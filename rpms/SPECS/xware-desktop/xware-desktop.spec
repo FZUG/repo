@@ -20,6 +20,7 @@ Source:		https://github.com/Xinkai/XwareDesktop/archive/%{_commit}/%{repo}-%{_sh
 Patch0:		xware-desktop_makefile.patch
 
 BuildRequires:	glibc-devel(x86-32)
+BuildRequires:	glibc(x86-32)
 BuildRequires:	libgcc(x86-32)
 BuildRequires:	python3-devel
 BuildRequires:	python3-setuptools
