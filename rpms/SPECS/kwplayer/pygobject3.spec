@@ -1,4 +1,5 @@
 # Last updated for version 3.14.0
+%define debug_package %{nil}
 %define glib2_version                  2.38.0
 %define gobject_introspection_version  1.39.0
 %define python2_version                2.3.5
@@ -113,7 +114,11 @@ for use in Python 3 programs.
 %endif # with_python3
 
 %prep
-%setup -q -n pygobject-%{version}
+%if 0%{?fedora} >= 22
+%setup -q -b 0 -n pygobject-%{version}
+%else
+%setup -q -b 1 -n pygobject-%{version}
+%endif
 %patch0 -p1
 
 %if 0%{?with_python3}
