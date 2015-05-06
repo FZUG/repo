@@ -1,5 +1,5 @@
 %global debug_package %{nil}
-%define helpdate 2014-11-29
+%define helpdate 2015-02-09
 %define zhcndate 20150118
 %global project grub4dos
 %global repo %{project}
@@ -22,6 +22,7 @@ Source0:	https://github.com/chenall/grub4dos/archive/%{_commit}/%{repo}-%{_short
 # find . -name ".git*" | xargs rm -f
 Source1:	ipxe-50e703a.tar.xz
 # https://code.google.com/p/grub4dos-help-doc
+# http://bbs.wuyou.net/forum.php?mod=viewthread&tid=185938
 Source2:	%{name}-help-%{helpdate}.chm
 Source3:	https://grub4dos-chenall.googlecode.com/files/unifont.hex.gz
 # git checkout 558e12a9b38613d827117c8da9b8e905c4c0eb2b , patch-chinese.diff
