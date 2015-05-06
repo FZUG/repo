@@ -1,0 +1,80 @@
+From 132daac42d49e14686b05e8dad64b3652084d240 Mon Sep 17 00:00:00 2001
+From: Shyouzou Sugitani <shy@users.sourceforge.jp>
+Date: Wed, 13 Jun 2012 23:44:11 +0900
+Subject: [PATCH] add a foreign type for cairo_region_t.
+
+* the patch in https://bugs.freedesktop.org/show_bug.cgi?id=44336
+  is required for pycairo
+
+Bug: https://bugzilla.gnome.org/show_bug.cgi?id=667959
+Bug-Ubuntu: https://launchpad.net/bugs/1028115
+---
+ gi/pygi-foreign-cairo.c |   44 ++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
+
+Index: pygobject/gi/pygi-foreign-cairo.c
+===================================================================
+--- pygobject.orig/gi/pygi-foreign-cairo.c
++++ pygobject/gi/pygi-foreign-cairo.c
+@@ -368,6 +368,46 @@ cairo_pattern_from_gvalue (const GValue
+ }
+ 
+ 
++#if PY_VERSION_HEX >= 0x03000000
++static PyObject *
++cairo_region_to_arg (PyObject        *value,
++                     GIInterfaceInfo *interface_info,
++                     GITransfer       transfer,
++                     GIArgument      *arg)
++{
++    cairo_region_t *region;
++
++    g_assert (transfer == GI_TRANSFER_NOTHING);
++
++    region = ( (PycairoRegion*) value)->region;
++    if (!region) {
++        PyErr_SetString (PyExc_ValueError, "Region instance wrapping a NULL region");
++        return NULL;
++    }
++
++    arg->v_pointer = region;
++    Py_RETURN_NONE;
++}
++
++static PyObject *
++cairo_region_from_arg (GIInterfaceInfo *interface_info, gpointer data)
++{
++    cairo_region_t *region = (cairo_region_t*) data;
++
++    cairo_region_reference (region);
++
++    return PycairoRegion_FromRegion (region);
++}
++
++static PyObject *
++cairo_region_release (GIBaseInfo *base_info,
++                      gpointer    struct_)
++{
++    cairo_region_destroy ( (cairo_region_t*) struct_);
++    Py_RETURN_NONE;
++}
++#endif
++
+ static PyMethodDef _gi_cairo_functions[] = { {0,} };
+ PYGLIB_MODULE_START(_gi_cairo, "_gi_cairo")
+ {
+@@ -406,6 +446,14 @@ PYGLIB_MODULE_START(_gi_cairo, "_gi_cair
+                                   cairo_font_options_from_arg,
+                                   cairo_font_options_release);
+ 
++#if PY_VERSION_HEX >= 0x03000000
++    pygi_register_foreign_struct ("cairo",
++                                  "Region",
++                                  cairo_region_to_arg,
++                                  cairo_region_from_arg,
++                                  cairo_region_release);
++#endif
++
+     pyg_register_gtype_custom (CAIRO_GOBJECT_TYPE_CONTEXT,
+                                cairo_context_from_gvalue,
+                                cairo_context_to_gvalue);
