@@ -1,0 +1,280 @@
+--- grub4dos/stage2/cmdline.c	2015-01-18 19:57:39.401992161 +0800
++++ grub4dos/stage2/cmdline.c	2015-01-18 20:09:42.457067587 +0800
+@@ -87,10 +87,23 @@
+ void
+ print_cmdline_message (int forever)
+ {
++#ifdef SUPPORT_GRAPHICS
++	if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++  printf (" ［ 提供类似 BASH 的行编辑功能。对于第一个词, TAB 键列出可能的\n"
++	  "    完整命令。否则即列出可能的设备/文件。%s ］\n",
++	  (forever ? "" : "  按 `ESC` 即可退出当前状态。"));
++	else
+   printf (" [ Minimal BASH-like line editing is supported.  For the first word, TAB\n"
+ 	  "   lists possible command completions.  Anywhere else TAB lists the possible\n"
+ 	  "   completions of a device/filename.%s ]\n",
+ 	  (forever ? "" : "  ESC at any time exits."));
++
++#else
++  printf (" [ Minimal BASH-like line editing is supported.  For the first word, TAB\n"
++	  "   lists possible command completions.  Anywhere else TAB lists the possible\n"
++	  "   completions of a device/filename.%s ]\n",
++	  (forever ? "" : "  ESC at any time exits."));
++#endif
+ }
+ 
+ extern int command_func (char *arg, int flags);
+--- grub4dos/stage2/stage2.c	2015-01-18 19:57:39.394992141 +0800
++++ grub4dos/stage2/stage2.c	2015-01-18 20:37:41.193758902 +0800
+@@ -142,6 +142,12 @@
+ 		printf("%.*s",current_term->chars_per_line,0);
+ 	}
+ 
++#ifdef SUPPORT_GRAPHICS
++	if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++	i = grub_sprintf (buff,"\n  用 %c 和 %c 两键将一个菜单项置为高亮。",
++		   DISP_UP, DISP_DOWN);
++	else
++#endif
+ 	i = grub_sprintf (buff,"\n Use the %c and %c keys to highlight an entry.",
+ 		   (unsigned long)(unsigned char)DISP_UP, (unsigned long)(unsigned char)DISP_DOWN);
+ 
+@@ -158,11 +164,28 @@
+ 	    }
+ #endif
+ #endif
++
++#ifdef SUPPORT_GRAPHICS
++	  if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++	  grub_strcpy (buff + i,"按回车或 b 键启动。按 p 键取得\n"
++		"  特权控制功能。");
++	  else
++#endif
+ 	  grub_strcpy (buff + i," Press ENTER or \'b\' to boot.\n"
+ 		" Press \'p\' to gain privileged control.");
+ 	}
+ 	else
+ 	{
++#ifdef SUPPORT_GRAPHICS
++	    if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++		grub_strcpy(buff + i,(config_entries?("按回车或 b 键启动；按 e 键可在\n"
++			"  启动前逐条编辑菜单中的命令序列；按 c 键进入命令行。")
++			:("  按 e 键编辑当前行；按 d 键删\n"
++			"  除当前行；按 O 键或 o 键分别在当前行之前或之后插入新行。编辑结束时，\n"
++			"  按 b 键启动；按 c 键进入命令行；按 Esc 键退回到主菜单。")
++			));
++	    else
++#endif
+ 		grub_strcpy(buff + i,(config_entries?(" Press ENTER or \'b\' to boot.\n"
+ 			" Press \'e\' to edit the commands before booting, or \'c\' for a command-line.")
+ 			:(" At a selected line, press \'e\' to edit, \'d\' to delete,"
+@@ -629,6 +652,12 @@
+ 	      /* Print a message.  */
+ 	      if (! silent_hiddenmenu)
+ 	      {
++#ifdef SUPPORT_GRAPHICS
++		if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++		grub_printf ("\r  按任意键进入菜单…… %d   ",
++				grub_timeout);
++		else
++#endif
+ 		grub_printf ("\rPress any key to enter the menu... %d   ",
+ 				grub_timeout);
+ 	      }
+@@ -715,6 +744,11 @@
+       print_default_help_message (config_entries);
+ 
+       if (current_term->flags & TERM_DUMB)
++#ifdef SUPPORT_GRAPHICS
++	if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++		grub_printf ("\n\n  当前选中项为：%d ", entryno);
++	else
++#endif
+ 	grub_printf ("\n\nThe selected entry is %d ", entryno);
+       else
+ 	print_entries (first_entry, entryno, menu_entries);
+@@ -760,6 +794,11 @@
+ 	      unsigned char *p;
+ 	      unsigned char ch = ' ';
+ 
++#ifdef SUPPORT_GRAPHICS
++	      if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++		grub_sprintf ((char*)tmp_buf, "  高亮选中的条目将会自动运行于 %d 秒之后。  ", grub_timeout);
++	      else
++#endif
+ 	      grub_sprintf ((char*)tmp_buf, " The highlighted entry will be booted automatically in %d seconds.", grub_timeout);
+ 	      gotoxy (0, MENU_BOX_B + 5);
+ 	      p = tmp_buf;
+@@ -789,7 +828,14 @@
+ 	     since we're comming in here also on GRUB_TIMEOUT == -1 and
+ 	     hang in GETKEY */
+ 	  if (current_term->flags & TERM_DUMB)
++	  {
++#ifdef SUPPORT_GRAPHICS
++	    if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
++		grub_printf ("\r    高亮选中的条目为 %d: ", entryno);
++	    else
++#endif
+ 	    grub_printf ("\r    Highlighted entry is %d: ", entryno);
++	  }
+ 	  if (config_entries && hotkey_func)
+ 	  {
+ 			putchar_hooked = (unsigned char*)0x800;
+--- grub4dos/stage2/graphics.c	2015-01-18 19:57:39.395992144 +0800
++++ grub4dos/stage2/graphics.c	2015-01-18 20:45:12.344995071 +0800
+@@ -1,4 +1,5 @@
+ /* graphics.c - graphics mode support for GRUB */
++/* Chinese double-byte character support by Gandalf <f22_storm@163.com> */
+ /* Implemented as a terminal type by Jeremy Katz <katzj@redhat.com> based
+  * on a patch by Paulo C閟ar Pereira de Andrade <pcpa@conectiva.com.br>
+  */
+@@ -30,8 +31,11 @@
+ #include <shared.h>
+ #include <graphics.h>
+ 
++#define BASE_FONT_ADDR 0x500000;  /* Raw base address for Chinese Font.*/
++
+ //static int saved_videomode = 0;
+ extern unsigned char *font8x16;
++static int dbcs_ending_byte = 0;
+ 
+ int outline = 0;
+ extern unsigned long is_highlight;
+@@ -74,6 +78,9 @@
+ unsigned long foreground = 0xFFFFFF; //(63 << 16) | (63 << 8) | (63)
+ unsigned long background = 0;
+ 
++//static char* chrMsg = "(r)Powered by Gandalf, f22_storm@163.com, 07/15/2004";
++
++unsigned short ushFontReaded = 0;	/* font loaded? */
+ /* global state so that we don't try to recursively scroll or cursor */
+ //static int no_scroll = 0;
+ 
+@@ -1222,12 +1229,20 @@
+ 
+ static unsigned char chr[16 << 2];
+ static unsigned char mask[16];
++static unsigned char chsa[16], chsb[16];
+ 
++/* This function was modified by Gandalf for Chinese Support 
++ *
++ * Change Log:
++ *	N/A
++ * TODO:
++ *      There is a empty line of the center of Chinese Character. !!!
++ */
+ static void
+ graphics_cursor (int set)
+ {
+     unsigned char *pat, *mem, *ptr;
+-    int i, ch, offset;
++    unsigned int i, ch, offset, n;
+ 
+     offset = (fonty << 4) * x1 + fontx;
+ 
+@@ -1235,8 +1250,63 @@
+ 
+     pat = font8x16 + (((unsigned long)((unsigned char)ch)) << 4);
+ 
++    dbcs_ending_byte = 0;
++
++    if (ushFontReaded && (unsigned char)ch >= 0xA1)
++    {
++	/* here is one trick, look one line as a string with '\0' ended, so,
++	 * if the last byte is the 1st byte of a Chinese Character,,, ,,, */
++	for (n = 0; n < fontx; n++)
++	{
++	    unsigned int pos;
++	    unsigned char ch1;
++	    unsigned char ch2;
++
++	    pos = fonty * x1 + n;
++	    ch1 = (unsigned char)text[pos] - 0xA1;
++	    pos++;
++	    ch2 = (unsigned char)text[pos] - 0xA1;
++
++	    if (ch1 <= 0xFE - 0xA1 && ch2 <= 0xFE - 0xA1)
++	    {
++		if (n == fontx - 1)
++		{
++		    dbcs_ending_byte = ch;
++
++		    pos = 0x500000 + ((ch1 * 94 + ch2) << 5);
++
++		    for (i = 0; i < 16; i++)
++		    {
++			chsa[i] = *(unsigned char *)pos++;
++			chsb[i] = *(unsigned char *)pos++;
++		    }
++		    break;
++		}
++		n++;
++	    }
++	}
++	if (! dbcs_ending_byte)
++	{
++		if (fontx == x1 - 1)
++		{
++			graphics_putchar (' ', 255);
++			text[fonty * x1 + fontx] = ch;
++		}
++		return;
++	}
++    }
++
+     mem = (unsigned char*)VIDEOMEM + offset;
+ 
++    if (dbcs_ending_byte)
++    {
++	mem--;//mem = (unsigned char*)VIDEOMEM + offset -1;
++	offset--;
++	pat = chsa;
++    }
++
++write_char:
++
+     if (set)
+     {
+ 	MapMask(15);
+@@ -1323,6 +1393,17 @@
+     }
+ 
+     MapMask(15);
++
++    if (dbcs_ending_byte)
++    {
++	dbcs_ending_byte = 0;
++
++	/* reset the mem position */
++	mem++;//mem += 1;//mem = (unsigned char*)VIDEOMEM + offset;
++	offset = (fonty << 4) * x1 + fontx;
++	pat = chsb;
++	goto write_char;
++    }
+ }
+ 
+ #endif /* SUPPORT_GRAPHICS */
+--- grub4dos/stage2/shared.h	2015-01-18 19:57:39.396992147 +0800
++++ grub4dos/stage2/shared.h	2015-01-18 20:47:16.387334951 +0800
+@@ -480,6 +480,10 @@
+ extern int hex (int v);
+ /* The Chinese patch will begin at here */
+ 
++extern char fontfile[256];
++extern unsigned long graphics_inited;
++extern unsigned short ushFontReaded;
++
+ /* multiboot stuff */
+ 
+ #include "mb_header.h"
+@@ -1238,6 +1242,10 @@
+   char *short_doc;
+   /* The long version of the documentation.  */
+   char *long_doc;
++  /* The short-chinese version of the documentation.  */
++  char *sc_short_doc;
++  /* The long version-chinese of the documentation.  */
++  char *sc_long_doc;
+ };
+ 
+ /* All the builtins are registered in this.  */
