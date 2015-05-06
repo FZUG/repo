@@ -10,7 +10,7 @@
 
 Name:		grub4dos
 Version:	0.4.6a.20150505
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	This is GNU GRUB, the GRand Unified Bootloader
 Summary(zh_CN):	多功能启动引导管理器
 
@@ -33,6 +33,7 @@ BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	upx
 BuildRequires:	nasm
+BuildRequires:	xz-devel
 BuildRequires:	/usr/bin/xxd
 %ifarch x86_64
 BuildRequires:	glibc-devel(x86-32)
@@ -244,6 +245,9 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 %{_datadir}/%{name}
 
 %changelog
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150505-2
+- Add buildrequire xz-devel
+- Update docs
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150505-1
 - Update version to 0.4.6a.20150505
 - Rebuilt for GCC 5 C++11 ABI change
