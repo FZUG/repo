@@ -1,0 +1,13 @@
+--- xware-desktop-0.13git20141029.orig/src/frontend/Extensions/Makefile	2014-10-29 18:46:29.853914060 +0800
++++ xware-desktop-0.13git20141029/src/frontend/Extensions/Makefile	2014-10-29 18:47:42.567998034 +0800
+@@ -1,7 +1,9 @@
++QMAKE	= qmake
++
+ all: DBusTypes.so
+ 
+ libDBusTypes.so: src/DBusTypes.cpp src/DBusTypes.hpp src/Extensions.pro
+-	cd src && qmake && make
++	cd src && $(QMAKE) && make
+ 	cp src/build/libDBusTypes.so* ./
+ 
+ DBusTypes.so: libDBusTypes.so
