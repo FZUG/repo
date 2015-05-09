@@ -101,7 +101,7 @@ mkdir dist
 pushd dist
 # fixed "/usr/lib64/lib64/libboost_date_time.a" but this file does not exist.
 # BOOL Boost_NO_BOOST_CMAKE "Enable fix for FindBoost.cmake"
-%{_cmake} .. \
+%{cmake} .. \
 %if 0%{?rhel} == 6
 	-DBoost_NO_BOOST_CMAKE=ON \
 %endif
