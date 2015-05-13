@@ -21,7 +21,7 @@ Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Vim
 Group: Applications/Editors
 Source0: ftp://ftp.vim.org/pub/vim/unix/vim-%{baseversion}.tar.bz2
@@ -1735,7 +1735,7 @@ mv -f ex_cmds.c.save ex_cmds.c
   --disable-rubyinterp \
 %endif
 %if "%{withlua}" == "1"
-  --enable-luainterp=dynamic \
+  --enable-luainterp \
 %else
   --disable-luainterp \
 %endif
@@ -1771,7 +1771,7 @@ make clean
   --disable-rubyinterp \
 %endif
 %if "%{withlua}" == "1"
-  --enable-luainterp=dynamic \
+  --enable-luainterp \
 %else
   --disable-luainterp \
 %endif
@@ -2212,6 +2212,10 @@ rm -rf %{buildroot}
 %{_datadir}/icons/hicolor/*/apps/*
 
 %changelog
+* Wed May 13 2015 mosquito <sensor.wen@gmail.com> - 2:7.4.728-2
+- Dynamic Lua 5.3 seems to be broken. Static seems to be okay. Lua 5.2 works fine.
+  https://groups.google.com/forum/#!topic/vim_dev/UpAfD1JEaSI
+
 * Wed May 13 2015 mosquito <sensor.wen@gmail.com> - 2:7.4.728-1
 - patchlevel 728
 - enable python3, lua, xfontset, sniff support
