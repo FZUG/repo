@@ -1,0 +1,11 @@
+--- vim70c/src/structs.h.warning1	2006-04-04 15:58:16.000000000 +0200
++++ vim70c/src/structs.h	2006-04-04 15:58:20.000000000 +0200
+@@ -1082,7 +1082,7 @@
+ {
+     typval_T	di_tv;		/* type and value of the variable */
+     char_u	di_flags;	/* flags (only used for variable) */
+-    char_u	di_key[1];	/* key (actually longer!) */
++    char_u	di_key[10];	/* key (actually longer!) */
+ };
+ 
+ typedef struct dictitem_S dictitem_T;

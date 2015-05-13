@@ -1,0 +1,126 @@
+diff -urN vim74/runtime/syntax/sshconfig.vim vim74_work/runtime/syntax/sshconfig.vim
+--- vim74/runtime/syntax/sshconfig.vim	2012-02-24 21:28:30.000000000 +0100
++++ vim74_work/runtime/syntax/sshconfig.vim	2015-02-11 15:17:16.146626439 +0100
+@@ -68,8 +68,8 @@
+ syn keyword sshconfigSysLogFacility LOCAL2 LOCAL3 LOCAL4 LOCAL5 LOCAL6 LOCAL7
+ syn keyword sshconfigAddressFamily  inet inet6
+ 
+-syn match   sshconfigIPQoS	"af1[1234]"
+-syn match   sshconfigIPQoS	"af2[23]"
++syn match   sshconfigIPQoS	"af1[123]"
++syn match   sshconfigIPQoS	"af2[123]"
+ syn match   sshconfigIPQoS	"af3[123]"
+ syn match   sshconfigIPQoS	"af4[123]"
+ syn match   sshconfigIPQoS	"cs[0-7]"
+@@ -99,10 +99,15 @@
+ 
+ " Keywords
+ syn keyword sshconfigHostSect Host
++syn keyword sshconfigMatchSect Match
+ 
+ syn keyword sshconfigKeyword AddressFamily
+ syn keyword sshconfigKeyword BatchMode
+ syn keyword sshconfigKeyword BindAddress
++syn keyword sshconfigKeyword CanonicalDomains
++syn keyword sshconfigKeyword CanonicalizeFallbackLocal
++syn keyword sshconfigKeyword CanonicalizeHostname
++syn keyword sshconfigKeyword CanonicalizeMaxDots
+ syn keyword sshconfigKeyword ChallengeResponseAuthentication
+ syn keyword sshconfigKeyword CheckHostIP
+ syn keyword sshconfigKeyword Cipher
+@@ -141,6 +146,8 @@
+ syn keyword sshconfigKeyword IPQoS
+ syn keyword sshconfigKeyword IdentitiesOnly
+ syn keyword sshconfigKeyword IdentityFile
++syn keyword sshconfigKeyword IgnoreUnknown
++syn keyword sshconfigKeyword IPQoS
+ syn keyword sshconfigKeyword KbdInteractiveAuthentication
+ syn keyword sshconfigKeyword KbdInteractiveDevices
+ syn keyword sshconfigKeyword KexAlgorithms
+@@ -157,6 +164,7 @@
+ syn keyword sshconfigKeyword PreferredAuthentications
+ syn keyword sshconfigKeyword Protocol
+ syn keyword sshconfigKeyword ProxyCommand
++syn keyword sshconfigKeyword ProxyUseFdpass
+ syn keyword sshconfigKeyword PubkeyAuthentication
+ syn keyword sshconfigKeyword RSAAuthentication
+ syn keyword sshconfigKeyword RekeyLimit
+@@ -211,6 +219,7 @@
+   HiLink sshconfigSpecial        Special
+   HiLink sshconfigKeyword        Keyword
+   HiLink sshconfigHostSect       Type
++  HiLink sshconfigMatchSect      Type
+   delcommand HiLink
+ endif
+ 
+diff -urN vim74/runtime/syntax/sshdconfig.vim vim74_work/runtime/syntax/sshdconfig.vim
+--- vim74/runtime/syntax/sshdconfig.vim	2011-11-30 12:14:42.000000000 +0100
++++ vim74_work/runtime/syntax/sshdconfig.vim	2015-02-11 15:40:38.082148329 +0100
+@@ -58,8 +58,8 @@
+ 
+ syn keyword sshdconfigCompression    delayed
+ 
+-syn match   sshdconfigIPQoS	"af1[1234]"
+-syn match   sshdconfigIPQoS	"af2[23]"
++syn match   sshdconfigIPQoS	"af1[123]"
++syn match   sshdconfigIPQoS	"af2[123]"
+ syn match   sshdconfigIPQoS	"af3[123]"
+ syn match   sshdconfigIPQoS	"af4[123]"
+ syn match   sshdconfigIPQoS	"cs[0-7]"
+@@ -101,6 +101,9 @@
+ syn keyword sshdconfigKeyword AllowGroups
+ syn keyword sshdconfigKeyword AllowTcpForwarding
+ syn keyword sshdconfigKeyword AllowUsers
++syn keyword sshdconfigKeyword AuthenticationMethods
++syn keyword sshdconfigKeyword AuthorizedKeysCommand
++syn keyword sshdconfigKeyword AuthorizedKeysCommandUser
+ syn keyword sshdconfigKeyword AuthorizedKeysFile
+ syn keyword sshdconfigKeyword AuthorizedPrincipalsFile
+ syn keyword sshdconfigKeyword Banner
+@@ -116,12 +119,14 @@
+ syn keyword sshdconfigKeyword ForceCommand
+ syn keyword sshdconfigKeyword GSSAPIAuthentication
+ syn keyword sshdconfigKeyword GSSAPICleanupCredentials
++syn keyword sshdconfigKeyword GSSAPIEnablek5users
+ syn keyword sshdconfigKeyword GSSAPIKeyExchange
+ syn keyword sshdconfigKeyword GSSAPIStoreCredentialsOnRekey
+ syn keyword sshdconfigKeyword GSSAPIStrictAcceptorCheck
+ syn keyword sshdconfigKeyword GatewayPorts
+ syn keyword sshdconfigKeyword HostCertificate
+ syn keyword sshdconfigKeyword HostKey
++syn keyword sshdconfigKeyword HostKeyAgent
+ syn keyword sshdconfigKeyword HostbasedAuthentication
+ syn keyword sshdconfigKeyword HostbasedUsesNameFromPacketOnly
+ syn keyword sshdconfigKeyword IPQoS
+@@ -132,6 +137,7 @@
+ syn keyword sshdconfigKeyword KerberosGetAFSToken
+ syn keyword sshdconfigKeyword KerberosOrLocalPasswd
+ syn keyword sshdconfigKeyword KerberosTicketCleanup
++syn keyword sshdconfigKeyword KerberosUseKuserok
+ syn keyword sshdconfigKeyword KexAlgorithms
+ syn keyword sshdconfigKeyword KeyRegenerationInterval
+ syn keyword sshdconfigKeyword ListenAddress
+@@ -148,6 +154,7 @@
+ syn keyword sshdconfigKeyword PermitOpen
+ syn keyword sshdconfigKeyword PermitRootLogin
+ syn keyword sshdconfigKeyword PermitTunnel
++syn keyword sshdconfigKeyword PermitTTY
+ syn keyword sshdconfigKeyword PermitUserEnvironment
+ syn keyword sshdconfigKeyword PidFile
+ syn keyword sshdconfigKeyword Port
+@@ -156,6 +163,7 @@
+ syn keyword sshdconfigKeyword Protocol
+ syn keyword sshdconfigKeyword PubkeyAuthentication
+ syn keyword sshdconfigKeyword RSAAuthentication
++syn keyword sshdconfigKeyword RekeyLimit
+ syn keyword sshdconfigKeyword RevokedKeys
+ syn keyword sshdconfigKeyword RhostsRSAAuthentication
+ syn keyword sshdconfigKeyword ServerKeyBits
+@@ -169,6 +177,7 @@
+ syn keyword sshdconfigKeyword UseLogin
+ syn keyword sshdconfigKeyword UsePAM
+ syn keyword sshdconfigKeyword UsePrivilegeSeparation
++syn keyword sshdconfigKeyword VersionAddendum
+ syn keyword sshdconfigKeyword X11DisplayOffset
+ syn keyword sshdconfigKeyword X11Forwarding
+ syn keyword sshdconfigKeyword X11UseLocalhost

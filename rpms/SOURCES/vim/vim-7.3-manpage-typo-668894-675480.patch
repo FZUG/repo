@@ -1,0 +1,21 @@
+diff -up vim73/runtime/doc/vim.1.668894 vim73/runtime/doc/vim.1
+--- vim73/runtime/doc/vim.1.668894	2010-05-15 13:04:00.000000000 +0200
++++ vim73/runtime/doc/vim.1	2012-08-28 12:41:36.000000000 +0200
+@@ -73,7 +73,7 @@ To edit a file that starts with a dash, 
+ .TP
+ \-
+ The file to edit is read from stdin.  Commands are read from stderr, which
+-should be a tty.
++should be a TTY.
+ .TP
+ \-t {tag}
+ The file to edit and the initial cursor position depends on a "tag", a sort
+@@ -321,7 +321,7 @@ When N is omitted, open one tab page for
+ \-R
+ Read-only mode.
+ The 'readonly' option will be set.
+-You can still edit the buffer, but will be prevented from accidently
++You can still edit the buffer, but will be prevented from accidentally
+ overwriting a file.
+ If you do want to overwrite a file, add an exclamation mark to the Ex command,
+ as in ":w!".

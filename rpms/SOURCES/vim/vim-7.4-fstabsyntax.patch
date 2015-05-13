@@ -1,0 +1,20 @@
+--- vim74/runtime/syntax/fstab.vim.orig	2013-05-21 16:07:26.000000000 +0200
++++ vim74/runtime/syntax/fstab.vim	2013-08-12 15:05:43.682707639 +0200
+@@ -53,7 +53,7 @@
+ " Type
+ syn cluster fsTypeCluster contains=fsTypeKeyword,fsTypeUnknown
+ syn match fsTypeUnknown /\s\+\zs\w\+/ contained
+-syn keyword fsTypeKeyword contained adfs ados affs anon_inodefs atfs audiofs auto autofs bdev befs bfs btrfs binfmt_misc cd9660 cfs cgroup cifs coda configfs cpuset cramfs devfs devpts devtmpfs e2compr efs ext2 ext2fs ext3 ext4 fdesc ffs filecore fuse fuseblk fusectl hfs hpfs hugetlbfs iso9660 jffs jffs2 jfs kernfs lfs linprocfs mfs minix mqueue msdos ncpfs nfs nfsd nilfs2 none ntfs null nwfs overlay ovlfs pipefs portal proc procfs pstore ptyfs qnx4 reiserfs ramfs romfs securityfs shm smbfs squashfs sockfs sshfs std subfs swap sysfs sysv tcfs tmpfs udf ufs umap umsdos union usbfs userfs vfat vs3fs vxfs wrapfs wvfs xenfs xfs zisofs
++syn keyword fsTypeKeyword contained adfs ados affs anon_inodefs atfs audiofs auto autofs bdev befs bfs btrfs binfmt_misc cd9660 cfs cgroup cifs coda configfs cpuset cramfs devfs devpts devtmpfs e2compr efs ext2 ext2fs ext3 ext4 fdesc ffs filecore fuse fuseblk fusectl hfs hpfs hugetlbfs iso9660 jffs jffs2 jfs kernfs lfs linprocfs mfs minix mqueue msdos ncpfs nfs nfsd nilfs2 none ntfs null nwfs overlay ovlfs pipefs portal proc procfs pstore ptyfs qnx4 reiserfs ramfs romfs rpc_pipefs securityfs shm smbfs squashfs sockfs sshfs std subfs swap sysfs sysv tcfs tmpfs udf ufs umap umsdos union usbfs userfs vfat vs3fs vxfs wrapfs wvfs xenfs xfs zisofs
+ 
+ " Options
+ " -------
+@@ -65,7 +65,7 @@
+ syn keyword fsOptionsYesNo yes no
+ syn cluster fsOptionsCheckCluster contains=fsOptionsExt2Check,fsOptionsFatCheck
+ syn keyword fsOptionsSize 512 1024 2048
+-syn keyword fsOptionsGeneral async atime auto bind current defaults dev devgid devmode devmtime devuid dirsync exec force fstab kudzu loop mand move noatime noauto noclusterr noclusterw nodev nodevmtime nodiratime noexec nomand nosuid nosymfollow nouser owner rbind rdonly remount ro rq rw suid suiddir supermount sw sync union update user users xx
++syn keyword fsOptionsGeneral async atime auto bind current defaults dev devgid devmode devmtime devuid dirsync exec force fstab kudzu loop managed mand move noatime noauto noclusterr noclusterw nodev nodevmtime nodiratime noexec nomand nosuid nosymfollow nouser owner pamconsole rbind rdonly remount ro rq rw suid suiddir supermount sw sync union update user[s] xx
+ syn match fsOptionsGeneral /_netdev/
+ 
+ " Options: adfs

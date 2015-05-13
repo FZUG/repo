@@ -1,0 +1,64 @@
+--- vim70/runtime/ftplugin/spec.vim.rh1	2006-05-10 19:37:45.000000000 +0200
++++ vim70/runtime/ftplugin/spec.vim	2006-11-13 12:21:32.000000000 +0100
+@@ -18,11 +18,18 @@
+ 
+ if !exists("*s:SpecChangelog")
+ 	function s:SpecChangelog(format)
++        let save_time = v:lc_time
+ 		if strlen(a:format) == 0
+ 			if !exists("g:spec_chglog_format")
+-				let email = input("Email address: ")
+-				let g:spec_chglog_format = "%a %b %d %Y " . l:email
+-				echo "\r"
++                if !exists("g:packager")
++                    let email = input("Email address: ")
++                    let g:spec_chglog_format = "%a %b %d %Y " . l:email
++                    echo "\r"
++                else
++                    let email = g:packager
++                    let g:spec_chglog_format = "%a %b %d %Y " . l:email
++                    echo "\r"
++                endif
+ 			endif
+ 			let format = g:spec_chglog_format
+ 		else
+@@ -58,7 +65,7 @@
+ 			let line = line+1
+ 		endwhile
+ 		if (nameline != -1 && verline != -1 && relline != -1)
+-			let include_release_info = exists("g:spec_chglog_release_info")
++			let include_release_info = 1
+ 			let name = s:ParseRpmVars(name, nameline)
+ 			let ver = s:ParseRpmVars(ver, verline)
+ 			let rel = s:ParseRpmVars(rel, relline)
+@@ -79,8 +86,10 @@
+ 			endif
+ 		endif
+ 		if (chgline != -1)
++            execute "language time C"
+ 			let parsed_format = "* ".strftime(format)
+-			let release_info = "+ ".name."-".ver."-".rel
++            execute "language time " . save_time
++			let release_info = ver."-".rel
+ 			let wrong_format = 0
+ 			let wrong_release = 0
+ 			let insert_line = 0
+@@ -97,15 +106,14 @@
+ 						execute relline
+ 						normal 
+ 						let rel = substitute(strpart(getline(relline),8), '^[	 ]*\([^ 	]\+\)[		]*$','\1','')
+-						let release_info = "+ ".name."-".ver."-".rel
++						let release_info = ver."-".rel
+ 					endif
+ 				endif
+ 				let n = 0
+-				call append(chgline+n, parsed_format)
+ 				if include_release_info
+-					let n = n + 1
+-					call append(chgline+n, release_info)
++                    let parsed_format = parsed_format." ".release_info
+ 				endif
++				call append(chgline+n, parsed_format)
+ 				let n = n + 1
+ 				call append(chgline+n,"- ")
+ 				let n = n + 1

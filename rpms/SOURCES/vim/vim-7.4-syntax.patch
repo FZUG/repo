@@ -1,0 +1,11 @@
+--- vim74/runtime/filetype.vim.orig	2013-08-12 14:51:58.669350813 +0200
++++ vim74/runtime/filetype.vim	2013-08-12 14:56:12.432540523 +0200
+@@ -2475,7 +2475,7 @@
+ 
+ " More Apache config files
+ au BufNewFile,BufRead access.conf*,apache.conf*,apache2.conf*,httpd.conf*,srm.conf*	call s:StarSetf('apache')
+-au BufNewFile,BufRead */etc/apache2/*.conf*,*/etc/apache2/conf.*/*,*/etc/apache2/mods-*/*,*/etc/apache2/sites-*/*,*/etc/httpd/conf.d/*.conf*		call s:StarSetf('apache')
++au BufNewFile,BufRead */etc/apache2/*.conf*,*/etc/httpd/conf.*/*,*/etc/httpd/mods-*/*,*/etc/httpd/sites-*/*,*/etc/httpd/conf.d/*.conf*,auth_mysql.conf*,auth_pgsql.conf*,ssl.conf*,perl.conf*,php.conf*,python.conf*,squirrelmail.conf*		call s:StarSetf('apache')
+ 
+ " Asterisk config file
+ au BufNewFile,BufRead *asterisk/*.conf*		call s:StarSetf('asterisk')

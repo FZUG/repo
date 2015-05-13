@@ -1,0 +1,15 @@
+--- vim62/src/os_unix.h.rcloc	2003-08-04 15:38:05.000000000 +0200
++++ vim62/src/os_unix.h	2003-08-04 15:39:25.000000000 +0200
+@@ -230,10 +230,10 @@
+  * Unix system-dependent file names
+  */
+ #ifndef SYS_VIMRC_FILE
+-# define SYS_VIMRC_FILE "$VIM/vimrc"
++# define SYS_VIMRC_FILE "/etc/vimrc"
+ #endif
+ #ifndef SYS_GVIMRC_FILE
+-# define SYS_GVIMRC_FILE "$VIM/gvimrc"
++# define SYS_GVIMRC_FILE "/etc/gvimrc"
+ #endif
+ #ifndef DFLT_HELPFILE
+ # define DFLT_HELPFILE	"$VIMRUNTIME/doc/help.txt"

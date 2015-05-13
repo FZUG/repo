@@ -1,0 +1,10 @@
+--- vim71/src/ex_docmd.c.nowarnings	2007-06-04 14:43:26.000000000 +0200
++++ vim71/src/ex_docmd.c	2007-06-04 14:43:43.000000000 +0200
+@@ -3993,6 +3993,7 @@ get_flags(eap)
+ ex_ni(eap)
+     exarg_T	*eap;
+ {
++    return;
+     if (!eap->skip)
+ 	eap->errmsg = (char_u *)N_("E319: Sorry, the command is not available in this version");
+ }
