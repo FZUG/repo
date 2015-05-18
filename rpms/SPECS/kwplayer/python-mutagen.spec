@@ -9,11 +9,13 @@
 %global with_python2 1
 
 Name:		python-%{realname}
-Version:	1.28
+Version:	1.29
 Release:	1%{?dist}
 Summary:	Mutagen is a Python module to handle audio metadata
+Summary(zh_CN):	一个处理音频元数据的Python模块
 
 Group:		Development/Languages
+# https://bitbucket.org/lazka/mutagen/raw/b27f57a13d47bf861bf69e95c250d12a5d7db489/COPYING
 License:	GPLv2
 URL:		https://bitbucket.org/lazka/mutagen/overview
 Source0:	https://bitbucket.org/lazka/mutagen/downloads/%{realname}-%{version}.tar.gz
@@ -32,15 +34,16 @@ includes a module to handle generic Ogg bitstreams.
 %if 0%{?with_python3}
 %package -n python3-%{realname}
 Summary:	Read and write audio tags for many formats in Python 3
+Summary(zh_CN):	一个处理音频元数据的Python3模块
 BuildRequires:	python3-devel
 
 %description -n python3-%{realname}
 A fork of the mutagen package, modified to support Python 3.3+.
-I take no credit for the original mutagen - the copyright for that 
+I take no credit for the original mutagen - the copyright for that
 is owned by the original developers.
 This package isn't compatible with Python 2.x, and will never be.
-The intention is to improve the existing code over time, 
-making it more Pythonic and better documented, 
+The intention is to improve the existing code over time,
+making it more Pythonic and better documented,
 and possibly adding new features such as id3v2.3 support.
 %endif # with_python3
 
@@ -79,6 +82,7 @@ popd
 %{__install} -p -m 0644 man/*.1 %{buildroot}%{_mandir}/man1
 
 %check
+export LANG=en_US.utf-8
 %{__python} setup.py test
 
 %if 0%{?with_python3}
@@ -103,6 +107,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 1.29-1
+- Update to 1.29
+
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.28-1
 - Update to 1.28
 
