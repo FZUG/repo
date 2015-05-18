@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 8addfa132089854a48b7bd41c8991a56d56ef4dc
+%global _commit 4bf03fa9b25e840caece9d5d3eb261cff2bc74fd
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # cmake version
@@ -16,12 +16,13 @@
 %endif
 
 Name:		wiznote-beta
-Version:	2.1.18
+Version:	2.2.1
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
 
 Group:		Applications/Editors
+# https://raw.githubusercontent.com/WizTeam/WizQTClient/master/LICENSE
 License:	GPLv3
 URL:		https://github.com/WizTeam/WizQTClient
 Source0:	https://github.com/WizTeam/WizQTClient/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
@@ -56,6 +57,11 @@ This is a development version.
 
 %prep
 %setup -q -n %repo-%{_commit}
+# 2.2.1 build error
+sed -i -e '488i#ifdef Q_OS_MAC' -e '494a#endif' src/utils/stylehelper.cpp
+sed -i -e '1508,1512s|search|searchWidget|' \
+    -e '1508am_searchWidget->setWidthHint(280);' \
+    -e '2854s|search|searchWidget|' src/wizmainwindow.cpp
 
 %build
 # GCC version
@@ -152,8 +158,15 @@ chmod 0755 %{buildroot}%{_bindir}/%{name}
 rm -rf %{buildroot}%{_datadir}/licenses/
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post
+update-desktop-database -q || true
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+ldconfig
+
+%postun
+update-desktop-database -q || true
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+ldconfig
 
 %files
 %defattr(-,root,root,-)
@@ -167,6 +180,8 @@ rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 #@exclude @{_datadir}/licenses/
 
 %changelog
+* Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1
+- Update version to 2.2.1
 * Tue May 05 2015 mosquito <sensor.wen@gmail.com> - 2.1.18-1
 - Rename version name
 * Mon May 04 2015 mosquito <sensor.wen@gmail.com> - 2.1.18git20150430-1
