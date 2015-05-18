@@ -5,15 +5,16 @@
 %global repo %{project}
 
 # commit
-%global _commit 8672ed4e3cf59815a68278b275fe90e931b9f070
+%global _commit 8d8c4e68b3f3e774ef5a9c10ba4f65158c55d4ac
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		grub4dos
-Version:	0.4.6a.20150505
-Release:	2.git%{_shortcommit}%{?dist}
+Version:	0.4.6a.20150518
+Release:	1.git%{_shortcommit}%{?dist}
 Summary:	This is GNU GRUB, the GRand Unified Bootloader
 Summary(zh_CN):	多功能启动引导管理器
 
+# https://raw.githubusercontent.com/chenall/grub4dos/master/COPYING
 License:	GPLv2
 Group:		Applications/System
 Url:		https://code.google.com/p/grub4dos-chenall
@@ -245,6 +246,8 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 %{_datadir}/%{name}
 
 %changelog
+* Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150518-1
+- Update version to 0.4.6a.20150518
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150505-2
 - Add buildrequire xz-devel
 - Update docs
