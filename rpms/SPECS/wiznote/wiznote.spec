@@ -1,4 +1,10 @@
 %global debug_package %{nil}
+%global project WizQTClient
+%global repo %{project}
+
+# commit
+%global _commit 8addfa132089854a48b7bd41c8991a56d56ef4dc
+%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # cmake version
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
@@ -10,14 +16,17 @@
 %endif
 
 Name:		wiznote
-Version:	2.1.15git20150215
-Release:	1%{?dist}
+Version:	2.1.18
+Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
+
 Group:		Applications/Editors
+# https://raw.githubusercontent.com/WizTeam/WizQTClient/master/LICENSE
 License:	GPLv3
 URL:		https://github.com/WizTeam/WizQTClient
-Source:		%{name}-%{version}.tar.xz
+Source0:	https://github.com/WizTeam/WizQTClient/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+
 BuildRequires:	gcc-c++
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qttools-devel
@@ -57,9 +66,20 @@ Please refer to WizNote home for more detailed info:
 此包为稳定版.
 
 %prep
-%setup -q
+%setup -q -n %repo-%{_commit}
 
 %build
+# GCC version
+gcc_version=$((LANG=c;gcc --version)|awk 'gsub(/\./,""){print $3;exit}')
+if [ $gcc_version -ge '490' ]; then
+#issue 307: https://github.com/WizTeam/WizQTClient/issues/307
+sed -i '1a#define CRYPTOPP_DISABLE_SSE2' lib/cryptopp/config.h
+fi
+
+%if 0%{?rhel} == 6
+sed -i '/QT_VERSION/s|504|540|g' src/wizCategoryViewItem.cpp
+%endif
+
 # change library path
 %ifarch x86_64
 sed -i 's|lib/wiznote/plugins|lib64/%{name}/plugins|' \
@@ -76,7 +96,7 @@ mkdir dist
 pushd dist
 # fixed "/usr/lib64/lib64/libboost_date_time.a" but this file does not exist.
 # BOOL Boost_NO_BOOST_CMAKE "Enable fix for FindBoost.cmake"
-%{_cmake} .. \
+%{cmake} .. \
 %if 0%{?rhel} == 6
 	-DBoost_NO_BOOST_CMAKE=ON \
 %endif
@@ -110,8 +130,15 @@ echo "%{_libdir}/%{name}/plugins/" > %{buildroot}/etc/ld.so.conf.d/%{name}.conf
 rm -rf %{buildroot}%{_datadir}/licenses/
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
+%post
+update-desktop-database -q || true
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+ldconfig
+
+%postun
+update-desktop-database -q || true
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+ldconfig
 
 %files
 %defattr(-,root,root,-)
@@ -125,6 +152,8 @@ rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 #@exclude @{_datadir}/licenses/
 
 %changelog
+* Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.1.18-1
+- Update version to 2.1.18
 * Wed Mar 04 2015 mosquito <sensor.wen@gmail.com> - 2.1.15git20150215-1
 - Update version to 2.1.15git20150215
 * Thu Nov 20 2014 mosquito <sensor.wen@gmail.com> - 2.1.14git20141119-1
