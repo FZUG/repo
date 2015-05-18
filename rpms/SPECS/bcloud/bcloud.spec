@@ -66,17 +66,16 @@ rm -rf $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ $1 -eq 1 ]; then
-    cd %{python3_sitelib}
-
-    for file in bcloud*
-    do
-	if [[ -f $file && $file != "bcloud-%{version}-py%{python3_version}.egg-info" ]]
-	then
-		rm $file
-	fi
-    done
-fi
+cd %{python3_sitelib}
+for file in bcloud*
+do
+    if [[ -f $file && $file != "bcloud-%{version}-py%{python3_version}.egg-info" ]]
+    then
+      rm $file
+    fi
+done
+update-desktop-database -q || true
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
 
 %files -f %{name}.lang
 %doc LICENSE README.md HISTORY
@@ -91,6 +90,7 @@ fi
 %changelog
 * Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 3.7.1-1
 - Update version to 3.7.1
+- Update post script
 
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 3.6.1-1
 - Rename version name
