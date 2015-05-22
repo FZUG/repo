@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 4bf03fa9b25e840caece9d5d3eb261cff2bc74fd
+%global _commit 8c584464828da0381654519373cb8126b5de359b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # cmake version
@@ -57,11 +57,6 @@ This is a development version.
 
 %prep
 %setup -q -n %repo-%{_commit}
-# 2.2.1 build error
-sed -i -e '488i#ifdef Q_OS_MAC' -e '494a#endif' src/utils/stylehelper.cpp
-sed -i -e '1508,1512s|search|searchWidget|' \
-    -e '1508am_searchWidget->setWidthHint(280);' \
-    -e '2854s|search|searchWidget|' src/wizmainwindow.cpp
 
 %build
 # GCC version
@@ -180,9 +175,11 @@ ldconfig
 #@exclude @{_datadir}/licenses/
 
 %changelog
-* Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1
+* Fri May 22 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git8c58446
+- Build on linux
+* Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git4bf03fa
 - Update version to 2.2.1
-* Tue May 05 2015 mosquito <sensor.wen@gmail.com> - 2.1.18-1
+* Tue May 05 2015 mosquito <sensor.wen@gmail.com> - 2.1.18-1.git8addfa1
 - Rename version name
 * Mon May 04 2015 mosquito <sensor.wen@gmail.com> - 2.1.18git20150430-1
 - Update version to 2.1.18git20150430
