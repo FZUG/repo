@@ -46,7 +46,9 @@ dpkg-deb -X %{SOURCE1} %{buildroot}
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{buildroot}/usr/lib/*-linux-gnu/%{name} %{buildroot}/usr/lib/
 rm -rf %{buildroot}/usr/lib/*-linux-gnu
+%ifarch x86_64
 mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
+%endif
 
 # Modify desktop file:
 sed -i '/Unity/s|^|#|' %{buildroot}%{_datadir}/applications/%{name}.desktop
