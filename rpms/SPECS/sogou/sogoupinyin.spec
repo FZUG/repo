@@ -2,7 +2,7 @@
 %define _xinitrcdir %{_sysconfdir}/X11/xinit/xinitrc.d
 
 Name:		sogoupinyin
-Version:	1.2.0.0048
+Version:	1.2.0.0056
 Release:	1%{?dist}
 Summary:	Sogou Pinyin input method
 Summary(zh_CN):	搜狗拼音输入法
@@ -10,8 +10,8 @@ Summary(zh_CN):	搜狗拼音输入法
 License:	Proprietary and GPLv2
 URL:		http://pinyin.sogou.com/linux
 Group:		Applications/System
-Source0:	http://download.ime.sogou.com/1429000650/%{name}_%{version}_amd64.deb
-Source1:	http://download.ime.sogou.com/1429000250/%{name}_%{version}_i386.deb
+Source0:	http://download.ime.sogou.com/1432523940/%{name}_%{version}_amd64.deb
+Source1:	http://download.ime.sogou.com/1432524151/%{name}_%{version}_i386.deb
 
 BuildRequires:	dpkg
 Conflicts:	fcitx-sogoupinyin
@@ -122,7 +122,7 @@ Exec=sogou-qimpanel %U
 Icon=fcitx-sogoupinyin
 Terminal=false
 Type=Application
-Categories=Utility;
+Categories=System;Utility;
 StartupNotify=false
 X-GNOME-Autostart-Phase=Applications
 X-GNOME-Autostart-Notify=false
@@ -145,10 +145,10 @@ install -Dm 0644 usr/share/glib-2.0/schemas/50_%{name}.gschema.override \
    %{buildroot}%{_datadir}/glib-2.0/schemas/50_%{name}.gschema.override
 
 # icon files
-for i in 16x16 48x48 128x128; do
+for i in 16x16 48x48 64x64 128x128; do
 install -d %{buildroot}%{_datadir}/icons/hicolor/$i/apps
-install -m 0644 usr/share/icons/hicolor/$i/apps/fcitx-%{name}.png \
- %{buildroot}%{_datadir}/icons/hicolor/$i/apps/
+install -m 0644 usr/share/icons/hicolor/$i/apps/*.png \
+ %{buildroot}%{_datadir}/icons/hicolor/$i/apps/fcitx-%{name}.png
 done
 install -d %{buildroot}%{_datadir}/pixmaps
 install -m 0644 usr/share/pixmaps/*.png %{buildroot}%{_datadir}/pixmaps/
@@ -250,6 +250,7 @@ fi
 %files
 %defattr(-,root,root,-)
 %{_bindir}/sogou-*
+%{_bindir}/uk-*
 %{_libdir}/fcitx/
 %{_xinitrcdir}/
 %{_includedir}/fcitx/module/
@@ -267,6 +268,8 @@ fi
 
 
 %changelog
+* Tue May 26 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-1
+- Update version 1.2.0.0056
 * Tue May  5 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0048-1
 - Update version 1.2.0.0048
 * Thu Feb  5 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0042-2
