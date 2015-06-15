@@ -21,7 +21,7 @@ Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: Vim
 Group: Applications/Editors
 Source0: ftp://ftp.vim.org/pub/vim/unix/vim-%{baseversion}.tar.bz2
@@ -790,6 +790,8 @@ Patch3012: vim-7.3-manpage-typo-668894-675480.patch
 Patch3013: vim-manpagefixes-948566.patch
 Patch3014: vim-7.4-licensemacro-1151450.patch
 Patch3015: vim-7.4-ssh-keywords.patch
+# https://bugzilla.redhat.com/show_bug.cgi?id=1221430
+Patch3016: vim-7.4-lua-symbol.patch
 
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: python-devel python3-devel ncurses-devel gettext perl-devel
@@ -1669,9 +1671,10 @@ perl -pi -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
 %patch3010 -p1
 %patch3011 -p1
 %patch3012 -p1
-
 %patch3013 -p1
+%patch3014 -p1
 %patch3015 -p1
+%patch3016 -p1
 
 %build
 cp -f %{SOURCE5} .
@@ -1735,7 +1738,7 @@ mv -f ex_cmds.c.save ex_cmds.c
   --disable-rubyinterp \
 %endif
 %if "%{withlua}" == "1"
-  --enable-luainterp \
+  --enable-luainterp=dynamic \
 %else
   --disable-luainterp \
 %endif
@@ -1771,7 +1774,7 @@ make clean
   --disable-rubyinterp \
 %endif
 %if "%{withlua}" == "1"
-  --enable-luainterp \
+  --enable-luainterp=dynamic \
 %else
   --disable-luainterp \
 %endif
@@ -2212,6 +2215,10 @@ rm -rf %{buildroot}
 %{_datadir}/icons/hicolor/*/apps/*
 
 %changelog
+* Mon Jun 15 2015 mosquito <sensor.wen@gmail.com> - 2:7.4.728-3
+- Fixe unecessary symbol lookups with lua >= 5.3
+  https://bugzilla.redhat.com/show_bug.cgi?id=1221430
+
 * Wed May 13 2015 mosquito <sensor.wen@gmail.com> - 2:7.4.728-2
 - Dynamic Lua 5.3 seems to be broken. Static seems to be okay. Lua 5.2 works fine.
   https://groups.google.com/forum/#!topic/vim_dev/UpAfD1JEaSI
