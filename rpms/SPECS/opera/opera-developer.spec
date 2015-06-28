@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name: opera-developer
-Version: 31.0.1857.0
+Version: 32.0.1899.0
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -99,6 +99,8 @@ gtk-update-icon-cache /usr/share/icons/hicolor &>/dev/null || :
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> -32.0.1899.0-1
+- Update version 32.0.1899.0
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> -31.0.1857.0-1
 - Update version 31.0.1857.0
 * Tue Dec 23 2014 mosquito <sensor.wen@gmail.com> -28.0.1719.0-1
