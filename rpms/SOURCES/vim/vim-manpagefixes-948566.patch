@@ -1,0 +1,326 @@
+diff -up vim73/runtime/doc/vim.man.rh1 vim73/runtime/doc/vim.man
+--- vim73/runtime/doc/vim.man.rh1	2013-07-26 11:26:20.566576864 +0200
++++ vim73/runtime/doc/vim.man	2013-07-26 11:47:42.061351469 +0200
+@@ -11,9 +11,9 @@ SYNOPSIS
+        vim [options] -t tag
+        vim [options] -q [errorfile]
+ 
+-       ex
++       ex gex
+        view
+-       gvim gview evim eview
++       gvim gview vimx evim eview
+        rvim rview rgvim rgview
+ 
+ DESCRIPTION
+@@ -79,8 +79,13 @@ DESCRIPTION
+                  the files.  Can also be done with the "-R" argument.
+ 
+        gvim gview
+-                 The GUI version.  Starts a new window.  Can also be done with
+-                 the "-g" argument.
++                 The GUI version.  Starts a new window.
++
++       gex       Starts a new gvim window in Ex mode. Can also be done with
++                 the "-e" argument to gvim.
++
++       vimx      Starts gvim in "Vi" mode similar to "vim", but with 
++                 additional features like xterm clipboard support.
+ 
+        evim eview
+                  The GUI version in easy mode.  Starts a new window.  Can also
+diff -urN vim73/runtime/doc/vim.1 vim73_new/runtime/doc/vim.1
+--- vim73/runtime/doc/vim.1	2013-07-31 14:13:01.039765800 +0200
++++ vim73_new/runtime/doc/vim.1	2013-07-31 13:57:59.861912768 +0200
+@@ -17,11 +17,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+@@ -114,7 +116,12 @@
+ gvim gview
+ The GUI version.
+ Starts a new window.
+-Can also be done with the "\-g" argument.
++.TP
++gex
++Starts a new gvim window in Ex mode. Can also be done with the "-e" argument to gvim
++.TP
++vimx
++Starts gvim in "Vi" mode similar to "vim", but with additional features like xterm clipboard support
+ .TP
+ evim eview
+ The GUI version in easy mode.
+@@ -458,6 +458,12 @@
+ \-\-remote\-wait\-silent
+ As \-\-remote\-wait, but without the warning when no server is found.
+ .TP
++\-\-remote\-tab[\-wait][\-silent]
++As \-\-remote but use tab page per file
++.TP
++\-\-role
++Set a unique role to identify the main window
++.TP
+ \-\-serverlist
+ List the names of all Vim servers that can be found.
+ .TP
+diff -urN vim73/runtime/doc/vim-fr.1 vim73_new/runtime/doc/vim-fr.1
+--- vim73/runtime/doc/vim-fr.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vim-fr.1	2013-07-31 13:59:10.587467916 +0200
+@@ -24,11 +24,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+diff -urN vim73/runtime/doc/vim-fr.UTF-8.1 vim73_new/runtime/doc/vim-fr.UTF-8.1
+--- vim73/runtime/doc/vim-fr.UTF-8.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vim-fr.UTF-8.1	2013-07-31 13:59:28.394852347 +0200
+@@ -24,11 +24,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+diff -urN vim73/runtime/doc/vim-it.1 vim73_new/runtime/doc/vim-it.1
+--- vim73/runtime/doc/vim-it.1	2010-07-27 22:22:52.000000000 +0200
++++ vim73_new/runtime/doc/vim-it.1	2013-07-31 13:59:43.474331077 +0200
+@@ -17,11 +17,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+diff -urN vim73/runtime/doc/vim-it.UTF-8.1 vim73_new/runtime/doc/vim-it.UTF-8.1
+--- vim73/runtime/doc/vim-it.UTF-8.1	2010-07-30 20:53:57.000000000 +0200
++++ vim73_new/runtime/doc/vim-it.UTF-8.1	2013-07-31 13:59:55.985898573 +0200
+@@ -17,11 +17,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+diff -urN vim73/runtime/doc/vim.man vim73_new/runtime/doc/vim.man
+--- vim73/runtime/doc/vim.man	2013-07-31 14:13:01.044765627 +0200
++++ vim73_new/runtime/doc/vim.man	2013-07-31 13:53:35.107064804 +0200
+@@ -82,10 +82,10 @@
+                  The GUI version.  Starts a new window.
+ 
+        gex       Starts a new gvim window in Ex mode. Can also be done with
+-                 the "-e" argument to gvim.
++                 the "-e" argument to gvim
+ 
+        vimx      Starts gvim in "Vi" mode similar to "vim", but with 
+-                 additional features like xterm clipboard support.
++                 additional features like xterm clipboard support
+ 
+        evim eview
+                  The GUI version in easy mode.  Starts a new window.  Can also
+diff -urN vim73/runtime/doc/vim-pl.1 vim73_new/runtime/doc/vim-pl.1
+--- vim73/runtime/doc/vim-pl.1	2010-05-15 13:04:01.000000000 +0200
++++ vim73_new/runtime/doc/vim-pl.1	2013-07-31 14:00:21.282024131 +0200
+@@ -17,11 +17,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+diff -urN vim73/runtime/doc/vim-pl.UTF-8.1 vim73_new/runtime/doc/vim-pl.UTF-8.1
+--- vim73/runtime/doc/vim-pl.UTF-8.1	2010-05-15 13:37:38.000000000 +0200
++++ vim73_new/runtime/doc/vim-pl.UTF-8.1	2013-07-31 14:00:36.056513402 +0200
+@@ -17,11 +17,13 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
+ .B evim
+ .B eview
+ .br
+diff -urN vim73/runtime/doc/vim-ru.1 vim73_new/runtime/doc/vim-ru.1
+--- vim73/runtime/doc/vim-ru.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vim-ru.1	2013-07-31 14:01:10.071337568 +0200
+@@ -17,11 +17,15 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
++.B evim
++.B eview
+ .br
+ .B rvim
+ .B rview
+diff -urN vim73/runtime/doc/vim-ru.UTF-8.1 vim73_new/runtime/doc/vim-ru.UTF-8.1
+--- vim73/runtime/doc/vim-ru.UTF-8.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vim-ru.UTF-8.1	2013-07-31 14:01:34.494493301 +0200
+@@ -17,11 +17,15 @@
+ .PP
+ .br
+ .B ex
++.B gex
+ .br
+ .B view
+ .br
+ .B gvim
+ .B gview
++.B vimx
++.B evim
++.B eview
+ .br
+ .B rvim
+ .B rview
+diff -urN vim73/runtime/doc/vimtutor.1 vim73_new/runtime/doc/vimtutor.1
+--- vim73/runtime/doc/vimtutor.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor.1	2013-07-31 14:10:10.093671964 +0200
+@@ -4,6 +4,8 @@
+ .SH SYNOPSIS
+ .br
+ .B vimtutor [\-g] [language]
++.br
++.B gvimtutor
+ .SH DESCRIPTION
+ .B Vimtutor
+ starts the
+diff -urN vim73/runtime/doc/vimtutor-it.1 vim73_new/runtime/doc/vimtutor-it.1
+--- vim73/runtime/doc/vimtutor-it.1	2010-07-27 22:35:32.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor-it.1	2013-07-31 14:10:33.564861055 +0200
+@@ -4,6 +4,8 @@
+ .SH SINTASSI
+ .br
+ .B vimtutor [\-g] [lingua]
++.br
++.B gvimtutor
+ .SH DESCRIZIONE
+ .B Vimtutor
+ inizia il
+diff -urN vim73/runtime/doc/vimtutor-it.UTF-8.1 vim73_new/runtime/doc/vimtutor-it.UTF-8.1
+--- vim73/runtime/doc/vimtutor-it.UTF-8.1	2010-07-30 20:53:57.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor-it.UTF-8.1	2013-07-31 14:10:40.483622016 +0200
+@@ -4,6 +4,8 @@
+ .SH SINTASSI
+ .br
+ .B vimtutor [\-g] [lingua]
++.br
++.B gvimtutor
+ .SH DESCRIZIONE
+ .B Vimtutor
+ inizia il
+diff -urN vim73/runtime/doc/vimtutor.man vim73_new/runtime/doc/vimtutor.man
+--- vim73/runtime/doc/vimtutor.man	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor.man	2013-07-31 14:11:04.786782356 +0200
+@@ -7,6 +7,7 @@
+ 
+ SYNOPSIS
+        vimtutor [-g] [language]
++       gvimtutor
+ 
+ DESCRIPTION
+        Vimtutor starts the Vim tutor.  It copies the tutor file first, so that
+diff -urN vim73/runtime/doc/vimtutor-pl.1 vim73_new/runtime/doc/vimtutor-pl.1
+--- vim73/runtime/doc/vimtutor-pl.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor-pl.1	2013-07-31 14:11:13.602477777 +0200
+@@ -4,6 +4,8 @@
+ .SH SYNOPSIS
+ .br
+ .B vimtutor -g [j�zyk]
++.br
++.B gvimtutor
+ .SH OPIS
+ .B Vimtutor
+ uruchamia nauczyciela
+diff -urN vim73/runtime/doc/vimtutor-pl.UTF-8.1 vim73_new/runtime/doc/vimtutor-pl.UTF-8.1
+--- vim73/runtime/doc/vimtutor-pl.UTF-8.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor-pl.UTF-8.1	2013-07-31 14:11:20.571237009 +0200
+@@ -4,6 +4,8 @@
+ .SH SYNOPSIS
+ .br
+ .B vimtutor -g [język]
++.br
++.B gvimtutor
+ .SH OPIS
+ .B Vimtutor
+ uruchamia nauczyciela
+diff -urN vim73/runtime/doc/vimtutor-ru.1 vim73_new/runtime/doc/vimtutor-ru.1
+--- vim73/runtime/doc/vimtutor-ru.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor-ru.1	2013-07-31 14:11:35.673715221 +0200
+@@ -4,6 +4,8 @@
+ .SH ��������� ������
+ .br
+ .B vimtutor [����]
++.br
++.B gvimtutor
+ .SH ��������
+ �������
+ .B vimtutor
+diff -urN vim73/runtime/doc/vimtutor-ru.UTF-8.1 vim73_new/runtime/doc/vimtutor-ru.UTF-8.1
+--- vim73/runtime/doc/vimtutor-ru.UTF-8.1	2010-05-15 13:04:00.000000000 +0200
++++ vim73_new/runtime/doc/vimtutor-ru.UTF-8.1	2013-07-31 14:11:46.649335999 +0200
+@@ -7,6 +7,8 @@
+ .SH ОПИСАНИЕ
+ Команда
+ .B vimtutor
++.br
++.B gvimtutor
+ запускает учебник по
+ .B Vim.
+ При этом сначала происходит создание копии файла учебника, 

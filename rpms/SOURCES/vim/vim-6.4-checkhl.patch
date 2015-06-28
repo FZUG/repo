@@ -1,0 +1,11 @@
+--- vim64/runtime/syntax/spec.vim.check	2005-10-25 13:18:57.000000000 +0200
++++ vim64/runtime/syntax/spec.vim	2005-10-25 13:20:06.000000000 +0200
+@@ -114,7 +114,7 @@
+ syn region specPackageArea matchgroup=specSection start='^%package' end='^%'me=e-1 contains=specPackageOpts,specPreAmble,specComment
+ 
+ "%% Scripts Section %%
+-syn region specScriptArea matchgroup=specSection start='^%\(prep\|build\|install\|clean\|pre\|postun\|preun\|post\)\>' skip='^%{\|^%\(define\|patch\d*\|configure\|GNUconfigure\|setup\|find_lang\|makeinstall\)\>' end='^%'me=e-1 contains=specSpecialVariables,specVariables,@specCommands,specVariables,shDo,shFor,shCaseEsac,specNoNumberHilite,specCommandOpts,shComment,shIf,specSpecialChar,specMacroIdentifier,specSectionMacroArea,specSectionMacroBracketArea,shOperator,shQuote1,shQuote2
++syn region specScriptArea matchgroup=specSection start='^%\(prep\|build\|install\|check\|clean\|pre\|postun\|preun\|post\)\>' skip='^%{\|^%\(define\|patch\d*\|configure\|GNUconfigure\|setup\|find_lang\|makeinstall\)\>' end='^%'me=e-1 contains=specSpecialVariables,specVariables,@specCommands,specVariables,shDo,shFor,shCaseEsac,specNoNumberHilite,specCommandOpts,shComment,shIf,specSpecialChar,specMacroIdentifier,specSectionMacroArea,specSectionMacroBracketArea,shOperator,shQuote1,shQuote2
+ 
+ "%% Changelog Section %%
+ syn region specChangelogArea matchgroup=specSection start='^%changelog' end='^%'me=e-1 contains=specEmail,specURL,specWeekday,specMonth,specNumber,specComment,specLicense

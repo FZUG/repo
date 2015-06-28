@@ -1,0 +1,25 @@
+--- vim70aa/src/term.c.orig	2006-03-01 23:07:55.000000000 +0100
++++ vim70aa/src/term.c	2006-03-14 15:39:12.000000000 +0100
+@@ -1008,14 +1008,14 @@
+     {K_XRIGHT,		IF_EB("\033[1;*C", ESC_STR "[1;*C")},
+     {K_XLEFT,		IF_EB("\033[1;*D", ESC_STR "[1;*D")},
+     /* An extra set of function keys for vt100 mode */
+-    {K_XF1,		IF_EB("\033O*P", ESC_STR "O*P")},
+-    {K_XF2,		IF_EB("\033O*Q", ESC_STR "O*Q")},
+-    {K_XF3,		IF_EB("\033O*R", ESC_STR "O*R")},
+-    {K_XF4,		IF_EB("\033O*S", ESC_STR "O*S")},
+-    {K_F1,		IF_EB("\033[11;*~", ESC_STR "[11;*~")},
+-    {K_F2,		IF_EB("\033[12;*~", ESC_STR "[12;*~")},
+-    {K_F3,		IF_EB("\033[13;*~", ESC_STR "[13;*~")},
+-    {K_F4,		IF_EB("\033[14;*~", ESC_STR "[14;*~")},
++    {K_XF1,             IF_EB("\033[11~", ESC_STR "[11~")},
++    {K_XF2,             IF_EB("\033[12~", ESC_STR "[12~")},
++    {K_XF3,             IF_EB("\033[13~", ESC_STR "[13~")},
++    {K_XF4,             IF_EB("\033[14~", ESC_STR "[14~")},
++    {K_F1,              IF_EB("\033OP", ESC_STR "OP")},
++    {K_F2,              IF_EB("\033OQ", ESC_STR "OQ")},
++    {K_F3,              IF_EB("\033OR", ESC_STR "OR")},
++    {K_F4,              IF_EB("\033OS", ESC_STR "OS")},
+     {K_F5,		IF_EB("\033[15;*~", ESC_STR "[15;*~")},
+     {K_F6,		IF_EB("\033[17;*~", ESC_STR "[17;*~")},
+     {K_F7,		IF_EB("\033[18;*~", ESC_STR "[18;*~")},

@@ -1,0 +1,126 @@
+*vi-help.txt*	For Vim version 7.1.  Last change: 2008 Mar 03
+
+			VIM - minimal  help file
+  (NOTE: This is a minimal help file and many tags won't work. Use 'vim' or
+   'gvim' to read the complete help docs.)
+									 k
+      Move around:  Use the cursor keys, or "h" to go left,	       h   l
+		    "j" to go down, "k" to go up, "l" to go right.	 j
+Close this window:  Use ":q<Enter>".
+   Get out of Vim:  Use ":qa!<Enter>" (careful, all changes are lost!).
+
+Jump to a subject:  Position the cursor on a tag between |bars| and hit CTRL-].
+	Jump back:  Type CTRL-T or CTRL-O (repeat to go further back).
+
+Get specific help:  It is possible to go directly to whatever you want help
+		    on, by giving an argument to the ":help" command |:help|.
+		    It is possible to further specify the context:
+							*vi-help-context*
+			  WHAT			PREPEND    EXAMPLE	~
+		      Normal mode command      (nothing)   :help x
+		      Insert mode command	  i_	   :help i_<Esc>
+		      Command-line command	  :	   :help :quit
+		      Command-line editing	  c_	   :help c_<Del>
+		      Vim command argument	  -	   :help -r
+		      Option			  '	   :help 'textwidth'
+  Search for help:  Type ":help word", then hit CTRL-D to see matching
+		    help entries for "word".
+
+VIM stands for Vi IMproved.  Most of VIM was made by Bram Moolenaar, but only
+through the help of many others.  See |vi-credits|.
+------------------------------------------------------------------------------
+3. Credits                              *vi-credits* *vi-author* *vi-Bram* *vi-Moolenaar*
+
+Most of Vim was written by Bram Moolenaar <Bram@vim.org>.
+
+Parts of the documentation come from several Vi manuals, written by:
+        W.N. Joy
+        Alan P.W. Hewett
+        Mark Horton
+
+The Vim editor is based on Stevie and includes (ideas from) other software,
+worked on by the people mentioned here.  Other people helped by sending me
+patches, suggestions and giving feedback about what is good and bad in Vim.
+
+Vim would never have become what it is now, without the help of these people!
+
+        Ron Aaron               Win32 GUI changes
+        Zoltan Arpadffy         work on VMS port
+        Tony Andrews            Stevie
+        Gert van Antwerpen      changes for DJGPP on MS-DOS
+        Berkeley DB(3)          ideas for swap file implementation
+        Keith Bostic            Nvi
+        Walter Briscoe          Makefile updates, various patches
+        Ralf Brown              SPAWNO library for MS-DOS
+        Robert Colon            many useful remarks
+        Marcin Dalecki          GTK+ GUI port, toolbar icons, gettext()
+        Kayhan Demirel          sent me news in Uganda
+        Chris & John Downey     xvi (ideas for multi-windows version)
+        Henk Elbers             first VMS port
+        Daniel Elstner          GTK+ 2 port
+        Eric Fischer            Mac port, 'cindent', and other improvements
+        Benji Fisher            Answering lots of user questions
+        Bill Foster             Athena GUI port
+        Loic Grenie             xvim (ideas for multi windows version)
+        Sven Guckes             Vim promotor and previous WWW page maintainer
+        Darren Hiebert          Exuberant ctags
+        Jason Hildebrand        GTK+ 2 port
+        Bruce Hunsaker          improvements for VMS port
+        Andy Kahn               Cscope support, GTK+ GUI port
+        Oezguer Kesim           Maintainer of Vim Mailing Lists
+        Axel Kielhorn           work on the Macintosh port
+        Steve Kirkendall        Elvis
+        Roger Knobbe            original port to Windows NT
+        Sergey Laskavy          Vim's help from Moscow
+        Felix von Leitner       Maintainer of Vim Mailing Lists
+        David Leonard           Port of Python extensions to Unix
+        Avner Lottem            Edit in right-to-left windows
+        Flemming Madsen         X11 client-server, various features and patches
+        MicroSoft               Gave me a copy of DevStudio to compile Vim with
+        Paul Moore              Python interface extensions, many patches
+        Katsuhito Nagano        Work on multi-byte versions
+        Sung-Hyun Nam           Work on multi-byte versions
+        Vince Negri             Win32 GUI and generic console enhancements
+        Steve Oualline          Author of the first Vim book |frombook|
+        George V. Reilly        Win32 port, Win32 GUI start-off
+        Stephen Riehm           bug collector
+        Stefan Roemer           various patches and help to users
+        Ralf Schandl            IBM OS/390 port
+        Olaf Seibert            DICE and BeBox version, regexp improvements
+        Mortaza Shiran          Farsi patches
+        Peter da Silva          termlib
+        Paul Slootman           OS/2 port
+        Henry Spencer           regular expressions
+        Dany St-Amant           Macintosh port
+        Tim Thompson            Stevie
+        G. R. (Fred) Walter     Stevie
+        Sven Verdoolaege        Perl interface
+        Robert Webb             Command-line completion, GUI versions, and
+                                lots of patches
+        Ingo Wilken             Tcl interface
+        Mike Williams           PostScript printing
+        Juergen Weigert         Lattice version, AUX improvements, UNIX and
+                                MS-DOS ports, autoconf
+        Stefan 'Sec' Zehl       Maintainer of vim.org
+
+I wish to thank all the people that sent me bug reports and suggestions.  The
+list is too long to mention them all here.  Vim would not be the same without
+the ideas from all these people: They keep Vim alive!
+
+
+------------------------------------------------------------------------------
+						*vi-doc-file-list* *V_ct*
+BASIC:
+|copying|	About copyrights
+|iccf|		Helping poor children in Uganda
+|sponsor|	Sponsor Vim development, become a registered Vim user
+|www|		Vim on the World Wide Web
+|bugs|		Where to send bug reports
+
+
+------------------------------------------------------------------------------
+
+Now that you've jumped here with CTRL-] or a double mouse click, you can use
+CTRL-T, CTRL-O, g<RightMouse>, or <C-RightMouse> to go back to where you were.
+------------------------------------------------------------------------------
+ vim:tw=78:fo=tcq2:isk=!-~,^*,^\|,^\":ts=8:ft=help:norl:
