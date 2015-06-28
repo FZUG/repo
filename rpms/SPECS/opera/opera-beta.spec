@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name: opera-beta
-Version: 30.0.1835.26
+Version: 31.0.1889.16
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -90,6 +90,8 @@ update-desktop-database &> /dev/null || :
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> -31.0.1889.16-1
+- Update version 31.0.1889.16
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> -30.0.1835.26-1
 - Update version 30.0.1835.26
 * Tue Dec 23 2014 mosquito <sensor.wen@gmail.com> -27.0.1689.33-1
