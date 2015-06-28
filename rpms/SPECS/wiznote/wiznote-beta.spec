@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 8c584464828da0381654519373cb8126b5de359b
+%global _commit 020d933bdd2c3720ed58a098be1b1ef395892ff7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # cmake version
@@ -175,6 +175,8 @@ ldconfig
 #@exclude @{_datadir}/licenses/
 
 %changelog
+* Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git020d933
+- Version release
 * Fri May 22 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git8c58446
 - Build on linux
 * Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git4bf03fa
