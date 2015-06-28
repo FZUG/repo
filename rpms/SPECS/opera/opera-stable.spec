@@ -2,7 +2,7 @@
 %global appname opera
 
 Name: opera-stable
-Version: 29.0.1795.60
+Version: 30.0.1835.88
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -103,6 +103,8 @@ update-desktop-database &> /dev/null || :
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> -30.0.1835.88-1
+- Update to 30.0.1835.88
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> -29.0.1795.60-1
 - Update to 29.0.1795.60
 * Wed Dec 17 2014 mosquito <sensor.wen@gmail.com> -26.0.1656.60-1
