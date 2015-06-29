@@ -6,15 +6,6 @@
 %global _commit 020d933bdd2c3720ed58a098be1b1ef395892ff7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-# cmake version
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-   %define _cmake cmake
-%else
- %if 0%{?rhel} == 6
-   %define _cmake cmake28
- %endif
-%endif
-
 Name:		wiznote-beta
 Version:	2.2.1
 Release:	1.git%{_shortcommit}%{?dist}
@@ -33,13 +24,7 @@ BuildRequires:	qt5-qttools-devel
 BuildRequires:	qt5-qtwebkit-devel
 BuildRequires:	boost-devel
 BuildRequires:	zlib-devel
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
 BuildRequires:	cmake >= 2.8.4
-%else
- %if 0%{?rhel} == 6
-BuildRequires:	cmake28 >= 2.8.4
- %endif
-%endif
 Obsoletes:	wiz-note <= 2.1.13git20140926
 Obsoletes:	wiznote-beta <= 2.1.18git20150430
 
