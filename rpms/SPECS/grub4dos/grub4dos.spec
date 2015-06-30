@@ -5,11 +5,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 8d8c4e68b3f3e774ef5a9c10ba4f65158c55d4ac
+%global _commit 8f1e932add84ff19798abd36200a5315c90f3000
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		grub4dos
-Version:	0.4.6a.20150518
+Version:	0.4.6a.20150617
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	This is GNU GRUB, the GRand Unified Bootloader
 Summary(zh_CN):	多功能启动引导管理器
@@ -21,7 +21,7 @@ Url:		https://code.google.com/p/grub4dos-chenall
 Source0:	https://github.com/chenall/grub4dos/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # http://ipxe.org (git clone --depth 1 git://git.ipxe.org/ipxe.git)
 # find . -name ".git*" | xargs rm -f
-Source1:	ipxe-50e703a.tar.xz
+Source1:	ipxe-a0f60d2.tar.xz
 # https://code.google.com/p/grub4dos-help-doc
 # http://bbs.wuyou.net/forum.php?mod=viewthread&tid=185938
 Source2:	%{name}-help-%{helpdate}.chm
@@ -246,6 +246,8 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 %{_datadir}/%{name}
 
 %changelog
+* Tue Jun 30 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150617-1
+- Update version to 0.4.6a.20150617
 * Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150518-1
 - Update version to 0.4.6a.20150518
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150505-2
