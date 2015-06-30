@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit e2e93364518415bebb4a1924443c020b8682b9d6
+%global _commit 3f846924a0bb66fa893798478b3725c50be50aa3
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		simplescreenrecorder
@@ -118,7 +118,10 @@ ldconfig
 %{_libdir}/libssr-glinject.so
 
 %changelog
-* Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1
+* Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1.git3f84692
+- Update version to 0.3.3-1.git3f84692
+
+* Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1.gite2e9336
 - Rename version name
 
 * Fri Jan 23 2015 mosquito <sensor.wen@gmail.com> - 0.3.3git20150122-1
