@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 53e1c0cccacf648e846057938a68dda914f532a1
+%global _commit e73c7af7c17d53dfb5cc27be84791d6f16ebd867
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		screenfetch
@@ -38,7 +38,9 @@ install -Dm 0755 %{name}-dev %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
-* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 3.6.5-1
+* Tue Jun 30 2015 mosquito <sensor.wen@gmail.com> - 3.6.5-1.gite73c7af
+- Update version to 3.6.5-1.gite73c7af
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 3.6.5-1.git53e1c0c
 - Rename version name
 * Fri Dec 12 2014 mosquito <sensor.wen@gmail.com> - 3.6.5git20141211-1
 - Update version to 3.6.5git20141211
