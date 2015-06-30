@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 8fb2929420f81a20c74cabc4dd2735384f87e8f5
+%global _commit 82471d7539597c4276b892f230b38d17141c1c2a
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.9.1
+Version:    0.10.1
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -34,6 +34,8 @@ BuildRequires:  hicolor-icon-theme
 BuildRequires:  jansson-devel
 BuildRequires:  systemd-devel
 BuildRequires:  libXrandr-devel
+BuildRequires:  ImageMagick-devel
+BuildRequires:  libcurl-devel
 
 %description
 Open Broadcaster Software is free and open source software
@@ -62,8 +64,11 @@ Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 %build
 mkdir build && pushd build
 %{cmake} .. \
-    -DUNIX_STRUCTURE=1 \
+    -DUNIX_STRUCTURE=ON \
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
+%ifarch x86_64
+    -DOBS_MULTIARCH_SUFFIX=64 \
+%endif
     -DOBS_VERSION_OVERRIDE=%{version} \
     -DCMAKE_BUILD_TYPE=Release
 make %{?_smp_mflags}
@@ -71,15 +76,6 @@ make %{?_smp_mflags}
 %install
 pushd build
 %make_install
-
-%ifarch x86_64
-mkdir -p %{buildroot}%{_libdir}
-mv %{buildroot}/usr/lib/* %{buildroot}%{_libdir}/
-# needs obs-plugins in lib/ even though 64bit
-mv %{buildroot}%{_libdir}/obs-plugins %{buildroot}/usr/lib/
-sed -i 's|/usr/lib|%{_libdir}|g' \
-    %{buildroot}%{_libdir}/cmake/LibObs/LibObsTarget.cmake
-%endif
 
 %post
 update-desktop-database -q || true
@@ -94,7 +90,7 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
 %files
 %defattr(-,root,root,-)
 %{_bindir}/obs
-%{_usr}/lib/obs-plugins
+%{_libdir}/obs-plugins
 %{_libdir}/libobs*.so.*
 %{_datadir}/applications/obs.desktop
 %{_datadir}/icons/hicolor/*/apps/obs*
@@ -107,7 +103,9 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
 %{_includedir}/obs
 
 %changelog
-* Sun May 10 2015 mosquito <sensor.wen@gmail.com> - 0.9.1-1
+* Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 0.10.1-1.git82471d7
+- Update to 0.10.1-1.git82471d7
+* Sun May 10 2015 mosquito <sensor.wen@gmail.com> - 0.9.1-1.git8fb2929
 - Rebuild for fedora
 * Fri Mar 27 2015 jimmy@boombatower.com
 - Update to 0.9.1 release.
