@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit ca0281d60da3dc81205c4e71f866a9450030f8bb
+%global _commit e77cb63a77db6b07165310ca2b8058f8c6879b6e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: freshplayerplugin
-Version: 0.2.4
+Version: 0.3.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
@@ -19,7 +19,7 @@ URL: https://github.com/i-rinat/freshplayerplugin
 Source0: https://github.com/i-rinat/freshplayerplugin/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: cmake >= 2.8.8
-BuildRequires: pkgconfig
+BuildRequires: pkgconfig chrpath
 BuildRequires: ragel
 BuildRequires: alsa-lib-devel
 BuildRequires: openssl-devel
@@ -37,7 +37,9 @@ BuildRequires: mesa-libGL-devel
 BuildRequires: pulseaudio-libs-devel
 BuildRequires: jack-audio-connection-kit-devel
 BuildRequires: soxr-devel
-BuildRequires: chrpath
+BuildRequires: ffmpeg-devel
+BuildRequires: libva-devel
+BuildRequires: libvdpau-devel
 
 %description
  The main goal of this project is to get PPAPI (Pepper)
@@ -82,5 +84,7 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 0.3.0-1.gite77cb63
+- Update version to 0.3.0-1.gite77cb63
 * Mon Jun  1 2015 mosquito <sensor.wen@gmail.com> - 0.2.4-1.gitca0281d
 - Initial build
