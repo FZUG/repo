@@ -8,7 +8,7 @@
 
 Name:		pointdownload
 Version:	1.2.0
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	Efficient download tool
 Summary(zh_CN):	一款美观高效的下载工具
 
@@ -71,11 +71,9 @@ make %{?_smp_mflags}
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # DESTDIR is error, please see Makefile
 #pushd build
-#make install INSTALL_ROOT=@{buildroot}
+#make install INSTALL_ROOT=%%{buildroot}
 #popd
 
 # main files
@@ -136,16 +134,14 @@ cp XwareMask/README* XwareMask-README.md
 %pre
 # $1 -eq 1: pre_install
 # $1 -eq 2: pre_upgrade
-
-pkill Embed
-pkill point
+pkill Embed ||:
+pkill point ||:
 
 %preun
 # $1 -eq 0: preun_uninstall
 # $1 -eq 1: preun_upgrade
-
-pkill Embed
-pkill point
+pkill Embed ||:
+pkill point ||:
 
 %post
 # $1 -eq 1: post_install
@@ -172,10 +168,10 @@ if [ 0$1 -eq 1 ]; then
     for i in $USER; do
 	su -c "mkdir -p /home/${i}/.local/share/applications/" "$i"
 	su -c "xdg-mime default pointpopup.desktop \
-    	application/x-bittorrent \
-    	x-scheme-handler/ed2k \
-    	x-scheme-handler/thunder \
-    	x-scheme-handler/magnet" "$i"
+      application/x-bittorrent \
+      x-scheme-handler/ed2k \
+      x-scheme-handler/thunder \
+      x-scheme-handler/magnet" "$i"
     done
     echo -e " - PointDownload安装完成。\n"
     echo "项目主页 https://github.com/PointTeam/PointDownload/wiki"
@@ -184,7 +180,6 @@ fi
 
 if [ 0$1 -eq 2 ]; then
     setcap CAP_SYS_ADMIN=+ep %{_datadir}/%{name}/xwarestartup
-    exit 0
 fi
 
 %postun
@@ -207,7 +202,7 @@ if [ 0$1 -eq 0 ]; then
 	"/home/${i}/.local/share/applications/mimeapps.list"
     done
     echo -e " - PointDownload卸载完成。\n"
-    echo "用户配置文件、下载列表文件以及下载组件执行文件位于~/.PointConfig，请手动删除。"
+    echo "用户配置文件、下载列表以及下载组件位于~/.PointConfig，请手动删除。"
     echo "============================================================"
 fi
 
@@ -224,7 +219,9 @@ fi
 %{_datadir}/%{name}/qml
 
 %changelog
-* Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 1.2.0-1
+* Fri Jul 03 2015 mosquito <sensor.wen@gmail.com> - 1.2.0-2.gitcd07f1d
+- Fix return value
+* Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 1.2.0-1.gitcd07f1d
 - Rename version name
 * Wed Jan 07 2015 mosquito <sensor.wen@gmail.com> - 1.2.0git20150105-1
 - Update version to 1.2.0git20150105
