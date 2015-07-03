@@ -16,12 +16,13 @@ Summary(zh_CN):	Xware (迅雷路由器固件) 的 Linux 桌面前端.
 Group:		Applications/Internet
 License:	GPLv3
 URL:		https://github.com/Xinkai/XwareDesktop/wiki
-Source:		https://github.com/Xinkai/XwareDesktop/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:	https://github.com/Xinkai/XwareDesktop/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Patch0:		xware-desktop_makefile.patch
 
 BuildRequires:	glibc-devel(x86-32)
 BuildRequires:	glibc(x86-32)
 BuildRequires:	libgcc(x86-32)
+BuildRequires:	fakeroot
 BuildRequires:	python3-devel
 BuildRequires:	python3-setuptools
 BuildRequires:	python3-sip
@@ -65,7 +66,6 @@ make all %{?_smp_mflags} \
 	QMAKE=%{_qt5_qmake}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=%{buildroot} PREFIX=%{_datadir}/%{name}
 
 # change rpath/runpath
@@ -80,30 +80,14 @@ install -d %{buildroot}%{python3_sitelib}
   easy_install-3.4 -d %{buildroot}%{python3_sitelib} pathlib asyncio
 %endif
 
-%pre
-    if [ 0$1 -eq 1 ]; then
-	# pre_install
-	exit 0
-    fi
-
-    if [ 0$1 -eq 2 ]; then
-	# pre_upgrade
-	exit 0
-    fi
-
 %post
+# $1 -eq 1: pre/post_install
+# $1 -eq 2: pre/post_upgrade
     if [ 0$1 -eq 1 ]; then
 	# Fedora specific, same as Arch
 	update-desktop-database -q
 	setcap CAP_SYS_ADMIN=+ep %{_datadir}/%{name}/chmns
 	chrpath -r %{_datadir}/%{name}/frontend/Extensions %{_datadir}/%{name}/frontend/Extensions/DBusTypes.so
-
-	# python3 library
-	#@if 0@{?fedora} <= 20 || 0@{?rhel} >= 7
-	#easy_install-3.3 pathlib asyncio
-	#@else
-	#easy_install-3.4 pathlib asyncio
-	#@endif
 
 	echo "================================================="
 	echo -e "《欢迎使用 Xware Desktop》\n"
@@ -123,29 +107,15 @@ install -d %{buildroot}%{python3_sitelib}
 	chrpath -r %{_datadir}/%{name}/frontend/Extensions %{_datadir}/%{name}/frontend/Extensions/DBusTypes.so
     fi
 
-%preun
-    if [ 0$1 -eq 0 ]; then
-	# uninstall
-	exit 0
-    fi
-
-    if [ 0$1 -eq 1 ]; then
-	# preun_upgrade
-	exit 0
-    fi
-
 %postun
+# $1 -eq 0: preun/postun_uninstall
+# $1 -eq 1: preun/postun_upgrade
     if [ 0$1 -eq 0 ]; then
 	# uninstall
 	echo "================================================="
 	echo "Xware Desktop 卸载完成......"
 	echo "用户配置文件位于~/.xware-desktop，并未删除。"
 	echo "================================================="
-    fi
-
-    if [ 0$1 -eq 1 ]; then
-	# postun_upgrade
-	exit 0
     fi
 
 %files
@@ -158,7 +128,7 @@ install -d %{buildroot}%{python3_sitelib}
 %{python3_sitelib}
 
 %changelog
-* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.13-1
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.13-1.git0c69374
 - Rename version name
 * Tue Feb 03 2015 mosquito <sensor.wen@gmail.com> - 0.13git20150201-1
 - Update version to 0.13git20150201
