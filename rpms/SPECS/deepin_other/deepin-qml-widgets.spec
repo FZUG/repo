@@ -20,6 +20,7 @@ Source:		https://github.com/linuxdeepin/deepin-qml-widgets/archive/%{_commit}/%{
 BuildRequires:	pkgconfig
 BuildRequires:	gettext
 BuildRequires:	desktop-file-utils
+BuildRequires:	gtk2-devel
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qtdeclarative-devel >= 5.3.1
 BuildRequires:	qt5-qtwebkit-devel >= 5.3.1
