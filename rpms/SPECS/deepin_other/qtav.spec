@@ -2,13 +2,13 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit bd257ec4a32daab4ecd18932fdf59aee42a591ae
+%global _commit 68322f85233590df7f196aed6d803a928928492d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 1
 
 Name: qtav
-Version: 1.6.0
+Version: 1.7.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
@@ -216,10 +216,11 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台高性能多媒体播放库.
 export QT_SELECT=qt5
 export CPATH="`pkg-config --variable=includedir libavformat`"
 mkdir build; pushd build
+# debug mode: CONFIG+=debug
 %if 0%{?with_llvm}
 %{_qt5_qmake} "CONFIG+=recheck" -spec linux-clang ..
 %else
-%{_qt5_qmake} "CONFIG+=recheck" ..
+%{_qt5_qmake} "CONFIG+=recheck" "QMAKE_CXXFLAGS_RELEASE-=-O2" "QMAKE_CXXFLAGS+=-O1" ..
 %endif
 make %{?_smp_mflags}
 
@@ -298,6 +299,9 @@ ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
 
 %changelog
+* Sat Jul 11 2015 mosquito <sensor.wen@gmail.com> - 1.7.0-1.git68322f8
+- Update version to 1.7.0-1.git68322f8
+- fix qtav gcc5 -O2 build error
 * Sat Jul  4 2015 mosquito <sensor.wen@gmail.com> - 1.6.0-1.gitbd257ec
 - Update version to 1.6.0-1.gitbd257ec
 * Thu Mar  5 2015 mosquito <sensor.wen@gmail.com> - 1.5.0git20150304-1
