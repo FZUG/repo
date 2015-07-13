@@ -3,20 +3,13 @@
 %global repo %{project}
 
 # commit
-%global _commit 8addfa132089854a48b7bd41c8991a56d56ef4dc
+%global _commit 1c186f32d0be20f04c14e3c500f8b5294259ff6c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-# cmake version
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-   %define _cmake cmake
-%else
- %if 0%{?rhel} == 6
-   %define _cmake cmake28
- %endif
-%endif
+%global with_llvm 0
 
 Name:		wiznote
-Version:	2.1.18
+Version:	2.2.1
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
@@ -27,18 +20,16 @@ License:	GPLv3
 URL:		https://github.com/WizTeam/WizQTClient
 Source0:	https://github.com/WizTeam/WizQTClient/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildRequires:	gcc-c++
+BuildRequires:	cmake >= 2.8.4
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qttools-devel
 BuildRequires:	qt5-qtwebkit-devel
 BuildRequires:	boost-devel
+BuildRequires:	cryptopp-devel
+BuildRequires:	quazip-devel
 BuildRequires:	zlib-devel
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-BuildRequires:	cmake >= 2.8.4
-%else
- %if 0%{?rhel} == 6
-BuildRequires:	cmake28 >= 2.8.4
- %endif
+%if 0%{?with_llvm}
+BuildRequires:	clang
 %endif
 Obsoletes:	wiz-note <= 2.1.13git20140926
 
@@ -69,6 +60,10 @@ Please refer to WizNote home for more detailed info:
 %setup -q -n %repo-%{_commit}
 
 %build
+# dynamic library (crypt|zip|json)
+sed -i -r '/crypt/d' lib/CMakeLists.txt
+sed -i -e '/cryptlib/az' -e 's|cryptlib|cryptopp|' src/CMakeLists.txt
+
 # GCC version
 gcc_version=$((LANG=c;gcc --version)|awk 'gsub(/\./,""){print $3;exit}')
 if [ $gcc_version -ge '490' ]; then
@@ -100,18 +95,17 @@ pushd dist
 %if 0%{?rhel} == 6
 	-DBoost_NO_BOOST_CMAKE=ON \
 %endif
+%if 0%{?with_llvm}
+	-DCMAKE_C_COMPILER=clang \
+	-DCMAKE_CXX_COMPILER=clang++ \
+%endif
 	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
-	-DBUILD_STATIC_LIBRARIES=ON \
-	-DCLUCENE_BUILD_SHARED_LIBRARIES=ON \
-	-DCRYPTOPP_BUILD_SHARED_LIBS=ON \
-	-DCRYPTOPP_BUILD_STATIC_LIBS=ON \
 	-DWIZNOTE_USE_QT5=ON \
 	-DCMAKE_BUILD_TYPE=Release
 make %{?_smp_mflags}
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
 pushd dist
 make install DESTDIR=%{buildroot}
 popd
@@ -131,13 +125,13 @@ rm -rf %{buildroot}%{_datadir}/licenses/
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 
 %post
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 ldconfig
 
 %postun
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 ldconfig
 
 %files
@@ -149,11 +143,15 @@ ldconfig
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/%{name}/*
-#@exclude @{_datadir}/licenses/
+#%%exclude %%{_datadir}/licenses/
 
 %changelog
-* Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.1.18-1
-- Update version to 2.1.18
+* Mon Jul 13 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git1c186f3
+- Update version to 2.2.1-1.git1c186f3
+- use clang with build test
+- dynamic link library
+* Mon May 18 2015 mosquito <sensor.wen@gmail.com> - 2.1.18-1.git8addfa1
+- Update version to 2.1.18-1.git8addfa1
 * Wed Mar 04 2015 mosquito <sensor.wen@gmail.com> - 2.1.15git20150215-1
 - Update version to 2.1.15git20150215
 * Thu Nov 20 2014 mosquito <sensor.wen@gmail.com> - 2.1.14git20141119-1
