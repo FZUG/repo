@@ -3,11 +3,13 @@
 %global repo %{project}
 
 # commit
-%global _commit 020d933bdd2c3720ed58a098be1b1ef395892ff7
+%global _commit 88992f4252b13aa78eabb75a87fb99b7328d6149
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
+%global with_llvm 0
+
 Name:		wiznote-beta
-Version:	2.2.1
+Version:	2.2.2
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
@@ -18,13 +20,17 @@ License:	GPLv3
 URL:		https://github.com/WizTeam/WizQTClient
 Source0:	https://github.com/WizTeam/WizQTClient/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildRequires:	gcc-c++
+BuildRequires:	cmake >= 2.8.4
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	qt5-qttools-devel
 BuildRequires:	qt5-qtwebkit-devel
 BuildRequires:	boost-devel
+BuildRequires:	cryptopp-devel
+BuildRequires:	quazip-devel
 BuildRequires:	zlib-devel
-BuildRequires:	cmake >= 2.8.4
+%if 0%{?with_llvm}
+BuildRequires:	clang
+%endif
 Obsoletes:	wiz-note <= 2.1.13git20140926
 Obsoletes:	wiznote-beta <= 2.1.18git20150430
 
@@ -44,6 +50,10 @@ This is a development version.
 %setup -q -n %repo-%{_commit}
 
 %build
+# dynamic library (crypt|zip|json)
+sed -i -r '/crypt/d' lib/CMakeLists.txt
+sed -i -e '/cryptlib/az' -e 's|cryptlib|cryptopp|' src/CMakeLists.txt
+
 # GCC version
 gcc_version=$((LANG=c;gcc --version)|awk 'gsub(/\./,""){print $3;exit}')
 if [ $gcc_version -ge '490' ]; then
@@ -91,18 +101,17 @@ pushd dist
 %if 0%{?rhel} == 6
 	-DBoost_NO_BOOST_CMAKE=ON \
 %endif
+%if 0%{?with_llvm}
+	-DCMAKE_C_COMPILER=clang \
+	-DCMAKE_CXX_COMPILER=clang++ \
+%endif
 	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
-	-DBUILD_STATIC_LIBRARIES=ON \
-	-DCLUCENE_BUILD_SHARED_LIBRARIES=ON \
-	-DCRYPTOPP_BUILD_SHARED_LIBS=ON \
-	-DCRYPTOPP_BUILD_STATIC_LIBS=ON \
 	-DWIZNOTE_USE_QT5=ON \
 	-DCMAKE_BUILD_TYPE=Release
 make %{?_smp_mflags}
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
 pushd dist
 make install DESTDIR=%{buildroot}
 popd
@@ -126,8 +135,8 @@ for i in `ls %{buildroot}%{_datadir}/icons/hicolor/`; do
 done
 
 # export library path
-#install -d @{buildroot}/etc/ld.so.conf.d/
-#echo "@{_libdir}/@{name}/plugins/" > @{buildroot}/etc/ld.so.conf.d/@{name}.conf
+#install -d %%{buildroot}/etc/ld.so.conf.d/
+#echo "%%{_libdir}/%%{name}/plugins/" > %%{buildroot}/etc/ld.so.conf.d/%%{name}.conf
 
 cat > %{buildroot}%{_bindir}/%{name} << EOF
 #!/bin/bash
@@ -139,27 +148,31 @@ rm -rf %{buildroot}%{_datadir}/licenses/
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 
 %post
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 ldconfig
 
 %postun
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 ldconfig
 
 %files
 %defattr(-,root,root,-)
 %doc LICENSE README.md CHANGELOG.md
-#@{_sysconfdir}/ld.so.conf.d/@{name}.conf
+#%%{_sysconfdir}/ld.so.conf.d/%%{name}.conf
 %{_libdir}/%{name}/plugins/*
 %{_bindir}/%{name}*
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/%{name}/*
-#@exclude @{_datadir}/licenses/
+#%%exclude %%{_datadir}/licenses/
 
 %changelog
+* Mon Jul 13 2015 mosquito <sensor.wen@gmail.com> - 2.2.2-1.git88992f4
+- Update version to 2.2.2-1.git88992f4
+- use clang with build test
+- dynamic link library
 * Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git020d933
 - Version release
 * Fri May 22 2015 mosquito <sensor.wen@gmail.com> - 2.2.1-1.git8c58446
