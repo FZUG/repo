@@ -8,7 +8,7 @@
 
 Name: deepin-movie
 Version: 2.2.2
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Deepin Movie
 Summary(zh_CN): 深度影音
 
@@ -26,7 +26,6 @@ Requires: python-qt5
 Requires: mediainfo
 Requires: python-xpyb
 Requires: python-magic
-Requires: python-peewee
 Requires: fontconfig-devel
 Requires(post): python-pip
 
@@ -38,13 +37,8 @@ Requires: deepin-qml-widgets
 Requires: dde-qml-dbus-factory
 
 # arch deps
-Requires: qt5-qtdeclarative
 Requires: qt5-qtquickcontrols
-Requires: qt5-qtmultimedia
-Requires: qt5-qtwebkit
 Requires: qt5-qtgraphicaleffects
-Requires: qt5-qtimageformats
-Requires: python-setproctitle
 Requires: enca
 
 %description
@@ -81,14 +75,14 @@ popd
 
 %post
 if [ $1 -eq 1 ]; then
-pip install -U -q ass pysrt &>/dev/null ||:
+pip install -U -q ass pysrt 'peewee>=2.3.0,<=2.4.4' &>/dev/null ||:
 fi
 update-desktop-database -q ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %postun
 if [ $1 -eq 0 ]; then
-pip uninstall -y -q ass pysrt &>/dev/null ||:
+pip uninstall -y -q ass pysrt peewee &>/dev/null ||:
 fi
 update-desktop-database -q ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
@@ -102,5 +96,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_datadir}/icons/hicolor/*
 
 %changelog
+* Thu Jul 16 2015 mosquito <sensor.wen@gmail.com> - 2.2.2-2.git53adfc6
+- python-peewee(>=2.3.0,<=2.4.4)
+- remove some depends
 * Sat Jul  4 2015 mosquito <sensor.wen@gmail.com> - 2.2.2-1.git53adfc6
 - Initial build
