@@ -45,7 +45,7 @@ Baka MPlayer 是一款开源, 跨平台, 基于 libmpv 的多媒体播放器.
 %setup -q -n %repo-%{_commit}
 
 %build
-%{_qt5_qmake} src/Baka-MPlayer.pro CONFIG+="release install_translations man.extra" \
+%{_qt5_qmake} src/Baka-MPlayer.pro CONFIG+="release install_translations" \
 lupdate=lupdate-qt5 lrelease=lrelease-qt5 \
 DOCDIR=%{_docdir} LICENSEDIR=%{_docdir} \
 QMAKE_CFLAGS+="%{optflags}" QMAKE_CXXFLAGS+="%{optflags}"
