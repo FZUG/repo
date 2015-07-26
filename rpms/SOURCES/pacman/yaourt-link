@@ -1,0 +1,101 @@
+#!/bin/bash
+# Author: mosquito <sensor.wen@gmail.com>
+# Date: 2015.7.26
+
+VERSION="0.1"
+L="${LANG%.*}"
+PREFIX="${3-/opt/arch}"
+FILELIST="/var/lib/pacman/local"
+
+HELP() {
+  case $L in
+    zh_CN)
+      echo \
+"用法：$0 <选项> [前缀]
+为 yaourt/pacman 安装的软件包，创建必要链接。
+路径前缀默认为 /opt/arch 。
+
+选项：
+  -l, --list           列出已安装软件包
+  -s, --link <包名>    创建必要软链接
+  -r, --remove <包名>  删除软链接
+  -h, --help           显示此帮助信息
+  -v, --version        显示版本信息
+
+示例：$0 --link package /opt/arch
+项目主页：<https://github.com/FZUG/repo>"
+	;;
+
+    *)
+      echo \
+"Usage：$0 <Option> [prefix]
+Create sybolic links for installed packages.
+prefix default /opt/arch.
+
+Options:
+  -l, --list           list installed packages
+  -s, --link <pkg>     create sybolic
+  -r, --remove <pkg>   remove sybolic
+  -h, --help           print help
+  -v, --version        print version
+
+Example: $0 --link package /opt/arch
+Github page: <https://github.com/FZUG/repo>"
+      ;;
+  esac
+}
+
+LINK() {
+  PKG=$(yaourt -Q $2)
+
+  if [[ $2 == "" ]]; then
+    echo "Please enter package name."
+  elif [[ $PKG == "" ]]; then
+    echo "No such package."
+  elif [[ ! -d $PREFIX ]]; then
+    echo "Error prefix directory's path."
+  else
+    for i in $(cat $FILELIST/$2*/files); do
+      # create links
+      if [[ "$1" == "link" && ! -a "/$i" && -a "$PREFIX/$i"  && "$i" != "%FILES%" ]]; then
+        echo " link to: /$i"
+        ln -s "$PREFIX/$i" "/$i"
+      fi
+      # remove links
+      if [[ "$1" == "remove" && -L "/$i" && $(readlink -f "/$i"|grep "$PREFIX") != "" && "$i" != "%FILES%" ]]; then
+        echo " remove link: /$i"
+        rm -rf "/$i"
+      fi
+    done
+    echo "Operating finish: $PKG"
+  fi
+}
+
+case "$1" in
+  -l|--list)
+    yaourt -Q
+    ;;
+  -s|--link)
+    LINK link "$2" "$3"
+    ;;
+  -r|--remove)
+    LINK remove "$2"
+    ;;
+  ""|-h|--help)
+    HELP
+    ;;
+  -v|--version)
+    if [ "$L" == "zh_CN" ]; then
+      echo -e "$0 (yaourt) $VERSION\n项目主页：<https://github.com/FZUG/repo>"
+    else
+      echo -e "$0 (yaourt) $VERSION\nGithub page: <https://github.com/FZUG/repo>"
+    fi
+    ;;
+  *)
+    if [ "$L" == "zh_CN" ]; then
+      echo "参数错误。请查看帮助。"
+    else
+      echo "parameters error. please see help."
+    fi
+    ;;
+esac
