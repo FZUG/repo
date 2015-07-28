@@ -8,7 +8,7 @@
 
 Name: package-query
 Version: 1.6.2
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Query ALPM and AUR
 Summary(zh_CN): 查询 ALPM 和 AUR
 
@@ -58,5 +58,7 @@ gzip -9 %{buildroot}%{_mandir}/man8/*
 %{_mandir}/man8/*.gz
 
 %changelog
+* Sun Jul 26 2015 mosquito <sensor.wen@gmail.com> - 1.6.2-2.git3d1115f
+- Rebuild for libalpm-4.2.1
 * Sun Jul 26 2015 mosquito <sensor.wen@gmail.com> - 1.6.2-1.git3d1115f
 - Initial build
