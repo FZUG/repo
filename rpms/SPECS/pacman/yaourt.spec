@@ -8,7 +8,7 @@
 
 Name: yaourt
 Version: 1.6
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A pacman wrapper with extended features and AUR support
 Summary(zh_CN): 支持 AUR 的 pacman 前端
 
@@ -16,7 +16,7 @@ License: GPL
 Group: Applications/System
 Url: https://archlinux.fr/yaourt-en
 Source0: https://github.com/archlinuxfr/yaourt/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-Source1: yaourt-link
+Source1: https://github.com/FZUG/repo/raw/master/rpms/SOURCES/pacman/yaourt-link
 
 BuildArch: noarch
 BuildRequires: gettext gzip
@@ -58,5 +58,7 @@ install -m 755 %{S:1} %{buildroot}%{_bindir}/
 %exclude %{_datadir}/bash-completion/
 
 %changelog
+* Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.6-2.gitd2d8300
+- Fixed yaourt-link's LINK function
 * Sun Jul 26 2015 mosquito <sensor.wen@gmail.com> - 1.6-1.gitd2d8300
 - Initial build
