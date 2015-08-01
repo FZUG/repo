@@ -5,39 +5,59 @@
 #   0.1(2015.7.26) - Initial version
 #   0.2(2015.7.30) - Fixed LINK function
 #   0.3(2015.7.31) - Add -L, --linked option
+#   0.4(2015.8.02) - Add -q, -S option
 
-VERSION="0.3"
-L="${LANG%.*}"
-PREFIX="${3-/opt/arch}"
-FILELIST="/var/lib/pacman/local"
+INIT() {
+  Version="0.4"
+  L="${LANG%.*}"
+  Sudo=$(if [ $(id -u) -ne "0" ];then echo "sudo";fi)
+  Conf="/etc/pacman.conf"
+  MultiDir="/etc/pacman.d/multiconf"
+  Prefix="${3-$(awk '/Root/{print $3}' $Conf)}"
+  FileList="$(awk '/DB/{print $3}' $Conf)/local"
+}
 
 HELP() {
   case $L in
     zh_CN)
-      echo \
-"用法：$0 <选项> [前缀]
+
+if [[ "$1" == "hElP" ]]; then
+  cat <<EOF
+用法：$0 <选项> [前缀]
 为 yaourt/pacman 安装的软件包，创建必要链接。
 路径前缀默认为 /opt/arch 。
 
 选项：
-  -l, --list           列出已安装软件包
-  -L, --linked [包名]  列出已链接软件包或路径
+  -q, --query          列出所有域配置
+  -S, --ln-conf <配置> 链接指定域配置至 /etc/pacman.conf
+  -l, --list           列出该域已安装软件包
+  -L, --linked [包名]  列出该域已链接软件包或路径
   -s, --link <包名>    创建必要软链接
   -r, --remove <包名>  删除软链接
   -h, --help           显示此帮助信息
   -v, --version        显示版本信息
 
 示例：$0 --link package /opt/arch
-项目主页：<https://github.com/FZUG/repo>"
-	;;
+项目主页：<https://github.com/FZUG/repo>
+EOF
 
-    *)
-      echo \
+elif [[ "$1" == "vErSiOn" ]]; then
+  echo -e "$0 (yaourt) $Version\n项目主页：<https://github.com/FZUG/repo>"
+else
+  echo "参数错误。请查看帮助。"
+fi;;
+
+  *)
+
+if [[ "$1" == "hElP" ]]; then
+  cat <<EOF
 "Usage：$0 <Option> [prefix]
 Create sybolic links for installed packages.
 prefix default /opt/arch.
 
 Options:
+  -q, --query          list all of the domain's config
+  -S, --ln-conf <conf> link specified domain's config to /etc/pacman.conf
   -l, --list           list installed packages
   -L, --linked [pkg]   list linked packages or path
   -s, --link <pkg>     create sybolic link
@@ -46,20 +66,55 @@ Options:
   -v, --version        print version
 
 Example: $0 --link package /opt/arch
-Github page: <https://github.com/FZUG/repo>"
-      ;;
+Github page: <https://github.com/FZUG/repo>
+EOF
+
+elif [[ "$1" == "vErSiOn" ]]; then
+  echo -e "$0 (yaourt) $Version\nGithub page: <https://github.com/FZUG/repo>"
+else
+  echo "parameters error. please see help."
+fi;;
+
   esac
 }
 
-LINK() {
-  PKG=$(yaourt -Q $2)
-  PKGLIST=$(pacman -Q|awk '{print $1}')
+LINKCONF() {
+  if [[ ! -d "$MultiDir" ]]; then
+    $Sudo mkdir "$MultiDir"
+  fi
+
+  if [[ -f "$Conf" && ! -f "$MultiDir/default" ]]; then
+    $Sudo mv "$Conf" "$MultiDir/default"
+    $Sudo ln -s "$MultiDir/default" "$Conf"
+  fi
+
+  if [[ "$1" == "list" ]]; then
+    ls "$MultiDir"
+    echo "Current: pacman.conf -> $(readlink $Conf)"
+  elif [[ "$2" != "" && ! -f "$MultiDir/$2" ]]; then
+    echo "No such config file."
+  elif [[ "$1" == "link" && -L "$Conf" ]]; then
+    $Sudo rm -f "$Conf"
+    $Sudo ln -s "$MultiDir/$2" "$Conf"
+
+    INIT
+    # check chroot directory
+    if [[ ! -a "$FileList" ]]; then
+      $Sudo mkdir -p "$FileList"
+      $Sudo yaourt -Q
+    fi
+  fi
+}
+
+LINKPKG() {
+  Pkg=$(yaourt -Q $2)
+  PkgList=$(pacman -Q|awk '{print $1}')
 
   # list linked packages
   if [[ "$2" == "" && "$1" == "linked" ]]; then
-    for item in $PKGLIST; do
-      for i in $(more +3 $FILELIST/$item*/files|head -n6); do
-        if [[ $(readlink "/${i%/}"|grep "$PREFIX") != "" ]]; then
+    for item in $PkgList; do
+      for i in $(more +3 $FileList/$item*/files|head -n6); do
+        if [[ $(readlink "/${i%/}"|grep "$Prefix") != "" ]]; then
           echo " $item"
           break
         fi
@@ -68,59 +123,41 @@ LINK() {
 
   elif [[ "$2" == "" ]]; then
     echo "Please enter package name."
-  elif [[ "$PKG" == "" ]]; then
+  elif [[ "$Pkg" == "" ]]; then
     echo "No such package."
-  elif [[ ! -d "$PREFIX" ]]; then
+  elif [[ ! -d "$Prefix" ]]; then
     echo "Error prefix directory's path."
   else
-    for i in $(more +2 $FILELIST/$2*/files|sed '/%BACKUP%/,$d'); do
+    for i in $(more +2 $FileList/$2*/files|sed '/%BACKUP%/,$d'); do
       # list links
-      if [[ "$1" == "linked" && $(readlink "/${i%/}"|grep "$PREFIX") != "" ]]; then
+      if [[ "$1" == "linked" && $(readlink "/${i%/}"|grep "$Prefix") != "" ]]; then
         echo " /$i"
       fi
       # create links
-      if [[ "$1" == "link" && ! -a "/${i%/}" && -a "$PREFIX/${i%/}" ]]; then
+      if [[ "$1" == "link" && ! -a "/${i%/}" && -a "$Prefix/${i%/}" ]]; then
         echo " link to: /$i"
-        ln -s "$PREFIX/$i" "/${i%/}"
+        $Sudo ln -s "$Prefix/$i" "/${i%/}"
       fi
       # remove links
-      if [[ "$1" == "remove" && -L "/${i%/}" && $(readlink "/${i%/}"|grep "$PREFIX") != "" ]]; then
+      if [[ "$1" == "remove" && -L "/${i%/}" && $(readlink "/${i%/}"|grep "$Prefix") != "" ]]; then
         echo " remove link: /$i"
-        rm -rf "/${i%/}"
+        $Sudo rm -rf "/${i%/}"
       fi
     done
-    echo "Operating finish: $PKG"
+    echo "Operating finish: $Pkg"
   fi
 }
 
+# Main
+INIT
 case "$1" in
-  -l|--list)
-    yaourt -Q
-    ;;
-  -L|--linked)
-    LINK linked "$2"
-    ;;
-  -s|--link)
-    LINK link "$2" "$3"
-    ;;
-  -r|--remove)
-    LINK remove "$2"
-    ;;
-  ""|-h|--help)
-    HELP
-    ;;
-  -v|--version)
-    if [ "$L" == "zh_CN" ]; then
-      echo -e "$0 (yaourt) $VERSION\n项目主页：<https://github.com/FZUG/repo>"
-    else
-      echo -e "$0 (yaourt) $VERSION\nGithub page: <https://github.com/FZUG/repo>"
-    fi
-    ;;
-  *)
-    if [ "$L" == "zh_CN" ]; then
-      echo "参数错误。请查看帮助。"
-    else
-      echo "parameters error. please see help."
-    fi
-    ;;
+  -q|--query)    LINKCONF  list                  ;;# ;; ;
+  -S|--ln-conf)  LINKCONF  link    "$2"       ;;#         ;;
+  -l|--list)     yaourt    -Q               ;;#             ;;
+  -L|--linked)   LINKPKG   linked  "$2"        ;;#           ;;
+  -s|--link)     LINKPKG   link    "$2" "$3"      ;;#        ;;
+  -r|--remove)   LINKPKG   remove  "$2"        ;;#           ;;
+  -h|--help|"")  HELP      hElP             ;;#             ;;
+  -v|--version)  HELP      vErSiOn            ;;#         ;;
+  *)             HELP      oThEr                 ;;# ;; ;
 esac

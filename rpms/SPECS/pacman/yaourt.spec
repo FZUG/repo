@@ -8,7 +8,7 @@
 
 Name: yaourt
 Version: 1.6
-Release: 3.git%{_shortcommit}%{?dist}
+Release: 4.git%{_shortcommit}%{?dist}
 Summary: A pacman wrapper with extended features and AUR support
 Summary(zh_CN): 支持 AUR 的 pacman 前端
 
@@ -58,6 +58,8 @@ install -m 755 %{S:1} %{buildroot}%{_bindir}/
 %exclude %{_datadir}/bash-completion/
 
 %changelog
+* Sun Aug  2 2015 mosquito <sensor.wen@gmail.com> - 1.6-4.gitd2d8300
+- Add yaourt-link's -q, -S option
 * Fri Jul 31 2015 mosquito <sensor.wen@gmail.com> - 1.6-3.gitd2d8300
 - Add yaourt-link's -L option
 * Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.6-2.gitd2d8300
