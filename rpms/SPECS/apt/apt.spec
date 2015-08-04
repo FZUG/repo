@@ -3,7 +3,7 @@
 %global _libdir %{_prefix}/lib
 
 Name:          apt
-Version:       1.0.9.10
+Version:       1.0.10.1
 Release:       1%{?dist}
 Summary:       Debian's commandline package manager
 
@@ -87,13 +87,13 @@ done
 
 install -d %{buildroot}%{_libdir}
 # libapt-inst
-install -m755 bin/libapt-inst.so.1.5.0 %{buildroot}%{_libdir}
-ln -sfv %{_libdir}/libapt-inst.so.1.5.0 %{buildroot}%{_libdir}/libapt-inst.so.1.5
-ln -sfv %{_libdir}/libapt-inst.so.1.5.0 %{buildroot}%{_libdir}/libapt-inst.so
+install -m755 bin/libapt-inst.so.1.7.0 %{buildroot}%{_libdir}
+ln -sfv %{_libdir}/libapt-inst.so.1.7.0 %{buildroot}%{_libdir}/libapt-inst.so.1.7
+ln -sfv %{_libdir}/libapt-inst.so.1.7.0 %{buildroot}%{_libdir}/libapt-inst.so
 # libapt-pkg
-install -m755 bin/libapt-pkg.so.4.12.0 %{buildroot}%{_libdir}
-ln -sfv %{_libdir}/libapt-pkg.so.4.12.0 %{buildroot}%{_libdir}/libapt-pkg.so.4.12
-ln -sfv %{_libdir}/libapt-pkg.so.4.12.0 %{buildroot}%{_libdir}/libapt-pkg.so
+install -m755 bin/libapt-pkg.so.4.16.0 %{buildroot}%{_libdir}
+ln -sfv %{_libdir}/libapt-pkg.so.4.16.0 %{buildroot}%{_libdir}/libapt-pkg.so.4.16
+ln -sfv %{_libdir}/libapt-pkg.so.4.16.0 %{buildroot}%{_libdir}/libapt-pkg.so
 # libapt-private
 install -m755 bin/libapt-private.so.0.0.0 %{buildroot}%{_libdir}
 ln -sfv %{_libdir}/libapt-private.so.0.0.0 %{buildroot}%{_libdir}/libapt-private.so.0.0
@@ -235,5 +235,7 @@ install -d %{buildroot}%{_var}/log/apt
 %{_libdir}/libapt-private.so
 
 %changelog
+* Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.0.10.1-1
+- Update to 1.0.10.1
 * Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.0.9.10-1
 - Initial build
