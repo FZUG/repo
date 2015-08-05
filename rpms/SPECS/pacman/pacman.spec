@@ -16,7 +16,7 @@
 
 Name:           pacman
 Version:        4.2.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        Package manager for the Arch distribution
 License:        GPLv2+
 Url:            https://www.archlinux.org/pacman
@@ -36,6 +36,7 @@ BuildRequires:  openssl-devel
 BuildRequires:  libcurl-devel
 Requires:       %{name}-filesystem = %{version}-%{release}
 Requires:       bsdtar
+Requires:       fakeroot
 
 %description
 Pacman is the package manager used by the Arch distribution. It is a
@@ -101,15 +102,35 @@ find %{buildroot} -name '*_BUILD_*' -print -delete
 install -Dm0644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pacman.d/mirrorlist
 
 cat >>%{buildroot}%{_sysconfdir}/pacman.conf <<EOF
-#[core]
-#SigLevel = Required DatabaseOptional
-#Include = /etc/pacman.d/mirrorlist
 
-#[extra]
+# The testing repositories are disabled by default. To enable, uncomment the
+# repo name header and Include lines. You can add preferred servers immediately
+# after the header, and they will be used before the default mirrors.
+
+#[testing]
 #SigLevel = Never
 #Include = /etc/pacman.d/mirrorlist
 
-#[testing]
+[core]
+SigLevel = Never
+Include = /etc/pacman.d/mirrorlist
+
+[extra]
+SigLevel = Never
+Include = /etc/pacman.d/mirrorlist
+
+#[community-testing]
+#SigLevel = Never
+#Include = /etc/pacman.d/mirrorlist
+
+[community]
+SigLevel = Never
+Include = /etc/pacman.d/mirrorlist
+
+# If you want to run 32 bit applications on your x86_64 system,
+# enable the multilib repositories as required here.
+
+#[multilib-testing]
 #SigLevel = Never
 #Include = /etc/pacman.d/mirrorlist
 
@@ -117,24 +138,12 @@ cat >>%{buildroot}%{_sysconfdir}/pacman.conf <<EOF
 #SigLevel = Never
 #Include = /etc/pacman.d/mirrorlist
 
-#[multilib-testing]
-#SigLevel = Never
-#Include = /etc/pacman.d/mirrorlist
-
-#[community]
-#SigLevel = Never
-#Include = /etc/pacman.d/mirrorlist
-
-#[community-testing]
-#SigLevel = Never
-#Include = /etc/pacman.d/mirrorlist
-
 #[archlinuxfr]
-#SigLevel = Optional TrustedOnly
+#SigLevel = Never
 #Server = http://repo.archlinux.fr/\$arch
 
 #[archlinuxcn]
-#SigLevel = Optional TrustedOnly
+#SigLevel = Never
 #Server = http://repo.archlinuxcn.org/\$arch
 EOF
 
@@ -194,6 +203,9 @@ EOF
 
 
 %changelog
+* Thu Aug  6 2015 mosquito <sensor.wen@gmail.com> - 4.2.1-2.gitdeac973
+- Add depend fakeroot
+
 * Wed Jul 29 2015 mosquito <sensor.wen@gmail.com> - 4.2.1-1.gitdeac973
 - Update to version 4.2.1-1.gitdeac973
 - Add other repository
