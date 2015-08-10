@@ -98,9 +98,10 @@ rm -rf Engine/Extras/Maya_AnimationRiggingTools
 rm -rf Engine/Source/*
 mv -T Engine/Source.bak Engine/Source
 
+# script
 install -d %{buildroot}%{_bindir}
-install -d %{buildroot}/opt/%{name}
 cat > %{buildroot}%{_bindir}/%{name} <<EOF
+#!/bin/bash
 cd /opt/%{name}/Engine/Binaries/Linux
 ./UE4Editor -SaveToUserDir
 EOF
@@ -108,11 +109,28 @@ ln -sfv /opt/%{name}/Engine/Binaries/Linux/UnrealFrontend %{buildroot}%{_bindir}
 ln -sfv /opt/%{name}/Engine/Binaries/Linux/SlateViewer %{buildroot}%{_bindir}
 
 # editor
+install -d %{buildroot}/opt/%{name}
 cp -r Engine %{buildroot}/opt/%{name}/
 cp -r FeaturePacks %{buildroot}/opt/%{name}/
 cp -r Templates %{buildroot}/opt/%{name}/
 cp -r Samples %{buildroot}/opt/%{name}/
 #make install DESTDIR=%%{buildroot}
+
+# desktop file
+install -d %{buildroot}%{_datadir}/applications
+install -Dm644 Engine/Source/Programs/UnrealVS/Resources/Preview.png \
+  %{buildroot}%{_datadir}/pixmaps/%{name}.png
+cat > %{buildroot}%{_datadir}/applications/%{name}.desktop <<EOF
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Unreal Engine Editor
+Name[zh_CN]=虚幻编辑器
+Exec=%{name}
+Icon=%{name}
+Terminal=false
+Categories=Development;
+EOF
 
 # permission
 install -d -m757 %{buildroot}/opt/%{name}/Engine/Intermediate
@@ -122,8 +140,13 @@ find %{buildroot}/opt/%{name}/Engine/Saved -type d | xargs chmod 757
 find %{buildroot}/opt/%{name}/Engine/Saved -type f | xargs chmod 646
 find %{buildroot}/opt/%{name} -name "*.dll" -or -name "*.so*" | xargs chmod 755
 
-%post -p /sbin/ldconfig
+%post
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+
 %postun
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 if [ $1 -eq 0 ]; then
 rm -rf /opt/%{name}
 fi
@@ -135,6 +158,8 @@ fi
 %{_bindir}/UnrealFrontend
 %{_bindir}/SlateViewer
 /opt/%{name}/
+%{_datadir}/pixmaps/%{name}.png
+%{_datadir}/applications/%{name}.desktop
 %exclude /opt/%{name}/Engine/Source
 %exclude /opt/%{name}/Engine/Documentation
 
