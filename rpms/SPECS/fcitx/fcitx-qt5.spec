@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 6d57ea52b6bbdf7f3b4bba38d332be7e4936b0a0
+%global _commit 73337c53f704f083c8269728ae8912fb47c4282f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		fcitx-qt5
-Version:	1.0.2
+Version:	1.0.4
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	Fcitx QT5 Input Context
 Summary(zh_CN):	Fcitx QT5 输入模块
@@ -17,7 +17,6 @@ License:	GPLv2
 Url:		https://github.com/fcitx/%{name}
 Source0:	https://github.com/fcitx/fcitx-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildRequires:	gcc-c++
 BuildRequires:	cmake
 BuildRequires:	fcitx-devel >= 4.2.3
 BuildRequires:	libicu-devel
@@ -51,7 +50,6 @@ Fcitx 输入法框架 (Qt5) 的头文件.
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %make_install
 
 %post -p /sbin/ldconfig
@@ -76,6 +74,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/cmake/FcitxQt5WidgetsAddons/FcitxQt5WidgetsAddons*.cmake
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-1
+- Update version to 1.0.4
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-1
 - Update version to 1.0.2
 - Rename version name
