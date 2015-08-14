@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 96fc948cd05e7fee20a1f977f021898ec2f89ba2
+%global _commit 7b71ee0dc5975f219044f1e042ffb85497f636fa
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		libQtShadowsocks
@@ -20,7 +20,6 @@ BuildRequires: qt5-qttools
 BuildRequires: botan-devel
 Requires: qt5-qtbase
 Requires: botan
-#AutoReq: no
 
 %description
 A lightweight and ultra-fast shadowsocks library written in C++/Qt.
@@ -75,5 +74,7 @@ make install INSTALL_ROOT=%{buildroot}
 %{_bindir}/shadowsocks-*
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git7b71ee0
+- Update to 1.6.1-1.git7b71ee0
 * Tue Jun 02 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git96fc948
 - Initial build
