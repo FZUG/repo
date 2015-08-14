@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name: opera-developer
-Version: 32.0.1899.0
+Version: 32.0.1933.0
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -73,21 +73,21 @@ rm -rf %{buildroot}%{_datadir}/lintian
 chown root:root "%{_libdir}/%{name}/opera_sandbox"
 chmod 4755 "%{_libdir}/%{name}/opera_sandbox"
 
-update-desktop-database &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+update-desktop-database &> /dev/null ||:
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor ||:
 fi
 
 %postun
 if [ $1 -eq 0 ] ; then
-	touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+	touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 fi
-update-desktop-database &> /dev/null || :
+update-desktop-database &> /dev/null ||:
 
 %posttrans
-gtk-update-icon-cache /usr/share/icons/hicolor &>/dev/null || :
+gtk-update-icon-cache /usr/share/icons/hicolor &>/dev/null ||:
 
 %files
 %defattr(-,root,root,-)
@@ -99,6 +99,8 @@ gtk-update-icon-cache /usr/share/icons/hicolor &>/dev/null || :
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> -32.0.1933.0-1
+- Update version 32.0.1933.0
 * Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> -32.0.1899.0-1
 - Update version 32.0.1899.0
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> -31.0.1857.0-1
