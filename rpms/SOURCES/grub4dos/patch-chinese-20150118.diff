@@ -26,48 +26,6 @@
  extern int command_func (char *arg, int flags);
 --- grub4dos/stage2/stage2.c	2015-01-18 19:57:39.394992141 +0800
 +++ grub4dos/stage2/stage2.c	2015-01-18 20:37:41.193758902 +0800
-@@ -142,6 +142,12 @@
- 		printf("%.*s",current_term->chars_per_line,0);
- 	}
- 
-+#ifdef SUPPORT_GRAPHICS
-+	if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
-+	i = grub_sprintf (buff,"\n  用 %c 和 %c 两键将一个菜单项置为高亮。",
-+		   DISP_UP, DISP_DOWN);
-+	else
-+#endif
- 	i = grub_sprintf (buff,"\n Use the %c and %c keys to highlight an entry.",
- 		   (unsigned long)(unsigned char)DISP_UP, (unsigned long)(unsigned char)DISP_DOWN);
- 
-@@ -158,11 +164,28 @@
- 	    }
- #endif
- #endif
-+
-+#ifdef SUPPORT_GRAPHICS
-+	  if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
-+	  grub_strcpy (buff + i,"按回车或 b 键启动。按 p 键取得\n"
-+		"  特权控制功能。");
-+	  else
-+#endif
- 	  grub_strcpy (buff + i," Press ENTER or \'b\' to boot.\n"
- 		" Press \'p\' to gain privileged control.");
- 	}
- 	else
- 	{
-+#ifdef SUPPORT_GRAPHICS
-+	    if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
-+		grub_strcpy(buff + i,(config_entries?("按回车或 b 键启动；按 e 键可在\n"
-+			"  启动前逐条编辑菜单中的命令序列；按 c 键进入命令行。")
-+			:("  按 e 键编辑当前行；按 d 键删\n"
-+			"  除当前行；按 O 键或 o 键分别在当前行之前或之后插入新行。编辑结束时，\n"
-+			"  按 b 键启动；按 c 键进入命令行；按 Esc 键退回到主菜单。")
-+			));
-+	    else
-+#endif
- 		grub_strcpy(buff + i,(config_entries?(" Press ENTER or \'b\' to boot.\n"
- 			" Press \'e\' to edit the commands before booting, or \'c\' for a command-line.")
- 			:(" At a selected line, press \'e\' to edit, \'d\' to delete,"
 @@ -629,6 +652,12 @@
  	      /* Print a message.  */
  	      if (! silent_hiddenmenu)
@@ -93,18 +51,6 @@
  	grub_printf ("\n\nThe selected entry is %d ", entryno);
        else
  	print_entries (first_entry, entryno, menu_entries);
-@@ -760,6 +794,11 @@
- 	      unsigned char *p;
- 	      unsigned char ch = ' ';
- 
-+#ifdef SUPPORT_GRAPHICS
-+	      if (graphics_inited && ushFontReaded && graphics_mode <= 0xFF)
-+		grub_sprintf ((char*)tmp_buf, "  高亮选中的条目将会自动运行于 %d 秒之后。  ", grub_timeout);
-+	      else
-+#endif
- 	      grub_sprintf ((char*)tmp_buf, " The highlighted entry will be booted automatically in %d seconds.", grub_timeout);
- 	      gotoxy (0, MENU_BOX_B + 5);
- 	      p = tmp_buf;
 @@ -789,7 +828,14 @@
  	     since we're comming in here also on GRUB_TIMEOUT == -1 and
  	     hang in GETKEY */
@@ -122,12 +68,6 @@
  			putchar_hooked = (unsigned char*)0x800;
 --- grub4dos/stage2/graphics.c	2015-01-18 19:57:39.395992144 +0800
 +++ grub4dos/stage2/graphics.c	2015-01-18 20:45:12.344995071 +0800
-@@ -1,4 +1,5 @@
- /* graphics.c - graphics mode support for GRUB */
-+/* Chinese double-byte character support by Gandalf <f22_storm@163.com> */
- /* Implemented as a terminal type by Jeremy Katz <katzj@redhat.com> based
-  * on a patch by Paulo C閟ar Pereira de Andrade <pcpa@conectiva.com.br>
-  */
 @@ -30,8 +31,11 @@
  #include <shared.h>
  #include <graphics.h>

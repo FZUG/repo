@@ -5,11 +5,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 8f1e932add84ff19798abd36200a5315c90f3000
+%global _commit 31be3fea231b8fd5748e832d24ce454e793cd1a7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		grub4dos
-Version:	0.4.6a.20150617
+Version:	0.4.6a.20150807
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	This is GNU GRUB, the GRand Unified Bootloader
 Summary(zh_CN):	多功能启动引导管理器
@@ -29,7 +29,6 @@ Source3:	https://grub4dos-chenall.googlecode.com/files/unifont.hex.gz
 # git checkout 558e12a9b38613d827117c8da9b8e905c4c0eb2b , patch-chinese.diff
 Source4:	patch-chinese-%{zhcndate}.diff
 
-BuildRequires:	gcc
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	upx
@@ -88,9 +87,7 @@ Grub4dos 相关信息: <https://code.google.com/p/grub4dos-chenall>
 GNU GRUB 相关信息: <http://www.gnu.org/software/grub/grub.html>
 
 %prep
-%setup -q -b 0 -n %{repo}-%{_commit}
-%setup -q -b 1 -n %{repo}-%{_commit}
-mv ../ipxe .
+%setup -q -a0 -a1 -n %{repo}-%{_commit}
 cp %{S:2} .
 
 %build
@@ -133,8 +130,6 @@ make %{?_smp_mflags} bin/undionly.kpxe \
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # Install grub4dos files
 install -Dm 0644 stage2/eltorito.sys %{buildroot}%{_datadir}/%{name}/eltorito.sys
 cp en/* %{buildroot}%{_datadir}/%{name}/
@@ -246,6 +241,8 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 %{_datadir}/%{name}
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150807-1
+- Update version to 0.4.6a.20150807
 * Tue Jun 30 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150617-1
 - Update version to 0.4.6a.20150617
 * Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150518-1
