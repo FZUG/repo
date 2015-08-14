@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 7ef006f307ab37ef67daba1dd020abd4be8d0a0d
+%global _commit 6cd43723422c5c4f26454ef41bb748bdf620fd51
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: shadowsocks-qt5
-Version: 2.4.0
+Version: 2.4.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A cross-platform shadowsocks GUI client
 Summary(zh_CN): 跨平台 shadowsocks GUI 客户端
@@ -44,13 +44,13 @@ make %{?_smp_mflags}
 make install INSTALL_ROOT=%{buildroot}
 
 %post
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 ldconfig
 
 %postun
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 ldconfig
 
 %files
@@ -61,5 +61,7 @@ ldconfig
 %{_datadir}/icons/hicolor/*
 
 %changelog
-* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.13-1
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 2.4.1-1.git6cd4372
+- Update to 2.4.1-1.git6cd4372
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 2.4.0-1.git7ef006f
 - Initial build
