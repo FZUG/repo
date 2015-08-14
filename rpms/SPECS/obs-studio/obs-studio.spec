@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 82471d7539597c4276b892f230b38d17141c1c2a
+%global _commit 4aef24a4312c9de35f3065b88319511b8e3e0798
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.10.1
+Version:    0.11.3
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -18,6 +18,7 @@ URL:        https://obsproject.com
 Source:     https://github.com/jp9000/obs-studio/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  cmake
+BuildRequires:  zlib-devel
 BuildRequires:  ffmpeg-devel
 BuildRequires:  libX11-devel
 BuildRequires:  libGL-devel
@@ -78,13 +79,13 @@ pushd build
 %make_install
 
 %post
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 /sbin/ldconfig
 
 %postun
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 /sbin/ldconfig
 
 %files
@@ -103,6 +104,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
 %{_includedir}/obs
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.11.3-1.git4aef24a
+- Update to 0.11.3-1.git4aef24a
 * Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 0.10.1-1.git82471d7
 - Update to 0.10.1-1.git82471d7
 * Sun May 10 2015 mosquito <sensor.wen@gmail.com> - 0.9.1-1.git8fb2929
