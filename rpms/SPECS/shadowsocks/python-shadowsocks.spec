@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 16db66675bb1160b4104140a7927036c5552333c
+%global _commit a2bc6e19457f51a421b7d2866be5903e0d71fd2f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %if 0%{?fedora} > 12
@@ -14,7 +14,7 @@
 %endif
 
 Name:           python-shadowsocks
-Version:        2.6.10
+Version:        2.8.2
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        A fast tunnel proxy that help you get through firewalls
 
@@ -108,6 +108,9 @@ popd
 %endif
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 2.8.2-1.gita2bc6e1
+- Update to 2.8.2
+
 * Tue Jun  2 2015 mosquito <sensor.wen@gmail.com> - 2.6.10-1.git16db666
 - Update to 2.6.10
 
