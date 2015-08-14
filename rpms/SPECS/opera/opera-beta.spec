@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name: opera-beta
-Version: 31.0.1889.16
+Version: 32.0.1948.4
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -67,18 +67,18 @@ rm -rf %{buildroot}%{_datadir}/lintian
 chown root:root "%{_libdir}/%{name}/opera_sandbox"
 chmod 4755 "%{_libdir}/%{name}/opera_sandbox"
 
-update-desktop-database &> /dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+update-desktop-database &> /dev/null ||:
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor || :
+	%{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor ||:
 fi
 
 %postun
 if [ $1 -eq 0 ] ; then
-	touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
+	touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+	gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 fi
-update-desktop-database &> /dev/null || :
+update-desktop-database &> /dev/null ||:
 
 %files
 %defattr(-,root,root,-)
@@ -90,6 +90,8 @@ update-desktop-database &> /dev/null || :
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> -32.0.1948.4-1
+- Update version 32.0.1948.4
 * Mon Jun 29 2015 mosquito <sensor.wen@gmail.com> -31.0.1889.16-1
 - Update version 31.0.1889.16
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> -30.0.1835.26-1
