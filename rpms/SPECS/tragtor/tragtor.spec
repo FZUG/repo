@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:		tragtor
-Version:	0.9.1
+Version:	0.9.2
 Release:	1%{?dist}
 Summary:	A GUI for FFmpeg for audio and video-conversion
 Summary(zh_CN):	基于 FFmpeg 的音视频转换器
@@ -68,6 +68,8 @@ cp -r usr/share/tragtor %{buildroot}%{_datadir}/
 %{_datadir}/pixmaps/%{name}.svg
 
 %changelog
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.9.2-1
+- Update version 0.9.2
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 0.9.1-1
 - Update version 0.9.1
 * Thu Mar 05 2015 mosquito <sensor.wen@gmail.com> - 0.9.0-1
