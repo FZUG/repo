@@ -3,13 +3,13 @@
 %global repo %{project}
 
 # commit
-%global _commit 7bcf616321357c08ffcccef2d07851c34c12c624
+%global _commit 60eee8daa497e97f6c1d46788afd2be75e1f01ae
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:		wiznote-beta
-Version:	2.2.3
+Version:	2.2.4
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
@@ -109,12 +109,9 @@ pushd dist
 	-DWIZNOTE_USE_QT5=ON \
 	-DCMAKE_BUILD_TYPE=Release
 make %{?_smp_mflags}
-popd
 
 %install
-pushd dist
-make install DESTDIR=%{buildroot}
-popd
+%make_install -C dist
 
 # change exec filename
 mv %{buildroot}%{_bindir}/WizNote %{buildroot}%{_bindir}/%{name}-run
@@ -159,16 +156,17 @@ ldconfig
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.md CHANGELOG.md
-#%%{_sysconfdir}/ld.so.conf.d/%%{name}.conf
+%doc README.md CHANGELOG.md
+%license LICENSE
 %{_libdir}/%{name}/plugins/*
 %{_bindir}/%{name}*
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/%{name}/*
-#%%exclude %%{_datadir}/licenses/
 
 %changelog
+* Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 2.2.4-1.git60eee8d
+- Update version to 2.2.4-1.git60eee8d
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 2.2.3-1.git7bcf616
 - Update version to 2.2.3-1.git7bcf616
 * Mon Jul 13 2015 mosquito <sensor.wen@gmail.com> - 2.2.2-1.git88992f4
