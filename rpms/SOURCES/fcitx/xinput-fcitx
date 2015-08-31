@@ -1,0 +1,14 @@
+XIM=fcitx
+XIM_PROGRAM=/usr/bin/fcitx
+ICON="/usr/share/pixmaps/fcitx.png"
+XIM_ARGS="-D"
+PREFERENCE_PROGRAM=/usr/bin/fcitx-configtool
+SHORT_DESC="FCITX"
+GTK_IM_MODULE=fcitx
+if test -f /usr/lib/qt4/plugins/inputmethods/qtim-fcitx.so || \
+   test -f /usr/lib64/qt4/plugins/inputmethods/qtim-fcitx.so;
+then
+    QT_IM_MODULE=fcitx
+else
+    QT_IM_MODULE=xim
+fi
