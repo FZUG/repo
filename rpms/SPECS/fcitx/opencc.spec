@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit b19714d74675cb0cbaf80187d4b4f6f9cbd9b961
+%global _commit e3951b6d28e71ad54124f0432e81ca66daf181e6
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		opencc
-Version:	1.0.2
-Release:	3.git%{_shortcommit}%{?dist}
+Version:	1.0.3
+Release:	1.git%{_shortcommit}%{?dist}
 Summary:	Libraries for Simplified-Traditional Chinese Conversion
 Summary(zh_CN):	简体-繁体中文转换库
 License:	ASL 2.0
@@ -35,7 +35,6 @@ Traditional Chinese and Simplified Chinese.
 %description -l zh_CN
 OpenCC 程序库可以将字符和短语在简体中文和繁体中文之间进行转换.
 
-
 %package doc
 Summary:	Documentation for OpenCC
 Summary(zh_CN):	OpenCC 文档
@@ -47,7 +46,6 @@ Doxygen generated documentation for OpenCC.
 
 %description doc -l zh_CN
 使用 doxygen 生成的 OpenCC 文档.
-
 
 %package tools
 Summary:	Command line tools for OpenCC
@@ -62,7 +60,6 @@ for building dictionaries.
 %description tools -l zh_CN
 OpenCC 命令行工具, 包含转换和构建字典的命令行工具.
 
-
 %package devel
 Summary:	Development files for OpenCC
 Summary(zh_CN):	OpenCC 开发文件
@@ -75,7 +72,6 @@ developing applications that use %{name}.
 
 %description devel -l zh_CN
 %{name}-devel 包含使用 %{name} 开发应用所需的程序库和头文件.
-
 
 %prep
 %setup -q -n %{repo}-%{_commit}
@@ -90,18 +86,6 @@ make VERBOSE=1 %{?_smp_mflags}
 %install
 %make_install
 rm -f %{buildroot}%{_libdir}/*.a
-
-# error path
-#install -d %{buildroot}%{_datadir}/%{name}
-#mv %{buildroot}/usr/shareopencc/* %{buildroot}%{_datadir}/%{name}
-#rm -rf %{buildroot}/usr/shareopencc/
-
-# error lib path
-#%ifarch x86_64
-#  mv %{buildroot}%{_exec_prefix}/lib/* %{buildroot}%{_libdir}
-#  rm -rf %{buildroot}%{_exec_prefix}/lib
-#  sed -i 's|libdir=/usr/lib/|libdir=%{_libdir}|g' %{buildroot}%{_libdir}/pkgconfig/%{name}.pc
-#%endif
 
 # provide libopencc.so.2.0.0 -> so.2 -> so
 rm -rf %{buildroot}%{_libdir}/libopencc.so{,.2}
@@ -128,10 +112,10 @@ ldconfig
 
 %postun -p /sbin/ldconfig
 
-
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS LICENSE README.md NEWS.md
+%doc AUTHORS README.md NEWS.md
+%license LICENSE
 %{_libdir}/lib*.so.*
 %{_datadir}/opencc/
 %exclude %{_datadir}/opencc/doc
@@ -150,8 +134,10 @@ ldconfig
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 
-
 %changelog
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.0.3-1.gite3951b6
+- Update to 1.0.3-1.gite3951b6
+
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-3
 - Rename version name
 

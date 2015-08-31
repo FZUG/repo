@@ -15,19 +15,20 @@ Index: OpenCC-ver.1.0.2/CMakeLists.txt
 ===================================================================
 --- OpenCC-ver.1.0.2.orig/CMakeLists.txt
 +++ OpenCC-ver.1.0.2/CMakeLists.txt
-@@ -65,10 +65,10 @@ set(CMAKE_MACOSX_RPATH 1)
+@@ -65,11 +65,11 @@
  ######## Directory
  
  set (DIR_PREFIX ${CMAKE_INSTALL_PREFIX})
 -set (DIR_INCLUDE ${DIR_PREFIX}/include/)
 -set (DIR_SHARE ${DIR_PREFIX}/share/)
 -set (DIR_ETC ${DIR_PREFIX}/etc/)
--set (DIR_LIBRARY ${DIR_PREFIX}/lib/)
 +set (DIR_INCLUDE ${INCLUDE_INSTALL_DIR})
 +set (DIR_SHARE ${SHARE_INSTALL_PREFIX})
 +set (DIR_ETC ${SYSCONF_INSTALL_DIR})
+ set (LIB_SUFFIX "")
+-set (DIR_LIBRARY ${DIR_PREFIX}/lib${LIB_SUFFIX}/)
 +set (DIR_LIBRARY ${LIB_INSTALL_DIR})
- 
+
  if (DEFINED SHARE_INSTALL_PREFIX)
    set (DIR_SHARE ${SHARE_INSTALL_PREFIX})
 @@ -82,8 +82,8 @@ if (DEFINED SYSCONF_INSTALL_DIR)
@@ -48,8 +49,8 @@ Index: OpenCC-ver.1.0.2/src/CMakeLists.txt
 @@ -82,7 +82,7 @@ endif (CMAKE_BUILD_TYPE MATCHES Debug)
  install(
    TARGETS libopencc
--  LIBRARY DESTINATION lib
--  ARCHIVE DESTINATION lib/static
+-  LIBRARY DESTINATION ${DIR_LIBRARY}
+-  ARCHIVE DESTINATION ${DIR_LIBRARY}
 +  LIBRARY DESTINATION ${LIB_INSTALL_DIR}
 +  ARCHIVE DESTINATION ${LIB_INSTALL_DIR}/static
  )
