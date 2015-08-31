@@ -9,7 +9,7 @@
 %global with_python2 1
 
 Name:		python-%{realname}
-Version:	1.29
+Version:	1.30
 Release:	1%{?dist}
 Summary:	Mutagen is a Python module to handle audio metadata
 Summary(zh_CN):	一个处理音频元数据的Python模块
@@ -67,8 +67,6 @@ popd
 %endif # with_python3
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 # Install mutagen for Python 3:
 %if 0%{?with_python3}
 pushd %{py3dir}
@@ -91,7 +89,8 @@ export LANG=en_US.utf-8
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
+%doc NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
+%license COPYING
 %{_bindir}/*
 %{_mandir}/man1/m*.1*
 %{python_sitelib}/%{realname}
@@ -100,13 +99,17 @@ export LANG=en_US.utf-8
 %if 0%{?with_python3}
 %files -n python3-mutagen
 %defattr(-,root,root,-)
-%doc COPYING NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
+%doc NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
+%license COPYING
 %{python3_sitelib}/%{realname}
 %{python3_sitelib}/%{realname}-%{version}-py%{python3_version}.egg-info
 %exclude %{python3_sitelib}/mutagen/__pycache__
 %endif # with_python3
 
 %changelog
+* Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 1.30-1
+- Update to 1.30
+
 * Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 1.29-1
 - Update to 1.29
 
