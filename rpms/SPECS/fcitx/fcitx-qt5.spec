@@ -8,21 +8,22 @@
 
 Name:		fcitx-qt5
 Version:	1.0.4
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	Fcitx QT5 Input Context
+Release:	2.git%{_shortcommit}%{?dist}
+Summary:	Fcitx IM module for Qt5
 Summary(zh_CN):	Fcitx QT5 输入模块
 
-Group:		Development/Libraries
-License:	GPLv2
-Url:		https://github.com/fcitx/%{name}
+# The entire source code is GPLv2+ except
+# platforminputcontext/keyserver_x11.h which is LGPLv2+
+License:	GPLv2+ and LGPLv2+
+Url:		https://github.com/fcitx/fcitx-qt5
 Source0:	https://github.com/fcitx/fcitx-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:	cmake
-BuildRequires:	fcitx-devel >= 4.2.3
 BuildRequires:	libicu-devel
+BuildRequires:	fcitx-devel
 BuildRequires:	qt5-qtbase-devel
-BuildRequires:	extra-cmake-modules
 BuildRequires:	libxkbcommon-devel
+BuildRequires:	extra-cmake-modules
 
 %description
 A QT5 input context plugin of Fcitx IM Framework.
@@ -34,7 +35,7 @@ Fcitx 输入法框架的 QT5 输入模块.
 Summary:	Development files for %{name}
 Summary(zh_CN):	%{name} 开发文件
 Group:		Development/Libraries
-Requires:	%{name} = %{version}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Development header files for Fcitx input method framework (Qt5).
@@ -74,6 +75,8 @@ make %{?_smp_mflags}
 %{_libdir}/cmake/FcitxQt5WidgetsAddons/FcitxQt5WidgetsAddons*.cmake
 
 %changelog
+* Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_22_Mass_Rebuild
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-1
 - Update version to 1.0.4
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-1
