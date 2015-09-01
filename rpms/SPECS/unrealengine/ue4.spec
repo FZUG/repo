@@ -6,11 +6,11 @@
 %global repo %{project}
 
 # commit
-%global _commit d049f041989d62f6d6d4840d58e084a52f0558a9
+%global _commit 311e18ff369078e192a83f27834b45bdb288168a
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		ue4
-Version:	4.8.3
+Version:	4.9.0
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	UnrealEngine 4 are integrated tools for game develop
 License:	Custom
@@ -41,7 +41,7 @@ BuildRequires:	freetype-devel
 BuildRequires:	libicu-devel
 BuildRequires:	nvidia-texture-tools-devel
 BuildRequires:	SDL2-devel
-Provides: %{name} = %{version}
+Provides: %{name}%{?_isa} = %{version}-%{release}
 Requires: qt5-qtbase-gui qt-x11
 Requires: cairo-gobject SDL2
 
@@ -52,7 +52,7 @@ to design and build games, simulations, and visualizations.
 %package devel
 Summary: Source for UnrealEngine 4 to create C++ scripts
 Provides: %{name}-devel = %{version}
-Requires: %{name} = %{version}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Source for UnrealEngine 4 to create C++ scripts.
@@ -60,7 +60,7 @@ Source for UnrealEngine 4 to create C++ scripts.
 %package docs
 Summary: Documents for UnrealEngine 4
 Provides: %{name}-docs = %{version}
-Requires: %{name} = %{version}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description docs
 Documents for UnrealEngine 4.
@@ -136,8 +136,6 @@ EOF
 install -d -m757 %{buildroot}/opt/%{name}/Engine/Intermediate
 install -d -m757 %{buildroot}/opt/%{name}/Engine/DerivedDataCache
 install -d -m757 %{buildroot}/opt/%{name}/Engine/Saved
-find %{buildroot}/opt/%{name}/Engine/Saved -type d | xargs chmod 757
-find %{buildroot}/opt/%{name}/Engine/Saved -type f | xargs chmod 646
 find %{buildroot}/opt/%{name} -name "*.dll" -or -name "*.so*" | xargs chmod 755
 
 %post
@@ -153,7 +151,8 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc README.md LICENSE.pdf
+%doc README.md
+%license LICENSE.pdf
 %attr(0755,root,root) %{_bindir}/%{name}
 %{_bindir}/UnrealFrontend
 %{_bindir}/SlateViewer
@@ -172,5 +171,7 @@ fi
 /opt/%{name}/Engine/Documentation
 
 %changelog
+* Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 4.9.0-1.git311e18f
+- Update to 4.9.0-1.git311e18f
 * Fri Aug  7 2015 mosquito <sensor.wen@gmail.com> - 4.8.3-1.gitd049f04
 - Initial build
