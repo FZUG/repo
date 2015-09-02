@@ -1,4 +1,4 @@
-# Require 20G+ disk space, download 2.7G source files, build time 3-5 hours.
+# Require 20G+ disk space, download 2810.5 MiB source files, build time 3-5 hours.
 # https://wiki.unrealengine.com/Building_On_Linux
 # https://github.com/EpicGames/UnrealEngine/blob/master/Engine/Build/BatchFiles/Linux/README.md
 %global debug_package %{nil}
@@ -9,23 +9,29 @@
 %global _commit 311e18ff369078e192a83f27834b45bdb288168a
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
+# provides and requires filter
+%global __provides_exclude_from ^/opt/%{name}/(.*.dll|Engine/ThirdParty/.*)$
+%global __requires_exclude_from ^/opt/%{name}/(.*.dll|Engine/ThirdParty/.*)$
+%global __provides_exclude (mono|icu|mcpp|libsteam|openal)
+%global __requires_exclude (mono|icu)
+
 Name:		ue4
 Version:	4.9.0
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	UnrealEngine 4 are integrated tools for game develop
 License:	Custom
 URL:		https://www.unrealengine.com
 Source0:	https://github.com/EpicGames/UnrealEngine/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source1:	https://github.com/EpicGames/UnrealEngine/raw/4.8/Engine/Source/Programs/UnrealVS/Resources/Preview.png
 
 # Note:
 # You will also need at least 20 GB of free disk space and a relatively powerful machine.
 # The mono-project provides latest mono-* packages.
 # dnf config-manager --add-repo http://download.mono-project.com/repo/centos
-AutoReqProv: false
 BuildRequires:	cmake
 BuildRequires:	clang >= 3.5.0
-BuildRequires:	mono-core >= 3.0.0
-BuildRequires:	mono-devel >= 3.0.0
+BuildRequires:	mono-core >= 3.2.8
+BuildRequires:	mono-devel >= 3.2.8
 BuildRequires:	dos2unix
 # third-party dependencies
 BuildRequires:	gtk3-devel
@@ -42,8 +48,7 @@ BuildRequires:	libicu-devel
 BuildRequires:	nvidia-texture-tools-devel
 BuildRequires:	SDL2-devel
 Provides: %{name}%{?_isa} = %{version}-%{release}
-Requires: qt5-qtbase-gui qt-x11
-Requires: cairo-gobject SDL2
+Requires: SDL2
 
 %description
 UnrealEngine 4 is a suite of integrated tools for game developers
@@ -51,7 +56,7 @@ to design and build games, simulations, and visualizations.
 
 %package devel
 Summary: Source for UnrealEngine 4 to create C++ scripts
-Provides: %{name}-devel = %{version}
+BuildArch: noarch
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
@@ -59,7 +64,7 @@ Source for UnrealEngine 4 to create C++ scripts.
 
 %package docs
 Summary: Documents for UnrealEngine 4
-Provides: %{name}-docs = %{version}
+BuildArch: noarch
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description docs
@@ -93,10 +98,11 @@ done
 %install
 # You need additionally about 5GB extra space for shaders that will be compiled on the 1st run!
 find Engine -name "*.a" -or -name "*.dmg" -or -name "*.msi" -or -name "Intermediate" | xargs rm -rf
-find Engine -name "*.py" | xargs sed -i -e 's||\n|g' -e '/^\s*$/d'
-rm -rf Engine/Extras/Maya_AnimationRiggingTools
-rm -rf Engine/Source/*
-mv -T Engine/Source.bak Engine/Source
+find Engine -name "*.py" -exec sed -i -e 's||\n|g' -e '/^\s*$/d' '{}' \;
+rm -rf Engine/Extras/Maya_AnimationRiggingTools \
+   Engine/Source.bak/ThirdParty/HTML5/emsdk/Win64/python/* \
+   Engine/Source
+mv Engine/Source.bak Engine/Source
 
 # script
 install -d %{buildroot}%{_bindir}
@@ -118,8 +124,7 @@ cp -r Samples %{buildroot}/opt/%{name}/
 
 # desktop file
 install -d %{buildroot}%{_datadir}/applications
-install -Dm644 Engine/Source/Programs/UnrealVS/Resources/Preview.png \
-  %{buildroot}%{_datadir}/pixmaps/%{name}.png
+install -Dm644 %{S:1} %{buildroot}%{_datadir}/pixmaps/%{name}.png
 cat > %{buildroot}%{_datadir}/applications/%{name}.desktop <<EOF
 [Desktop Entry]
 Version=1.0
@@ -140,14 +145,16 @@ find %{buildroot}/opt/%{name} -name "*.dll" -or -name "*.so*" | xargs chmod 755
 
 %post
 update-desktop-database -q ||:
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %postun
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 if [ $1 -eq 0 ]; then
-rm -rf /opt/%{name}
+  touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+  gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+  rm -rf /opt/%{name}
 fi
+update-desktop-database -q ||:
 
 %files
 %defattr(-,root,root,-)
@@ -171,6 +178,8 @@ fi
 /opt/%{name}/Engine/Documentation
 
 %changelog
+* Wed Sep  2 2015 mosquito <sensor.wen@gmail.com> - 4.9.0-2.git311e18f
+- Use auto-generate dependencies
 * Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 4.9.0-1.git311e18f
 - Update to 4.9.0-1.git311e18f
 * Fri Aug  7 2015 mosquito <sensor.wen@gmail.com> - 4.8.3-1.gitd049f04
