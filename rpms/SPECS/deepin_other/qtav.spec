@@ -2,18 +2,18 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit 68322f85233590df7f196aed6d803a928928492d
+%global _commit 8f8ae591fdacf1e5fd4fb5cd438b633d0dd207da
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 1
 
 Name: qtav
-Version: 1.7.0
+Version: 1.8.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
-License: LGPLv2
+License: LGPLv2.1
 Group: Development/Libraries
 Url: https://github.com/wang-bin/QtAV
 Source0: https://github.com/wang-bin/QtAV/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
@@ -44,9 +44,9 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 Summary: FFmpeg powered multimedia playback SDK for Qt
 Summary(zh_CN): 基于 FFmpeg 和 Qt 驱动的多媒体播放 SDK
 Buildarch: noarch
-Requires: qtav-devel
-Requires: qtav-private-devel
-Requires: qtav-qml-module
+Requires: qtav-devel = %{version}-%{release}
+Requires: qtav-private-devel = %{version}-%{release}
+Requires: qtav-qml-module = %{version}-%{release}
 
 %description sdk
 QtAV can help you to write a player with less effort than ever before.
@@ -115,8 +115,7 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 %package -n lib%{name}widgets
 Summary: QtAV Widgets module
 Summary(zh_CN): QtAV Widgets 模块
-Requires: libqtav
-Requires: qt5-qtbase-gui
+Requires: libqtav = %{version}-%{release}
 
 %description -n lib%{name}widgets
 QtAV is a multimedia playback library based on Qt and FFmpeg.
@@ -134,9 +133,9 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 %package devel
 Summary: QtAV development files
 Summary(zh_CN): QtAV 开发文件
-Requires: libqtav
+Requires: libqtav = %{version}-%{release}
+Requires: libqtavwidgets = %{version}-%{release}
 Requires: qt5-qtbase-devel
-Requires: libqtavwidgets
 
 %description devel
 QtAV is a multimedia playback library based on Qt and FFmpeg.
@@ -155,7 +154,8 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 %package private-devel
 Summary: QtAV private development files
 Summary(zh_CN): QtAV 私有开发文件
-Requires: qtav-devel = %{version}
+Buildarch: noarch
+Requires: qtav-devel = %{version}-%{release}
 
 %description private-devel
 QtAV is a multimedia playback library based on Qt and FFmpeg.
@@ -192,10 +192,9 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 Summary: QtAV/QML players
 Summary(zh_CN): QtAV/QML 播放器
 License: GPLv3
-Requires: libqtav
-Requires: libqtavwidgets
-Requires: qtav-qml-module
-Requires: qt5-qtsvg
+Requires: libqtav = %{version}-%{release}
+Requires: libqtavwidgets = %{version}-%{release}
+Requires: qtav-qml-module = %{version}-%{release}
 
 %description players
 QtAV is a multimedia playback framework based on Qt and FFmpeg.
@@ -225,9 +224,7 @@ mkdir build; pushd build
 make %{?_smp_mflags}
 
 %install
-pushd build
-make install DESTDIR=%{buildroot} INSTALL_ROOT=%{buildroot}
-popd
+%make_install INSTALL_ROOT=%{buildroot} -C build
 
 rm -rf %{buildroot}%{_datadir}/doc/*
 rm -rf %{buildroot}%{_qt5_archdatadir}/bin/libcommon.*
@@ -241,23 +238,47 @@ install -D src/QtAV.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/QtAV
 ln -sfv %{_libdir}/libQtAV.so %{buildroot}%{_libdir}/libQt5AV.so
 ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
+%post devel -p /sbin/ldconfig
+%post -n lib%{name} -p /sbin/ldconfig
+%post -n lib%{name}widgets -p /sbin/ldconfig
+
+%post players
+update-desktop-database -q ||:
+touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+
+%postun devel -p /sbin/ldconfig
+%postun -n lib%{name} -p /sbin/ldconfig
+%postun -n lib%{name}widgets -p /sbin/ldconfig
+
+%postun players
+if [ $1 -eq 0 ]; then
+    touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+update-desktop-database -q ||:
+
 %files sdk
 %defattr(-,root,root,-)
-%doc README.md Changelog lgpl-2.1.txt
+%doc README.md Changelog
+%license lgpl-2.1.txt
 
 %files -n lib%{name}
 %defattr(-,root,root,-)
-%doc README.md Changelog lgpl-2.1.txt
+%doc README.md Changelog
+%license lgpl-2.1.txt
 %{_libdir}/libQtAV.so.*
 
 %files -n lib%{name}widgets
 %defattr(-,root,root,-)
-%doc README.md Changelog lgpl-2.1.txt
+%doc README.md Changelog
+%license lgpl-2.1.txt
 %{_libdir}/libQtAVWidgets.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc README.md Changelog lgpl-2.1.txt
+%doc README.md Changelog
+%license lgpl-2.1.txt
 %{_qt5_headerdir}/QtAV/*
 %{_qt5_headerdir}/QtAVWidgets/*
 %{_libdir}/libQtAV.so
@@ -273,14 +294,16 @@ ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
 %files private-devel
 %defattr(-,root,root,-)
-%doc README.md Changelog lgpl-2.1.txt
+%doc README.md Changelog
+%license lgpl-2.1.txt
 %{_qt5_headerdir}/QtAV/%{_qt5_version}/QtAV/private/*.h
 %{_qt5_archdatadir}/mkspecs/modules/qt_lib_av_private.pri
 %{_qt5_archdatadir}/mkspecs/modules/qt_lib_avwidgets_private.pri
 
 %files qml-module
 %defattr(-,root,root,-)
-%doc README.md Changelog lgpl-2.1.txt
+%doc README.md Changelog
+%license lgpl-2.1.txt
 %{_qt5_archdatadir}/qml/QtAV/libQmlAV.so
 %{_qt5_archdatadir}/qml/QtAV/plugins.qmltypes
 %{_qt5_archdatadir}/qml/QtAV/qmldir
@@ -288,7 +311,8 @@ ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
 %files players
 %defattr(-,root,root,-)
-%doc README.md Changelog gpl-3.0.txt
+%doc README.md Changelog
+%license gpl-3.0.txt
 %{_qt5_bindir}/player
 %{_qt5_bindir}/QMLPlayer
 %{_bindir}/player
@@ -299,6 +323,8 @@ ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
 
 %changelog
+* Thu Sep  3 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-1.git8f8ae59
+- Update version to 1.8.0-1.git8f8ae59
 * Sat Jul 11 2015 mosquito <sensor.wen@gmail.com> - 1.7.0-1.git68322f8
 - Update version to 1.7.0-1.git68322f8
 - fix qtav gcc5 -O2 build error
