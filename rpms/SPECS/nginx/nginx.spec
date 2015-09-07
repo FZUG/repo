@@ -19,7 +19,11 @@
 
 # gperftools exist only on selected arches
 %ifarch %{ix86} x86_64 ppc ppc64 %{arm}
+%if 0%{?rhel} >= 6 || 0%{?fedora}
 %global  with_gperftools     1
+%else
+%global  with_gperftools     0
+%endif
 %endif
 
 # AIO missing on some arches
@@ -35,11 +39,11 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.7.10
+Version:           1.7.11
 %if 0%{?with_modsec}
-Release:           3.modsec_%{modsec_version}%{dist}
+Release:           1.modsec_%{modsec_version}%{dist}
 %else
-Release:           3%{?dist}
+Release:           1%{?dist}
 %endif
 
 Summary:           A high performance web server and reverse proxy server
@@ -82,12 +86,17 @@ BuildRequires:     gperftools-devel
 BuildRequires:     libxslt-devel
 BuildRequires:     openssl-devel
 BuildRequires:     pcre-devel
+%if 0%{?rhel} == 5
+BuildRequires:     perl
+%else
 BuildRequires:     perl-devel
 BuildRequires:     perl(ExtUtils::Embed)
+%endif
 BuildRequires:     zlib-devel
 %if 0%{?with_modsec}
 # Build reqs for mod_security
-BuildRequires:     httpd-devel libxml2-devel pcre-devel curl-devel lua-devel
+BuildRequires:     httpd-devel pcre-devel curl-devel lua-devel
+BuildRequires:     libxml2-devel >= 2.6.29
 %endif
 
 Requires:          nginx-filesystem = %{epoch}:%{version}-%{release}
@@ -216,6 +225,7 @@ export DESTDIR=%{buildroot}
     --with-mail \
     --with-mail_ssl_module \
     --with-pcre \
+    --with-threads \
 %if 0%{?with_gperftools}
     --with-google_perftools_module \
 %endif
@@ -384,6 +394,9 @@ fi
 
 
 %changelog
+* Sun Mar 29 2015 mosquito <sensor.wen@gmail.com> - 1:1.7.11-1.modsec_2.9.0
+- update to upstream release 1.7.11
+
 * Sat Mar 07 2015 mosquito <sensor.wen@gmail.com> - 1:1.7.10-3.modsec_2.9.0
 - Update fancyindex to 0.3.5
 - add --with-http_auth_request_module
