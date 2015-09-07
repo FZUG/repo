@@ -1,0 +1,11 @@
+--- modsecurity-2.9.0.orig/apache2/msc_lua.c	2015-03-06 01:35:06.458699865 +0800
++++ modsecurity-2.9.0/apache2/msc_lua.c	2015-03-06 01:34:48.719647454 +0800
+@@ -111,7 +111,7 @@
+     dump.pool = pool;
+     dump.parts = apr_array_make(pool, 128, sizeof(msc_script_part *));
+ 
+-    lua_dump(L, dump_writer, &dump);
++    lua_dump(L, dump_writer, &dump, 1);
+ 
+     (*script) = apr_pcalloc(pool, sizeof(msc_script));
+     (*script)->name = filename;
