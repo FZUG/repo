@@ -39,7 +39,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.0
+Version:           1.9.1
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -97,6 +97,7 @@ BuildRequires:     zlib-devel
 # Build reqs for mod_security
 BuildRequires:     httpd-devel pcre-devel curl-devel lua-devel
 BuildRequires:     libxml2-devel >= 2.6.29
+BuildRequires:     yajl-devel ssdeep-devel
 %endif
 
 Requires:          nginx-filesystem = %{epoch}:%{version}-%{release}
@@ -165,7 +166,7 @@ popd
 %if 0%{?with_modsec}
 # Build mod_security standalone module
 pushd ../modsecurity-%{modsec_version}
-#CFLAGS="%{optflags} $(pcre-config --cflags)" ./configure \
+#CFLAGS="%%{optflags} $(pcre-config --cflags)" ./configure \
 %configure \
     --enable-standalone-module \
     --disable-mlogc \
@@ -395,6 +396,11 @@ fi
 
 
 %changelog
+* Wed Jun 03 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.1-1.modsec_2.9.0
+- update to upstream release 1.9.1
+- Feature: the "reuseport" parameter of the "listen" directive
+- Feature: the $upstream_connect_time variable
+
 * Wed Apr 29 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.0-1.modsec_2.9.0
 - update to upstream release 1.9.0
 - add --with-stream and --with-threads
