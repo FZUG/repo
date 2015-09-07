@@ -1,3 +1,6 @@
+%if ! 0%{?rhel} && ! 0%{?fedora}
+%global  rhel %(%{__python} -c "import platform;print platform.dist()[1][0]")
+%endif
 %global  debug_package       %{nil}
 %global  _hardened_build     1
 %global  nginx_user          nginx
@@ -8,6 +11,7 @@
 %global  nginx_datadir       %{_datadir}/nginx
 %global  nginx_logdir        %{_localstatedir}/log/nginx
 %global  nginx_webroot       %{nginx_datadir}/html
+%global  with_http2          1
 
 # ModSecurity module
 %global  modsec_version      2.9.0
@@ -21,25 +25,21 @@
 %ifarch %{ix86} x86_64 ppc ppc64 %{arm}
 %if 0%{?rhel} >= 6 || 0%{?fedora}
 %global  with_gperftools     1
-%else
-%global  with_gperftools     0
 %endif
 %endif
 
 # AIO missing on some arches
 %ifnarch aarch64
-%global  with_aio   1
+%global  with_aio  1
 %endif
 
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
-%global with_systemd 1
-%else
-%global with_systemd 0
+%global  with_systemd  1
 %endif
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.1
+Version:           1.9.4
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -78,6 +78,12 @@ Patch0:            nginx-auto-cc-gcc.patch
 # lua_dump was changed
 Patch1:            modsec_lua_dump.patch
 
+# HTTP/2 patch
+Patch2:            http://nginx.org/patches/http2/patch.http2.txt
+
+%if 0%{?rhel}
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
+%endif
 BuildRequires:     GeoIP-devel
 BuildRequires:     gd-devel
 %if 0%{?with_gperftools}
@@ -96,8 +102,10 @@ BuildRequires:     zlib-devel
 %if 0%{?with_modsec}
 # Build reqs for mod_security
 BuildRequires:     httpd-devel pcre-devel curl-devel lua-devel
-BuildRequires:     libxml2-devel >= 2.6.29
-BuildRequires:     yajl-devel ssdeep-devel
+BuildRequires:     libxml2-devel >= 2.6.29 ssdeep-devel
+%if 0%{?rhel} != 5
+BuildRequires:     yajl-devel
+%endif
 %endif
 
 Requires:          nginx-filesystem = %{epoch}:%{version}-%{release}
@@ -108,7 +116,6 @@ Requires:          pcre
 Requires:          perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires(pre):     nginx-filesystem
 Provides:          webserver = %{version}
-#Provides:         nginx = 1:{version}-{release}
 
 %if 0%{?with_modsec}
 # So we can install rules from pkg
@@ -148,24 +155,22 @@ directories.
 
 
 %prep
-%if 0%{?with_modsec}
-%setup -q -b 2
+%setup -q -a2 -a3
 %if 0%{?fedora} > 21
-pushd ../modsecurity-%{modsec_version}
+pushd modsecurity-%{modsec_version}
 %patch1 -p1
 popd
 %endif
-%endif
-%if 0%{?with_fancy}
-%setup -q -b 3
-%endif
 %patch0 -p0
+%if 0%{?with_http2}
+%patch2 -p1
+%endif
 
 
 %build
 %if 0%{?with_modsec}
 # Build mod_security standalone module
-pushd ../modsecurity-%{modsec_version}
+pushd modsecurity-%{modsec_version}
 #CFLAGS="%%{optflags} $(pcre-config --cflags)" ./configure \
 %configure \
     --enable-standalone-module \
@@ -205,7 +210,11 @@ export DESTDIR=%{buildroot}
 %endif
     --with-ipv6 \
     --with-http_ssl_module \
+%if 0%{?with_http2}
+    --with-http_v2_module \
+%else
     --with-http_spdy_module \
+%endif
     --with-http_realip_module \
     --with-http_addition_module \
     --with-http_xslt_module \
@@ -226,16 +235,18 @@ export DESTDIR=%{buildroot}
     --with-mail \
     --with-mail_ssl_module \
     --with-pcre \
-    --with-stream \
+    --with-pcre-jit \
     --with-threads \
+    --with-stream \
+    --with-stream_ssl_module \
 %if 0%{?with_gperftools}
     --with-google_perftools_module \
 %endif
 %if 0%{?with_modsec}
-    --add-module="../modsecurity-%{modsec_version}/nginx/modsecurity" \
+    --add-module="modsecurity-%{modsec_version}/nginx/modsecurity" \
 %endif
 %if 0%{?with_fancy}
-    --add-module="../ngx-fancyindex-%{fancy_version}" \
+    --add-module="ngx-fancyindex-%{fancy_version}" \
 %endif
     --with-debug \
     --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
@@ -246,6 +257,7 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=%{buildroot} INSTALLDIRS=vendor
+rm -rf %{buildroot}%{_sbindir}/%{name}.old
 
 find %{buildroot} -type f -name .packlist -exec rm -f '{}' \;
 find %{buildroot} -type f -name perllocal.pod -exec rm -f '{}' \;
@@ -278,7 +290,7 @@ install -p -m 0644 %{SOURCE12} \
     sed -i 's|/run/nginx.pid|/var/run/nginx.pid|' %{buildroot}%{nginx_confdir}/nginx.conf
 %endif
 %if 0%{?with_modsec}
-pushd ../modsecurity-%{modsec_version}
+pushd modsecurity-%{modsec_version}
     install -p -m 0644 modsecurity.conf-recommended \
         %{buildroot}%{nginx_confdir}/modsecurity.conf
 popd
@@ -318,7 +330,7 @@ if [ $1 -eq 1 ]; then
     /sbin/chkconfig --add %{name}
 fi
 %endif
-if [ $1 -eq 2 ]; then
+if [ $1 -ge 1 ]; then
     # Make sure these directories are not world readable.
     chmod 700 %{nginx_home}
     chmod 700 %{nginx_home_tmp}
@@ -338,14 +350,20 @@ fi
 %postun
 %if 0%{?with_systemd}
 %systemd_postun nginx.service
+if [ $1 -ge 1 ]; then
+    /usr/bin/nginx-upgrade &>/dev/null ||:
+fi
 %else
 if [ $1 -eq 1 ]; then
-    /sbin/service %{name} upgrade || :
+    /sbin/service %{name} upgrade ||:
 fi
 %endif
 
 %files
 %doc LICENSE CHANGES README
+%if 0%{?rhel} > 6 || 0%{?fedora}
+%license LICENSE
+%endif
 %{nginx_datadir}/html/*
 %{_bindir}/nginx-upgrade
 %{_sbindir}/nginx
@@ -396,14 +414,55 @@ fi
 
 
 %changelog
+* Mon Sep 07 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.4-1.modsec_2.9.0
+- update to upstream release 1.9.4
+
+* Fri Jul 03 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-10
+- switch back to /bin/kill in logrotate script due to SELinux denials
+
+* Tue Jun 16 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-9
+- fix path to png in error pages (#1232277)
+- optimize png images with optipng
+
+* Sun Jun 14 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-8
+- replace /bin/kill with /usr/bin/systemctl kill in logrotate script (#1231543)
+- remove After=syslog.target in nginx.service (#1231543)
+- replace ExecStop with KillSignal=SIGQUIT in nginx.service (#1231543)
+
 * Wed Jun 03 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.1-1.modsec_2.9.0
 - update to upstream release 1.9.1
 - Feature: the "reuseport" parameter of the "listen" directive
 - Feature: the $upstream_connect_time variable
 
+* Wed Jun 03 2015 Jitka Plesnikova <jplesnik@redhat.com> - 1:1.8.0-7
+- Perl 5.22 rebuild
+
+* Sun May 10 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-6
+- revert previous change
+
+* Sun May 10 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-5
+- move default server to default.conf (#1220094)
+
+* Sun May 10 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-4
+- add TimeoutStopSec=5 and KillMode=mixed to nginx.service
+- set worker_processes to auto
+- add some common options to the http block in nginx.conf
+- run nginx-upgrade on package update
+- remove some redundant scriptlet commands
+- listen on ipv6 for default server (#1217081)
+
 * Wed Apr 29 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.0-1.modsec_2.9.0
 - update to upstream release 1.9.0
 - add --with-stream and --with-threads
+
+* Wed Apr 22 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-3
+- improve nginx-upgrade script
+
+* Wed Apr 22 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-2
+- add --with-pcre-jit
+
+* Wed Apr 22 2015 Jamie Nguyen <jamielinux@fedoraproject.org> - 1:1.8.0-1
+- update to upstream release 1.8.0
 
 * Thu Apr 09 2015 mosquito <sensor.wen@gmail.com> - 1:1.7.12-1.modsec_2.9.0
 - update to upstream release 1.7.12
