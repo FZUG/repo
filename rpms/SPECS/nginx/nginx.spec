@@ -39,7 +39,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.7.12
+Version:           1.9.0
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -225,6 +225,8 @@ export DESTDIR=%{buildroot}
     --with-mail \
     --with-mail_ssl_module \
     --with-pcre \
+    --with-stream \
+    --with-threads \
 %if 0%{?with_gperftools}
     --with-google_perftools_module \
 %endif
@@ -237,7 +239,6 @@ export DESTDIR=%{buildroot}
     --with-debug \
     --with-cc-opt="%{optflags} $(pcre-config --cflags)" \
     --with-ld-opt="$RPM_LD_FLAGS -Wl,-E" # so the perl module finds its symbols
-#    --with-threads
 
 make %{?_smp_mflags}
 
@@ -394,6 +395,10 @@ fi
 
 
 %changelog
+* Wed Apr 29 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.0-1.modsec_2.9.0
+- update to upstream release 1.9.0
+- add --with-stream and --with-threads
+
 * Thu Apr 09 2015 mosquito <sensor.wen@gmail.com> - 1:1.7.12-1.modsec_2.9.0
 - update to upstream release 1.7.12
 
