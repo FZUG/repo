@@ -1,0 +1,15 @@
+[FZUG]
+name=FZUG fc$releasever - $basearch
+baseurl=http://repo.fdzh.org/FZUG/$releasever/$basearch/
+skip_if_unavailable=True
+metadata_expire=1d
+gpgcheck=0
+enabled=1
+
+[FZUG-source]
+name=FZUG fc$releasever - Source
+baseurl=http://repo.fdzh.org/FZUG/$releasever/source/SRPMS/
+skip_if_unavailable=True
+metadata_expire=1d
+gpgcheck=0
+enabled=0
