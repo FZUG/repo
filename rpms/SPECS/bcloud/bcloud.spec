@@ -10,12 +10,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 40d8d2d294e9899906e6464066a6ab9a68c0ef82
+%global _commit 75fab30de2f3644fa549d497a03d3454574a0c10
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		bcloud
 Version:	3.7.2
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	Baidu Pan client for Linux Desktop users
 Summary(zh_CN):	百度网盘 Linux 桌面客户端
 
@@ -74,7 +74,8 @@ update-desktop-database -q ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files -f %{name}.lang
-%doc LICENSE README.md HISTORY
+%doc README.md HISTORY
+%license LICENSE
 %{python3_sitelib}/*
 %{_bindir}/%{name}-gui
 %{_datadir}/icons/*
@@ -84,14 +85,17 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %exclude %{python3_sitelib}/bcloud/__pycache__
 
 %changelog
-* Mon Jul 13 2015 mosquito <sensor.wen@gmail.com> - 3.7.2-1
-- Update version to 3.7.2
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 3.7.2-2.git75fab30
+- Update version to 3.7.2-2.git75fab30
 
-* Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 3.7.1-1
-- Update version to 3.7.1
+* Mon Jul 13 2015 mosquito <sensor.wen@gmail.com> - 3.7.2-1.git40d8d2d
+- Update version to 3.7.2-1.git40d8d2d
+
+* Tue May 19 2015 mosquito <sensor.wen@gmail.com> - 3.7.1-1.git32abfb9
+- Update version to 3.7.1-1.git32abfb9
 - Update post script
 
-* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 3.6.1-1
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 3.6.1-1.gitcffb757
 - Rename version name
 
 * Tue Feb 03 2015 mosquito <sensor.wen@gmail.com> - 3.6.1git20150201-1
