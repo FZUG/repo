@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit f48b220c59fac6ff08d26906bafc8027a8f9a47d
+%global _commit bc568f34c559813d14c6471a1b2d1555dcc26ce5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: libtelegramqml
 Version: 0.8.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Telegram API tools for QtQML and Qml
 Summary(zh_CN): Telegram Qml API 工具
 
@@ -53,22 +53,24 @@ mkdir build && pushd build
 make %{?_smp_mflags}
 
 %install
-make install INSTALL_ROOT=%{buildroot} -C build
+%make_install INSTALL_ROOT=%{buildroot} -C build
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.md
+%doc README.md
+%license LICENSE
 %{_libdir}/%{name}.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc LICENSE README.md
-%{_includedir}/%{name}
+%{_qt5_headerdir}/%{name}
 %{_libdir}/%{name}.so
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 0.8.0-2.gitbc568f3
+- Update to 0.8.0-2.gitbc568f3
 * Thu Jul 23 2015 mosquito <sensor.wen@gmail.com> - 0.8.0-1.gitf48b220
 - Initial build

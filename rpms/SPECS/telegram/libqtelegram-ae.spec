@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit ef383c9b3d02e0b010d08ee1b7b479eb4736bba7
+%global _commit d54aebed628b5864f5e84b36918c2dc651d5fba2
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: libqtelegram-ae
 Version: 0.5.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Telegram protocol access library
 Summary(zh_CN): Telegram 协议库
 
@@ -44,27 +44,29 @@ exposes an easy to use API for applications to interact to.
 %setup -q -n %repo-%{_commit}
 
 %build
-mkdir build && pushd build
+mkdir dist && pushd dist
 %{_qt5_qmake} PREFIX=%{_prefix} LIBDIR=%{_libdir} ..
 make %{?_smp_mflags}
 
 %install
-make install INSTALL_ROOT=%{buildroot} -C build
+%make_install INSTALL_ROOT=%{buildroot} -C dist
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.md
+%doc README.md
+%license LICENSE
 %{_libdir}/%{name}.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc LICENSE README.md
-%{_includedir}/%{name}
+%{_qt5_headerdir}/%{name}
 %{_libdir}/%{name}.so
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 0.5.0-2.gitd54aebe
+- Update to 0.5.0-2.gitd54aebe
 * Thu Jul 23 2015 mosquito <sensor.wen@gmail.com> - 0.5.0-1.gitef383c9
 - Initial build

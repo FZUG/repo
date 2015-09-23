@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 2083574ee436c9726186d13e9c1eba11e502d52b
+%global _commit 79fc6b0ab9d08074c52ecf49b41762a5dfb84b64
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: cutegram
 Version: 2.5.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Cutegram telegram client
 Summary(zh_CN): Cutegram telegram 客户端
 
@@ -57,13 +57,13 @@ Cutegram 是一款 Telegram 第三方客户端. 它拥有智能美观的用户�
 mkdir build && pushd build
 %{_qt5_qmake} PREFIX=%{_prefix} \
     LIBQTELEGRAM_LIB_DIR=%{_libdir} \
-    LIBQTELEGRAM_INCLUDE_PATH=%{_includedir}/libqtelegram-ae \
+    LIBQTELEGRAM_INCLUDE_PATH=%{_qt5_headerdir}/libqtelegram-ae \
     TELEGRAMQML_LIB_DIR=%{_libdir} \
-    TELEGRAMQML_INCLUDE_PATH=%{_includedir}/libtelegramqml ..
+    TELEGRAMQML_INCLUDE_PATH=%{_qt5_headerdir}/libtelegramqml ..
 make %{?_smp_mflags}
 
 %install
-make install INSTALL_ROOT=%{buildroot} -C build
+%make_install INSTALL_ROOT=%{buildroot} -C build
 
 %post
 update-desktop-database -q ||:
@@ -77,7 +77,8 @@ ldconfig
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.md
+%doc README.md
+%license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/icons/*
@@ -86,5 +87,9 @@ ldconfig
 %exclude %{_datadir}/%{name}/icons
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 2.5.0-2.git79fc6b0
+- Fix include path
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 2.5.0-1.git79fc6b0
+- Update to 2.5.0-1.git79fc6b0
 * Thu Jul 23 2015 mosquito <sensor.wen@gmail.com> - 2.5.0-1.git2083574
 - Initial build
