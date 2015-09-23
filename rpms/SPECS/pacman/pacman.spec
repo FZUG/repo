@@ -11,12 +11,12 @@
 
 # commit
 %global debug_package %{nil}
-%global _commit deac9731884a83ad91eab9f27b288f406f56c87b
+%global _commit 578035075108a90d20f084f077badf05d1c8527c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           pacman
 Version:        4.2.1
-Release:        2.git%{_shortcommit}%{?dist}
+Release:        3.git%{_shortcommit}%{?dist}
 Summary:        Package manager for the Arch distribution
 License:        GPLv2+
 Url:            https://www.archlinux.org/pacman
@@ -203,6 +203,9 @@ EOF
 
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 4.2.1-3.git5780350
+- Update to version 4.2.1-3.git5780350
+
 * Thu Aug  6 2015 mosquito <sensor.wen@gmail.com> - 4.2.1-2.gitdeac973
 - Add depend fakeroot
 
