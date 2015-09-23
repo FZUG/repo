@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit d2d8300c7627e119e3d60ce99e4dd22370810a3b
+%global _commit e75e9b8b5a6a671f3e750da66b45445d7ae925de
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: yaourt
 Version: 1.6
-Release: 4.git%{_shortcommit}%{?dist}
+Release: 5.git%{_shortcommit}%{?dist}
 Summary: A pacman wrapper with extended features and AUR support
 Summary(zh_CN): 支持 AUR 的 pacman 前端
 
@@ -38,7 +38,7 @@ pushd src
 make PREFIX=%{_prefix} sysconfdir=%{_sysconfdir} localstatedir=%{_var}
 
 %install
-make install -C src \
+%make_install -C src \
     PREFIX=%{_prefix} \
     sysconfdir=%{_sysconfdir} \
     localstatedir=%{_var} \
@@ -50,7 +50,8 @@ install -m 755 %{S:1} %{buildroot}%{_bindir}/
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc src/COPYING README.pod
+%doc README.pod
+%license src/COPYING
 %config(noreplace) %{_sysconfdir}/%{name}rc
 %{_bindir}/*
 %{_prefix}/lib/%{name}/
@@ -58,6 +59,8 @@ install -m 755 %{S:1} %{buildroot}%{_bindir}/
 %exclude %{_datadir}/bash-completion/
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.6-5.gite75e9b8
+- Update to 1.6-5.gite75e9b8
 * Sun Aug  2 2015 mosquito <sensor.wen@gmail.com> - 1.6-4.gitd2d8300
 - Add yaourt-link's -q, -S option
 * Fri Jul 31 2015 mosquito <sensor.wen@gmail.com> - 1.6-3.gitd2d8300
