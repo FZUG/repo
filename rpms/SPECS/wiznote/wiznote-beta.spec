@@ -3,13 +3,13 @@
 %global repo %{project}
 
 # commit
-%global _commit 60eee8daa497e97f6c1d46788afd2be75e1f01ae
+%global _commit 56bca7d81e7586e06ec26a86f9740076f7743e14
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:		wiznote-beta
-Version:	2.2.4
+Version:	2.2.5
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
@@ -165,6 +165,8 @@ ldconfig
 %{_datadir}/%{name}/*
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 2.2.5-1.git56bca7d
+- Update version to 2.2.5-1.git56bca7d
 * Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 2.2.4-1.git60eee8d
 - Update version to 2.2.4-1.git60eee8d
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 2.2.3-1.git7bcf616
