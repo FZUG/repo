@@ -5,11 +5,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 31be3fea231b8fd5748e832d24ce454e793cd1a7
+%global _commit ee3ad5bd4e749c471f6457fdffecc3554b3baf85
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		grub4dos
-Version:	0.4.6a.20150807
+Version:	0.4.6a.20150915
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	This is GNU GRUB, the GRand Unified Bootloader
 Summary(zh_CN):	多功能启动引导管理器
@@ -235,12 +235,15 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING README* THANKS
-%doc ChangeLog* %{name}-help-%{helpdate}.chm
+%doc README* THANKS ChangeLog*
+%doc %{name}-help-%{helpdate}.chm
+%license COPYING
 %{_bindir}/bootlace*
 %{_datadir}/%{name}
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150915-1
+- Update version to 0.4.6a.20150915
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150807-1
 - Update version to 0.4.6a.20150807
 * Tue Jun 30 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150617-1
