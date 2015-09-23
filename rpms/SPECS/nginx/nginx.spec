@@ -39,7 +39,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.4
+Version:           1.9.5
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -79,7 +79,7 @@ Patch0:            nginx-auto-cc-gcc.patch
 Patch1:            modsec_lua_dump.patch
 
 # HTTP/2 patch
-Patch2:            http://nginx.org/patches/http2/patch.http2.txt
+#Patch2:            http://nginx.org/patches/http2/patch.http2.txt
 
 %if 0%{?rhel}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -162,9 +162,6 @@ pushd modsecurity-%{modsec_version}
 popd
 %endif
 %patch0 -p0
-%if 0%{?with_http2}
-%patch2 -p1
-%endif
 
 
 %build
@@ -212,8 +209,6 @@ export DESTDIR=%{buildroot}
     --with-http_ssl_module \
 %if 0%{?with_http2}
     --with-http_v2_module \
-%else
-    --with-http_spdy_module \
 %endif
     --with-http_realip_module \
     --with-http_addition_module \
@@ -414,6 +409,9 @@ fi
 
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.5-1.modsec_2.9.0
+- update to upstream release 1.9.5
+
 * Mon Sep 07 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.4-1.modsec_2.9.0
 - update to upstream release 1.9.4
 
