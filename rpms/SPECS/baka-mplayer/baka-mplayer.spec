@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 8b02c84a58eb158ad2bcc3e31a11cf61a14a677f
+%global _commit 554ec3818ed4a4a3fa287756e0589779ca7d33f9
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: baka-mplayer
@@ -45,14 +45,14 @@ Baka MPlayer 是一款开源, 跨平台, 基于 libmpv 的多媒体播放器.
 %setup -q -n %repo-%{_commit}
 
 %build
-%{_qt5_qmake} src/Baka-MPlayer.pro CONFIG+="release install_translations" \
+%{_qt5_qmake} src/Baka-MPlayer.pro CONFIG+="release install_translations man.extra" \
 lupdate=lupdate-qt5 lrelease=lrelease-qt5 \
 DOCDIR=%{_docdir} LICENSEDIR=%{_docdir} \
 QMAKE_CFLAGS+="%{optflags}" QMAKE_CXXFLAGS+="%{optflags}"
 make %{?_smp_mflags}
 
 %install
-make install INSTALL_ROOT=%{buildroot}
+%make_install INSTALL_ROOT=%{buildroot}
 
 %post
 update-desktop-database -q ||:
@@ -64,7 +64,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE DOCS/%{name}.md
+%doc DOCS/%{name}.md LICENSE
+%license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_mandir}/man1/%{name}.1.gz
@@ -73,5 +74,7 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 2.0.3-1.git554ec38
+- Update to 2.0.3-1.git554ec38
 * Thu Jul 23 2015 mosquito <sensor.wen@gmail.com> - 2.0.3-1.git8b02c84
 - Initial build
