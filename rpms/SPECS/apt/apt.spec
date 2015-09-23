@@ -3,7 +3,7 @@
 %global _libdir %{_prefix}/lib
 
 Name:          apt
-Version:       1.0.10.1
+Version:       1.0.10.2
 Release:       1%{?dist}
 Summary:       Debian's commandline package manager
 
@@ -220,6 +220,7 @@ install -d %{buildroot}%{_var}/log/apt
 %{_mandir}/*/man[158]/*.[158].gz
 %{_mandir}/man[158]/*.[158].gz
 %{_datadir}/locale/*/LC_MESSAGES/*.mo
+%{_defaultdocdir}/apt/examples/
 %dir %{_var}/cache/apt/archives/partial
 %dir %{_sharedstatedir}/apt/lists/partial
 %dir %{_sharedstatedir}/apt/mirrors/partial
@@ -235,6 +236,8 @@ install -d %{buildroot}%{_var}/log/apt
 %{_libdir}/libapt-private.so
 
 %changelog
+* Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.0.10.2-1
+- Update to 1.0.10.2
 * Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.0.10.1-1
 - Update to 1.0.10.1
 * Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.0.9.10-1
