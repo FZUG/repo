@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit d3a0f2b39800b2bc1954271652f70c126036226c
+%global _commit a86ce5e7595487285a8cfec80a499c67bdfdb5f4
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		screenfetch
 Version:	3.7.0
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	Fetches system/theme information in terminal
 Summary(zh_CN):	终端查询系统/主题信息
 
@@ -33,10 +33,13 @@ install -Dm 0755 %{name}-dev %{buildroot}%{_bindir}/%{name}
 
 %files
 %defattr(-,root,root,-)
-%doc CHANGELOG COPYING README.mkdn TODO
+%doc CHANGELOG README.mkdn TODO
+%license COPYING
 %{_bindir}/%{name}
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 3.7.0-2.gita86ce5e
+- Update version to 3.7.0-2.gita86ce5e
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 3.7.0-1.gitd3a0f2b
 - Update version to 3.7.0-1.gitd3a0f2b
 * Tue Jun 30 2015 mosquito <sensor.wen@gmail.com> - 3.6.5-1.gite73c7af
