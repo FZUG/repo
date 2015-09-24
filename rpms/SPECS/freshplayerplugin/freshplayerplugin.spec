@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit acb0ee46443ff2dcbeec23eca1b7d8bee0ad9f90
+%global _commit 8cc1005bdb1651af8b105bd5630d539e35634b00
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: freshplayerplugin
-Version: 0.3.1
+Version: 0.3.2
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
@@ -56,8 +56,7 @@ BuildRequires: libvdpau-devel
 %setup -q -n %repo-%{_commit}
 
 %build
-mkdir build
-pushd build
+mkdir build && pushd build
 %{cmake} -DCMAKE_BUILD_TYPE=Release ..
 make %{?_smp_mflags}
 
@@ -79,11 +78,14 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE README.md data/freshwrapper.conf.example doc/*.md
+%doc README.md data/freshwrapper.conf.example doc/*.md
+%license LICENSE
 %{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.3.2-1.git8cc1005
+- Update version to 0.3.2-1.git8cc1005
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.3.1-1.gitacb0ee4
 - Update version to 0.3.1-1.gitacb0ee4
 * Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 0.3.0-1.gite77cb63
