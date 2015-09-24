@@ -3,35 +3,35 @@
 %global repo %{project}
 
 # commit
-%global _commit 3f846924a0bb66fa893798478b3725c50be50aa3
+%global _commit 55d2c5cb8877454a79692e29a5582d52d8735623
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		simplescreenrecorder
-Version:	0.3.3
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	A feature-rich screen recorder that supports X11 and OpenGL
-Summary(zh_CN):	一个功能丰富的屏幕录像软件, 支持录制 X11 和 OpenGL 程序
+Name:           simplescreenrecorder
+Version:        0.3.3
+Release:        2.git%{_shortcommit}%{?dist}
+Summary:        A feature-rich screen recorder that supports X11 and OpenGL
+Summary(zh_CN): 一个功能丰富的屏幕录像软件, 支持录制 X11 和 OpenGL 程序
 
-License:	GPLv3
-Group:		Applications/Multimedia
-Url:		http://www.maartenbaert.be/simplescreenrecorder
-Source0:	https://github.com/MaartenBaert/ssr/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+License:        GPLv3
+Group:          Applications/Multimedia
+Url:            http://www.maartenbaert.be/simplescreenrecorder
+Source0:        https://github.com/MaartenBaert/ssr/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildRequires:	hicolor-icon-theme
-BuildRequires:	desktop-file-utils
-BuildRequires:	pkgconfig
-BuildRequires:	ffmpeg-devel
-BuildRequires:	qt-devel >= 4.8.6
-BuildRequires:	alsa-lib-devel
-BuildRequires:	pulseaudio-libs-devel
-BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	mesa-libGL-devel
-BuildRequires:	mesa-libGLU-devel
-BuildRequires:	libX11-devel
-BuildRequires:	libXfixes-devel
-BuildRequires:	libXext-devel
-BuildRequires:	libXi-devel
-Requires:	%{name}-lib%{?_isa} = %{version}-%{release}
+BuildRequires:  desktop-file-utils
+BuildRequires:  hicolor-icon-theme
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libswscale)
+BuildRequires:  pkgconfig(QtCore) >= 4.8
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(jack)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glu)
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xfixes)
+Requires:       %{name}-lib = %{version}-%{release}
 
 %description
 SimpleScreenRecorder is a feature-rich screen recorder that supports X11 and OpenGL.
@@ -49,9 +49,10 @@ SimpleScreenRecorder 是一个功能丰富的屏幕录像软件, 支持录制 X1
 此包包含主程序.
 
 %package lib
-Summary:	%{name} GLInject library
-Summary(zh_CN):	%{name} 的 GLInject 库
-Group:		System Environment/Libraries
+Summary:        %{name} GLInject library
+Summary(zh_CN): %{name} 的 GLInject 库
+Group:          System Environment/Libraries
+Requires:       %{name} = %{version}-%{release}
 
 %description lib
 SimpleScreenRecorder is a feature-rich screen recorder that supports X11 and OpenGL.
@@ -76,34 +77,34 @@ export LDFLAGS="$LDFLAGS `pkg-config --libs-only-l libavformat libavcodec libavu
 export CPPFLAGS="$CPPFLAGS `pkg-config --cflags-only-I libavformat libavcodec libavutil libswscale`"
 %configure \
 %ifarch %{ix86} x86_64
-	--disable-assert
+    --disable-assert
 %else
-	--disable-x86-asm \
-	--disable-glinjectlib
+    --disable-x86-asm \
+    --disable-glinjectlib
 %endif
 make %{?_smp_mflags}
 
 %install
-rm -rf $RPM_BUILD_ROOT
 %make_install
 rm -f %{buildroot}%{_libdir}/*.la
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 install -Dm 0644 %{buildroot}/%{_datadir}/icons/hicolor/256x256/apps/%{name}.png \
-	%{buildroot}/%{_datadir}/pixmaps/%{name}.png
+    %{buildroot}/%{_datadir}/pixmaps/%{name}.png
 
 %post
-update-desktop-database -q
-gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor || true
-ldconfig
+update-desktop-database -q ||:
+gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor ||:
+/sbin/ldconfig
 
 %postun
-update-desktop-database -q
-gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor || true
-ldconfig
+update-desktop-database -q ||:
+gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor ||:
+/sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING notes.txt README.md todo.txt
+%doc *.txt *.md data/resources/about.htm
+%license COPYING
 %{_bindir}/%{name}
 %{_bindir}/ssr-glinject
 %{_datadir}/%{name}
@@ -114,10 +115,12 @@ ldconfig
 
 %files lib
 %defattr(-,root,root,-)
-%doc COPYING notes.txt README.md todo.txt
 %{_libdir}/libssr-glinject.so
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-2.git55d2c5c
+- Update version to 0.3.3-2.git55d2c5c
+
 * Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1.git3f84692
 - Update version to 0.3.3-1.git3f84692
 
