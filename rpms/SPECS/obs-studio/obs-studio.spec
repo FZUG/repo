@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 4aef24a4312c9de35f3065b88319511b8e3e0798
+%global _commit 80b20abde2690cc8a9b0459eb768903aa72d9b1e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.11.3
+Version:    0.12.0
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -18,25 +18,25 @@ URL:        https://obsproject.com
 Source:     https://github.com/jp9000/obs-studio/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  cmake
-BuildRequires:  zlib-devel
+BuildRequires:  hicolor-icon-theme
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  ffmpeg-devel
-BuildRequires:  libX11-devel
-BuildRequires:  libGL-devel
-BuildRequires:  libv4l-devel
 BuildRequires:  pulseaudio-libs-devel
+BuildRequires:  jansson-devel
 BuildRequires:  x264-devel
+BuildRequires:  libv4l-devel
 BuildRequires:  freetype-devel
 BuildRequires:  fontconfig-devel
 BuildRequires:  libXcomposite-devel
 BuildRequires:  libXinerama-devel
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  hicolor-icon-theme
-BuildRequires:  jansson-devel
-BuildRequires:  systemd-devel
 BuildRequires:  libXrandr-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libGL-devel
+BuildRequires:  systemd-devel
 BuildRequires:  ImageMagick-devel
 BuildRequires:  libcurl-devel
+BuildRequires:  zlib-devel
 
 %description
 Open Broadcaster Software is free and open source software
@@ -50,7 +50,7 @@ Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 %package devel
 Summary:    Header files and library for %{name}
 Group:      Development/Libraries
-Requires:   %{name} = %{version}
+Requires:   %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Open Broadcaster Software is free and open source software
@@ -66,7 +66,6 @@ Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 mkdir build && pushd build
 %{cmake} .. \
     -DUNIX_STRUCTURE=ON \
-    -DCMAKE_INSTALL_PREFIX=%{_prefix} \
 %ifarch x86_64
     -DOBS_MULTIARCH_SUFFIX=64 \
 %endif
@@ -75,8 +74,7 @@ mkdir build && pushd build
 make %{?_smp_mflags}
 
 %install
-pushd build
-%make_install
+%make_install -C build
 
 %post
 update-desktop-database -q ||:
@@ -90,6 +88,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
+%doc CONTRIBUTING README
+%license COPYING
 %{_bindir}/obs
 %{_libdir}/obs-plugins
 %{_libdir}/libobs*.so.*
@@ -104,6 +104,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_includedir}/obs
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.12.0-1.git80b20ab
+- Update to 0.12.0-1.git80b20ab
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.11.3-1.git4aef24a
 - Update to 0.11.3-1.git4aef24a
 * Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 0.10.1-1.git82471d7
