@@ -2,14 +2,14 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit 8f8ae591fdacf1e5fd4fb5cd438b633d0dd207da
+%global _commit 37f4a540b2aa2b0fc924d97360f2d2978c80eab7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 1
 
 Name: qtav
 Version: 1.8.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
@@ -323,6 +323,8 @@ update-desktop-database -q ||:
 
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-2.git37f4a54
+- Update version to 1.8.0-2.git37f4a54
 * Thu Sep  3 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-1.git8f8ae59
 - Update version to 1.8.0-1.git8f8ae59
 * Sat Jul 11 2015 mosquito <sensor.wen@gmail.com> - 1.7.0-1.git68322f8
