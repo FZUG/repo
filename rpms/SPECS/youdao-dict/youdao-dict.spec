@@ -3,7 +3,7 @@
 
 Name:		youdao-dict
 Version:	1.0.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Youdao Dict
 Summary(zh_CN):	有道词典
 
@@ -45,7 +45,6 @@ dpkg-deb -X %{SOURCE1} %{_builddir}/%{name}-%{version}
 %build
 
 %install
-rm -rf $RPM_BUILD_ROOT
 pushd %{_builddir}/%{name}-%{version}
 
 # data files
@@ -70,22 +69,23 @@ sed -i 's|/usr/share|%{python3_sitelib}|' \
 
 %post
 # install
-if [ "0$1" -eq "1" ]; then
-    ln -s %{_datadir}/applications/%{name}-autostart.desktop %{_sysconfdir}/xdg/autostart/ > /dev/null 2>&1
+if [ "$1" -eq "1" ]; then
+    ln -s %{_datadir}/applications/%{name}-autostart.desktop \
+      %{_sysconfdir}/xdg/autostart/ &>/dev/null ||:
 fi
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %preun
 # uninstall
-if [ "0$1" -eq "0" ];then
+if [ "$1" -eq "0" ];then
     rm -rf %{_sysconfdir}/xdg/autostart/%{name}-autostart.desktop
-    pkill %{name} > /dev/null 2>&1 || true
+    pkill %{name} &>/dev/null ||:
 fi
 
 %postun
-update-desktop-database -q || true
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
+update-desktop-database -q ||:
+gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
@@ -97,5 +97,7 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || true
 %{_datadir}/icons/hicolor/*/apps/%{name}*
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-2
+- remove some command
 * Sat May 09 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-1
 - initial version 1.0.2
