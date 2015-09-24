@@ -3,7 +3,7 @@
 
 Name:		sogoupinyin
 Version:	1.2.0.0056
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Sogou Pinyin input method
 Summary(zh_CN):	搜狗拼音输入法
 
@@ -14,13 +14,9 @@ Source0:	http://download.ime.sogou.com/1432523940/%{name}_%{version}_amd64.deb
 Source1:	http://download.ime.sogou.com/1432524151/%{name}_%{version}_i386.deb
 
 BuildRequires:	dpkg
-Conflicts:	fcitx-sogoupinyin
-Requires:	qt
-Requires:	qt-x11
-Requires:	opencc
 Requires:	fcitx >= 4.2.8.3
-Requires:	fcitx-libs
 Requires:	fcitx-configtool
+Conflicts:	fcitx-sogoupinyin
 Obsoletes:	sogou-pinyin < %{version}-%{release}
 
 %description
@@ -51,7 +47,6 @@ dpkg-deb -X %{SOURCE1} %{_builddir}/%{name}-%{version}
 %build
 
 %install
-rm -rf $RPM_BUILD_ROOT
 pushd %{_builddir}/%{name}-%{version}
 
 # 55-sogoupinyin.sh script
@@ -196,55 +191,39 @@ for i in *;do
 done
 popd
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %post
-# install
-if [ "0$1" -eq "1" ]; then
-    ln -s %{_datadir}/applications/fcitx-ui-sogou-qimpanel.desktop %{_sysconfdir}/xdg/autostart/ > /dev/null 2>&1
-    glib-compile-schemas %{_datadir}/glib-2.0/schemas >/dev/null 2>&1 || true
-    update-desktop-database -q || true
-    update-mime-database %{_datadir}/mime || true
-    INPUTRC=`readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}'`
-    if [ "$INPUTRC" != "fcitx.conf" ]; then
-	alternatives --set xinputrc /etc/X11/xinit/xinput.d/fcitx.conf
-    fi
-    ldconfig
+/sbin/ldconfig
+INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
+if [ "$INPUTRC" != "fcitx.conf" ]; then
+    alternatives --set xinputrc /etc/X11/xinit/xinput.d/fcitx.conf
 fi
 
-# update
-if [ "0$1" -eq "2" ]; then
-    rm -rf /home/*/.config/sogou-qimpanel/skin
-    for i in /home/*;do
-	if [ -d "${i}/.config/sogou-qimpanel" ];then
-	    cp -r "%{_datadir}/sogou-qimpanel/recommendSkin/skin" "${i}/.config/sogou-qimpanel/"
-	fi
-    done
-    INPUTRC=`readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}'`
-    if [ "$INPUTRC" != "fcitx.conf" ]; then
-	alternatives --set xinputrc /etc/X11/xinit/xinput.d/fcitx.conf
-    fi
+# install
+if [ "$1" -eq "1" ]; then
+    ln -s %{_datadir}/applications/fcitx-ui-sogou-qimpanel.desktop %{_sysconfdir}/xdg/autostart/ &>/dev/null ||:
+    glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
+    update-desktop-database -q ||:
+    update-mime-database %{_datadir}/mime ||:
 fi
 
 %preun
 # uninstall
-if [ "0$1" -eq "0" ];then
-    rm -rf %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop
-    pkill sogou > /dev/null 2>&1
+if [ "$1" -eq "0" ];then
+    rm -rf %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop ||:
+    pkill sogou > /dev/null 2>&1 ||:
 fi
 
 %postun
 # uninstall
-if [ "0$1" -eq "0" ]; then
-    glib-compile-schemas %{_datadir}/glib-2.0/schemas >/dev/null 2>&1 || true
-    update-desktop-database -q || true
-    update-mime-database %{_datadir}/mime || true
+if [ "$1" -eq "0" ]; then
+    glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
+    update-desktop-database -q ||:
+    update-mime-database %{_datadir}/mime ||:
     INPUTRC=`readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}'`
     if [ "$INPUTRC" == "fcitx.conf" ]; then
 	alternatives --auto xinputrc
     fi
-    ldconfig
+    /sbin/ldconfig
 fi
 
 %files
@@ -268,6 +247,8 @@ fi
 
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-2
+- Remove depends
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-1
 - Update version 1.2.0.0056
 * Tue May  5 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0048-1
