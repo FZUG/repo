@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN" prefix="og: http://ogp.me/ns#">
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="Author" content="Fedora Zh User Group"/>
+        <meta name="Description" content="Fedora 中文用户组（FZUG）创建并维护此社区源，本源提供中文用户常用软件包。"/>
+        <title>Fedora中文社区软件源</title>
+        <meta property="og:url" content="http://repo.fdzh.org"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:site_name" content="FZUG"/>
+        <link rel="home" href="http://repo.fdzh.org"/>
+<!--
+        <link rel="stylesheet" href="http://www.uisdc.com/wss/fonts?family=Myriad+Set+Pro&amp;weights=100&amp;v=1" type="text/css" media="all"/>
+        <link rel="stylesheet" href="http://www.uisdc.com/wss/fonts?family=PingHei&amp;weights=200&amp;v=1"/>
+-->
+        <link type="text/css" rel="stylesheet" href="http://repo.fdzh.org:81/css?family=Clicker+Script|Open+Sans:400,300">
+
+        <style type="text/css">
+
+/* css reset */
+html{color:#000;background:transparent;}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td{margin:0;padding:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal}li{list-style:none}caption,th{text-align:left}h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal}q:before,q:after{content:''}abbr,acronym{border:0;font-variant:normal}sup{vertical-align:text-top}sub{vertical-align:text-bottom}input,textarea,select{font-family:inherit;font-size:inherit;font-weight:inherit}input,textarea,select{*font-size:100%}legend{color:#000}
+html[lang=zh-CN] body{font-family: "PingHei","Lucida Grande","Lucida Sans Unicode","Helvetica","Arial","Verdana","sans-serif";}
+html[lang=zh-CN] .icon-play{font-family: "PingHei 200","PingHei","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif"}
+html[lang=zh-CN] h1{font-family: "Myriad Set Pro","Lucida Grande","Helvetica Neue","Helvetica","Arial","Verdana","sans-serif";letter-spacing: 0px;}
+
+/*stylesheet here*/
+body{
+	background-color: #FDFFFD;
+}
+#header{
+	width:75%;
+	margin:0 auto;
+}
+#headlinks{
+	float:right;
+	margin-right: 10px;
+	padding: 10px 0;
+}
+#headlinks li{
+	float:left;
+	margin-left:25px;
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	font-size:16px;
+	color:#EEECDF;
+}
+#headlinks li:hover{
+	color:#FFF;
+}
+#headlinks li a{
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	font-size:16px;
+	color:#EEECDF;
+	text-decoration:none;
+}
+#headlinks li a:hover{
+	color:#FFF;
+}
+#welcome{
+	/*width: 100%;*/
+	padding: 42px 0px;
+	background: #477ec9; /* Old browsers #40bd97 #07a878 */
+	background: -moz-linear-gradient(top, #5a8ed5 0%, #3c6eb4 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5a8ed5), color-stop(100%,#3c6eb4)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #5a8ed5 0%,#3c6eb4 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #5a8ed5 0%,#3c6eb4 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #5a8ed5 0%,#3c6eb4 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #5a8ed5 0%,#3c6eb4 100%); /* W3C */
+}
+#intro{
+	margin:0 auto;
+	width:75%;
+	color:#F1F1F1;
+}
+#intro h1{
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	font-weight:400;
+	font-size:48px;
+	margin-top:10px;
+	color:rgba(255, 255, 255, 0.1);
+}
+#intro h2{
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	font-weight:300;
+	font-size:24px;
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#intro p{
+	margin-bottom:0px;
+	line-height:1.3em;
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	font-weight:300;
+	font-size:18px;
+}
+#wrapper{
+	width:75%;
+	margin:25px auto;
+}
+#filelist h3{
+	color:#07A878;
+	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+	font-weight:100;
+	font-size:24px;
+	margin:0px 0 15px 0;
+}
+#filelist table{
+	width:100%;
+	empty-cells:hide;
+}
+th{
+	font-weight:normal;
+	text-align:left;
+	font-size:16px;
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	padding:3px 0px;
+}
+thead{
+	/*border-bottom:thin dotted #000;*/
+}
+#name{
+	text-align:left;
+	padding:3px 0 3px 3px;
+}
+#help{
+	text-align:left;
+	padding:3px 3px 3px 0;
+}
+#filelist td{
+	font-size:14px;
+	line-height:20px;
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+}
+#filelist td.help{
+	padding:0px 3px 0px 0px;
+	text-align: left;
+}
+#filelist td.filename
+{
+	padding-left:3px;
+}
+#filelist td a{
+	color:#0B486B;
+	text-decoration: none;
+}
+#filelist a:hover{
+	text-decoration: underline;
+}
+#filename{
+	text-align:left;
+	width:15%;
+}
+.filesize{
+	display:none;
+	text-align:right;
+	width:0%;
+}
+.filetime{
+	text-align:left;
+	width:35%;
+}
+
+.help{
+	text-align:left;
+	width:20px;
+}
+tbody tr:hover{
+	background-color:#DDEADD;
+}
+#sidebar div{
+	margin-bottom: 25px;
+}
+#sidebar h3{
+	color:#07A878;
+	font-family: "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+	font-weight:300;
+	font-size:24px;
+	margin:0px 0 15px 0;
+}
+#sidebar p,a{
+	line-height: 1.5em;
+	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+}
+#sidebar a{
+	color:#030303;
+	text-decoration: none;
+}
+#sidebar a:hover{
+	text-decoration: underline;
+}
+.btn{
+	display: inline-block;
+	background-color: #07A878;
+	margin:12px auto 12px auto;
+	padding:3px 20px;
+	line-height: 1.5em;
+	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+	font-size: 20px;
+	color:#f3f3f3;
+	text-align: center;
+	-webkit-transition: background 0.3s linear;
+	-moz-transition: background 0.3s linear;
+	-ms-transition: background 0.3s linear;
+	-o-transition: background 0.3s linear;
+	transition: background 0.3s linear;
+	cursor:pointer;
+
+}
+.btn:hover{
+	background-color:#40BD97;
+}
+#footer{
+	background-color: #333;
+	color:#bbb;
+	padding:30px 0;
+}
+#footercontent{
+	width:75%;
+	margin:0 auto;
+}
+#footerleft{
+	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+	width:60%;
+	float:left;
+	font-size: 14px;
+	line-height: 1.5em;
+}
+#footerleft a{
+	color:#ccc;
+}
+#footerright{
+	width:33%;
+	float:right;
+	text-align: center;
+}
+#footerright p{
+	margin-top:5px;
+}
+.modal
+{
+	visibility: hidden;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	z-index: 5;
+}
+.modalclear{
+	width:100%;
+	background-color:rgba(255,255,255,0.85);
+	height:100%;
+	z-index: 6;
+}
+
+.modalcontainer
+{
+	position: absolute;
+	width: 40%;
+	top:200px;
+	left:30%;
+	margin:0 auto;
+	background-color: #FCFCFC;
+	border: 3px solid #ccc;
+	padding: 0px;
+	text-align: left;
+	overflow: hidden;
+	-webkit-box-shadow: 0px 0px 6px 3px rgba(128, 128, 128, 128);
+	box-shadow: 0px 0px 6px 3px rgba(128, 128, 128, 128);
+	opacity: 1;
+	z-index:7;
+}
+.modaltitle{
+	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+	font-weight:300;
+	font-size:22px;
+	padding:8px 20px;
+	background-color: #07A878;
+	color:#FCFCFC;
+}
+.modalcontent{
+	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+	font-size:22px;
+	padding:8px 20px;
+	background-color: #FFFFFF;
+	line-height: 1.8em;
+}
+.modalcontent p{
+	margin-bottom: 10px;
+}
+.modalcontent select{
+	width:300px;
+}
+ @media screen and (min-width:750px) {
+   #filelist{
+	 float:left;
+	 width:60%;
+	 border-right: 1px solid #eee;
+	 padding-right: 30px;
+   }
+   #sidebar{
+	 float:right;
+	 width:33%;
+   }
+ }
+ @media screen and (max-width:749px) {
+   #filelist{
+	 float: left;
+	 width: 100%;
+     margin-bottom: 30px;
+   }
+   #sidebar {
+     float: left;
+     max-width: 400px;
+     width: 100%;
+   }
+ }
+ @media screen and (max-width:500px) {
+   .update, .filetime {
+     display: none;
+   }
+ }
+
+#back-top {
+  background: rgba(25, 25, 25, 0.1) none repeat scroll 0 0;
+  bottom: 60px;
+  display: none;
+  font-size: 14px;
+  height: 38px;
+  line-height: 38px;
+  left: 92%;
+  position: fixed;
+  text-align: center;
+  width: 38px;
+  z-index: 10;
+}
+
+#back-top a {
+  padding: 9px 12px;
+  text-decoration: none;
+}
+        </style>
+    </head>
+
+    <body> <!-- body start -->
+
+<div id="header">
+    <ul id="headlinks">
+        <li><a target="_blank" href="http://www.fdzh.org">Home</a></li>
+        <li><a target="_blank" href="http://hack.fdzh.org">Hack</a></li>
+        <li><a target="_blank" href="https://github.com/FZUG/repo/wiki">Wiki</a></li>
+        <li><a target="_blank" href="https://github.com/FZUG/repo/issues">Issues</a></li>
+        <li><a target="_blank" href="https://github.com/FZUG">About</a></li>
+    </ul>
+</div>
+
+<div id="welcome">
+    <div id="intro">
+        <h1>Freedom. Friends. Features. First.</h1>
+        <h2>欢迎访问 Fedora 中文社区软件源</h2>
+        <p>Fedora 由来自世界各地的爱好者共同合作而成。我们始终相信，创新激发灵感，一切从 Fedora 开始...</p>
+    </div>
+</div>
+
+<div id="wrapper">
+    <div id="filelist">
+        <h3>FZUG 社区源</h3>
+        <p>Fedora 中文用户组（FZUG）创建并维护此社区源，本源提供中文用户常用软件包。<a href="http://repo.fdzh.org/FZUG">浏览...</a></p>
+        <hr />
+        <h4>软件包列表</h4>
+        <!-- vim:ai:et:noexpandtab:sts=8:sw=8 -->
+
+        <table cellspacing="0" cellpadding="0" class="filelist">
+            <thead>
+                <tr id="firstline">
+                    <th id="name">Name</th>
+                    <th class="update">Lisence</th>
+                    <th class="update">Require repo</th>
+                    <th class="update">Description</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <!------- Input Methods ------->
+                <tr>
+                    <td class="filename">Input Methods</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">sogoupinyin</a></td>
+                    <td class="filetime">Proprietary, GPLv2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">搜狗拼音输入法</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">fcitx-sunpinyin</a></td>
+                    <td class="filetime">GPLv2+</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">sunpinyin 输入法</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">fcitx-qt5</a></td>
+                    <td class="filetime">GPLv2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">fcitx qt5 输入模块</td>
+                </tr>
+
+                <!------- Multimedia ------->
+                <tr>
+                    <td class="filename">Multimedia</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">kwplayer</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">酷我音乐</td>
+                    <!--Require: python-html2text, python3-keybinder(python3-xlib), python-mutagen, python3-cairo, pygobject3(python3-gobject)-->
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">doubanfm-qt</a></td>
+                    <td class="filetime">MIT</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">豆瓣FM</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">musicbox</a></td>
+                    <td class="filetime">MIT</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">网易云音乐 CLI</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">deepin-music-player</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">深度音乐</td>
+                    <!--Require: deepin-ui(deepin-utils, deepin-gsettings), pyjavascriptcore)-->
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">moonplayer</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">Moonplayer播放器</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">simplescreenrecorder</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">屏幕录像</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">obs-studio</a></td>
+                    <td class="filetime">GPLv2</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">屏幕录像/流媒体直播</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">tragtor</a></td>
+                    <td class="filetime">LGPLv2</td>
+                    <td class="filetime">rpmfusion</td>
+                    <td class="filetime">FFmpeg音视频转码</td>
+                </tr>
+
+                <!------- Notes / Dict ------->
+                <tr>
+                    <td class="filename">Notes / Dict</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">wiznote</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">为知笔记 stable</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">wiznote-beta</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">为知笔记 beta</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">youdao-dict</a></td>
+                    <td class="filetime">Proprietary</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">有道词典 for linux</td>
+                </tr>
+
+                <!------- Browser ------->
+                <tr>
+                    <td class="filename">Browser / Proxy</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">opera-developer</a></td>
+                    <td class="filetime">Proprietary</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Opera developer</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">opera-beta</a></td>
+                    <td class="filetime">Proprietary</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Opera beta</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">opera-stable</a></td>
+                    <td class="filetime">Proprietary</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Opera stable</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">freshplayerplugin</a></td>
+                    <td class="filetime">MIT</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Firefox PPAPI flash 兼容插件</td>
+                </tr>
+
+                <!------- Downloads ------->
+                <tr>
+                    <td class="filename">Downloads</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">bcloud</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">百度云客户端</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">xware-desktop</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">迅雷客户端</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">pointdownload</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">点载, 支持迅雷/BT/ed2k下载</td>
+                </tr>
+
+                <!------- System tools ------->
+                <tr>
+                    <td class="filename">System tools</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">grub4dos</a></td>
+                    <td class="filetime">GPLv2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">grub 引导管理器</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">screenfetch</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">系统信息收集</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">vim 7.4.764</a></td>
+                    <td class="filetime">vim</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">编辑器之神，增加剪贴板/lua/py3支持</td>
+                    <!--"+yy 复制, "+dd 剪切, "+p 粘贴-->
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">dkms-mt7601u</a></td>
+                    <td class="filetime">GPL</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">MT7601U USB Wifi 驱动</td>
+                </tr>
+
+                <!------- System libraries ------->
+                <tr>
+                    <td class="filename">System libraries</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">opencc</a></td>
+                    <td class="filetime">ASL2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">简繁转换库，修正依赖</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">sunpinyin</a></td>
+                    <td class="filetime">LGPLv2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">基于 SLM 模型的输入法引擎，更新字典</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">python-html2text</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">HTML -> ASCII</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">python3-xlib</a></td>
+                    <td class="filetime">GPLv2</td>
+                    <td class="filetime">null</td>
+                    <td class="filetime">Python3 X 库</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">python3-keybinder</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">null</td>
+                    <td class="filetime">Python3 键绑定库</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">python-mutagen</a></td>
+                    <td class="filetime">GPLv2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">处理音频元数据</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">python3-cairo</a></td>
+                    <td class="filetime">LGPLv2</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Python3 cairo 绑定，修复 bug</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">pygobject3</a></td>
+                    <td class="filetime">LGPLv2+</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Python GObject 封装，修复 bug</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">deepin-ui</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Deepin UI toolkit</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">deepin-utils</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">Deepin utils 库</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">deepin-gsettings</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">gsettings python 绑定</td>
+                </tr>
+                <tr>
+                    <td class="filename"><a href="#">pyjavascriptcore</a></td>
+                    <td class="filetime">GPLv3</td>
+                    <td class="filetime">fedora</td>
+                    <td class="filetime">pyjs</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="sidebar">
+        <div id="cdimages">
+            <h3>获取 Fedora 镜像</h3>
+            <p>Fedora 分为 Workstation, Server, Cloud 三个版本，请根据需要选择：</p>
+            <p></p>
+            <span onclick="window.open('https://getfedora.org')" class="btn">获取安装镜像 &gt;</span>
+        </div>
+
+        <div id="mirrorshelp">
+            <h3>配置软件源</h3>
+            <p>Fedora 中文社区软件源配置帮助：</p>
+            <span onclick="window.open('https://github.com/FZUG/repo/wiki')" class="btn">配置软件源  &gt;</span>
+            <span></span>
+            <p>Chrome 镜像源：<a href="http://repo.fdzh.org/chrome">Chrome/repo</a></p>
+        </div>
+
+        <div id="mirrorlinks">
+            <h3>常用链接</h3>
+            <a target="_black" href="http://www.fdzh.org">社区主站 / Home</a><br>
+            <a target="_blank" href="http://hack.fdzh.org">社区新闻 / Hack</a><br>
+            <a target="_blank" href="https://github.com/FZUG/repo/wiki">使用帮助 / Wiki</a><br>
+            <a target="_blank" href="https://github.com/FZUG/repo/issues">Bug 报告 / Issues</a><br>
+            <a target="_blank" href="https://github.com/FZUG">关于我们 / About</a><br>
+            <span></span>
+        </div>
+
+        <div id="mirrorlinks">
+            <h3>使用截图</h3>
+            <a target="_blank" href="/img/snapshot1.png"><img src="/img/snapshot1.png" title="Fedora 22 beautiful face" alt="Fedora 22 桌面" width="60%"/></a>
+            <a target="_blank" href="/img/snapshot2.png"><img src="/img/snapshot2.png" title="Youdao Dictionary" alt="有道词典" width="60%"/></a>
+        </div>
+    </div>
+    <div mce_style="clear: both;" style="clear: both;"></div>
+</div>
+
+<div id="footer">
+    <div id="footercontent">
+
+        <div id="footerleft">
+            <p>Fedora 中文社区软件源（FZUG）由 <a href="https://github.com/FZUG">Fedora 中文用户组</a> 提供支持。</p>
+            <p>FZUG 源为 Fedora 提供中文用户常用的软件包，并积极扩大 Fedora 在中文用户群中的影响力。</p>
+            <p>Fedora Linux 是知名度较高的 GNU/Linux 发行版之一，由来自世界各地的爱好者在 Fedora 社区及 RedHat 的主导下共同开发而成。其目标是创建一套新颖、多功能且自由开源的操作系统。</p>
+            <p>最后，感谢 <a href="https://github.com/FZUG" target="_blank">FZUG</a> 社区成员的积极参与；<br/>
+	感谢 <a href="http://www.ucloud.cn/?ref=fdzh.org" target="_blank" data-original-title="服务器由 UCloud 赞助"><img height="10%" width="15%" src="/img/ucloud.png" alt="UCloud"></a> 提供服务器资源；<br/>
+	感谢 <a href="http://www.qiniu.com/?ref=fdzh.org" target="_blank" data-original-title="QINIU CDN"><img height="10%" width="15%" src="http://assets.qiniu.com/qiniu-125x55.png" alt="QINIU"></a> 提供 CDN 服务；<br/> <!--www.b1.qiniudn.com/images/logo-3.png-->
+	<a href="http://moeka.me" target="_blank">Designed by Miaomiao Li</a> </p>
+        </div>
+
+        <div id="footerright">
+            <p><span style="font-family:'Open Sans','Seoge UI','Ubuntu',sans-serif; font-size:32px; font-weight:400">∞</span><span style="font-family:'Open Sans','Seoge UI','Ubuntu',sans-serif; font-size:32px; font-weight:100">@fedora</span></p>
+            <p style="font-family:'clicker script','segoe script','Comic Sans MS'; font-size:28px">"Freedom,Friends,Features,First"</p>
+        </div>
+
+        <div mce_style="clear: both;" style="clear: both;"></div>
+    </div>
+</div>
+
+<div id="back-top" style="display: block;">
+  <a alt="返回顶部" title="返回顶部" href="#">↑</a>
+</div>
+
+    </body> <!-- body end -->
+
+    <!-- Google analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-47480129-12', 'auto');
+        ga('send', 'pageview');
+
+var h = new Date();
+var hour = h.getHours();
+var color = document.getElementById('welcome');
+if ( 5 <= hour && hour <= 7 ) {
+    color.style.background="linear-gradient(to right bottom,#b3d9ff 0%,#47a2ff 100%)";
+} else if ( 8 <= hour && hour <= 10 ) {
+    color.style.background="linear-gradient(to right bottom,#8eb6ed 0%,#5b90d7 100%)";
+} else if ( 11 <= hour && hour <= 15 ) {
+    color.style.background="linear-gradient(to bottom,#5a8ed5 0%,#3c6eb4 100%)";
+} else if ( 16 <= hour && hour <= 19 ) {
+    color.style.background="linear-gradient(to right bottom,#9e87f1 0%,#596cc6 100%)";
+} else if ( 20 <= hour && hour <= 23 ) {
+    color.style.background="linear-gradient(to bottom,#7aa5d5 0%,#3b6391 100%)";
+} else if ( 0 <= hour && hour <= 4 ) {
+    color.style.background="linear-gradient(to bottom,#586b80 0%,#283a4e 100%)";
+}
+    </script>
+<!-- Designed by Miaomiao Li. It's a wonderful life! -->
+<!--
+vim:ai:et:sta:ts=4:sts=4:sw=4
+-->
+</html>
