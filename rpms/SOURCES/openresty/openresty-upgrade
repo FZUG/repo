@@ -1,0 +1,19 @@
+#!/bin/sh
+[ ! -f /run/openresty.pid ] && exit 1
+echo "Start new openresty master..."
+/bin/systemctl kill --signal=SIGUSR2 openresty.service
+sleep 5
+[ ! -f /run/openresty.pid.oldbin ] && sleep 10
+if [ ! -f /run/openresty.pid.oldbin ]; then
+    echo "Failed to start new openresty master."
+    exit 1
+fi
+echo "Stop old openresty master gracefully..."
+oldpid=`/usr/bin/cat /run/openresty.pid.oldbin 2>/dev/null`
+/bin/kill -s QUIT $oldpid 2>/dev/null
+sleep 5
+[ -f /run/openresty.pid.oldbin ] && sleep 10
+if [ -f /run/openresty.pid.oldbin ]; then
+    echo "Failed to stop old openresty master."
+    exit 1
+fi
