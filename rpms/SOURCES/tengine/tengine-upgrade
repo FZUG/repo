@@ -1,0 +1,19 @@
+#!/bin/sh
+[ ! -f /run/tengine.pid ] && exit 1
+echo "Start new tengine master..."
+/bin/systemctl kill --signal=SIGUSR2 tengine.service
+sleep 5
+[ ! -f /run/tengine.pid.oldbin ] && sleep 10
+if [ ! -f /run/tengine.pid.oldbin ]; then
+    echo "Failed to start new tengine master."
+    exit 1
+fi
+echo "Stop old tengine master gracefully..."
+oldpid=`/usr/bin/cat /run/tengine.pid.oldbin 2>/dev/null`
+/bin/kill -s QUIT $oldpid 2>/dev/null
+sleep 5
+[ -f /run/tengine.pid.oldbin ] && sleep 10
+if [ -f /run/tengine.pid.oldbin ]; then
+    echo "Failed to stop old tengine master."
+    exit 1
+fi

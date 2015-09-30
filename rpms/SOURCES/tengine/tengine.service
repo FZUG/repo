@@ -1,0 +1,17 @@
+[Unit]
+Description=The Tengine HTTP and reverse proxy server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/tengine.pid
+ExecStartPre=/usr/sbin/tengine -t
+ExecStart=/usr/sbin/tengine
+ExecReload=/bin/kill -s HUP $MAINPID
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=mixed
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
