@@ -17,6 +17,12 @@
 %global  modsec_version      2.9.0
 %global  with_modsec         1
 
+# OWASP ModSecurity Core Rule Set (CRS)
+%global  modsec_crs_version  2.2.9
+%global  modsec_crs_commit   c63affc9dfa6294ecf8782ae4d1f1fb2c9fd5a18
+%global  modsec_crs_shortcommit %(c=%{modsec_crs_commit};echo ${c:0:7})
+%global  with_modsec_crs     1
+
 # FancyIndex module
 %global  fancy_version       0.3.5
 %global  with_fancy          1
@@ -30,20 +36,20 @@
 
 # AIO missing on some arches
 %ifnarch aarch64
-%global  with_aio  1
+%global  with_aio            1
 %endif
 
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
-%global  with_systemd  1
+%global  with_systemd        1
 %endif
 
 Name:              nginx
 Epoch:             1
 Version:           1.9.5
 %if 0%{?with_modsec}
-Release:           1.modsec_%{modsec_version}%{dist}
+Release:           2.modsec_%{modsec_version}%{dist}
 %else
-Release:           1%{?dist}
+Release:           2%{?dist}
 %endif
 
 Summary:           A high performance web server and reverse proxy server
@@ -57,7 +63,8 @@ URL:               http://nginx.org
 Source0:           http://nginx.org/download/nginx-%{version}.tar.gz
 Source1:           http://nginx.org/download/nginx-%{version}.tar.gz.asc
 Source2:           https://www.modsecurity.org/tarball/%{modsec_version}/modsecurity-%{modsec_version}.tar.gz
-Source3:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source3:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
+Source4:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
 Source10:          nginx.service
 Source11:          nginx.logrotate
 Source12:          nginx.conf
@@ -116,6 +123,7 @@ Requires:          pcre
 Requires:          perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires(pre):     nginx-filesystem
 Provides:          webserver = %{version}
+Provides:          %{name} = %{version}-%{release}
 
 %if 0%{?with_modsec}
 # So we can install rules from pkg
@@ -153,9 +161,21 @@ The nginx-filesystem package contains the basic directory layout
 for the Nginx server including the correct permissions for the
 directories.
 
+%if 0%{?with_modsec_crs}
+%package modsec_crs
+Summary:           ModSecurity Rules for %{name}
+License:           ASL 2.0
+URL:               https://github.com/SpiderLabs/owasp-modsecurity-crs
+BuildArch:         noarch
+Requires:          %{name} = %{version}-%{release}
+
+%description modsec_crs
+This package provides the base rules for mod_security.
+%endif
+
 
 %prep
-%setup -q -a2 -a3
+%setup -q -a2 -a3 -a4
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
 %patch1 -p1
@@ -184,8 +204,8 @@ popd
 export DESTDIR=%{buildroot}
 ./configure \
     --prefix=%{nginx_datadir} \
-    --sbin-path=%{_sbindir}/nginx \
-    --conf-path=%{nginx_confdir}/nginx.conf \
+    --sbin-path=%{_sbindir}/%{name} \
+    --conf-path=%{nginx_confdir}/%{name}.conf \
     --error-log-path=%{nginx_logdir}/error.log \
     --http-log-path=%{nginx_logdir}/access.log \
     --http-client-body-temp-path=%{nginx_home_tmp}/client_body \
@@ -194,11 +214,11 @@ export DESTDIR=%{buildroot}
     --http-uwsgi-temp-path=%{nginx_home_tmp}/uwsgi \
     --http-scgi-temp-path=%{nginx_home_tmp}/scgi \
 %if 0%{?with_systemd}
-    --pid-path=/run/nginx.pid \
-    --lock-path=/run/lock/subsys/nginx \
+    --pid-path=/run/%{name}.pid \
+    --lock-path=/run/lock/subsys/%{name} \
 %else
-    --pid-path=%{_localstatedir}/run/nginx.pid \
-    --lock-path=%{_localstatedir}/lock/subsys/nginx \
+    --pid-path=%{_localstatedir}/run/%{name}.pid \
+    --lock-path=%{_localstatedir}/lock/subsys/%{name} \
 %endif
     --user=%{nginx_user} \
     --group=%{nginx_group} \
@@ -209,6 +229,8 @@ export DESTDIR=%{buildroot}
     --with-http_ssl_module \
 %if 0%{?with_http2}
     --with-http_v2_module \
+%else
+    --with-http_spdy_module \
 %endif
     --with-http_realip_module \
     --with-http_addition_module \
@@ -251,7 +273,7 @@ make %{?_smp_mflags}
 
 
 %install
-make install DESTDIR=%{buildroot} INSTALLDIRS=vendor
+%make_install DESTDIR=%{buildroot} INSTALLDIRS=vendor
 rm -rf %{buildroot}%{_sbindir}/%{name}.old
 
 find %{buildroot} -type f -name .packlist -exec rm -f '{}' \;
@@ -261,16 +283,16 @@ find %{buildroot} -type f -iname '*.so' -exec chmod 0755 '{}' \;
 
 %if 0%{?with_systemd}
 install -p -D -m 0644 %{SOURCE10} \
-    %{buildroot}%{_unitdir}/nginx.service
+    %{buildroot}%{_unitdir}/%{name}.service
 %else
 install -p -D -m 0755 %{SOURCE15} \
-    %{buildroot}%{_initrddir}/nginx
+    %{buildroot}%{_initrddir}/%{name}
 install -p -D -m 0644 %{SOURCE16} \
-    %{buildroot}%{_sysconfdir}/sysconfig/nginx
+    %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 %endif
 
 install -p -D -m 0644 %{SOURCE11} \
-    %{buildroot}%{_sysconfdir}/logrotate.d/nginx
+    %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 
 install -p -d -m 0755 %{buildroot}%{nginx_confdir}/conf.d
 install -p -d -m 0755 %{buildroot}%{nginx_confdir}/default.d
@@ -281,14 +303,40 @@ install -p -d -m 0755 %{buildroot}%{nginx_webroot}
 
 install -p -m 0644 %{SOURCE12} \
     %{buildroot}%{nginx_confdir}
-%if 0%{?rhel} < 7
-    sed -i 's|/run/nginx.pid|/var/run/nginx.pid|' %{buildroot}%{nginx_confdir}/nginx.conf
+%if 0%{?rhel} < 7 && ! 0%{?fedora}
+    sed -i 's|/run/%{name}.pid|/var/run/%{name}.pid|' %{buildroot}%{nginx_confdir}/%{name}.conf
 %endif
+
 %if 0%{?with_modsec}
 pushd modsecurity-%{modsec_version}
     install -p -m 0644 modsecurity.conf-recommended \
         %{buildroot}%{nginx_confdir}/modsecurity.conf
+    install -p -m 0644 unicode.mapping %{buildroot}%{nginx_confdir}/
 popd
+install -d %{buildroot}%{nginx_confdir}/modsecurity.d/{activated,local}_rules
+cat >> %{buildroot}%{nginx_confdir}/modsecurity.conf << EOF
+# ModSecurity Core Rules Set and Local configuration
+IncludeOptional %{_sysconfdir}/%{name}/modsecurity.d/*.conf
+IncludeOptional %{_sysconfdir}/%{name}/modsecurity.d/activated_rules/*.conf
+IncludeOptional %{_sysconfdir}/%{name}/modsecurity.d/local_rules/*.conf
+EOF
+
+%if 0%{?with_modsec_crs}
+pushd owasp-modsecurity-crs-*
+install -d %{buildroot}%{_datadir}/%{name}/modsecurity.d/{base,optional,experimental,slr}_rules
+install -m0644 modsecurity_crs_10_setup.conf.example \
+    %{buildroot}%{_sysconfdir}/%{name}/modsecurity.d/modsecurity_crs_10_config.conf
+install -m0644 base_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/
+install -m0644 optional_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/optional_rules/
+install -m0644 experimental_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/experimental_rules/
+install -m0644 slr_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/slr_rules/
+
+# activate base_rules
+for f in `ls %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/`; do
+    ln -s %{_datadir}/%{name}/modsecurity.d/base_rules/$f %{buildroot}%{_sysconfdir}/%{name}/modsecurity.d/activated_rules/$f;
+done
+popd
+%endif
 %endif
 
 install -p -m 0644 %{SOURCE100} \
@@ -298,15 +346,15 @@ install -p -m 0644 %{SOURCE101} %{SOURCE102} \
 install -p -m 0644 %{SOURCE103} %{SOURCE104} \
     %{buildroot}%{nginx_webroot}
 
-install -p -D -m 0644 %{_builddir}/nginx-%{version}/man/nginx.8 \
-    %{buildroot}%{_mandir}/man8/nginx.8
+install -p -D -m 0644 %{_builddir}/%{name}-%{version}/man/nginx.8 \
+    %{buildroot}%{_mandir}/man8/%{name}.8
 
-install -p -D -m 0755 %{SOURCE13} %{buildroot}%{_bindir}/nginx-upgrade
-install -p -D -m 0644 %{SOURCE14} %{buildroot}%{_mandir}/man8/nginx-upgrade.8
+install -p -D -m 0755 %{SOURCE13} %{buildroot}%{_bindir}/%{name}-upgrade
+install -p -D -m 0644 %{SOURCE14} %{buildroot}%{_mandir}/man8/%{name}-upgrade.8
 
 for i in ftdetect indent syntax; do
     install -p -D -m644 contrib/vim/${i}/nginx.vim \
-        %{buildroot}%{_datadir}/vim/vimfiles/${i}/nginx.vim
+        %{buildroot}%{_datadir}/vim/vimfiles/${i}/%{name}.vim
 done
 
 
@@ -319,7 +367,7 @@ exit 0
 
 %post
 %if 0%{?with_systemd}
-%systemd_post nginx.service
+%systemd_post %{name}.service
 %else
 if [ $1 -eq 1 ]; then
     /sbin/chkconfig --add %{name}
@@ -334,7 +382,7 @@ fi
 
 %preun
 %if 0%{?with_systemd}
-%systemd_preun nginx.service
+%systemd_preun %{name}.service
 %else
 if [ $1 -eq 0 ]; then
     /sbin/service %{name} stop >/dev/null 2>&1
@@ -344,9 +392,9 @@ fi
 
 %postun
 %if 0%{?with_systemd}
-%systemd_postun nginx.service
+%systemd_postun %{name}.service
 if [ $1 -ge 1 ]; then
-    /usr/bin/nginx-upgrade &>/dev/null ||:
+    /usr/bin/%{name}-upgrade &>/dev/null ||:
 fi
 %else
 if [ $1 -eq 1 ]; then
@@ -355,24 +403,25 @@ fi
 %endif
 
 %files
+%defattr(-,root,root,-)
 %doc LICENSE CHANGES README
 %if 0%{?rhel} > 6 || 0%{?fedora}
 %license LICENSE
 %endif
 %{nginx_datadir}/html/*
-%{_bindir}/nginx-upgrade
-%{_sbindir}/nginx
-%{_datadir}/vim/vimfiles/ftdetect/nginx.vim
-%{_datadir}/vim/vimfiles/syntax/nginx.vim
-%{_datadir}/vim/vimfiles/indent/nginx.vim
-%{_mandir}/man3/nginx.3pm*
-%{_mandir}/man8/nginx.8*
-%{_mandir}/man8/nginx-upgrade.8*
+%{_bindir}/%{name}-upgrade
+%{_sbindir}/%{name}
+%{_datadir}/vim/vimfiles/ftdetect/%{name}.vim
+%{_datadir}/vim/vimfiles/syntax/%{name}.vim
+%{_datadir}/vim/vimfiles/indent/%{name}.vim
+%{_mandir}/man3/%{name}.3pm*
+%{_mandir}/man8/%{name}.8*
+%{_mandir}/man8/%{name}-upgrade.8*
 %if 0%{?with_systemd}
-%{_unitdir}/nginx.service
+%{_unitdir}/%{name}.service
 %else
-%{_initrddir}/nginx
-%config(noreplace) %{_sysconfdir}/sysconfig/nginx
+%{_initrddir}/%{name}
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %endif
 %config(noreplace) %{nginx_confdir}/fastcgi.conf
 %config(noreplace) %{nginx_confdir}/fastcgi.conf.default
@@ -382,20 +431,23 @@ fi
 %config(noreplace) %{nginx_confdir}/koi-win
 %config(noreplace) %{nginx_confdir}/mime.types
 %config(noreplace) %{nginx_confdir}/mime.types.default
-%config(noreplace) %{nginx_confdir}/nginx.conf
-%config(noreplace) %{nginx_confdir}/nginx.conf.default
+%config(noreplace) %{nginx_confdir}/%{name}.conf
+%config(noreplace) %{nginx_confdir}/%{name}.conf.default
 %if 0%{?with_modsec}
 %config(noreplace) %{nginx_confdir}/modsecurity.conf
+%config(noreplace) %{nginx_confdir}/unicode.mapping
+%dir %{nginx_confdir}/modsecurity.d/activated_rules/
+%dir %{nginx_confdir}/modsecurity.d/local_rules/
 %endif
 %config(noreplace) %{nginx_confdir}/scgi_params
 %config(noreplace) %{nginx_confdir}/scgi_params.default
 %config(noreplace) %{nginx_confdir}/uwsgi_params
 %config(noreplace) %{nginx_confdir}/uwsgi_params.default
 %config(noreplace) %{nginx_confdir}/win-utf
-%config(noreplace) %{_sysconfdir}/logrotate.d/nginx
-%dir %{perl_vendorarch}/auto/nginx
-%{perl_vendorarch}/nginx.pm
-%{perl_vendorarch}/auto/nginx/nginx.so
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+%dir %{perl_vendorarch}/auto/%{name}
+%{perl_vendorarch}/%{name}.pm
+%{perl_vendorarch}/auto/%{name}/%{name}.so
 %attr(700,%{nginx_user},%{nginx_group}) %dir %{nginx_home}
 %attr(700,%{nginx_user},%{nginx_group}) %dir %{nginx_home_tmp}
 %attr(700,%{nginx_user},%{nginx_group}) %dir %{nginx_logdir}
@@ -407,8 +459,26 @@ fi
 %dir %{nginx_confdir}/conf.d
 %dir %{nginx_confdir}/default.d
 
+%if 0%{?with_modsec_crs}
+%files modsec_crs
+%defattr(-,root,root,-)
+%doc owasp-modsecurity-crs-*/{CHANGES,INSTALL,LICENSE,README.md}
+%if 0%{?rhel} > 6 || 0%{?fedora}
+%license owasp-modsecurity-crs-*/LICENSE
+%endif
+%{nginx_confdir}/modsecurity.d/modsecurity_crs_10_config.conf
+%{nginx_confdir}/modsecurity.d/activated_rules/
+%{nginx_datadir}/modsecurity.d/base_rules/
+%{nginx_datadir}/modsecurity.d/optional_rules/
+%{nginx_datadir}/modsecurity.d/experimental_rules/
+%{nginx_datadir}/modsecurity.d/slr_rules/
+%endif
+
 
 %changelog
+* Thu Oct  1 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.5-2.modsec_2.9.0
+- add OWASP ModSecurity Core Rule Set
+
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.5-1.modsec_2.9.0
 - update to upstream release 1.9.5
 
