@@ -1,3 +1,5 @@
+# If you use el6, please add epel-testing repository.
+# If you use el7, please add epel repository.
 %if ! 0%{?rhel} && ! 0%{?fedora}
 %global  rhel %(%{__python} -c "import platform;print platform.dist()[1][0]")
 %endif
@@ -20,6 +22,12 @@
 # ModSecurity module
 %global  modsec_version      2.9.0
 %global  with_modsec         1
+
+# OWASP ModSecurity Core Rule Set (CRS)
+%global  modsec_crs_version  2.2.9
+%global  modsec_crs_commit   c63affc9dfa6294ecf8782ae4d1f1fb2c9fd5a18
+%global  modsec_crs_shortcommit %(c=%{modsec_crs_commit};echo ${c:0:7})
+%global  with_modsec_crs     1
 
 # FancyIndex module
 %global  fancy_version       0.3.5
@@ -45,9 +53,9 @@ Name:              openresty
 Epoch:             1
 Version:           1.9.3.1
 %if 0%{?with_modsec}
-Release:           1.modsec_%{modsec_version}%{dist}
+Release:           2.modsec_%{modsec_version}%{dist}
 %else
-Release:           1%{?dist}
+Release:           2%{?dist}
 %endif
 
 Summary:           a fast Web App Server by extending Nginx
@@ -63,7 +71,8 @@ Source1:           https://openresty.org/download/ngx_%{name}-%{version}.tar.gz.
 Source2:           http://nginx.org/download/nginx-%{ngx_version}.tar.gz
 Source3:           http://nginx.org/download/nginx-%{ngx_version}.tar.gz.asc
 Source4:           https://www.modsecurity.org/tarball/%{modsec_version}/modsecurity-%{modsec_version}.tar.gz
-Source5:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source5:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
+Source6:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
 Source10:          openresty.service
 Source11:          openresty.logrotate
 Source12:          openresty.conf
@@ -127,6 +136,7 @@ Requires:          pcre
 Requires:          perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires(pre):     openresty-filesystem
 Provides:          webserver = %{version}
+Provides:          %{name} = %{version}-%{release}
 
 %if 0%{?with_modsec}
 # So we can install rules from pkg
@@ -164,9 +174,21 @@ The %{name}-filesystem package contains the basic directory layout
 for the OpenResty server including the correct permissions for the
 directories.
 
+%if 0%{?with_modsec_crs}
+%package modsec_crs
+Summary:           ModSecurity Rules for %{name}
+License:           ASL 2.0
+URL:               https://github.com/SpiderLabs/owasp-modsecurity-crs
+BuildArch:         noarch
+Requires:          %{name} = %{version}-%{release}
+
+%description modsec_crs
+This package provides the base rules for mod_security.
+%endif
+
 
 %prep
-%setup -q -a2 -a4 -a5 -n ngx_%{name}-%{version}
+%setup -q -a2 -a4 -a5 -a6 -n ngx_%{name}-%{version}
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
 %patch1 -p1
@@ -190,6 +212,8 @@ sed -i 's|nginx|%{name}|g' \
     src/http/modules/perl/nginx.{pm,xs}
 mv src/http/modules/perl/{nginx,%{name}}.pm
 mv src/http/modules/perl/{nginx,%{name}}.xs
+sed -i -E '/(embedding|get_sv)/s|nginx|%{name}|' \
+    src/http/modules/perl/ngx_http_perl_module.c
 popd
 %if 0%{?with_ngx_mainline}
 rm -rf bundle/nginx-*
@@ -330,11 +354,37 @@ mv %{buildroot}%{nginx_confdir}/{nginx,%{name}}.conf.default
 %if 0%{?rhel} < 7 && ! 0%{?fedora}
     sed -i 's|/run/openresty.pid|/var/run/openresty.pid|' %{buildroot}%{nginx_confdir}/%{name}.conf
 %endif
+
 %if 0%{?with_modsec}
 pushd modsecurity-%{modsec_version}
     install -p -m 0644 modsecurity.conf-recommended \
         %{buildroot}%{nginx_confdir}/modsecurity.conf
+    install -p -m 0644 unicode.mapping %{buildroot}%{nginx_confdir}/
 popd
+install -d %{buildroot}%{nginx_confdir}/modsecurity.d/{activated,local}_rules
+cat >> %{buildroot}%{nginx_confdir}/modsecurity.conf << EOF
+# ModSecurity Core Rules Set and Local configuration
+IncludeOptional %{_sysconfdir}/%{name}/modsecurity.d/*.conf
+IncludeOptional %{_sysconfdir}/%{name}/modsecurity.d/activated_rules/*.conf
+IncludeOptional %{_sysconfdir}/%{name}/modsecurity.d/local_rules/*.conf
+EOF
+
+%if 0%{?with_modsec_crs}
+pushd owasp-modsecurity-crs-*
+install -d %{buildroot}%{_datadir}/%{name}/modsecurity.d/{base,optional,experimental,slr}_rules
+install -m0644 modsecurity_crs_10_setup.conf.example \
+    %{buildroot}%{_sysconfdir}/%{name}/modsecurity.d/modsecurity_crs_10_config.conf
+install -m0644 base_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/
+install -m0644 optional_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/optional_rules/
+install -m0644 experimental_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/experimental_rules/
+install -m0644 slr_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/slr_rules/
+
+# activate base_rules
+for f in `ls %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/`; do
+    ln -s %{_datadir}/%{name}/modsecurity.d/base_rules/$f %{buildroot}%{_sysconfdir}/%{name}/modsecurity.d/activated_rules/$f;
+done
+popd
+%endif
 %endif
 
 install -p -m 0644 %{SOURCE100} \
@@ -401,14 +451,18 @@ fi
 %endif
 
 %files
+%defattr(-,root,root,-)
 %doc bundle/nginx-*/{LICENSE,CHANGES,README} README.markdown
 %if 0%{?rhel} > 6 || 0%{?fedora}
 %license bundle/nginx-*/LICENSE
 %endif
+%{nginx_datadir}/bin/*
 %{nginx_datadir}/html/*
+%{nginx_datadir}/luajit/*
+%{nginx_datadir}/lualib/*
+%exclude %{nginx_datadir}/nginx/
 %{_bindir}/%{name}-upgrade
 %{_sbindir}/%{name}
-%{_datadir}/%{name}
 %{_datadir}/vim/vimfiles/ftdetect/%{name}.vim
 %{_datadir}/vim/vimfiles/syntax/%{name}.vim
 %{_datadir}/vim/vimfiles/indent/%{name}.vim
@@ -433,6 +487,9 @@ fi
 %config(noreplace) %{nginx_confdir}/%{name}.conf.default
 %if 0%{?with_modsec}
 %config(noreplace) %{nginx_confdir}/modsecurity.conf
+%config(noreplace) %{nginx_confdir}/unicode.mapping
+%dir %{nginx_confdir}/modsecurity.d/activated_rules/
+%dir %{nginx_confdir}/modsecurity.d/local_rules/
 %endif
 %config(noreplace) %{nginx_confdir}/scgi_params
 %config(noreplace) %{nginx_confdir}/scgi_params.default
@@ -454,8 +511,26 @@ fi
 %dir %{nginx_confdir}/conf.d
 %dir %{nginx_confdir}/default.d
 
+%if 0%{?with_modsec_crs}
+%files modsec_crs
+%defattr(-,root,root,-)
+%doc owasp-modsecurity-crs-*/{CHANGES,INSTALL,LICENSE,README.md}
+%if 0%{?rhel} > 6 || 0%{?fedora}
+%license owasp-modsecurity-crs-*/LICENSE
+%endif
+%{nginx_confdir}/modsecurity.d/modsecurity_crs_10_config.conf
+%{nginx_confdir}/modsecurity.d/activated_rules/
+%{nginx_datadir}/modsecurity.d/base_rules/
+%{nginx_datadir}/modsecurity.d/optional_rules/
+%{nginx_datadir}/modsecurity.d/experimental_rules/
+%{nginx_datadir}/modsecurity.d/slr_rules/
+%endif
+
 
 %changelog
+* Thu Oct  1 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.3.1-2.modsec_2.9.0
+- add OWASP ModSecurity Core Rule Set
+- change ngx_http_perl_module name
 * Tue Sep 29 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.3.1-1.modsec_2.9.0
 - initial build
 - update to upstream release 1.9.5
