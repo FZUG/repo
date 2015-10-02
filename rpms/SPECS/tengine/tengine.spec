@@ -1,8 +1,9 @@
+# If you use rhel, please add epel repository.
 # If you use el6, please add epel and puias-computational repository.
-# http://puias.math.ias.edu/data/puias/computational/6/x86_64/
-# If you use el7, please add epel repository.
+# - http://puias.math.ias.edu/data/puias/computational/6/x86_64/
 %if ! 0%{?rhel} && ! 0%{?fedora}
 %global  rhel %(%{__python} -c "import platform;print platform.dist()[1][0]")
+%global  dist .el5
 %endif
 %global  debug_package       %{nil}
 %global  _hardened_build     1
@@ -21,7 +22,11 @@
 %global  with_ngx_lua_latest 1
 
 # ModSecurity module
+%if 0%{?rhel} == 5
+%global  modsec_version      2.8.0
+%else
 %global  modsec_version      2.9.0
+%endif
 %global  with_modsec         1
 
 # OWASP ModSecurity Core Rule Set (CRS)
@@ -50,13 +55,19 @@
 %global  with_systemd        1
 %endif
 
+# ModSecurity require libxml2 >= 2.6.29
+%define libxml2_version 2.6.29
+%define libxml2_build_path %{_tmppath}/libxml2-%{libxml2_version}
+%define httpd_version 2.2.15
+%define httpd_build_path %{_tmppath}/httpd-%{httpd_version}
+
 Name:              tengine
 Epoch:             1
 Version:           2.1.1
 %if 0%{?with_modsec}
-Release:           2.modsec_%{modsec_version}%{dist}
+Release:           3.modsec_%{modsec_version}%{?dist}
 %else
-Release:           2%{?dist}
+Release:           3%{?dist}
 %endif
 
 Summary:           A high performance web server and reverse proxy server
@@ -69,9 +80,12 @@ URL:               http://tengine.taobao.org
 
 Source0:           http://tengine.taobao.org/download/%{name}-%{version}.tar.gz
 Source1:           https://github.com/openresty/lua-nginx-module/archive/v%{ngx_lua_version}/lua-nginx-module-%{ngx_lua_version}.tar.gz
-Source2:           https://www.modsecurity.org/tarball/%{modsec_version}/modsecurity-%{modsec_version}.tar.gz
-Source3:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
-Source4:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source2:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
+Source3:           https://www.modsecurity.org/tarball/2.8.0/modsecurity-2.8.0.tar.gz
+Source4:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
+Source5:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source6:           ftp://xmlsoft.org/libxml2-%{libxml2_version}.tar.gz
+Source7:           http://www.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
 Source10:          tengine.service
 Source11:          tengine.logrotate
 Source12:          tengine.conf
@@ -115,15 +129,18 @@ BuildRequires:     perl(ExtUtils::Embed)
 BuildRequires:     zlib-devel
 %if 0%{?with_modsec}
 # Build reqs for mod_security
-BuildRequires:     httpd-devel pcre-devel curl-devel lua-devel
-BuildRequires:     libxml2-devel >= 2.6.29 ssdeep-devel
+BuildRequires:     pcre-devel >= 5.0 curl-devel
+BuildRequires:     lua-devel ssdeep-devel
+BuildRequires:     apr-devel >= 1.2.0 apr-util-devel >= 1.2.0
 %if 0%{?rhel} != 5
-BuildRequires:     yajl-devel
+BuildRequires:     libxml2-devel >= 2.6.29 yajl-devel httpd-devel
 %endif
 %endif
 # Tengine
 BuildRequires:     lua-devel
+%if 0%{?rhel} != 5
 BuildRequires:     luajit-devel
+%endif
 BuildRequires:     jemalloc-devel
 BuildRequires:     libatomic_ops-devel
 
@@ -167,7 +184,9 @@ tmall.com.
 %package filesystem
 Group:             System Environment/Daemons
 Summary:           The basic directory layout for the Tengine server
+%if 0%{?rhel} != 5
 BuildArch:         noarch
+%endif
 Requires(pre):     shadow-utils
 
 %description filesystem
@@ -175,12 +194,26 @@ The %{name}-filesystem package contains the basic directory layout
 for the Tengine server including the correct permissions for the
 directories.
 
+%package devel
+Group:             System Environment/Daemons
+Summary:           DSO tool for %{name}
+%if 0%{?rhel} != 5
+BuildArch:         noarch
+%endif
+Requires:          %{name} = %{version}-%{release}
+
+%description devel
+This package provides the DSO tool for %{name}.
+
 %if 0%{?with_modsec_crs}
 %package modsec_crs
+Group:             System Environment/Daemons
 Summary:           ModSecurity Rules for %{name}
 License:           ASL 2.0
 URL:               https://github.com/SpiderLabs/owasp-modsecurity-crs
+%if 0%{?rhel} != 5
 BuildArch:         noarch
+%endif
 Requires:          %{name} = %{version}-%{release}
 
 %description modsec_crs
@@ -189,7 +222,7 @@ This package provides the base rules for mod_security.
 
 
 %prep
-%setup -q -a1 -a2 -a3 -a4
+%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
 %patch1 -p1
@@ -214,19 +247,53 @@ sed -i 's|nginx|%{name}|g' \
     src/http/modules/perl/nginx.{pm,xs}
 mv src/http/modules/perl/{nginx,%{name}}.pm
 mv src/http/modules/perl/{nginx,%{name}}.xs
+%if 0%{?rhel} != 5
 sed -i -E '/(embedding|get_sv)/s|nginx|%{name}|' \
+%else
+sed -i -r '/(embedding|get_sv)/s|nginx|%{name}|' \
+%endif
     src/http/modules/perl/ngx_http_perl_module.c
 
 
 %build
 %if 0%{?with_modsec}
+%if 0%{?rhel} == 5
+# This is only safe in a mock environment.
+pushd libxml2-%{libxml2_version}
+./configure --prefix=%{libxml2_build_path}
+make
+make install
+popd
+pushd httpd-%{httpd_version}
+./configure --prefix=%{httpd_build_path}
+make
+make install
+popd
+%endif
+
 # Build mod_security standalone module
 pushd modsecurity-%{modsec_version}
-#CFLAGS="%%{optflags} $(pcre-config --cflags)" ./configure \
-%configure \
+#CPATH=%%{httpd_build_path}/include
+#CFLAGS="%%{optflags} $(pcre-config --cflags) -I%%{httpd_build_path}/include" ./configure \
+%if 0%{?rhel} == 5
+%configure --with-libxml=%{libxml2_build_path} --with-apxs=%{httpd_build_path}/bin/apxs \
+%else
+%configure --with-yajl \
+%endif
+    --enable-pcre-match-limit=no \
+    --enable-pcre-match-limit-recursion=no \
+%if 0%{?rhel} > 6 || 0%{?fedora}
+    --enable-pcre-jit --enable-pcre-study \
+%endif
     --enable-standalone-module \
     --disable-mlogc \
+    --with-ssdeep \
+    --enable-lua-cache \
     --enable-shared
+
+# remove rpath
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
 popd
 %endif
@@ -239,6 +306,8 @@ export DESTDIR=%{buildroot}
 ./configure \
     --prefix=%{nginx_datadir} \
     --sbin-path=%{_sbindir}/%{name} \
+    --dso-tool-path=%{_sbindir}/dso_tool \
+    --includedir=%{_includedir}/%{name} \
     --conf-path=%{nginx_confdir}/%{name}.conf \
     --error-log-path=%{nginx_logdir}/error.log \
     --http-log-path=%{nginx_logdir}/access.log \
@@ -294,9 +363,11 @@ export DESTDIR=%{buildroot}
     --with-backtrace_module \
     --with-http_concat_module \
     --with-http_lua_module=shared \
+    --with-lua-inc=%{_includedir} \
+    --with-lua-lib=%{_libdir} \
+%if 0%{?rhel} > 6 || 0%{?fedora}
     --with-luajit-inc=%{_includedir}/luajit-2.0 \
     --with-luajit-lib=%{_libdir} \
-%if 0%{?rhel} > 6 || 0%{?fedora}
     --with-http_tfs_module=shared \
 %endif
     --with-http_upstream_ip_hash_module=shared \
@@ -319,7 +390,8 @@ make %{?_smp_mflags}
 
 
 %install
-%make_install DESTDIR=%{buildroot} INSTALLDIRS=vendor
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot} INSTALLDIRS=vendor
 rm -rf %{buildroot}%{_sbindir}/%{name}.old
 
 find %{buildroot} -type f -name .packlist -exec rm -f '{}' \;
@@ -456,9 +528,7 @@ fi
 %license LICENSE
 %endif
 %{nginx_datadir}/html/*
-%{nginx_datadir}/include/*
 %{nginx_datadir}/modules/*
-%{nginx_datadir}/sbin/*
 %{_bindir}/%{name}-upgrade
 %{_sbindir}/%{name}
 %{_datadir}/vim/vimfiles/ftdetect/%{name}.vim
@@ -511,6 +581,11 @@ fi
 %dir %{nginx_confdir}/conf.d
 %dir %{nginx_confdir}/default.d
 
+%files devel
+%defattr(-,root,root,-)
+%{_sbindir}/dso_tool
+%{_includedir}/%{name}/*.h
+
 %if 0%{?with_modsec_crs}
 %files modsec_crs
 %defattr(-,root,root,-)
@@ -528,6 +603,8 @@ fi
 
 
 %changelog
+* Fri Oct  2 2015 mosquito <sensor.wen@gmail.com> - 1:2.1.1-3.modsec_2.9.0
+- support el5
 * Thu Oct  1 2015 mosquito <sensor.wen@gmail.com> - 1:2.1.1-2.modsec_2.9.0
 - add OWASP ModSecurity Core Rule Set
 - change ngx_http_perl_module name
