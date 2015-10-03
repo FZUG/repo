@@ -58,13 +58,13 @@ body{
 #welcome{
 	/*width: 100%;*/
 	padding: 42px 0px;
-	background: #477ec9; /* Old browsers #40bd97 #07a878 */
-	background: -moz-linear-gradient(top, #5a8ed5 0%, #3c6eb4 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#5a8ed5), color-stop(100%,#3c6eb4)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #5a8ed5 0%,#3c6eb4 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #5a8ed5 0%,#3c6eb4 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #5a8ed5 0%,#3c6eb4 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #5a8ed5 0%,#3c6eb4 100%); /* W3C */
+	background: #294172; /* Old browsers */
+	background: -moz-linear-gradient(top, #3c6eb4 0%, #294172 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3c6eb4), color-stop(100%,#294172)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #3c6eb4 0%,#294172 100%); /* W3C */
 }
 #intro{
 	margin:0 auto;
@@ -96,8 +96,15 @@ body{
 	width:75%;
 	margin:25px auto;
 }
+#wrapper a {
+	color:#06c;
+	text-decoration: none;
+}
+#wrapper a:hover {
+	text-decoration: underline;
+}
 #filelist h3{
-	color:#07A878;
+	color:#3c6eb4;
 	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
 	font-weight:100;
 	font-size:24px;
@@ -139,11 +146,11 @@ thead{
 	padding-left:3px;
 }
 #filelist td a{
-	color:#0B486B;
+	color:#06c;
 	text-decoration: none;
 }
 #filelist a:hover{
-	text-decoration: underline;
+	text-decoration: none;
 }
 #filename{
 	text-align:left;
@@ -170,7 +177,7 @@ tbody tr:hover{
 	margin-bottom: 25px;
 }
 #sidebar h3{
-	color:#07A878;
+	color:#3c6eb4;
 	font-family: "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
 	font-weight:300;
 	font-size:24px;
@@ -189,7 +196,7 @@ tbody tr:hover{
 }
 .btn{
 	display: inline-block;
-	background-color: #07A878;
+	background-color: #294172;
 	margin:12px auto 12px auto;
 	padding:3px 20px;
 	line-height: 1.5em;
@@ -206,7 +213,7 @@ tbody tr:hover{
 
 }
 .btn:hover{
-	background-color:#40BD97;
+	background-color:#3c6eb4;
 }
 #footer{
 	background-color: #333;
@@ -728,23 +735,6 @@ tbody tr:hover{
 
         ga('create', 'UA-47480129-12', 'auto');
         ga('send', 'pageview');
-
-var h = new Date();
-var hour = h.getHours();
-var color = document.getElementById('welcome');
-if ( 5 <= hour && hour <= 7 ) {
-    color.style.background="linear-gradient(to right bottom,#b3d9ff 0%,#47a2ff 100%)";
-} else if ( 8 <= hour && hour <= 10 ) {
-    color.style.background="linear-gradient(to right bottom,#8eb6ed 0%,#5b90d7 100%)";
-} else if ( 11 <= hour && hour <= 15 ) {
-    color.style.background="linear-gradient(to bottom,#5a8ed5 0%,#3c6eb4 100%)";
-} else if ( 16 <= hour && hour <= 19 ) {
-    color.style.background="linear-gradient(to right bottom,#9e87f1 0%,#596cc6 100%)";
-} else if ( 20 <= hour && hour <= 23 ) {
-    color.style.background="linear-gradient(to bottom,#7aa5d5 0%,#3b6391 100%)";
-} else if ( 0 <= hour && hour <= 4 ) {
-    color.style.background="linear-gradient(to bottom,#586b80 0%,#283a4e 100%)";
-}
     </script>
 <!-- Designed by Miaomiao Li. It's a wonderful life! -->
 <!--
