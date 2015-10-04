@@ -1,5 +1,6 @@
 %if ! 0%{?rhel} && ! 0%{?fedora}
 %global  rhel %(%{__python} -c "import platform;print platform.dist()[1][0]")
+%global  dist .el5
 %endif
 %global  debug_package       %{nil}
 %global  _hardened_build     1
@@ -13,8 +14,21 @@
 %global  nginx_webroot       %{nginx_datadir}/html
 %global  with_http2          1
 
+# ngx_http_lua_module
+%global  ngx_lua_version     0.9.16
+%global  ndk_version         0.2.19
+%global  with_ngx_lua        1
+
+# ngx_echo module
+%global  ngx_echo_version    0.58
+%global  with_ngx_echo       1
+
 # ModSecurity module
+%if 0%{?rhel} == 5
+%global  modsec_version      2.8.0
+%else
 %global  modsec_version      2.9.0
+%endif
 %global  with_modsec         1
 
 # OWASP ModSecurity Core Rule Set (CRS)
@@ -43,13 +57,19 @@
 %global  with_systemd        1
 %endif
 
+# ModSecurity require libxml2 >= 2.6.29
+%define libxml2_version 2.6.29
+%define libxml2_build_path %{_tmppath}/libxml2-%{libxml2_version}
+%define httpd_version 2.2.15
+%define httpd_build_path %{_tmppath}/httpd-%{httpd_version}
+
 Name:              nginx
 Epoch:             1
 Version:           1.9.5
 %if 0%{?with_modsec}
-Release:           2.modsec_%{modsec_version}%{dist}
+Release:           3.modsec_%{modsec_version}%{?dist}
 %else
-Release:           2%{?dist}
+Release:           3%{?dist}
 %endif
 
 Summary:           A high performance web server and reverse proxy server
@@ -61,10 +81,15 @@ License:           BSD
 URL:               http://nginx.org
 
 Source0:           http://nginx.org/download/nginx-%{version}.tar.gz
-Source1:           http://nginx.org/download/nginx-%{version}.tar.gz.asc
-Source2:           https://www.modsecurity.org/tarball/%{modsec_version}/modsecurity-%{modsec_version}.tar.gz
-Source3:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
-Source4:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source1:           https://github.com/openresty/lua-nginx-module/archive/v%{ngx_lua_version}/lua-nginx-module-%{ngx_lua_version}.tar.gz
+Source2:           https://github.com/simpl/ngx_devel_kit/archive/v%{ndk_version}/ngx_devel_kit-%{ndk_version}.tar.gz
+Source3:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
+Source4:           https://www.modsecurity.org/tarball/2.8.0/modsecurity-2.8.0.tar.gz
+Source5:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
+Source6:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source7:           https://github.com/openresty/echo-nginx-module/archive/v%{ngx_echo_version}/echo-nginx-module-%{ngx_echo_version}.tar.gz
+Source8:           ftp://xmlsoft.org/libxml2-%{libxml2_version}.tar.gz
+Source9:           http://www.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
 Source10:          nginx.service
 Source11:          nginx.logrotate
 Source12:          nginx.conf
@@ -108,12 +133,19 @@ BuildRequires:     perl(ExtUtils::Embed)
 BuildRequires:     zlib-devel
 %if 0%{?with_modsec}
 # Build reqs for mod_security
-BuildRequires:     httpd-devel pcre-devel curl-devel lua-devel
-BuildRequires:     libxml2-devel >= 2.6.29 ssdeep-devel
+BuildRequires:     pcre-devel >= 5.0 curl-devel
+BuildRequires:     lua-devel ssdeep-devel
+BuildRequires:     apr-devel >= 1.2.0 apr-util-devel >= 1.2.0
 %if 0%{?rhel} != 5
-BuildRequires:     yajl-devel
+BuildRequires:     libxml2-devel >= 2.6.29 yajl-devel httpd-devel
 %endif
 %endif
+# ngx_lua_module
+BuildRequires:     lua-devel
+%if 0%{?rhel} != 5
+BuildRequires:     luajit-devel
+%endif
+BuildRequires:     libatomic_ops-devel
 
 Requires:          nginx-filesystem = %{epoch}:%{version}-%{release}
 Requires:          GeoIP
@@ -153,7 +185,9 @@ memory usage.
 %package filesystem
 Group:             System Environment/Daemons
 Summary:           The basic directory layout for the Nginx server
+%if 0%{?rhel} != 5
 BuildArch:         noarch
+%endif
 Requires(pre):     shadow-utils
 
 %description filesystem
@@ -163,10 +197,13 @@ directories.
 
 %if 0%{?with_modsec_crs}
 %package modsec_crs
+Group:             System Environment/Daemons
 Summary:           ModSecurity Rules for %{name}
 License:           ASL 2.0
 URL:               https://github.com/SpiderLabs/owasp-modsecurity-crs
+%if 0%{?rhel} != 5
 BuildArch:         noarch
+%endif
 Requires:          %{name} = %{version}-%{release}
 
 %description modsec_crs
@@ -175,7 +212,7 @@ This package provides the base rules for mod_security.
 
 
 %prep
-%setup -q -a2 -a3 -a4
+%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7 -a8 -a9
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
 %patch1 -p1
@@ -186,15 +223,54 @@ popd
 
 %build
 %if 0%{?with_modsec}
+%if 0%{?rhel} == 5
+# This is only safe in a mock environment.
+pushd libxml2-%{libxml2_version}
+./configure --prefix=%{libxml2_build_path}
+make
+make install
+popd
+pushd httpd-%{httpd_version}
+./configure --prefix=%{httpd_build_path}
+make
+make install
+popd
+%endif
+
 # Build mod_security standalone module
 pushd modsecurity-%{modsec_version}
-#CFLAGS="%%{optflags} $(pcre-config --cflags)" ./configure \
-%configure \
+#CPATH=%%{httpd_build_path}/include
+#CFLAGS="%%{optflags} $(pcre-config --cflags) -I%%{httpd_build_path}/include" ./configure \
+%if 0%{?rhel} == 5
+%configure --with-libxml=%{libxml2_build_path} --with-apxs=%{httpd_build_path}/bin/apxs \
+%else
+%configure --with-yajl \
+%endif
+    --enable-pcre-match-limit=no \
+    --enable-pcre-match-limit-recursion=no \
+%if 0%{?rhel} > 6 || 0%{?fedora}
+    --enable-pcre-jit --enable-pcre-study \
+%endif
     --enable-standalone-module \
     --disable-mlogc \
+    --with-ssdeep \
+    --enable-lua-cache \
     --enable-shared
+
+# remove rpath
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
 popd
+%endif
+
+# luajit and lua variable
+%if 0%{?rhel} == 5
+export LUA_LIB=%{_libdir}
+export LUA_INC=%{_includedir}
+%else
+export LUAJIT_LIB=%{_libdir}
+export LUAJIT_INC=%{_includedir}/luajit-2.0
 %endif
 
 # nginx does not utilize a standard configure script.  It has its own
@@ -249,15 +325,25 @@ export DESTDIR=%{buildroot}
     --with-http_stub_status_module \
     --with-http_perl_module \
     --with-http_auth_request_module \
+    --with-md5-asm \
+    --with-sha1-asm \
     --with-mail \
     --with-mail_ssl_module \
     --with-pcre \
     --with-pcre-jit \
+    --with-libatomic \
     --with-threads \
     --with-stream \
     --with-stream_ssl_module \
 %if 0%{?with_gperftools}
     --with-google_perftools_module \
+%endif
+%if 0%{?with_ngx_lua}
+    --add-module="ngx_devel_kit-%{ndk_version}" \
+    --add-module="lua-nginx-module-%{ngx_lua_version}" \
+%endif
+%if 0%{?with_ngx_echo}
+    --add-module="echo-nginx-module-%{ngx_echo_version}" \
 %endif
 %if 0%{?with_modsec}
     --add-module="modsecurity-%{modsec_version}/nginx/modsecurity" \
@@ -273,7 +359,8 @@ make %{?_smp_mflags}
 
 
 %install
-%make_install DESTDIR=%{buildroot} INSTALLDIRS=vendor
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot} INSTALLDIRS=vendor
 rm -rf %{buildroot}%{_sbindir}/%{name}.old
 
 find %{buildroot} -type f -name .packlist -exec rm -f '{}' \;
@@ -476,6 +563,10 @@ fi
 
 
 %changelog
+* Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.5-3.modsec_2.9.0
+- support el5
+- add ngx_lua, ngx_echo module
+
 * Thu Oct  1 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.5-2.modsec_2.9.0
 - add OWASP ModSecurity Core Rule Set
 
