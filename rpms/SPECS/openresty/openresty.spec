@@ -1,7 +1,8 @@
+# If you use rhel, please add epel repository.
 # If you use el6, please add epel-testing repository.
-# If you use el7, please add epel repository.
 %if ! 0%{?rhel} && ! 0%{?fedora}
 %global  rhel %(%{__python} -c "import platform;print platform.dist()[1][0]")
+%global  dist .el5
 %endif
 %global  debug_package       %{nil}
 %global  _hardened_build     1
@@ -15,12 +16,27 @@
 %global  nginx_webroot       %{nginx_datadir}/html
 %global  with_http2          1
 
+# provides filter
+# the modern macros for Provides and Requires Filtering
+# do not work for EPEL 5 or older.
+%if 0%{?rhel} > 6 || 0%{?fedora}
+%global  __provides_exclude  (luajit|json)
+%else
+%{?filter_setup:
+%filter_from_provides /luajit/d; /json/d; /parser/d;
+%filter_setup}
+%endif
+
 # nginx mainline version
 %global  ngx_version         1.9.5
 %global  with_ngx_mainline   1
 
 # ModSecurity module
+%if 0%{?rhel} == 5
+%global  modsec_version      2.8.0
+%else
 %global  modsec_version      2.9.0
+%endif
 %global  with_modsec         1
 
 # OWASP ModSecurity Core Rule Set (CRS)
@@ -49,13 +65,19 @@
 %global  with_systemd        1
 %endif
 
+# ModSecurity require libxml2 >= 2.6.29
+%define libxml2_version 2.6.29
+%define libxml2_build_path %{_tmppath}/libxml2-%{libxml2_version}
+%define httpd_version 2.2.15
+%define httpd_build_path %{_tmppath}/httpd-%{httpd_version}
+
 Name:              openresty
 Epoch:             1
 Version:           1.9.3.1
 %if 0%{?with_modsec}
-Release:           2.modsec_%{modsec_version}%{dist}
+Release:           3.modsec_%{modsec_version}%{dist}
 %else
-Release:           2%{?dist}
+Release:           3%{?dist}
 %endif
 
 Summary:           a fast Web App Server by extending Nginx
@@ -70,9 +92,12 @@ Source0:           https://openresty.org/download/ngx_%{name}-%{version}.tar.gz
 Source1:           https://openresty.org/download/ngx_%{name}-%{version}.tar.gz.asc
 Source2:           http://nginx.org/download/nginx-%{ngx_version}.tar.gz
 Source3:           http://nginx.org/download/nginx-%{ngx_version}.tar.gz.asc
-Source4:           https://www.modsecurity.org/tarball/%{modsec_version}/modsecurity-%{modsec_version}.tar.gz
-Source5:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
-Source6:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source4:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
+Source5:           https://www.modsecurity.org/tarball/2.8.0/modsecurity-2.8.0.tar.gz
+Source6:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
+Source7:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
+Source8:           ftp://xmlsoft.org/libxml2-%{libxml2_version}.tar.gz
+Source9:           http://www.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
 Source10:          openresty.service
 Source11:          openresty.logrotate
 Source12:          openresty.conf
@@ -116,10 +141,11 @@ BuildRequires:     perl(ExtUtils::Embed)
 BuildRequires:     zlib-devel
 %if 0%{?with_modsec}
 # Build reqs for mod_security
-BuildRequires:     httpd-devel pcre-devel curl-devel lua-devel
-BuildRequires:     libxml2-devel >= 2.6.29 ssdeep-devel
+BuildRequires:     pcre-devel >= 5.0 curl-devel
+BuildRequires:     lua-devel ssdeep-devel
+BuildRequires:     apr-devel >= 1.2.0 apr-util-devel >= 1.2.0
 %if 0%{?rhel} != 5
-BuildRequires:     yajl-devel
+BuildRequires:     libxml2-devel >= 2.6.29 yajl-devel httpd-devel
 %endif
 %endif
 # OpenResty ngx_postgres, ngx_drizzle
@@ -166,7 +192,9 @@ their external dependencies.
 %package filesystem
 Group:             System Environment/Daemons
 Summary:           The basic directory layout for the OpenResty server
+%if 0%{?rhel} != 5
 BuildArch:         noarch
+%endif
 Requires(pre):     shadow-utils
 
 %description filesystem
@@ -176,10 +204,13 @@ directories.
 
 %if 0%{?with_modsec_crs}
 %package modsec_crs
+Group:             System Environment/Daemons
 Summary:           ModSecurity Rules for %{name}
 License:           ASL 2.0
 URL:               https://github.com/SpiderLabs/owasp-modsecurity-crs
+%if 0%{?rhel} != 5
 BuildArch:         noarch
+%endif
 Requires:          %{name} = %{version}-%{release}
 
 %description modsec_crs
@@ -188,13 +219,15 @@ This package provides the base rules for mod_security.
 
 
 %prep
-%setup -q -a2 -a4 -a5 -a6 -n ngx_%{name}-%{version}
+%setup -q -a2 -a4 -a5 -a6 -a7 -a8 -a9 -n ngx_%{name}-%{version}
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
 %patch1 -p1
 popd
 %endif
+%if 0%{?rhel} != 5
 %patch0 -p0 -d nginx-%{ngx_version}
+%endif
 
 # Change server and library name
 %if 0%{?with_ngx_mainline}
@@ -212,7 +245,11 @@ sed -i 's|nginx|%{name}|g' \
     src/http/modules/perl/nginx.{pm,xs}
 mv src/http/modules/perl/{nginx,%{name}}.pm
 mv src/http/modules/perl/{nginx,%{name}}.xs
+%if 0%{?rhel} != 5
 sed -i -E '/(embedding|get_sv)/s|nginx|%{name}|' \
+%else
+sed -i -r '/(embedding|get_sv)/s|nginx|%{name}|' \
+%endif
     src/http/modules/perl/ngx_http_perl_module.c
 popd
 %if 0%{?with_ngx_mainline}
@@ -223,13 +260,43 @@ mv nginx-%{ngx_version} bundle/
 
 %build
 %if 0%{?with_modsec}
+%if 0%{?rhel} == 5
+# This is only safe in a mock environment.
+pushd libxml2-%{libxml2_version}
+./configure --prefix=%{libxml2_build_path}
+make
+make install
+popd
+pushd httpd-%{httpd_version}
+./configure --prefix=%{httpd_build_path}
+make
+make install
+popd
+%endif
+
 # Build mod_security standalone module
 pushd modsecurity-%{modsec_version}
-#CFLAGS="%%{optflags} $(pcre-config --cflags)" ./configure \
-%configure \
+#CPATH=%%{httpd_build_path}/include
+#CFLAGS="%%{optflags} $(pcre-config --cflags) -I%%{httpd_build_path}/include" ./configure \
+%if 0%{?rhel} == 5
+%configure --with-libxml=%{libxml2_build_path} --with-apxs=%{httpd_build_path}/bin/apxs \
+%else
+%configure --with-yajl \
+%endif
+    --enable-pcre-match-limit=no \
+    --enable-pcre-match-limit-recursion=no \
+%if 0%{?rhel} > 6 || 0%{?fedora}
+    --enable-pcre-jit --enable-pcre-study \
+%endif
     --enable-standalone-module \
     --disable-mlogc \
+    --with-ssdeep \
+    --enable-lua-cache \
     --enable-shared
+
+# remove rpath
+sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 make %{?_smp_mflags}
 popd
 %endif
@@ -320,7 +387,8 @@ make %{?_smp_mflags}
 
 
 %install
-%make_install DESTDIR=%{buildroot} INSTALLDIRS=vendor
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot} INSTALLDIRS=vendor
 rm -rf %{buildroot}%{_sbindir}/%{name}.old
 
 find %{buildroot} -type f -name .packlist -exec rm -f '{}' \;
@@ -352,7 +420,7 @@ install -p -m 0644 %{SOURCE12} \
     %{buildroot}%{nginx_confdir}
 mv %{buildroot}%{nginx_confdir}/{nginx,%{name}}.conf.default
 %if 0%{?rhel} < 7 && ! 0%{?fedora}
-    sed -i 's|/run/openresty.pid|/var/run/openresty.pid|' %{buildroot}%{nginx_confdir}/%{name}.conf
+    sed -i 's|/run/%{name}.pid|/var/run/%{name}.pid|' %{buildroot}%{nginx_confdir}/%{name}.conf
 %endif
 
 %if 0%{?with_modsec}
@@ -404,6 +472,10 @@ for i in ftdetect indent syntax; do
     install -p -D -m644 bundle/nginx-*/contrib/vim/${i}/nginx.vim \
         %{buildroot}%{_datadir}/vim/vimfiles/${i}/%{name}.vim
 done
+
+# resty tool
+sed -i '10,300s|nginx|%{name}|g' %{buildroot}%{_datadir}/%{name}/bin/resty
+ln -sfv %{_datadir}/%{name}/bin/resty %{buildroot}%{_bindir}/resty
 
 
 %pre filesystem
@@ -461,6 +533,7 @@ fi
 %{nginx_datadir}/luajit/*
 %{nginx_datadir}/lualib/*
 %exclude %{nginx_datadir}/nginx/
+%{_bindir}/resty
 %{_bindir}/%{name}-upgrade
 %{_sbindir}/%{name}
 %{_datadir}/vim/vimfiles/ftdetect/%{name}.vim
@@ -528,6 +601,9 @@ fi
 
 
 %changelog
+* Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.3.1-3.modsec_2.9.0
+- support el5
+- don't provide luajit library
 * Thu Oct  1 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.3.1-2.modsec_2.9.0
 - add OWASP ModSecurity Core Rule Set
 - change ngx_http_perl_module name
