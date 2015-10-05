@@ -4,12 +4,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 0c693745567dc5e831f1c99ccd6edc7d386f1db1
+%global _commit 2baa049c2f7ed0060cb6eeb858e432aa3f7d862d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		xware-desktop
 Version:	0.13
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	An attempt to bring Xware (Xunlei on routers) to desktop Linux.
 Summary(zh_CN):	Xware (迅雷路由器固件) 的 Linux 桌面前端.
 
@@ -62,14 +62,15 @@ sed -i 's|qmake|%{_qt5_qmake}|g' src/frontend/Extensions/sip/configure.py
 %build
 QT_SELECT=5 \
 make all %{?_smp_mflags} \
-	PREFIX=%{_datadir}/%{name} \
-	QMAKE=%{_qt5_qmake}
+    PREFIX=%{_datadir}/%{name} \
+    QMAKE=%{_qt5_qmake}
 
 %install
 make install DESTDIR=%{buildroot} PREFIX=%{_datadir}/%{name}
 
 # change rpath/runpath
-chrpath -r %{_datadir}/%{name}/frontend/Extensions %{buildroot}%{_datadir}/%{name}/frontend/Extensions/DBusTypes.so
+chrpath -r %{_datadir}/%{name}/frontend/Extensions \
+    %{buildroot}%{_datadir}/%{name}/frontend/Extensions/DBusTypes.so
 
 # python3 library
 export PYTHONPATH=%{buildroot}%{python3_sitelib}
@@ -81,56 +82,49 @@ install -d %{buildroot}%{python3_sitelib}
 %endif
 
 %post
-# $1 -eq 1: pre/post_install
-# $1 -eq 2: pre/post_upgrade
-    if [ 0$1 -eq 1 ]; then
-	# Fedora specific, same as Arch
-	update-desktop-database -q
-	setcap CAP_SYS_ADMIN=+ep %{_datadir}/%{name}/chmns
-	chrpath -r %{_datadir}/%{name}/frontend/Extensions %{_datadir}/%{name}/frontend/Extensions/DBusTypes.so
+if [ $1 -eq 1 ]; then
+    update-desktop-database -q ||:
+    gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
-	echo "================================================="
-	echo -e "《欢迎使用 Xware Desktop》\n"
-	echo -e "初始设置：\n  1. 设置下载文件夹\n     文件 -> 设置 -> 挂载 -> 添加，选择下载文件夹[TDDOWNLOADS]"
-	echo -e "  2. 托管 xwared 并启动\n     文件 -> 设置 -> 启动与登录 -> xwared托管，选择「由systemd托管」或「由upstart托管」，重启后 xwared会自动启动"
-	echo -e "  3. 手动启动/关闭 xwared\n     - systemd：systemctl --user [start|stop] xwared\n     - upstart：[start|stop] xwared\n     - 直接执行：/usr/share/xware-desktop/xwared &"
-	echo -e "  4. 使用迅雷帐号登陆，并激活设备即可"
-	echo -e "  5. 浏览器整合\n     xware-desktop 可接受url参数，格式为\n\txware-desktop URL_File1 URL_File2 ...\n     以 Firefox 的 Flashgot 为例，添加一个新下载器，程序设置为 xware-desktop URL"
-	echo -e "  6. 调整窗口大小\n     编辑 ~/.xware-desktop/profile/etc/frontend.ini，在 [legacy] 添加以下条目：\n\twebviewminsizeoverride = 400,200  # 设置最小宽,高\n\twebviewzoom = 0.8  # 设置缩放比例\n"
-	echo "  项目主页 https://github.com/Xinkai/XwareDesktop"
-	echo "================================================="
-    fi
-
-    if [ 0$1 -eq 2 ]; then
-	# post_upgrade
-	setcap CAP_SYS_ADMIN=+ep %{_datadir}/%{name}/chmns
-	chrpath -r %{_datadir}/%{name}/frontend/Extensions %{_datadir}/%{name}/frontend/Extensions/DBusTypes.so
-    fi
-
-%postun
-# $1 -eq 0: preun/postun_uninstall
-# $1 -eq 1: preun/postun_upgrade
-    if [ 0$1 -eq 0 ]; then
-	# uninstall
-	echo "================================================="
-	echo "Xware Desktop 卸载完成......"
-	echo "用户配置文件位于~/.xware-desktop，并未删除。"
-	echo "================================================="
-    fi
+    echo "================================================="
+    echo -e "《欢迎使用 Xware Desktop》\n"
+    echo "初始设置："
+    echo "  1. 设置下载文件夹"
+    echo "     文件 -> 设置 -> 挂载 -> 添加，选择下载文件夹[TDDOWNLOADS]"
+    echo "  2. 托管 xwared 并启动"
+    echo "     文件 -> 设置 -> 启动与登录 -> xwared托管，选择「由systemd托管」或「由upstart托管」，重启后 xwared会自动启动"
+    echo "  3. 手动启动/关闭 xwared"
+    echo "     - systemd：systemctl --user [start|stop] xwared"
+    echo "     - upstart：[start|stop] xwared"
+    echo "     - 直接执行：/usr/share/xware-desktop/xwared &"
+    echo "  4. 使用迅雷帐号登陆，并激活设备即可"
+    echo "  5. 浏览器整合"
+    echo "     xware-desktop 可接受url参数，格式为"
+    echo -e "\txware-desktop URL_File1 URL_File2 ..."
+    echo "     以 Firefox 的 Flashgot 为例，添加一个新下载器，程序设置为 xware-desktop URL"
+    echo "  6. 调整窗口大小"
+    echo "     编辑 ~/.xware-desktop/profile/etc/frontend.ini，在 [legacy] 添加以下条目："
+    echo -e "\twebviewminsizeoverride = 400,200 # 设置最小宽,高"
+    echo -e "\twebviewzoom = 0.8  # 设置缩放比例"
+    echo "================================================="
+fi
 
 %files
 %defattr(-,root,root,-)
 %doc README.md
 %{_bindir}/%{name}
 %{_datadir}/%{name}
+%caps(cap_sys_admin=+ep) %{_datadir}/%{name}/chmns
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor
 %{python3_sitelib}
 
 %changelog
-* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 0.13-1.git0c69374
+* Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 0.13-1.git2baa049
+- Update version to 0.13-1.git2baa049
+* Wed May  6 2015 mosquito <sensor.wen@gmail.com> - 0.13-1.git0c69374
 - Rename version name
-* Tue Feb 03 2015 mosquito <sensor.wen@gmail.com> - 0.13git20150201-1
+* Tue Feb  3 2015 mosquito <sensor.wen@gmail.com> - 0.13git20150201-1
 - Update version to 0.13git20150201
 * Thu Jan 29 2015 mosquito <sensor.wen@gmail.com> - 0.13git20150126-1
 - Update version to 0.13git20150126
@@ -162,5 +156,5 @@ install -d %{buildroot}%{python3_sitelib}
 - Update version to 0.13
 * Fri Oct 10 2014 mosquito <sensor.wen@gmail.com> - 0.12git20140909-2
 - Add comments
-* Thu Oct 9 2014 mosquito <sensor.wen@gmail.com> - 0.12git20140909-1
+* Thu Oct  9 2014 mosquito <sensor.wen@gmail.com> - 0.12git20140909-1
 - Initial build
