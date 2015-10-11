@@ -153,6 +153,7 @@ Requires:          gd
 Requires:          openssl
 Requires:          pcre
 Requires:          perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
+Requires:          yajl
 Requires(pre):     nginx-filesystem
 Provides:          webserver = %{version}
 Provides:          %{name} = %{version}-%{release}
