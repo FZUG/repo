@@ -523,10 +523,9 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc LICENSE CHANGES{,.cn} README
-%if 0%{?rhel} > 6 || 0%{?fedora}
+%doc CHANGES{,.cn} README
+%{!?_licensedir:%global license %doc}
 %license LICENSE
-%endif
 %{nginx_datadir}/html/*
 %{nginx_datadir}/modules/*
 %{_bindir}/%{name}-upgrade
@@ -589,10 +588,9 @@ fi
 %if 0%{?with_modsec_crs}
 %files modsec_crs
 %defattr(-,root,root,-)
-%doc owasp-modsecurity-crs-*/{CHANGES,INSTALL,LICENSE,README.md}
-%if 0%{?rhel} > 6 || 0%{?fedora}
+%doc owasp-modsecurity-crs-*/{CHANGES,INSTALL,README.md}
+%{!?_licensedir:%global license %doc}
 %license owasp-modsecurity-crs-*/LICENSE
-%endif
 %{nginx_confdir}/modsecurity.d/modsecurity_crs_10_config.conf
 %{nginx_confdir}/modsecurity.d/activated_rules/
 %{nginx_datadir}/modsecurity.d/base_rules/
