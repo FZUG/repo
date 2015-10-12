@@ -524,10 +524,9 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc bundle/nginx-*/{LICENSE,CHANGES,README} README.markdown
-%if 0%{?rhel} > 6 || 0%{?fedora}
+%doc bundle/nginx-*/{CHANGES,README} README.markdown
+%{!?_licensedir:%global license %doc}
 %license bundle/nginx-*/LICENSE
-%endif
 %{nginx_datadir}/bin/*
 %{nginx_datadir}/html/*
 %{nginx_datadir}/luajit/*
@@ -587,10 +586,9 @@ fi
 %if 0%{?with_modsec_crs}
 %files modsec_crs
 %defattr(-,root,root,-)
-%doc owasp-modsecurity-crs-*/{CHANGES,INSTALL,LICENSE,README.md}
-%if 0%{?rhel} > 6 || 0%{?fedora}
+%doc owasp-modsecurity-crs-*/{CHANGES,INSTALL,README.md}
+%{!?_licensedir:%global license %doc}
 %license owasp-modsecurity-crs-*/LICENSE
-%endif
 %{nginx_confdir}/modsecurity.d/modsecurity_crs_10_config.conf
 %{nginx_confdir}/modsecurity.d/activated_rules/
 %{nginx_datadir}/modsecurity.d/base_rules/
