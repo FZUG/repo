@@ -1,0 +1,61 @@
+From 832ef51a1bc127e176da67a1959c787dfbb66ecd Mon Sep 17 00:00:00 2001
+From: Dominic Hargreaves <dom@earth.li>
+Date: Sat, 12 Jan 2013 00:24:56 +0000
+Subject: Adjust paths for Debian/FHS
+
+Forwarded: not-needed
+Patch-Name: fhs_comply.patch
+---
+ include/defaults.h | 14 +++++++-------
+ src/Makefile.am    |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/include/defaults.h b/include/defaults.h
+index 3d722ef..2df3c49 100644
+--- a/include/defaults.h
++++ b/include/defaults.h
+@@ -50,25 +50,25 @@
+ 
+ /* dirs */
+ #define DPATH        PREFIX
+-#define BINPATH      PREFIX "/bin/"
++#define SBINPATH     PREFIX "/sbin/"
+ #define MODPATH      LIBDIR "/" PACKAGE "/modules/"
+ #define HPATH        DATADIR "/" PACKAGE "/help"
+ #define AUTOMODPATH  MODPATH "/autoload/"
+ #define ETCPATH      SYSCONFDIR
+-#define LIBPATH      LOCALSTATEDIR "/lib"
+-#define LOGPATH      LOCALSTATEDIR "/log"
+-#define RUNPATH      LOCALSTATEDIR "/run"
++#define LIBPATH      LOCALSTATEDIR "/lib/ircd-hybrid"
++#define LOGPATH      LOCALSTATEDIR "/log/ircd"
++#define RUNPATH      LOCALSTATEDIR "/run/ircd"
+ 
+ /* files */
+-#define SPATH     BINPATH "/ircd"  /* ircd executable */
++#define SPATH     SBINPATH "/ircd"  /* ircd executable */
+ #define CPATH     ETCPATH "/ircd.conf"  /* ircd.conf file */
+ #define KPATH     LIBPATH "/kline.db"  /* kline file */
+ #define RESVPATH  LIBPATH "/resv.db"  /* resv file */
+ #define DLPATH    LIBPATH "/dline.db"  /* dline file */
+ #define XPATH     LIBPATH "/xline.db"  /* xline file */
+ #define MPATH     ETCPATH "/ircd.motd"  /* MOTD file */
+-#define LPATH     LOGPATH "/ircd.log"  /* ircd logfile */
+-#define PPATH     RUNPATH "/ircd.pid"  /* pid file */
++#define LPATH     LOGPATH "/ircd-hybrid.log"  /* ircd logfile */
++#define PPATH     RUNPATH "/ircd-hybrid.pid"  /* pid file */
+ #define LIPATH    LIBPATH "/links.txt"  /* cached links file */
+ 
+ /*
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 5ffb12a..8549317 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,6 +1,6 @@
+ AUTOMAKE_OPTIONS = foreign
+ 
+-bin_PROGRAMS = ircd
++sbin_PROGRAMS = ircd
+ 
+ BUILD_DATE ?= $(shell LANG=C date '+%B %-e %Y at %T%z')
+ 

@@ -1,0 +1,98 @@
+policy_module(ircd-hybrid,1.0.0)
+
+########################################
+#
+# Declarations
+#
+
+# ircd domain
+type ircd_hybrid_t;
+# ircd entrypoint
+type ircd_hybrid_exec_t;
+# mark ircd_hybrid_t as a domain and ircd_hybrid_exec_t
+# as an entrypoint into that domain
+init_daemon_domain(ircd_hybrid_t, ircd_hybrid_exec_t)
+
+# configuration files
+type ircd_hybrid_conf_t;
+files_config_file(ircd_hybrid_conf_t)
+
+# PID file /var/run/ircd-hybrid/ircd.pid
+type ircd_hybrid_var_run_t;
+files_pid_file(ircd_hybrid_var_run_t)
+
+# files and directories under /var/lib/ircd-hybrid
+type ircd_hybrid_var_lib_t;
+files_type(ircd_hybrid_var_lib_t)
+
+# log files
+type ircd_hybrid_log_t;
+logging_log_file(ircd_hybrid_log_t)
+
+########################################
+#
+# ircd-hybrid - core access
+#
+
+# read，open, getattr /dev/urandom
+# ircd_hybrid_t -> urandom_device_t
+# require global_ssp=1 boolean
+auth_use_nsswitch(ircd_hybrid_t)
+
+# Log files - create, read, and append
+allow ircd_hybrid_t ircd_hybrid_log_t : dir rw_dir_perms;
+allow ircd_hybrid_t ircd_hybrid_log_t : file { create rw_file_perms };
+logging_log_filetrans(ircd_hybrid_t, ircd_hybrid_log_t, file)
+logging_search_logs(ircd_hybrid_t)
+
+# Configuration files - read
+allow ircd_hybrid_t ircd_hybrid_conf_t : dir list_dir_perms;
+allow ircd_hybrid_t ircd_hybrid_conf_t : file read_file_perms;
+allow ircd_hybrid_t ircd_hybrid_conf_t : lnk_file { getattr read };
+
+# PID file - create, read, and write
+allow ircd_hybrid_t ircd_hybrid_var_run_t : dir rw_dir_perms;
+allow ircd_hybrid_t ircd_hybrid_var_run_t : file { create unlink rw_file_perms };
+files_pid_filetrans(ircd_hybrid_t, ircd_hybrid_var_run_t, file)
+
+# /var/lib/ircd-hybrid files/dirs - create, read, write
+allow ircd_hybrid_t ircd_hybrid_var_lib_t : dir { create add_name remove_name rw_dir_perms };
+allow ircd_hybrid_t ircd_hybrid_var_lib_t : file { create rename unlink rw_file_perms };
+files_var_lib_filetrans(ircd_hybrid_t, ircd_hybrid_var_lib_t, { file dir })
+
+# Network access - the ircd daemon is allowed to send
+# and receive network data to all nodes and ports over
+# all network interfaces. Additionally, it can name_bind
+# to the ircd port (ircd_port_t)
+allow ircd_hybrid_t self : tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_all_if(ircd_hybrid_t)
+corenet_tcp_sendrecv_all_nodes(ircd_hybrid_t)
+corenet_tcp_sendrecv_all_ports(ircd_hybrid_t)
+corenet_tcp_connect_auth_port(ircd_hybrid_t)
+corenet_all_recvfrom_unlabeled(ircd_hybrid_t)
+sysnet_dns_name_resolve(ircd_hybrid_t)
+
+corenet_tcp_bind_all_nodes(ircd_hybrid_t)
+corenet_tcp_bind_ircd_port(ircd_hybrid_t)
+corenet_tcp_bind_gatekeeper_port(ircd_hybrid_t)
+corenet_tcp_bind_afs3_callback_port(ircd_hybrid_t)
+
+# Due to this problem, you can't enable the following access interface.
+# PR: https://github.com/fedora-selinux/selinux-policy/pull/52
+#corenet_tcp_bind_unreserved_ports(ircd_hybrid_t)
+#dontaudit ircd_hybrid_t unreserved_port_t : tcp_socket name_bind;
+
+# use shared libraries
+libs_use_ld_so(ircd_hybrid_t)
+libs_use_shared_libs(ircd_hybrid_t)
+
+# read localization data
+miscfiles_read_localization(ircd_hybrid_t)
+
+# read common directories / files including
+# * /etc (search)
+# * system variables
+files_search_etc(ircd_hybrid_t)
+kernel_read_kernel_sysctls(ircd_hybrid_t)
+kernel_read_system_state(ircd_hybrid_t)
+kernel_read_all_sysctls(ircd_hybrid_t)

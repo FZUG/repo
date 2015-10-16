@@ -1,0 +1,6 @@
+# ircd-hybrid labeling policy
+/usr/sbin/ircd-hybrid    -- gen_context(system_u:object_r:ircd_hybrid_exec_t,s0)
+/etc/ircd-hybrid(/.*)?      gen_context(system_u:object_r:ircd_hybrid_conf_t,s0)
+/var/lib/ircd-hybrid(/.*)?  gen_context(system_u:object_r:ircd_hybrid_var_lib_t,s0)
+/var/log/ircd-hybrid(/.*)?  gen_context(system_u:object_r:ircd_hybrid_log_t,s0)
+/var/run/ircd-hybrid(/.*)?  gen_context(system_u:object_r:ircd_hybrid_var_run_t,s0)

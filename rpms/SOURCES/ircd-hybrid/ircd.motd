@@ -1,0 +1,24 @@
+           /:-------------:\        ircd-hybrid 8.2
+        :------------------::       ---------------
+      :-----------/shhOHbmp--:\
+    /-----------omMMMNNNMMD  --:
+   :-----------sMMMMNMNMP.    --:    If you are seeing this, you have
+  :-----------:MMMdP-------    --\  installed the ircd-hybrid package and
+ ,------------:MMMd--------    --:  you are now connected to your new IRC
+ :------------:MMMd-------    .--:  server -- congratulations.
+ :----    oNMMMMMMMMMNho     .---:
+ :--     .+shhhMMMmhhy++   .-----/   Since you have just installed the
+ :-    -------:MMMd-------------:   package, there are some things you
+ :-   --------/MMMd------------;    should do before going any further:
+ :-    ------/hMMMy-----------:
+ :-- :dMNdhhdNMMNo-----------;      1. Edit /etc/ircd-hybrid/ircd.conf to
+ :---:sdNMMMMNds:-----------:       suit your needs. Beware some options have
+ :------:://:------------::         been removed or moved into other blocks in
+ :--------------------://           the configuration file since
+                                    ircd-hybrid 7.2.2.
+
+                                    2. Edit /etc/ircd-hybrid/ircd.motd (this
+                                    MOTD) to suit your needs.
+
+                                    3. Restart the server using "systemctl
+                                    restart ircd-hybrid".

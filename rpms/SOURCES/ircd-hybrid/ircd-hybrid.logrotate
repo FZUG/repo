@@ -1,0 +1,6 @@
+/var/log/ircd-hybrid/*.log {
+        monthly
+	rotate 4
+	notifempty
+	compress
+}

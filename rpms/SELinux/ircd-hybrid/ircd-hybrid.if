@@ -1,0 +1,32 @@
+## <summary>IRC Hybrid daemon</summary>
+## <desc>
+##	<p>
+##		IRC Hybrid daemon.
+##	</p>
+##	<p>
+##		This policy supports the following features:
+##		<ul>
+##		<li>ircd_hybrid_read_log</li>
+##		</ul>
+##	</p>
+## </desc>
+#
+
+########################################
+## <summary>
+##  Read IRC daemon log files.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed to read the log files.
+##	</summary>
+## </param>
+#
+interface(`ircd_hybrid_read_log',`
+	gen_require(`
+		type ircd_hybrid_log_t;
+	')
+
+	logging_search_logs($1)
+	allow $1 ircd_hybrid_log_t:file read_file_perms;
+')

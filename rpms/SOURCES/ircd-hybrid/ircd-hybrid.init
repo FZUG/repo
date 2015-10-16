@@ -1,0 +1,78 @@
+#!/bin/sh
+#
+# ircd-hybrid   This shell script takes care of starting and stopping ircd.
+#
+# chkconfig: - 75 25
+# description:	Internet Relay Chat Server.
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+OPTIONS=""
+prog=ircd
+
+# Get service config
+[ -f /etc/sysconfig/ircd-hybrid ] && . /etc/sysconfig/ircd-hybrid
+
+
+start() {
+	echo -n $"Starting $prog: "
+	daemon --user ircd-hybrid $prog $OPTIONS
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/$prog
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc $prog
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$prog /var/run/ircd-hybrid/ircd.pid
+}
+
+reload() {
+	echo -n $"Reloading $prog: "
+	killproc $prog -HUP
+	RETVAL=$?
+	echo
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+	status $prog
+	RETVAL=$?
+	;;
+  restart)
+	stop
+	start
+	;;
+  condrestart)
+	if [ -f /var/lock/subsys/$prog ]; then
+	  stop
+	  start
+	fi
+	;;
+  reload)
+	reload
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|condrestart|reload|status"
+	exit 1
+esac
+
+exit $RETVAL

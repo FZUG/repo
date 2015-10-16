@@ -1,0 +1,14 @@
+[Unit]
+Description=Internet Relay Chat Server
+After=network.target
+
+[Service]
+User=ircd-hybrid
+Type=forking
+PIDFile=/run/ircd-hybrid/ircd.pid
+ExecStart=/usr/sbin/ircd-hybrid \
+          -configfile /etc/ircd-hybrid/ircd.conf \
+          -pidfile /run/ircd-hybrid/ircd.pid
+
+[Install]
+WantedBy=multi-user.target
