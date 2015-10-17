@@ -2,16 +2,16 @@
 %define _xinitrcdir %{_sysconfdir}/X11/xinit/xinitrc.d
 
 Name:		sogoupinyin
-Version:	1.2.0.0056
-Release:	2%{?dist}
+Version:	2.0.0.0066
+Release:	1%{?dist}
 Summary:	Sogou Pinyin input method
 Summary(zh_CN):	搜狗拼音输入法
 
 License:	Proprietary and GPLv2
 URL:		http://pinyin.sogou.com/linux
 Group:		Applications/System
-Source0:	http://download.ime.sogou.com/1432523940/%{name}_%{version}_amd64.deb
-Source1:	http://download.ime.sogou.com/1432524151/%{name}_%{version}_i386.deb
+Source0:	http://cdn2.ime.sogou.com/dl/index/1445002254/%{name}_%{version}_amd64.deb
+Source1:	http://cdn2.ime.sogou.com/dl/index/1445001029/%{name}_%{version}_i386.deb
 
 BuildRequires:	dpkg
 Requires:	fcitx >= 4.2.8.3
@@ -35,7 +35,6 @@ China, and Sogou promises it will always be free of charge.
 支持全拼简拼, 模糊拼音, 细胞词库, 云输入, 皮肤, 中英混输.
 通过结合搜索引擎技术, 提高输入准确率. 更多惊喜等您体验.
 
-
 %prep
 # Extract DEB package
 %ifarch x86_64
@@ -58,30 +57,30 @@ set -e
 [ -x /usr/bin/fcitx ] || exit 0
 
 if [ -x /usr/bin/im-config ] && [ ! -f $HOME/.xinputrc ]; then
-    /usr/bin/im-config -n fcitx && export XMODIFIERS="@im=fcitx" || true
+    /usr/bin/im-config -n fcitx && export XMODIFIERS="@im=fcitx" || :
 elif [ -x /usr/bin/imsettings-switch ] && [ ! -f $HOME/.config/imsettings/xinputrc ]; then
-    /usr/bin/imsettings-switch -qf fcitx.conf && export XMODIFIERS="@im=fcitx" || true
+    /usr/bin/imsettings-switch -qf fcitx.conf && export XMODIFIERS="@im=fcitx" || :
 elif [ ! -x /usr/bin/im-config ] && [ ! -x /usr/bin/imsettings-switch ]; then
     if [ "$XMODIFIERS" != "@im=fcitx" ]; then
-	export XMODIFIERS="@im=fcitx"
+        export XMODIFIERS="@im=fcitx"
     fi
 fi
 
 if [ "$XMODIFIERS" == "@im=fcitx" ]; then
-    if [ -f /usr/lib/gtk-2.0/*/immodules/im-fcitx.so ] || \
-       [ -f /usr/lib64/gtk-2.0/*/immodules/im-fcitx.so ]; then
-	if [ -f /usr/lib/gtk-3.0/*/immodules/im-fcitx.so ] || \
-	   [ -f /usr/lib64/gtk-3.0/*/immodules/im-fcitx.so ]; then
-		export GTK_IM_MODULE=fcitx
-	fi
+    if [ -f /usr/lib/*/gtk-2.0/*/immodules/im-fcitx.so ] || \
+       [ -f /usr/lib*/gtk-2.0/*/immodules/im-fcitx.so ]; then
+        if [ -f /usr/lib/*/gtk-3.0/*/immodules/im-fcitx.so ] || \
+           [ -f /usr/lib*/gtk-3.0/*/immodules/im-fcitx.so ]; then
+            export GTK_IM_MODULE=fcitx
+        fi
     fi
-    if [ -f /usr/lib/qt4/plugins/inputmethods/qtim-fcitx.so ] || \
-       [ -f /usr/lib64/qt4/plugins/inputmethods/qtim-fcitx.so ]; then
-	export QT_IM_MODULE=fcitx
-	if [ -f /usr/lib/qt5/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so ] || \
-	   [ -f /usr/lib64/qt5/plugins/platforminputcontexts/libfcitxplatforminputcontextplugin.so ]; then
-		export QT_IM_MODULE=fcitx
-	fi
+    if [ -f /usr/lib/*/qt4/plugins/input*/qtim-fcitx.so ] || \
+       [ -f /usr/lib*/qt4/plugins/input*/qtim-fcitx.so ]; then
+        export QT_IM_MODULE=fcitx
+        if [ -f /usr/lib/*/qt5/plugins/*inputcontexts/libfcitx*.so ] || \
+           [ -f /usr/lib*/qt5/plugins/*inputcontexts/libfcitx*.so ]; then
+            export QT_IM_MODULE=fcitx
+        fi
     fi
 fi
 EOF
@@ -93,13 +92,6 @@ install -m 0755 usr/bin/* %{buildroot}%{_bindir}/
 # library files
 install -d %{buildroot}%{_libdir}/fcitx
 install -m 0644 usr/lib/*-linux-gnu/fcitx/* %{buildroot}%{_libdir}/fcitx/
-
-# include files
-install -d %{buildroot}%{_includedir}/fcitx/module/{autoeng-ng,punc-ng}
-install -m 0644 usr/include/fcitx/module/autoeng-ng/AutoEng.h \
- %{buildroot}%{_includedir}/fcitx/module/autoeng-ng/
-install -m 0644 usr/include/fcitx/module/punc-ng/* \
- %{buildroot}%{_includedir}/fcitx/module/punc-ng/
 
 # desktop file
 install -d %{buildroot}%{_datadir}/applications
@@ -117,6 +109,7 @@ Exec=sogou-qimpanel %U
 Icon=fcitx-sogoupinyin
 Terminal=false
 Type=Application
+NoDisplay=true
 Categories=System;Utility;
 StartupNotify=false
 X-GNOME-Autostart-Phase=Applications
@@ -125,6 +118,9 @@ X-GNOME-Autostart-Delay=2
 X-GNOME-AutoRestart=true
 X-KDE-autostart-phase=1
 X-KDE-autostart-after=panel
+X-MATE-Autostart-Phase=Applications
+X-MATE-Autostart-Delay=2
+X-MATE-Autostart-Notify=false
 EOF
 
 # fcitx files
@@ -161,23 +157,13 @@ install -d %{buildroot}%{_datadir}/sogou-qimpanel
 cp -r usr/share/sogou-qimpanel/* %{buildroot}%{_datadir}/sogou-qimpanel/
 
 # doc files
-install -d %{buildroot}%{_datadir}/doc/%{name}
-cp usr/share/doc/%{name}/* %{buildroot}%{_datadir}/doc/%{name}/
+mv usr/share/doc/%{name}/* .
 
 # version information
 install -d %{buildroot}%{_datadir}/%{name}
 echo "%{version}" > %{buildroot}%{_datadir}/%{name}/sogou-version
 
 # rename files
-pushd %{buildroot}%{_datadir}/sogou-qimpanel/cell/defaultCell
-for i in *;do
-  j=`echo "$i"|sed 's|【.*】||'`
-  if [ "$i" != "$j" ];then
-    mv "$i" "$j"
-  fi
-done
-popd
-
 pushd %{buildroot}%{_datadir}/sogou-qimpanel/recommendSkin/skin
 rm -rf "三国杀"* *"路飞" *"团兵"*
 for i in *;do
@@ -210,7 +196,7 @@ fi
 # uninstall
 if [ "$1" -eq "0" ];then
     rm -rf %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop ||:
-    pkill sogou > /dev/null 2>&1 ||:
+    pkill sogou &>/dev/null ||:
 fi
 
 %postun
@@ -221,18 +207,18 @@ if [ "$1" -eq "0" ]; then
     update-mime-database %{_datadir}/mime ||:
     INPUTRC=`readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}'`
     if [ "$INPUTRC" == "fcitx.conf" ]; then
-	alternatives --auto xinputrc
+        alternatives --auto xinputrc
     fi
     /sbin/ldconfig
 fi
 
 %files
 %defattr(-,root,root,-)
+%doc %{name}-%{version}/changelog.gz
+%license %{name}-%{version}/{copyright,license*}
 %{_bindir}/sogou-*
-%{_bindir}/uk-*
 %{_libdir}/fcitx/
 %{_xinitrcdir}/
-%{_includedir}/fcitx/module/
 %{_datadir}/applications/*.desktop
 %{_datadir}/fcitx/
 %{_datadir}/fcitx-%{name}/
@@ -243,10 +229,10 @@ fi
 %{_datadir}/pixmaps/
 %{_datadir}/sogou-qimpanel/
 %{_datadir}/%{name}/
-%{_datadir}/doc/%{name}/
-
 
 %changelog
+* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-1
+- Update version 2.0.0.0066
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-2
 - Remove depends
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-1
