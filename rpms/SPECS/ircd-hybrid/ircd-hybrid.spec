@@ -11,6 +11,9 @@
 
 %if 0%{?fedora} >= 16 || 0%{?rhel} >= 7
 %global  with_systemd  1
+%global  _rundir       /run
+%else
+%global  _rundir       /var/run
 %endif
 
 # ircd-hybrid-selinux conditional
@@ -111,6 +114,9 @@ SELinux policy modules for use with %{name}.
 %prep
 %setup -q
 %patch0 -p1
+# reduce automake/autoconf version
+sed -i -e 's|1.15|1.11|' \
+       -e 's|2.69|2.64|' configure.ac
 
 %if 0%{?with_selinux}
 mkdir selinux
@@ -118,7 +124,7 @@ cp %{S:21} %{S:22} %{S:23} %{S:24} selinux/
 %endif # with_selinux
 
 %build
-autoreconf -vi
+autoreconf --verbose --install --force
 %configure \
     --prefix=%{_prefix} \
     --sysconfdir=%{_sysconfdir}/%{name} \
