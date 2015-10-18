@@ -10,7 +10,7 @@
 
 Name:		wiznote-beta
 Version:	2.2.5
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
 
@@ -49,7 +49,6 @@ This is a development version.
 %prep
 %setup -q -n %repo-%{_commit}
 
-%build
 # dynamic library (crypt|zip|json)
 sed -i -r '/crypt/d' lib/CMakeLists.txt
 sed -i -e '/cryptlib/az' -e 's|cryptlib|cryptopp|' src/CMakeLists.txt
@@ -93,6 +92,7 @@ sed -i 's|share/wiznote|share/%{name}|' \
 	src/CMakeLists.txt \
 	src/plugins/markdown/markdown.cpp
 
+%build
 mkdir dist
 pushd dist
 # fixed "/usr/lib64/lib64/libboost_date_time.a" but this file does not exist.
@@ -114,7 +114,7 @@ make %{?_smp_mflags}
 %make_install -C dist
 
 # change exec filename
-mv %{buildroot}%{_bindir}/WizNote %{buildroot}%{_bindir}/%{name}-run
+mv %{buildroot}%{_bindir}/WizNote %{buildroot}%{_bindir}/%{name}
 mv %{buildroot}%{_datadir}/applications/wiznote.desktop \
    %{buildroot}%{_datadir}/applications/%{name}.desktop
 
@@ -131,28 +131,18 @@ for i in `ls %{buildroot}%{_datadir}/icons/hicolor/`; do
       %{buildroot}%{_datadir}/icons/hicolor/${i}/apps/%{name}.png
 done
 
-# export library path
-#install -d %%{buildroot}/etc/ld.so.conf.d/
-#echo "%%{_libdir}/%%{name}/plugins/" > %%{buildroot}/etc/ld.so.conf.d/%%{name}.conf
-
-cat > %{buildroot}%{_bindir}/%{name} << EOF
-#!/bin/bash
-LD_LIBRARY_PATH=%{_libdir}/%{name}/plugins %{name}-run
-EOF
-chmod 0755 %{buildroot}%{_bindir}/%{name}
-
 rm -rf %{buildroot}%{_datadir}/licenses/
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 
 %post
 update-desktop-database -q ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-ldconfig
+/sbin/ldconfig
 
 %postun
 update-desktop-database -q ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-ldconfig
+/sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
@@ -165,6 +155,8 @@ ldconfig
 %{_datadir}/%{name}/*
 
 %changelog
+* Sun Oct 18 2015 mosquito <sensor.wen@gmail.com> - 2.2.5-2.git56bca7d
+- Do not use the LD_LIBRARY_PATH variable for main program
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 2.2.5-1.git56bca7d
 - Update version to 2.2.5-1.git56bca7d
 * Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 2.2.4-1.git60eee8d
