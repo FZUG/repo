@@ -3,17 +3,27 @@ SHAREDIR?=/usr/share
 #MODULE?=${TARGETS:=.pp.bz2}
 #INSTALL=?=install
 
-all: ${TARGET:%.te=%.pp.bz2}
+all: cil pp
+cil: ${TARGET:%.te=%.cil}
+pp: ${TARGET:%.te=%.pp.bz2}
 
 %.pp.bz2: %.pp
-	@echo Compressing $^ -\> $@
+	@echo Compressing $^ -\> $@; \
 	bzip2 -9 $^
+
+%.cil: %.pp
+	@if [ -x /usr/libexec/selinux/hll/pp ]; then \
+		echo Converting $^ -\> $@; \
+		cat $^ | /usr/libexec/selinux/hll/pp > $@; \
+		echo Compressing $@ -\> $@.bz2; \
+		bzip2 -9 $@; \
+	fi
 
 %.pp: %.te
 	make -f ${SHAREDIR}/selinux/devel/Makefile $@
 
 clean:
-	rm -rf tmp *.pp *.pp.bz2
+	rm -rf tmp *.cil *.pp *.bz2
 
 #install:
 #AWK${INSTALL} -m 0644 ${TARGET} \
