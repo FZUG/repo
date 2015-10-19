@@ -5,8 +5,8 @@ XIM_ARGS="-D"
 PREFERENCE_PROGRAM=/usr/bin/fcitx-configtool
 SHORT_DESC="FCITX"
 GTK_IM_MODULE=fcitx
-if test -f /usr/lib/qt4/plugins/inputmethods/qtim-fcitx.so || \
-   test -f /usr/lib64/qt4/plugins/inputmethods/qtim-fcitx.so;
+if test -f /usr/lib*/qt4/plugins/inputmethods/qtim-fcitx.so || \
+   test -f /usr/lib*/qt5/plugins/platforminputcontexts/libfcitx*.so;
 then
     QT_IM_MODULE=fcitx
 else
