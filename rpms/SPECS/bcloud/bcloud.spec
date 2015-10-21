@@ -36,6 +36,7 @@ Requires:	python3-lxml
 Requires:	python3-urllib3
 Requires:	gnome-icon-theme-symbolic
 Requires:	libnotify
+Requires:	python3-inotify
 #Requires:	notification-daemon
 #Requires:	libgnome-keyring
 #Requires:	python3-pykde4
