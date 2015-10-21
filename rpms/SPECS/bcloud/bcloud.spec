@@ -1,5 +1,5 @@
 # bcloud.spec
-# Used to build rpm for bcloud on Fedora 20/21/22/rawhide
+# Used to build rpm for bcloud on Fedora 21/22/23/rawhide
 # Released by mosquito <sensor.wen@gmail.com>, wangjiezhe <wangjiezhe@gmail.com>
 # This spec file is published under the GPLv3 license
 
@@ -14,8 +14,8 @@
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		bcloud
-Version:	3.7.2
-Release:	2.git%{_shortcommit}%{?dist}
+Version:	3.8.1
+Release:	1.git%{_shortcommit}%{?dist}
 Summary:	Baidu Pan client for Linux Desktop users
 Summary(zh_CN):	百度网盘 Linux 桌面客户端
 
@@ -26,19 +26,18 @@ Source0:	https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortco
 
 BuildArch:	noarch
 BuildRequires:	python3-devel
-#Requires:	gtk3
+Requires:	gnome-icon-theme-symbolic
+Requires:	gtk3
+Requires:	libnotify
 Requires:	python3-crypto
 Requires:	python3-cssselect
 Requires:	python3-dbus
 Requires:	python3-gobject
 Requires:	python3-keyring
 Requires:	python3-lxml
-Requires:	python3-urllib3
-Requires:	gnome-icon-theme-symbolic
-Requires:	libnotify
 Requires:	python3-inotify
 #Requires:	notification-daemon
-#Requires:	libgnome-keyring
+#Requires:	libgnome-keyring, gnome-keyring
 #Requires:	python3-pykde4
 
 %description
@@ -86,6 +85,10 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %exclude %{python3_sitelib}/bcloud/__pycache__
 
 %changelog
+* Thu Oct 22 2015 mosquito <sensor.wen@gmail.com> - 3.8.1-1.git75fab30
+- Update version to 3.8.1-1.git75fab30
+- Adjustment dependent
+
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 3.7.2-2.git75fab30
 - Update version to 3.7.2-2.git75fab30
 
