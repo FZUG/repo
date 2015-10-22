@@ -11,7 +11,8 @@ Url:       http://asic-linux.com.mx/~izto/checkinstall
 Source:    http://checkinstall.izto.org/files/source/%{name}-%{fversion}.tar.gz
 # git patch
 # git diff 49b8ebd65c62313daaafb063717c7aeb9546829a
-Patch0:    checkinstall-latest.patch
+Patch0:    %{name}-latest.patch
+BuildRequires: gettext
 Requires:  rpm-build dpkg
 
 %description
@@ -33,15 +34,17 @@ make PREFIX=%{_prefix}
 sed -i 's|[[:space:]]*$||' %{name} %{name}rc-dist installwatch/installwatch makepak
 
 # change files path
-sed -i 's|${INSTALLDIR}/lib/checkinstall|/etc|' %{name}
-sed -i 's|#PREFIX#|%{_prefix}|' installwatch/installwatch
+sed -i -e 's|${INSTALLDIR}/lib/%{name}|/etc|' \
+       -e 's|lib/%{name}/|share/|' %{name}
+sed -i -e 's|#PREFIX#|%{_prefix}|' \
+       -e 's|FIX/\(lib[64]*\)|FIX/\1/%{name}|' installwatch/installwatch
 sed -i 's|/local||' %{name}rc-dist
 
-install -D -m 755 checkinstall %{buildroot}%{_bindir}/checkinstall
+install -D -m 755 %{name} %{buildroot}%{_bindir}/%{name}
 install -m 755 installwatch/installwatch %{buildroot}%{_bindir}
 install -D -m 755 makepak %{buildroot}%{_sbindir}/makepak
-install -D -m 755 installwatch/installwatch.so %{buildroot}%{_libdir}/checkinstall/installwatch.so
-install -D -m 644 checkinstallrc-dist %{buildroot}%{_sysconfdir}/checkinstallrc
+install -D -m 755 installwatch/installwatch.so %{buildroot}%{_libdir}/%{name}/installwatch.so
+install -D -m 644 %{name}rc-dist %{buildroot}%{_sysconfdir}/%{name}rc
 
 # locale files
 pushd locale
@@ -58,11 +61,11 @@ popd
 %doc README RELNOTES FAQ BUGS TODO CREDITS
 %license COPYING
 %{_bindir}/installwatch
-%{_bindir}/checkinstall
+%{_bindir}/%{name}
 %{_sbindir}/makepak
-%{_sysconfdir}/checkinstallrc
-%dir %{_libdir}/checkinstall/
-%{_libdir}/checkinstall/installwatch.so
+%{_sysconfdir}/%{name}rc
+%dir %{_libdir}/%{name}/
+%{_libdir}/%{name}/installwatch.so
 
 %changelog
 * Thu Oct 22 2015 mosquito <sensor.wen@gmail.com> - 1.6.3-1
