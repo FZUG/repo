@@ -1,5 +1,4 @@
-# repo
-FZUG Repository ([release-monitoring](https://release-monitoring.org/distro/FZUG))
+# FZUG Repository ([release-monitoring](https://release-monitoring.org/distro/FZUG))
 
 Usage
 -
