@@ -1,23 +1,59 @@
 %global debug_package %{nil}
 %define _xinitrcdir %{_sysconfdir}/X11/xinit/xinitrc.d
 
-Name:		sogoupinyin
-Version:	2.0.0.0066
-Release:	1%{?dist}
-Summary:	Sogou Pinyin input method
-Summary(zh_CN):	搜狗拼音输入法
+# sogoupinyin-selinux conditional
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%global  with_selinux  1
+%endif
 
-License:	Proprietary and GPLv2
-URL:		http://pinyin.sogou.com/linux
-Group:		Applications/System
-Source0:	http://cdn2.ime.sogou.com/dl/index/1445002254/%{name}_%{version}_amd64.deb
-Source1:	http://cdn2.ime.sogou.com/dl/index/1445001029/%{name}_%{version}_i386.deb
+%if 0%{?with_selinux}
+%global  selinuxtype   targeted
+%global  moduletype    apps
+%global  modulename    %{name}
 
-BuildRequires:	dpkg
-Requires:	fcitx >= 4.2.8.3
-Requires:	fcitx-configtool
-Conflicts:	fcitx-sogoupinyin
-Obsoletes:	sogou-pinyin < %{version}-%{release}
+# Usage: _format var format
+# Expand 'modulename' into various formats as needed
+# Format must contain '$x' somewhere to do anything useful
+%global _format() export %1=""; for x in %{modulename}; do %1+=%2; %1+=" "; done;
+
+# Relabel files
+%global relabel_files() %{_sbindir}/restorecon -R %{_bindir}/sogou* %{_datadir}/sogou* %{_datadir}/fcitx-%{name} /tmp/*sogou* /home/*/.config/{SogouPY*/,sogou-qimpanel/,Trolltech.conf} &>/dev/null ||:
+
+# Version of SELinux we were using
+%if 0%{?fedora} >= 21
+%global  selinux_policyver 3.13.1-105
+%else
+%global  selinux_policyver 3.13.1-39
+%endif
+%endif # with_selinux
+
+Name:       sogoupinyin
+Version:    2.0.0.0066
+Release:    2%{?dist}
+Summary:    Sogou Pinyin input method
+Summary(zh_CN): 搜狗拼音输入法
+
+License:    Proprietary and GPLv2
+URL:        http://pinyin.sogou.com/linux
+Group:      Applications/System
+Source0:    http://cdn2.ime.sogou.com/dl/index/1445002254/%{name}_%{version}_amd64.deb
+Source1:    http://cdn2.ime.sogou.com/dl/index/1445001029/%{name}_%{version}_i386.deb
+Source11:   %{name}.te
+Source12:   %{name}.fc
+Source13:   %{name}.if
+Source14:   Makefile
+
+BuildRequires:  dpkg
+Requires:   fcitx >= 4.2.8.3
+Requires:   fcitx-configtool
+Conflicts:  fcitx-sogoupinyin
+Obsoletes:  sogou-pinyin < %{version}-%{release}
+
+# RE: rhbz#1195804 - ensure min NVR for selinux-policy
+%if 0%{?with_selinux}
+Requires:   selinux-policy >= %{selinux_policyver}
+Requires(pre): %{name}-selinux >= %{version}-%{release}
+%endif # with_selinux
 
 %description
 Sogou Pinyin Input Method
@@ -32,8 +68,64 @@ China, and Sogou promises it will always be free of charge.
 
 %description -l zh_CN
 搜狗拼音输入法 - 专注输入法 20 年
-支持全拼简拼, 模糊拼音, 细胞词库, 云输入, 皮肤, 中英混输.
+支持全拼简拼双拼, 模糊拼音, 细胞词库, 云输入, 皮肤, 中英混输.
 通过结合搜索引擎技术, 提高输入准确率. 更多惊喜等您体验.
+
+如果您安装了 %{name}-selinux 并将 SELinux 设为 enforcing 模式, 则 SELinux 会
+保护您 home 目录的私有文件, 避免被 %{name} 访问. 同时, SELinux 默认也会阻止您
+安装皮肤和词库.
+
+皮肤保存在~/.config/sogou-qimpanel/skin/, 按以下方式安装:
+  $ sudo setsebool sogou_enable_homedirs=1
+  $ sogou-qimpanel Skin.ssf
+
+词库保存在~/.config/SogouPY/scd/, 按以下方式安装:
+  $ sudo setsebool sogou_enable_homedirs=1
+  $ sogou-qimpanel Cell.scel
+
+禁止 sogou 访问网络:
+  $ sudo setsebool -P sogou_access_network=0 # 默认: true
+
+允许 sogou 访问 home 目录:
+  $ sudo setsebool sogou_enable_homedirs=1   # 默认: false
+
+%if 0%{?with_selinux}
+%package selinux
+Summary: SELinux policies for %{name}
+BuildArch: noarch
+BuildRequires:  selinux-policy
+BuildRequires:  selinux-policy-devel
+Requires(post): selinux-policy-base >= %{selinux_policyver}
+Requires(post): selinux-policy-targeted >= %{selinux_policyver}
+Requires(post): policycoreutils
+%if 0%{?fedora} > 22
+Requires(post): policycoreutils-python-utils
+%else
+Requires(post): policycoreutils-python
+%endif
+Requires(post): libselinux-utils
+
+%description selinux
+SELinux policy modules for use with %{name}.
+
+If you do not want to %{name} access the network. Execute this command.
+
+  $ sudo setsebool -P sogou_access_network=0 # default: true
+
+Allow sogou access home dirs:
+
+  $ sudo setsebool sogou_enable_homedirs=1   # default: false
+
+%description selinux -l zh_CN
+适用于 %{name} 的 SELinux 策略模块.
+
+如果您不希望 %{name} 访问网络, 请执行以下命令:
+
+  $ sudo setsebool -P sogou_access_network=0 # 默认: true
+
+允许 sogou 访问 home 目录:
+  $ sudo setsebool sogou_enable_homedirs=1   # 默认: false
+%endif # with_selinux
 
 %prep
 # Extract DEB package
@@ -43,7 +135,19 @@ dpkg-deb -X %{SOURCE0} %{_builddir}/%{name}-%{version}
 dpkg-deb -X %{SOURCE1} %{_builddir}/%{name}-%{version}
 %endif
 
+%if 0%{?with_selinux}
+pushd %{_builddir}/%{name}-%{version}
+mkdir selinux
+cp %{S:11} %{S:12} %{S:13} %{S:14} selinux/
+%endif # with_selinux
+
 %build
+%if 0%{?with_selinux}
+pushd %{_builddir}/%{name}-%{version}
+pushd selinux
+make
+popd
+%endif # with_selinux
 
 %install
 pushd %{_builddir}/%{name}-%{version}
@@ -177,6 +281,23 @@ for i in *;do
 done
 popd
 
+%if 0%{?with_selinux}
+# install SELinux interfaces
+%_format INTERFACES $x.if
+install -d %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+install -p -m 644 selinux/$INTERFACES \
+    %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
+
+# install policy modules
+%if 0%{?fedora} > 22
+%_format MODULES $x.cil.bz2
+%else
+%_format MODULES $x.pp.bz2
+%endif
+install -d %{buildroot}%{_datadir}/selinux/packages
+install -m 644 selinux/$MODULES %{buildroot}%{_datadir}/selinux/packages
+%endif # with_selinux
+
 %post
 /sbin/ldconfig
 INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
@@ -191,6 +312,21 @@ if [ "$1" -eq "1" ]; then
     update-desktop-database -q ||:
     update-mime-database %{_datadir}/mime ||:
 fi
+
+%if 0%{?with_selinux}
+%post selinux
+# Install all modules in a single transaction
+%_format MODULES %{_datadir}/selinux/packages/$x.*.bz2
+%{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULES
+if %{_sbindir}/selinuxenabled ; then
+    %{_sbindir}/load_policy
+    %relabel_files
+fi
+if [ $1 -eq 1 ]; then
+    %{_sbindir}/setsebool -P -N sogou_access_network=1
+    %{_sbindir}/setsebool -P -N sogou_enable_homedirs=0
+fi
+%endif # with_selinux
 
 %preun
 # uninstall
@@ -212,6 +348,17 @@ if [ "$1" -eq "0" ]; then
     /sbin/ldconfig
 fi
 
+%if 0%{?with_selinux}
+%postun selinux
+if [ $1 -eq 0 ]; then
+    %{_sbindir}/semodule -n -r %{modulename} &>/dev/null ||:
+    if %{_sbindir}/selinuxenabled ; then
+        %{_sbindir}/load_policy
+        %relabel_files
+    fi
+fi
+%endif # with_selinux
+
 %files
 %defattr(-,root,root,-)
 %doc %{name}-%{version}/changelog.gz
@@ -230,8 +377,16 @@ fi
 %{_datadir}/sogou-qimpanel/
 %{_datadir}/%{name}/
 
+%if 0%{?with_selinux}
+%files selinux
+%defattr(-,root,root,-)
+%{_datadir}/selinux/*
+%endif # with_selinux
+
 %changelog
-* Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-1
+* Sun Oct 25 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-2
+- Add SELinux module (sogoupinyin 1.0.0)
+* Sat Oct 17 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-1
 - Update version 2.0.0.0066
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-2
 - Remove depends

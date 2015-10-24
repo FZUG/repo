@@ -1,0 +1,182 @@
+policy_module(sogoupinyin, 1.0.0)
+
+# Allow user_r, staff_r, unconfined_r role access sogou_t
+optional_policy(`
+    gen_require(`
+        role user_r, staff_r, unconfined_r;
+        type user_t, staff_t, unconfined_t;
+    ')
+    sogou_role(user, user_r, user_t)
+    sogou_role(staff, staff_r, staff_t)
+    sogou_role(unconfined, unconfined_r, unconfined_t)
+')
+
+########################################
+#
+# Declarations
+#
+
+gen_require(`
+    type var_lib_t, config_usr_t;
+    attribute device_node;
+')
+
+attribute_role sogou_roles;
+
+# Booleans
+## <desc>
+## <p>
+## Allow the sogoupinyin access network
+## </p>
+## </desc>
+gen_tunable(sogou_access_network, true)
+
+## <desc>
+## <p>
+## Allow the sogoupinyin read home dirs
+## </p>
+## </desc>
+gen_tunable(sogou_enable_homedirs, false)
+
+# sogou-qimpanel
+type sogou_t;
+type sogou_exec_t;
+application_domain(sogou_t, sogou_exec_t)
+role sogou_roles types sogou_t;
+
+# ~/.config/SogouPY[.users], ~/.config/sogou-qimpanel
+type sogou_home_t;
+userdom_user_home_content(sogou_home_t)
+
+# PID/Socket files /tmp/sogou-qimpanel*
+type sogou_tmp_t;
+userdom_user_tmp_file(sogou_tmp_t)
+
+# Config files
+type sogou_conf_t;
+files_config_file(sogou_conf_t)
+
+# Data files
+type sogou_data_t;
+files_type(sogou_data_t)
+
+########################################
+#
+# sogoupinyin local policy
+#
+
+# If we would link to grant the application access to the user content.
+# userdom_manage_user_home_content_dirs()
+# userdom_manage_user_home_content_files()
+tunable_policy(`sogou_enable_homedirs',`
+    userdom_search_user_home_content(sogou_t)
+    userdom_read_user_home_content_files(sogou_t)
+')
+
+# Allow manage rights on ~/.config/SogouPY
+manage_dirs_pattern(sogou_t, sogou_home_t, sogou_home_t)
+manage_files_pattern(sogou_t, sogou_home_t, sogou_home_t)
+userdom_config_home_content_filetrans(sogou_t, sogou_home_t, dir, "SogouPY")
+userdom_config_home_content_filetrans(sogou_t, sogou_home_t, dir, "SogouPY.users")
+userdom_config_home_content_filetrans(sogou_t, sogou_home_t, dir, "sogou-qimpanel")
+userdom_config_home_content_filetrans(sogou_t, sogou_home_t, file)
+
+# Shared memory
+manage_files_pattern(sogou_t, sogou_tmp_t, sogou_tmp_t)
+#manage_lnk_files_pattern(sogou_t, sogou_tmp_t, sogou_tmp_t)
+#manage_fifo_files_pattern(sogou_t, sogou_tmp_t, sogou_tmp_t)
+manage_sock_files_pattern(sogou_t, sogou_tmp_t, sogou_tmp_t)
+#fs_tmpfs_filetrans(sogou_t, sogou_tmp_t, { file lnk_file fifo_file sock_file })
+files_tmp_filetrans(sogou_t, sogou_tmp_t, { dir file sock_file })
+
+# Application is an X11 application
+xserver_user_x_domain_template(sogou, sogou_t, sogou_tmp_t)
+
+# Network access boolean
+#tunable_policy(`!bool1 && bool2',`
+tunable_policy(`sogou_access_network',`
+    #sysnet_dns_name_resolve(sogou_t)
+    sysnet_read_config(sogou_t)
+
+    # tcp/udp socket
+    allow sogou_t self:netlink_route_socket { create bind getattr nlmsg_read write };
+    allow sogou_t self:udp_socket { create getattr connect read write };
+    allow sogou_t self:tcp_socket { create getattr connect read write getopt setopt };
+
+    # Network access
+    corenet_tcp_bind_generic_node(sogou_t)
+    corenet_udp_bind_generic_node(sogou_t)
+    # Central sogou services
+    corenet_tcp_connect_http_port(sogou_t)
+    corenet_tcp_connect_all_unreserved_ports(sogou_t)
+    # Listen for incoming communication
+    corenet_tcp_bind_all_unreserved_ports(sogou_t)
+    corenet_udp_bind_all_unreserved_ports(sogou_t)
+',`
+    # dont read /etc/rescolv.conf
+    sysnet_dontaudit_read_config(sogou_t)
+    # tcp/udp socket
+    dontaudit sogou_t self:netlink_route_socket create;
+    dontaudit sogou_t self:udp_socket { create getattr };
+    dontaudit sogou_t self:tcp_socket { create getattr };
+')
+
+# Terminal output
+userdom_use_user_terminals(sogou_t)
+
+# Configuration, Data files - read
+allow sogou_t sogou_data_t:dir list_dir_perms;
+allow sogou_t sogou_data_t:file read_file_perms;
+allow sogou_t sogou_conf_t:file read_file_perms;
+
+# tmp files - create, read, and write
+allow sogou_t sogou_tmp_t:dir create;
+allow sogou_t sogou_tmp_t:file { open write };
+
+# dont write /tmp
+#files_dontaudit_access_check_tmp(sogou_t)
+files_dontaudit_leaks(sogou_t)
+
+# dont read config_usr_t
+dontaudit sogou_t config_usr_t:dir read;
+
+# dont create /home/ subdir
+userdom_dontaudit_manage_user_home_dirs(sogou_t)
+
+# start sogou-qimpanel
+# dont get xattr
+#allow sogou_t fs_t:filesystem getattr;
+fs_dontaudit_getattr_xattr_fs(sogou_t)
+
+# execute bash script /usr/bin/sogou-session
+#!!!! WARNING: 'shell_exec_t' is a base type.
+#allow sogou_t shell_exec_t:file { execute execute_no_trans };
+
+# execute fcitx-remote
+#!!!! WARNING: 'bin_t' is a base type.
+#allow sogou_t bin_t:file { execute execute_no_trans };
+corecmd_dontaudit_exec_all_executables(sogou_t)
+
+# read /var/lib/dbus/machine-id
+#allow sogou_t system_dbusd_var_lib_t:file { read getattr open };
+
+# read .config/fcitx/dbus/, write .config/fcitx/config
+#allow sogou_t config_home_t:file { getattr read write open };
+
+# execution memory
+allow sogou_t self:process execmem;
+
+# dont read /etc/passwd
+auth_dontaudit_read_passwd(sogou_t)
+
+# dont read /proc/meminfo
+#kernel_read_all_proc(sogou_t)
+kernel_dontaudit_read_system_state(sogou_t)
+kernel_dontaudit_getattr_core_if(sogou_t)
+
+# dont read /var/lib/dpkg/status
+#!!!! WARNING: 'var_lib_t' is a base type.
+dontaudit sogou_t var_lib_t:{ file dir } read;
+dontaudit sogou_t var_lib_t:file { open getattr };
+dontaudit sogou_t { file_type device_node }:{ chr_file blk_file sock_file lnk_file } { getattr read };
+
