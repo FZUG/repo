@@ -65,11 +65,11 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.5
+Version:           1.9.6
 %if 0%{?with_modsec}
-Release:           3.modsec_%{modsec_version}%{?dist}
+Release:           1.modsec_%{modsec_version}%{?dist}
 %else
-Release:           3%{?dist}
+Release:           1%{?dist}
 %endif
 
 Summary:           A high performance web server and reverse proxy server
@@ -368,19 +368,6 @@ find %{buildroot} -type f -name perllocal.pod -exec rm -f '{}' \;
 find %{buildroot} -type f -empty -exec rm -f '{}' \;
 find %{buildroot} -type f -iname '*.so' -exec chmod 0755 '{}' \;
 
-%if 0%{?with_systemd}
-install -p -D -m 0644 %{SOURCE10} \
-    %{buildroot}%{_unitdir}/%{name}.service
-%else
-install -p -D -m 0755 %{SOURCE15} \
-    %{buildroot}%{_initrddir}/%{name}
-install -p -D -m 0644 %{SOURCE16} \
-    %{buildroot}%{_sysconfdir}/sysconfig/%{name}
-%endif
-
-install -p -D -m 0644 %{SOURCE11} \
-    %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
-
 install -p -d -m 0755 %{buildroot}%{nginx_confdir}/conf.d
 install -p -d -m 0755 %{buildroot}%{nginx_confdir}/default.d
 install -p -d -m 0700 %{buildroot}%{nginx_home}
@@ -388,10 +375,20 @@ install -p -d -m 0700 %{buildroot}%{nginx_home_tmp}
 install -p -d -m 0700 %{buildroot}%{nginx_logdir}
 install -p -d -m 0755 %{buildroot}%{nginx_webroot}
 
-install -p -m 0644 %{SOURCE12} \
-    %{buildroot}%{nginx_confdir}
+%if 0%{?with_systemd}
+install -p -D -m 0644 %{SOURCE10} %{buildroot}%{_unitdir}/%{name}.service
+%else
+install -p -D -m 0755 %{SOURCE15} %{buildroot}%{_initrddir}/%{name}
+install -p -D -m 0644 %{SOURCE16} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+%endif
+
+install -p -D -m 0644 %{SOURCE11} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -p    -m 0644 %{SOURCE12} %{buildroot}%{nginx_confdir}
+
 %if 0%{?rhel} < 7 && ! 0%{?fedora}
-    sed -i 's|/run/%{name}.pid|/var/run/%{name}.pid|' %{buildroot}%{nginx_confdir}/%{name}.conf
+    sed -i 's|run|var/run|' \
+        %{buildroot}%{nginx_confdir}/%{name}.conf \
+        %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
 %endif
 
 %if 0%{?with_modsec}
@@ -411,12 +408,12 @@ EOF
 %if 0%{?with_modsec_crs}
 pushd owasp-modsecurity-crs-*
 install -d %{buildroot}%{_datadir}/%{name}/modsecurity.d/{base,optional,experimental,slr}_rules
-install -m0644 modsecurity_crs_10_setup.conf.example \
+install -m 0644 modsecurity_crs_10_setup.conf.example \
     %{buildroot}%{_sysconfdir}/%{name}/modsecurity.d/modsecurity_crs_10_config.conf
-install -m0644 base_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/
-install -m0644 optional_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/optional_rules/
-install -m0644 experimental_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/experimental_rules/
-install -m0644 slr_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/slr_rules/
+install -m 0644 base_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/
+install -m 0644 optional_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/optional_rules/
+install -m 0644 experimental_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/experimental_rules/
+install -m 0644 slr_rules/* %{buildroot}%{_datadir}/%{name}/modsecurity.d/slr_rules/
 
 # activate base_rules
 for f in `ls %{buildroot}%{_datadir}/%{name}/modsecurity.d/base_rules/`; do
@@ -426,11 +423,7 @@ popd
 %endif
 %endif
 
-install -p -m 0644 %{SOURCE100} \
-    %{buildroot}%{nginx_webroot}
-install -p -m 0644 %{SOURCE101} %{SOURCE102} \
-    %{buildroot}%{nginx_webroot}
-install -p -m 0644 %{SOURCE103} %{SOURCE104} \
+install -p -m 0644 %{S:100} %{S:101} %{S:102} %{S:103} %{S:104} \
     %{buildroot}%{nginx_webroot}
 
 install -p -D -m 0644 %{_builddir}/%{name}-%{version}/man/nginx.8 \
@@ -561,6 +554,9 @@ fi
 
 
 %changelog
+* Thu Oct 29 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.6-1.modsec_2.9.0
+- update to upstream release 1.9.6
+
 * Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.5-3.modsec_2.9.0
 - support el5
 - add ngx_lua, ngx_echo module
