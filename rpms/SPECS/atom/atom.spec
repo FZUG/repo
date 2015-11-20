@@ -8,11 +8,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 7e902bc31ee4ad446c25d5d64c46871645be0dbb
+%global _commit fb5b1ba7f394e7c970d04d29af551d81c2fd277b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.2.1
+Version: 1.2.3
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hackable text editor for the 21st century
 
@@ -98,6 +98,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_datadir}/icons/hicolor/
 
 %changelog
+* Sat Nov 21 2015 mosquito <sensor.wen@gmail.com> - 1.2.3-1.gitfb5b1ba
+- Release 1.2.3
 * Sat Nov 14 2015 mosquito <sensor.wen@gmail.com> - 1.2.1-1.git7e902bc
 - Release 1.2.1
 * Wed Nov 04 2015 mosquito <sensor.wen@gmail.com> - 1.1.0-1.git402f605
