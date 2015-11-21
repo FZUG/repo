@@ -1,15 +1,19 @@
 #!/bin/bash
 # Description: download google chrome browser.
 # Author: mosquito <sensor.wen@gmail.com>
-# Date: 2015.9.8
+# Date: 2015.11.21
 # Changelog:
 #   0.1(2015.6.2) - Initial version
 #   0.2(2015.9.8) - Refactoring
+#   0.3(2015.11.21) - Add DMG version
 
 # Download rpm
-echo "-> download rpm"
+#echo "-> download rpm"
 Prefix="/path/to/chrome/"
 Dist="${Prefix}rpm/"
+
+# chrome version
+curl -so ${Prefix}version "http://omahaproxy.appspot.com/all"
 
 URL="https://dl.google.com/linux/chrome/rpm/stable/"
 Name="google-chrome-unstable google-chrome-beta google-chrome-stable"
@@ -46,7 +50,7 @@ gpgcheck=0
 EOF
 
 # Download deb
-echo "-> download deb"
+#echo "-> download deb"
 URL="http://dl.google.com/linux/chrome/deb/dists/stable/"
 Platform="amd64 i386"
 MetaFile="Release Packages Packages.gz Packages.bz2"
@@ -77,11 +81,12 @@ deb http://repo.fdzh.org/chrome/deb/ stable main
 EOF
 
 # Download dmg
-echo "-> download dmg"
+#echo "-> download dmg"
 URL="https://dl.google.com/chrome/mac/"
 Name="stable beta dev canary"
 PkgName="googlechrome"
 Dist="${Prefix}dmg/"
+GetVers="${Prefix}version"
 
 mkdir -p $Dist
 for Pkg in $Name; do
@@ -90,12 +95,13 @@ for Pkg in $Name; do
     else
         ChromeURL="$URL$Pkg/${PkgName}.dmg"
     fi
-    Output="${Dist}google-chrome-${Pkg}.dmg"
+    Vers=`awk -F, '/mac/&&/'$Pkg'/{print $3}' $GetVers`
+    Output="${Dist}google-chrome-${Pkg}-${Vers}.dmg"
     rm -f $Output; axel -q -n4 "$ChromeURL" -o "$Output"
 done
 
 # Download 32bit exe
-echo "-> download exe"
+#echo "-> download exe"
 UUID="8a69d345-d564-463c-aff1-a69d9e530f96"
 URL="http://clients2.google.com/service/update2/crx?x=id={$UUID}%26uc"
 Dist="${Prefix}exe/"
