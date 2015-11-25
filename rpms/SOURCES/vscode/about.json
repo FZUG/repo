@@ -1,0 +1,48 @@
+	"dataFolderName": ".vscode",
+	"downloadUrl": "https://code.visualstudio.com",
+	"welcomePage": "resources/welcome.md",
+	"icons": {
+		"application": {
+			"png": "resources/linux/vscode.png",
+			"icns": "resources/darwin/vscode.icns",
+			"ico": "resources/win32/vscode.ico"
+		},
+		"file": {
+			"icns": "resources/darwin/vscode_file.icns",
+			"ico": "resources/win32/vscode_file.ico"
+		}
+	},
+	"updateUrl": "https://ticino-builds.azurewebsites.net",
+	"expiryDate": 1485817200000,
+	"expiryUrl": "http://go.microsoft.com/fwlink/?LinkID=533481",
+	"extensionsGallery": {
+		"serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+		"itemUrl": "https://marketplace.visualstudio.com/items"
+	},
+	"crashReporter": {
+		"productName": "VSCode",
+		"companyName": "Microsoft",
+		"submitUrl": "https://ticinocrashreporter.azurewebsites.net/crash",
+		"extra": {
+			"vscode_sessionId": "$(sessionId)",
+			"vscode_version": "$(version)",
+			"vscode_commit": "$(commit)"
+		}
+	},
+	"enableTelemetry": true,
+	"aiConfig": {
+		"key": "8aa6e059-82b6-46f6-8138-5a43aa3dd621",
+		"asimovKey": "AIF-444c3af9-8e69-4462-ab49-4191e6ad1916"
+	},
+	"sendASmile": {
+		"submitUrl": "https://sendvsfeedback.cloudapp.net/api/verbatim",
+		"reportIssueUrl": "http://go.microsoft.com/fwlink/?LinkId=534872",
+		"requestFeatureUrl": "http://go.microsoft.com/fwlink/?LinkID=533482"
+	},
+	"documentationUrl": "http://go.microsoft.com/fwlink/?LinkID=533484#vscode",
+	"releaseNotesUrl": "http://go.microsoft.com/fwlink/?LinkID=533483#vscode",
+	"twitterUrl": "http://go.microsoft.com/fwlink/?LinkID=533687",
+	"requestFeatureUrl": "http://go.microsoft.com/fwlink/?LinkID=533482",
+	"reportIssueUrl": "http://go.microsoft.com/fwlink/?LinkId=534872",
+	"licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=533485#vscode",
+	"privacyStatementUrl": "http://go.microsoft.com/fwlink/?LinkID=528096&clcid=0x409",
