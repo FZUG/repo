@@ -45,8 +45,10 @@ cat > ${Prefix}google-chrome-mirrors.repo <<EOF
 name=Google Chrome mirrors
 #baseurl=http://dl.google.com/linux/chrome/rpm/stable/\$basearch
 baseurl=http://repo.fdzh.org/chrome/rpm/\$basearch
+gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+gpgcheck=1
 enabled=1
-gpgcheck=0
+skip_if_unavailable=1
 EOF
 
 # Download deb
