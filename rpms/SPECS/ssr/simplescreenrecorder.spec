@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 55d2c5cb8877454a79692e29a5582d52d8735623
+%global _commit c580a19e6ab21146bffa74fe2ff5f774c53ec20f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           simplescreenrecorder
-Version:        0.3.3
-Release:        2.git%{_shortcommit}%{?dist}
+Version:        0.3.6
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        A feature-rich screen recorder that supports X11 and OpenGL
 Summary(zh_CN): 一个功能丰富的屏幕录像软件, 支持录制 X11 和 OpenGL 程序
 
@@ -118,6 +118,9 @@ gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor ||:
 %{_libdir}/libssr-glinject.so
 
 %changelog
+* Sun Dec 06 2015 mosquito <sensor.wen@gmail.com> - 0.3.6-1.gitc580a19
+- Update version to 0.3.6-1.gic580a19
+
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-2.git55d2c5c
 - Update version to 0.3.3-2.git55d2c5c
 
