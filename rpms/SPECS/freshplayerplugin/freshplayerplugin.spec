@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 8cc1005bdb1651af8b105bd5630d539e35634b00
+%global _commit 3c6567a8c32a69bfeb20b280b9dcf060b5859954
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name: freshplayerplugin
-Version: 0.3.2
+Version: 0.3.3
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
@@ -62,9 +62,9 @@ make %{?_smp_mflags}
 
 %install
 # library file
-chrpath -d build/libfreshwrapper-pepperflash.so
+chrpath -d build/libfreshwrapper-flashplayer.so
 install -d %{buildroot}%{_libdir}/mozilla/plugins/
-install -m 755 build/libfreshwrapper-pepperflash.so \
+install -m 755 build/libfreshwrapper-flashplayer.so \
     %{buildroot}%{_libdir}/mozilla/plugins/
 
 # config file
@@ -80,10 +80,12 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %defattr(-,root,root,-)
 %doc README.md data/freshwrapper.conf.example doc/*.md
 %license LICENSE
-%{_sysconfdir}/freshwrapper.conf
+%config(noreplace) %{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1.git3c6567a
+- Update version to 0.3.3-1.git3c6567a
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.3.2-1.git8cc1005
 - Update version to 0.3.2-1.git8cc1005
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.3.1-1.gitacb0ee4
