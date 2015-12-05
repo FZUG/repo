@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit c05205092e8c57f975c33bd2829875f89e83e290
+%global _commit bbf096ece7d451bbfa0b0a2b38a955e4d1f938ac
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		moonplayer
-Version:	0.34
+Version:	0.49
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	Video player that can play online videos
 Summary(zh_CN):	一款可点播优酷, 土豆等网站在线视频的视频播放器
@@ -23,9 +23,9 @@ Source2:	plugin_funshion.py
 Source3:	plugin_iqiyi.py
 Source4:	plugin_sohu.py
 
-BuildRequires:	qt-devel
+#BuildRequires:	qt-devel
 BuildRequires:	python-devel
-#BuildRequires:	qt5-qtbase-devel
+BuildRequires:	qt5-qtbase-devel
 Requires:	mplayer
 Requires:	mencoder
 
@@ -42,7 +42,7 @@ Video player that can play online videos from youku, tudou etc.
 #export CPATH="%%{_includedir}/qt5/QtWidgets:$CPATH"
 mkdir src/build
 pushd src/build
-%{_qt4_qmake} ..
+%{_qt5_qmake} ..
 make %{?_smp_mflags}
 popd
 
@@ -57,13 +57,17 @@ install -m 0644 %{S:4} %{buildroot}%{_datadir}/%{name}/plugins/
 
 %files
 %defattr(-,root,root,-)
-%doc README.md LICENSE
+%doc README.md
+%license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}/*
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.49-1.gitbbf096e
+- Update version to 0.49-1.gitbbf096e
+
 * Wed Jul 15 2015 mosquito <sensor.wen@gmail.com> - 0.34-1.gitc052050
 - Update version to 0.34-1.gitc052050
 

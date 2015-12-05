@@ -7,26 +7,28 @@ from utils import convert_to_utf8, list_links
 import moonplayer
 
 ## hosts
-hosts = ('tv.sohu.com',)
+hosts = ('tv.sohu.com', 'my.tv.sohu.com')
     
 ##--------##
 ## search ##
 ##--------##
 def search(kw, page):
-    url = 'http://so.tv.sohu.com/mts?box=1&wd=' + kw + '&p=' + str(page)
+    kw = kw.replace(' ', '+')
+    url = 'http://so.tv.sohu.com/mts?c=0&v=0&length=0&limit=0&o=0&st=&wd=' + kw + '&p=' + str(page) 
     moonplayer.get_url(url, search_cb, kw)
     
 def search_cb(page, kw):
     page = convert_to_utf8(page)
     #tv series
-    links = list_links(page, 'http://so.tv.sohu.com/show/', kw)
-    links += list_links(page, 'http://tv.sohu.com/item/', kw)
+    links = list_links(page, 'http://so.tv.sohu.com/show/')
+    links += list_links(page, 'http://tv.sohu.com/item/')
     n_series = len(links) / 2
     #movies
-    links += list_links(page, 'http://tv.sohu.com/2', kw)
+    links += list_links(page, 'http://tv.sohu.com/2')
     n = len(links) / 2
     #others
-    links += list_links(page, 'http://my.tv.sohu.com/us/', kw)
+    links += list_links(page, 'http://my.tv.sohu.com/us/')
+    links += list_links(page, 'http://my.tv.sohu.com/pl/')
     #show
     moonplayer.show_list(links)
     for i in xrange(n_series):
@@ -103,10 +105,14 @@ def parse_cb2(page, msg):
     su = data[u'su']
     ip = page[u'allot']
     name = data[u'tvName'].encode('UTF-8')
+    tvid = page[u'tvid']
+    files = [s.replace('http://data.vod.itc.cn', '') for s in data[u'clipsURL']]
     result = []
     i = 0
     #make cdnlist
-    cdnlist = ['http://%s/cdnList?new=%s&vid=%s' % (ip, new, vid) for new in su]
+    cdnlist = []
+    for i in xrange(len(su)):
+        cdnlist.append('http://%s/yp2p?prot=9&prod=flash&pt=1&file=%s&new=%s&vid=%s&tvid=%s' % (ip, files[i], su[i], vid, tvid))
     data = {'result': [], 'cdnlist': cdnlist, 'name': name, 'options': msg[2]}
     moonplayer.get_url(cdnlist[0], parse_cdnlist, data)
     
@@ -137,11 +143,15 @@ def parse_my_cb(page, msg):
     vid = msg[0]
     su = data[u'su']
     ip = page[u'allot']
+    tvid = page[u'tvid']
     name = data[u'tvName'].encode('UTF-8')
+    files = [s.replace('http://data.vod.itc.cn', '') for s in data[u'clipsURL']]
     result = []
     i = 0
     #make cdnlist
-    cdnlist = ['http://%s/cdnList?new=%s&vid=%s' % (ip, new, vid) for new in su]
+    cdnlist = []
+    for i in xrange(len(su)):
+        cdnlist.append('http://%s/yp2p?prot=9&prod=flash&pt=1&file=%s&new=%s&vid=%s&tvid=%s' % (ip, files[i], su[i], vid, tvid))
     data = {'result': [], 'cdnlist': cdnlist, 'name': name, 'options': msg[1]}
     moonplayer.get_url(cdnlist[0], parse_cdnlist, data)
     
@@ -152,6 +162,7 @@ def parse_cdnlist(page, data):
     i = len(result) / 2
     result.append(data['name'] + '_' + str(i) + '.mp4') 
     result.append(url)
+    i += 1
     if i < len(cdnlist):
         moonplayer.get_url(cdnlist[i], parse_cdnlist, data)
     elif data['options'] & moonplayer.OPT_DOWNLOAD:
