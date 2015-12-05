@@ -14,19 +14,22 @@ Buildarch:	noarch
 Requires:	pygtk2 ffmpeg id3v2
 
 %description
-traGtor is a graphical user interface (GUI) for the awesome conversion tool ffmpeg for the use with Linux-OS.
-It is written in Python and uses the GTK-Engine (standard in GNOME desktops) for displaying its interface.
-The goal of traGtor is not to bring you all of the features ffmpeg offers, but to be a fast
-and user friendly choice for converting a single media file into any other format.
-For a full ffmpeg featuring GUI please refer to the other great projects listed below.
-This GUI is written for not dealing too much with command lines, options and parameters and so on,
-and refers mostly to the real keyboard haters.
+traGtor is a graphical user interface (GUI) for the awesome conversion tool
+ffmpeg for the use with Linux-OS. It is written in Python and uses the
+GTK-Engine (standard in GNOME desktops) for displaying its interface. The goal
+of traGtor is not to bring you all of the features ffmpeg offers, but to be
+a fast and user friendly choice for converting a single media file into any
+other format. For a full ffmpeg featuring GUI please refer to the other great
+projects listed below. This GUI is written for not dealing too much with
+command lines, options and parameters and so on, and refers mostly to the
+real keyboard haters.
 
-One may edit the command line sent to ffmpeg to fit all of his needs,
-but for those cases the more command line oriented tools (with nice GUIs too) could be the better choice.
-But if you need a tool for click oriented and flawless conversion like stripping an mp3 from a youtube movie,
-resizing and recoding a clip to fit your mobiles screen or just changing the format of a movie-file
-to be able to play it in a flash-media-player  traGor may be Mr. Right for you.
+One may edit the command line sent to ffmpeg to fit all of his needs, but for
+those cases the more command line oriented tools (with nice GUIs too) could be
+the better choice. But if you need a tool for click oriented and flawless
+conversion like stripping an mp3 from a youtube movie, resizing and recoding
+a clip to fit your mobiles screen or just changing the format of a movie-file
+to be able to play it in a flash-media-player traGor may be Mr.Right for you.
 
 %prep
 %setup -q -c %{name}
@@ -39,7 +42,7 @@ cat > usr/share/applications/tragtor.desktop << EOF
 [Desktop Entry]
 Name=traGtor
 GenericName=traGtor
-Comment=traGtor - a GUI for FFmpeg for audio and video-conversion
+Comment=a GUI for FFmpeg for audio and video-conversion
 Type=Application
 Exec=tragtor %F
 Icon=tragtor
