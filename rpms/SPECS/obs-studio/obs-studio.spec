@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 80b20abde2690cc8a9b0459eb768903aa72d9b1e
+%global _commit 725a36bc0f7c12dcfece44cf5c431e46acc55a74
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.12.0
+Version:    0.12.3
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -104,6 +104,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_includedir}/obs
 
 %changelog
+* Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.12.3-1.git725a36b
+- Update to 0.12.3-1.git725a36b
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.12.0-1.git80b20ab
 - Update to 0.12.0-1.git80b20ab
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.11.3-1.git4aef24a
