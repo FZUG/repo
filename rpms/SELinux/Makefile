@@ -9,14 +9,14 @@ pp: ${TARGET:%.te=%.pp.bz2}
 
 %.pp.bz2: %.pp
 	@echo Compressing $^ -\> $@; \
-	bzip2 -9 $^
+	bzip2 -f -9 $^
 
 %.cil: %.pp
 	@if [ -x /usr/libexec/selinux/hll/pp ]; then \
 		echo Converting $^ -\> $@; \
 		cat $^ | /usr/libexec/selinux/hll/pp > $@; \
 		echo Compressing $@ -\> $@.bz2; \
-		bzip2 -9 $@; \
+		bzip2 -f -9 $@; \
 	fi
 
 %.pp: %.te
