@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit c20734e86aac8175b3a801b5249ab834560ee1d1
+%global _commit 826e8a2d9744590c95a2e2ff61498fff67b13d15
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		doubanfm-qt
 Version:	2.2
-Release:	1.git%{_shortcommit}%{?dist}
+Release:	2.git%{_shortcommit}%{?dist}
 Summary:	A douban.fm client written in Qt5
 Summary(zh_CN):	基于 Qt5 编写的 douban.fm 客户端
 
@@ -23,6 +23,7 @@ BuildRequires:	qt5-qtmultimedia-devel
 BuildRequires:	pulseaudio-libs-devel
 Requires:	gstreamer-plugins-ugly
 Requires:	gstreamer1-plugins-ugly
+Requires:	gstreamer1-libav
 
 %description
 A douban.fm client written in pure Qt5.
@@ -71,12 +72,15 @@ EOF
 
 %files
 %defattr(-,root,root,-)
-%doc ChangeLog Copyright README.md
+%doc ChangeLog README.md
+%license Copyright
 %{_bindir}/%{name}
 %{_datadir}/icons/%{name}.png
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 2.2-2.git826e8a2
+- Update version to 2.2-2.git826e8a2
 * Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 2.2-1.gitc20734e
 - Update version to 2.2-1.gitc20734e
 * Wed Jan  7 2015 mosquito <sensor.wen@gmail.com> - 2.2git20140611-2
