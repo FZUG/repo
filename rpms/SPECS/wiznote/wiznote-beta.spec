@@ -1,16 +1,17 @@
+%global __strip_shared %(test $(rpm -E%?fedora) -eq 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
 %global debug_package %{nil}
 %global project WizQTClient
 %global repo %{project}
 
 # commit
-%global _commit 56bca7d81e7586e06ec26a86f9740076f7743e14
+%global _commit fdd16c920336fbc10e96fd2f60b65b00650e0ca4
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:		wiznote-beta
-Version:	2.2.5
-Release:	2.git%{_shortcommit}%{?dist}
+Version:	2.3.1
+Release:	1.git%{_shortcommit}%{?dist}
 Summary:	WizNote QT Client
 Summary(zh_CN):	为知笔记 Qt 客户端
 
@@ -134,6 +135,9 @@ done
 rm -rf %{buildroot}%{_datadir}/licenses/
 rm -rf %{buildroot}%{_datadir}/icons/hicolor/{512x512,8x8}
 
+# stripe shared files
+%{__strip_shared}
+
 %post
 update-desktop-database -q ||:
 gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
@@ -155,6 +159,9 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_datadir}/%{name}/*
 
 %changelog
+* Sun Dec 06 2015 mosquito <sensor.wen@gmail.com> - 2.3.1-1.gitfdd16c9
+- Update version to 2.3.1-1.gitfdd16c9
+- Strip shared files
 * Sun Oct 18 2015 mosquito <sensor.wen@gmail.com> - 2.2.5-2.git56bca7d
 - Do not use the LD_LIBRARY_PATH variable for main program
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 2.2.5-1.git56bca7d
