@@ -1,0 +1,36 @@
+diff --git a/src/sdk/knlocalemanager.cpp b/src/sdk/knlocalemanager.cpp
+index 7eded34..3da5195 100644
+--- a/src/sdk/knlocalemanager.cpp
++++ b/src/sdk/knlocalemanager.cpp
+@@ -81,7 +81,7 @@ void KNLocaleManager::loadLanguageFiles(const QString &languageDir)
+     //the default embedded language.
+     addLanguage("English", "English", "", QPixmap("://public/English.png"));
+     //Load the language in application default folder.
+-    loadLanguageInFolder(qApp->applicationDirPath()+"/Language");
++    loadLanguageInFolder("/usr/share/mu/locale");
+     //Load the language in the language folder.
+     loadLanguageInFolder(languageDir);
+ }
+@@ -240,9 +240,9 @@ inline void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
+     for(auto i : folderList)
+     {
+         //Use the file name as key.
+-        QString &&key=i.fileName();
++        QString &&key=i.fileName().section('.',0,0);
+         //Ignore if the current info is not folder, dot(.) and dot-dot(..).
+-        if(!i.isDir() || key=="." || key=="..")
++        if(i.isDir() || key=="." || key=="..")
+         {
+             continue;
+         }
+@@ -252,8 +252,8 @@ inline void KNLocaleManager::loadLanguageInFolder(const QString &dirPath)
+         // | |-Simplified_Chinese.qm        Translation file (.qm)
+         // | |-Simplified_Chinese.png       Translation icon (.png)
+         //Get the language file and the icon file.
+-        QFileInfo qmInfo(i.absoluteFilePath()+"/"+key+".qm"),
+-                  iconInfo(i.absoluteFilePath()+"/"+key+".png");
++        QFileInfo qmInfo("/usr/share/mu/locale/"+key+".qm"),
++                  iconInfo("/usr/share/mu/locale/"+key+".png");
+         //If there's no qm file, then ignore this folder.
+         if(qmInfo.exists())
+         {

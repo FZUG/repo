@@ -1,13 +1,14 @@
+%global __strip_shared %(test $(rpm -E%?fedora) -eq 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
 %global debug_package %{nil}
 %global project Mu
 %global repo %{project}
 
 # commit
-%global _commit c1c72c78fcf42e75751bf6c66cdadf272d0d4879
+%global _commit 0fdf1c60b121c2ec58bcedb5488128eeb053f2e0
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    mu
-Version: 0.9.147
+Version: 0.9.184
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Incredible music manager
 Summary(zh_CN): 为音乐而生的播放器
@@ -16,14 +17,16 @@ License: GPLv2
 Url:     https://kreogist.github.io/Mu
 Source0: https://github.com/Kreogist/Mu/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
+# https://github.com/Kreogist/Mu/issues/17
+Patch0:  mu_translation.patch
+
 BuildRequires: qt5-qtbase-devel
-BuildRequires: phonon-qt5-devel
+BuildRequires: qt5-linguist
 BuildRequires: ffmpeg-devel
+BuildRequires: gstreamer1-devel
 BuildRequires: desktop-file-utils
-Requires: phonon-qt5-backend-gstreamer
 Requires: gstreamer1-plugins-bad-free
 Requires: gstreamer1-plugins-ugly
-Requires: gstreamer1-libav
 
 %description
 Kreogist Mu is a cross-platform incredible music manager/player based on Qt.
@@ -59,15 +62,17 @@ Kreogist Mu 是一款跨平台媒体管理器, 基于 Qt 开发.
 
 %prep
 %setup -q -n %repo-%{_commit}
-sed -i '/-m64/d' src/src.pro
+%patch0 -p1
+sed -i 's|lrelease|lrelease-qt5|' src/src.pro
 
 %build
 export CPATH="`pkg-config --variable=includedir libavformat`"
 mkdir build
 pushd build
 CONFIG+="release linux" \
-%{_qt5_qmake} ..
+%{qmake_qt5} ..
 make %{?_smp_mflags}
+lrelease-qt5 ../src/src.pro
 popd
 
 %install
@@ -91,6 +96,15 @@ StartupNotify=false
 MimeType=audio/flac;audio/aac;audio/mp2;audio/mp4;audio/mpeg;audio/x-ape;audio/x-musepack;audio/x-aif;audio/x-aiff;audio/oga;audio/ogg;audio/x-flac+ogg;audiox-vorbis+ogg;audio/x-opus+ogg;audio/x-speex;audio/x-tta;audio/x-wav;audio/x-wavpack;application/x-cue;x-content/audio-player
 EOF
 
+# translation
+install -d %{buildroot}%{_datadir}/%{name}/locale/
+%{__cp} src/i18n/Simplified*.{qm,png}  %{buildroot}%{_datadir}/%{name}/locale/
+%{__cp} src/i18n/Traditional*.{qm,png} %{buildroot}%{_datadir}/%{name}/locale/
+%{__cp} src/i18n/Japanese.{qm,png}     %{buildroot}%{_datadir}/%{name}/locale/
+
+# stripe shared files
+%{__strip_shared}
+
 %post
 update-desktop-database -q ||:
 
@@ -100,9 +114,15 @@ update-desktop-database -q ||:
 %license LICENSE
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/*
+%{_datadir}/%{name}/*
 %{_bindir}/%{name}
 
 %changelog
+* Mon Dec  7 2015 mosquito <sensor.wen@gmail.com> - 0.9.184-1.git0fdf1c6
+- Update to 0.9.184-1.git0fdf1c6
+- Fix translation, see https://github.com/Kreogist/Mu/issues/17
+- Strip shared files
+- Hardened package
 * Sat Oct 17 2015 mosquito <sensor.wen@gmail.com> - 0.9.147-1.gitc1c72c7
 - Update to 0.9.147-1.gitc1c72c7
 * Wed Feb  4 2015 mosquito <sensor.wen@gmail.com> - 0.7.0git20150203-1
