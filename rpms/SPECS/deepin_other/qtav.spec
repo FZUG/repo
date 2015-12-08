@@ -2,20 +2,20 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit 37f4a540b2aa2b0fc924d97360f2d2978c80eab7
+%global _commit 83f523657fc50b9bea750726b40b630fd32a9eb9
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-%global with_llvm 1
+%global with_llvm 0
 
-Name: qtav
+Name:    qtav
 Version: 1.8.0
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
 License: LGPLv2.1
-Group: Development/Libraries
-Url: https://github.com/wang-bin/QtAV
+Group:   Development/Libraries
+Url:     http://www.qtav.org
 Source0: https://github.com/wang-bin/QtAV/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: qt5-qtbase-devel
@@ -217,18 +217,20 @@ export CPATH="`pkg-config --variable=includedir libavformat`"
 mkdir build; pushd build
 # debug mode: CONFIG+=debug
 %if 0%{?with_llvm}
-%{_qt5_qmake} "CONFIG+=recheck" -spec linux-clang ..
+%{qmake_qt5} "CONFIG+=recheck" -spec linux-clang ..
 %else
-%{_qt5_qmake} "CONFIG+=recheck" "QMAKE_CXXFLAGS_RELEASE-=-O2" "QMAKE_CXXFLAGS+=-O1" ..
+%{qmake_qt5} "CONFIG+=recheck" ..
 %endif
 make %{?_smp_mflags}
 
 %install
 %make_install INSTALL_ROOT=%{buildroot} -C build
 
-rm -rf %{buildroot}%{_datadir}/doc/*
+rm -rf %{buildroot}%{_datadir}/{doc,icons}
 rm -rf %{buildroot}%{_qt5_archdatadir}/bin/libcommon.*
 rm -rf %{buildroot}%{_qt5_headerdir}/*.h
+
+# link execution files
 install -d %{buildroot}%{_bindir}
 ln -sfv %{_qt5_bindir}/player %{buildroot}%{_bindir}
 ln -sfv %{_qt5_bindir}/QMLPlayer %{buildroot}%{_bindir}
@@ -238,25 +240,30 @@ install -D src/QtAV.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/QtAV
 ln -sfv %{_libdir}/libQtAV.so %{buildroot}%{_libdir}/libQt5AV.so
 ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
+# strip files
+strip --strip-all --verbose %{buildroot}%{_qt5_bindir}/*layer
+
 %post devel -p /sbin/ldconfig
+%post qml-module -p /sbin/ldconfig
 %post -n lib%{name} -p /sbin/ldconfig
 %post -n lib%{name}widgets -p /sbin/ldconfig
 
 %post players
-update-desktop-database -q ||:
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/usr/bin/update-desktop-database -q ||:
 
 %postun devel -p /sbin/ldconfig
+%postun qml-module -p /sbin/ldconfig
 %postun -n lib%{name} -p /sbin/ldconfig
 %postun -n lib%{name}widgets -p /sbin/ldconfig
 
 %postun players
 if [ $1 -eq 0 ]; then
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
-update-desktop-database -q ||:
+/usr/bin/update-desktop-database -q ||:
 
 %files sdk
 %defattr(-,root,root,-)
@@ -279,8 +286,10 @@ update-desktop-database -q ||:
 %defattr(-,root,root,-)
 %doc README.md Changelog
 %license lgpl-2.1.txt
-%{_qt5_headerdir}/QtAV/*
-%{_qt5_headerdir}/QtAVWidgets/*
+%{_qt5_headerdir}/QtAV/*.h
+%{_qt5_headerdir}/QtAV/QtAV
+%{_qt5_headerdir}/QtAVWidgets/*.h
+%{_qt5_headerdir}/QtAVWidgets/QtAVWidgets
 %{_libdir}/libQtAV.so
 %{_libdir}/libQtAV.prl
 %{_libdir}/libQt5AV.so
@@ -323,6 +332,9 @@ update-desktop-database -q ||:
 
 
 %changelog
+* Tue Dec  8 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-3.git83f5236
+- Update version to 1.8.0-3.git83f5236
+- Hardened package
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-2.git37f4a54
 - Update version to 1.8.0-2.git37f4a54
 * Thu Sep  3 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-1.git8f8ae59
