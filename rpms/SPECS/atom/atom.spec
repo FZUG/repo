@@ -8,11 +8,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 05ef4c0e853c123f372f4d13310a92ea47121930
+%global _commit 3937312936f09c0279186c96423cc2b5a3be480f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.2.4
+Version: 1.3.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hackable text editor for the 21st century
 
@@ -77,14 +77,16 @@ for i in 1024 512 256 128 64 48 32 24 16; do
 done
 
 %post
-update-desktop-database -q ||:
-touch --no-create %{_datadir}/icons/hicolor ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/usr/bin/update-desktop-database -q ||:
 
 %postun
-update-desktop-database -q ||:
-touch --no-create %{_datadir}/icons/hicolor ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database -q ||:
 
 %files
 %defattr(-,root,root,-)
@@ -100,6 +102,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git3937312
+- Release 1.3.1
 * Thu Nov 26 2015 mosquito <sensor.wen@gmail.com> - 1.2.4-1.git05ef4c0
 - Release 1.2.4
 * Sat Nov 21 2015 mosquito <sensor.wen@gmail.com> - 1.2.3-1.gitfb5b1ba
