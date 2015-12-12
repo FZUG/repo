@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit b8415f83e7f26a907309e78a2dd343a7b9063199
+%global _commit 9157181c09a7c630b633f41e0d108490aae8751f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
@@ -15,7 +15,7 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:		python-html2text
-Version:	2015.6.21
+Version:	2015.11.4
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	Converts a page of HTML into plain ASCII text
 Summary(zh_CN):	转换页面中的 HTML 为 ASCII 字符
@@ -86,7 +86,7 @@ install -Dm 0644 python2/lib/html2text/config.py %{buildroot}%{python_sitelib}/h
 install -Dm 0644 python2/lib/html2text/compat.py %{buildroot}%{python_sitelib}/html2text/compat.py
 install -Dm 0644 python2/lib/html2text/utils.py %{buildroot}%{python_sitelib}/html2text/utils.py
 install -Dm 0644 python2/lib/html2text/cli.py %{buildroot}%{python_sitelib}/html2text/cli.py
-mv %{buildroot}%{_bindir}/html2text %{buildroot}%{_bindir}/%{name}
+mv %{buildroot}%{_bindir}/{html2text,%{name}}
 
 %if 0%{?with_python3}
 %{__python3} setup.py install -O1 --skip-build --root=%{buildroot}
@@ -95,7 +95,7 @@ install -Dm 0644 python3/lib/html2text/config.py %{buildroot}%{python3_sitelib}/
 install -Dm 0644 python3/lib/html2text/compat.py %{buildroot}%{python3_sitelib}/html2text/compat.py
 install -Dm 0644 python3/lib/html2text/utils.py %{buildroot}%{python3_sitelib}/html2text/utils.py
 install -Dm 0644 python3/lib/html2text/cli.py %{buildroot}%{python3_sitelib}/html2text/cli.py
-mv %{buildroot}%{_bindir}/html2text %{buildroot}%{_bindir}/python3-html2text
+mv %{buildroot}%{_bindir}/{,python3-}html2text
 %endif # with_python3
 
 
@@ -109,7 +109,8 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} coverage run --source=html2text setup.
 
 %files
 %defattr(-,root,root,-)
-%doc AUTHORS.rst COPYING ChangeLog.rst README.md
+%doc AUTHORS.rst ChangeLog.rst README.md
+%license COPYING
 %{_bindir}/%{name}
 %{python_sitelib}/html2text
 %{python_sitelib}/html2text-%{version}-py%{python_version}.egg-info
@@ -117,7 +118,8 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} coverage run --source=html2text setup.
 %if 0%{?with_python3}
 %files -n python3-html2text
 %defattr(-,root,root,-)
-%doc AUTHORS.rst COPYING ChangeLog.rst README.md
+%doc AUTHORS.rst ChangeLog.rst README.md
+%license COPYING
 %{_bindir}/python3-html2text
 %{python3_sitelib}/html2text
 %{python3_sitelib}/html2text-%{version}-py%{python3_version}.egg-info
@@ -125,6 +127,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} coverage run --source=html2text setup.
 
 
 %changelog
+* Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> - 2015.11.4-1.git9157181
+- Update version to 2015.11.4
+
 * Tue Jun 30 2015 mosquito <sensor.wen@gmail.com> - 2015.6.21-1.gitb8415f8
 - Update version to 2015.6.21
 
