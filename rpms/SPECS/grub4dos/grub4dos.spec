@@ -1,15 +1,15 @@
 %global debug_package %{nil}
-%define helpdate 2015-02-09
-%define zhcndate 20150118
+%global helpdate 2015-02-09
+%global zhcndate 20150118
 %global project grub4dos
 %global repo %{project}
 
 # commit
-%global _commit ee3ad5bd4e749c471f6457fdffecc3554b3baf85
+%global _commit c6048e89b7e5c43c1a65a0f5afa330f555d13347
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:		grub4dos
-Version:	0.4.6a.20150915
+Version:	0.4.6a.20151118
 Release:	1.git%{_shortcommit}%{?dist}
 Summary:	This is GNU GRUB, the GRand Unified Bootloader
 Summary(zh_CN):	多功能启动引导管理器
@@ -21,7 +21,7 @@ Url:		https://code.google.com/p/grub4dos-chenall
 Source0:	https://github.com/chenall/grub4dos/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # http://ipxe.org (git clone --depth 1 git://git.ipxe.org/ipxe.git)
 # find . -name ".git*" | xargs rm -f
-Source1:	ipxe-a0f60d2.tar.xz
+#Source1:	ipxe-a0f60d2.tar.xz
 # https://code.google.com/p/grub4dos-help-doc
 # http://bbs.wuyou.net/forum.php?mod=viewthread&tid=185938
 Source2:	%{name}-help-%{helpdate}.chm
@@ -29,6 +29,7 @@ Source3:	https://grub4dos-chenall.googlecode.com/files/unifont.hex.gz
 # git checkout 558e12a9b38613d827117c8da9b8e905c4c0eb2b , patch-chinese.diff
 Source4:	patch-chinese-%{zhcndate}.diff
 
+BuildRequires:	git
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	upx
@@ -87,7 +88,8 @@ Grub4dos 相关信息: <https://code.google.com/p/grub4dos-chenall>
 GNU GRUB 相关信息: <http://www.gnu.org/software/grub/grub.html>
 
 %prep
-%setup -q -a0 -a1 -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{_commit}
+git clone --depth 1 git://git.ipxe.org/ipxe.git
 cp %{S:2} .
 
 %build
@@ -242,6 +244,8 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 %{_datadir}/%{name}
 
 %changelog
+* Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20151118-1
+- Update version to 0.4.6a.20151118
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150915-1
 - Update version to 0.4.6a.20150915
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150807-1
