@@ -8,21 +8,24 @@
 # compatible FFmpeg library included into package.
 %global __requires_exclude (libffmpeg)
 
-Name: opera-stable
-Version: 32.0.1948.25
+Name:    opera-stable
+Version: 34.0.2036.25
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
 Summary(zh_CN): 快速安全的欧朋浏览器
 
-Group: Applications/Internet
+Group:   Applications/Internet
 License: Proprietary
-URL: http://www.opera.com/browser
+URL:     http://www.opera.com/browser
 Source0: http://ftp.opera.com/pub/%{appname}/desktop/%{version}/linux/%{name}_%{version}_amd64.deb
 
 ExclusiveArch: x86_64
-BuildRequires: desktop-file-utils
 BuildRequires: dpkg
+BuildRequires: desktop-file-utils
+Requires: desktop-file-utils
+Requires: /usr/bin/gtk-update-icon-cache
+Requires: /usr/bin/update-mime-database
 
 %description
  Opera is a fast, secure, and user-friendly web browser.
@@ -55,15 +58,18 @@ mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
 # Modify desktop file
 mv %{buildroot}%{_datadir}/applications/%{appname}.desktop \
    %{buildroot}%{_datadir}/applications/%{name}.desktop
-sed  -i -e 's|TryExec=%{appname}|TryExec=%{name}|' \
-	-e 's|Exec=%{appname}|Exec=%{name}|' \
-	-e 's|Icon=%{appname}|Icon=%{name}|' \
-	-e '/Unity/s|^|#|' \
+sed -i -e '
+    s|^TryExec=%{appname}|TryExec=%{name}|
+    s|^Exec=%{appname}|Exec=%{name}|
+    s|^Icon=%{appname}|Icon=%{name}|
+    /Unity/s|^|#|' \
   %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # Rename icon files
-mv %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{appname}.png \
-   %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
+for i in 256x256 128x128 48x48 32x32 16x16; do
+mv %{buildroot}%{_datadir}/icons/hicolor/${i}/apps/%{appname}.png \
+   %{buildroot}%{_datadir}/icons/hicolor/${i}/apps/%{name}.png
+done
 mv %{buildroot}%{_datadir}/pixmaps/%{appname}.xpm \
    %{buildroot}%{_datadir}/pixmaps/%{name}.xpm
 
@@ -78,38 +84,45 @@ desktop-file-install \
 # Fix symlink
 rm -f %{buildroot}%{_bindir}/*
 ln -sfv %{_libdir}/%{name}/%{appname} %{buildroot}%{_bindir}/%{name}
+ln -sfv %{_libdir}/%{name}/lib/libffmpeg.so.34 %{buildroot}%{_libdir}
 
 # Clean files
-rm -rf %{buildroot}%{_datadir}/menu
-rm -rf %{buildroot}%{_datadir}/lintian
+rm -rf %{buildroot}%{_datadir}/{menu,lintian}
 
 %post
 chown root:root "%{_libdir}/%{name}/opera_sandbox"
 chmod 4755 "%{_libdir}/%{name}/opera_sandbox"
 
-update-desktop-database &>/dev/null ||:
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-    %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor ||:
-fi
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/bin/touch --no-create %{_datadir}/mime/packages &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
 
 %postun
-if [ $1 -eq 0 ] ; then
-    touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+    /usr/bin/update-mime-database %{_datadir}/mime &>/dev/null ||:
 fi
-update-desktop-database &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/usr/bin/update-mime-database /usr/share/mime &>/dev/null ||:
 
 %files
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
 %{_libdir}/%{name}/*
-%{_datadir}/pixmaps/*
-%{_datadir}/applications/*
-%{_datadir}/icons/hicolor/*
+%{_libdir}/libffmpeg.so.*
+%{_datadir}/pixmaps/%{name}.xpm
+%{_datadir}/mime/packages/%{name}.xml
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.25-1
+- Update to 34.0.2036.25
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> -32.0.1948.25-1
 - Update to 32.0.1948.25
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> -31.0.1889.99-1
