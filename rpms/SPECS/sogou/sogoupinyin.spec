@@ -28,23 +28,30 @@
 %endif # with_selinux
 
 Name:       sogoupinyin
-Version:    2.0.0.0066
-Release:    2%{?dist}
+Version:    2.0.0.0068
+Release:    1%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
 License:    Proprietary and GPLv2
 URL:        http://pinyin.sogou.com/linux
 Group:      Applications/System
-Source0:    http://cdn2.ime.sogou.com/dl/index/1445002254/%{name}_%{version}_amd64.deb
-Source1:    http://cdn2.ime.sogou.com/dl/index/1445001029/%{name}_%{version}_i386.deb
+Source0:    http://cdn2.ime.sogou.com/dl/index/1446541585/%{name}_%{version}_amd64.deb
+Source1:    http://cdn2.ime.sogou.com/dl/index/1446541532/%{name}_%{version}_i386.deb
 Source11:   %{name}.te
 Source12:   %{name}.fc
 Source13:   %{name}.if
 Source14:   Makefile
 
-BuildRequires:  dpkg
-Requires:   fcitx >= 4.2.8.3
+BuildRequires: dpkg
+Requires(post): /usr/bin/glib-compile-schemas
+Requires(post): /usr/bin/gtk-update-icon-cache
+Requires(post): /usr/bin/update-mime-database
+Requires(post): desktop-file-utils
+Requires(postun): desktop-file-utils
+Requires:   imsettings im-chooser
+Requires:   fcitx-qt4 fcitx-qt5
+Requires:   fcitx-gtk2 fcitx-gtk3
 Requires:   fcitx-configtool
 Conflicts:  fcitx-sogoupinyin
 Obsoletes:  sogou-pinyin < %{version}-%{release}
@@ -109,18 +116,15 @@ Requires(post): libselinux-utils
 SELinux policy modules for use with %{name}.
 
 If you do not want to %{name} access the network. Execute this command.
-
   $ sudo setsebool -P sogou_access_network=0 # default: true
 
 Allow sogou access home dirs:
-
   $ sudo setsebool sogou_enable_homedirs=1   # default: false
 
 %description selinux -l zh_CN
 适用于 %{name} 的 SELinux 策略模块.
 
 如果您不希望 %{name} 访问网络, 请执行以下命令:
-
   $ sudo setsebool -P sogou_access_network=0 # 默认: true
 
 允许 sogou 访问 home 目录:
@@ -165,7 +169,7 @@ if [ -x /usr/bin/im-config ] && [ ! -f $HOME/.xinputrc ]; then
 elif [ -x /usr/bin/imsettings-switch ] && [ ! -f $HOME/.config/imsettings/xinputrc ]; then
     /usr/bin/imsettings-switch -qf fcitx.conf && export XMODIFIERS="@im=fcitx" || :
 elif [ ! -x /usr/bin/im-config ] && [ ! -x /usr/bin/imsettings-switch ]; then
-    if [ "$XMODIFIERS" != "@im=fcitx" ]; then
+    if [ "$XMODIFIERS" == "" ] || [ "$XMODIFIERS" == "@im=xim" ]; then
         export XMODIFIERS="@im=fcitx"
     fi
 fi
@@ -178,9 +182,9 @@ if [ "$XMODIFIERS" == "@im=fcitx" ]; then
             export GTK_IM_MODULE=fcitx
         fi
     fi
-    if [ -f /usr/lib/*/qt4/plugins/input*/qtim-fcitx.so ] || \
-       [ -f /usr/lib*/qt4/plugins/input*/qtim-fcitx.so ]; then
-        export QT_IM_MODULE=fcitx
+    if [ -f /usr/lib/*/qt4/plugins/inputmethods/qtim-fcitx.so ] || \
+       [ -f /usr/lib*/qt4/plugins/inputmethods/qtim-fcitx.so ]; then
+        export QT4_IM_MODULE=fcitx
         if [ -f /usr/lib/*/qt5/plugins/*inputcontexts/libfcitx*.so ] || \
            [ -f /usr/lib*/qt5/plugins/*inputcontexts/libfcitx*.so ]; then
             export QT_IM_MODULE=fcitx
@@ -195,7 +199,7 @@ install -m 0755 usr/bin/* %{buildroot}%{_bindir}/
 
 # library files
 install -d %{buildroot}%{_libdir}/fcitx
-install -m 0644 usr/lib/*-linux-gnu/fcitx/* %{buildroot}%{_libdir}/fcitx/
+install -m 0644 usr/lib/*-linux-gnu/fcitx/*.so %{buildroot}%{_libdir}/fcitx/
 
 # desktop file
 install -d %{buildroot}%{_datadir}/applications
@@ -206,7 +210,7 @@ Name[zh_CN]=搜狗拼音
 GenericName=Sogou Pinyin Input Method
 GenericName[zh_CN]=搜狗拼音输入法
 Comment=a popular pinyin input method
-Comment[zh_CN]=20 年稳定专业的输入法
+Comment[zh_CN]=搜狗拼音输入法
 MimeType=application/x-sogouskin;application/x-scel;
 Keywords=ime;imf;input;
 Exec=sogou-qimpanel %U
@@ -299,19 +303,21 @@ install -m 644 selinux/$MODULES %{buildroot}%{_datadir}/selinux/packages
 %endif # with_selinux
 
 %post
-/sbin/ldconfig
+test -x /usr/bin/ibus-daemon && chmod a-x /usr/bin/ibus-daemon ||:
 INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
 if [ "$INPUTRC" != "fcitx.conf" ]; then
     alternatives --set xinputrc /etc/X11/xinit/xinput.d/fcitx.conf
 fi
 
 # install
-if [ "$1" -eq "1" ]; then
-    ln -s %{_datadir}/applications/fcitx-ui-sogou-qimpanel.desktop %{_sysconfdir}/xdg/autostart/ &>/dev/null ||:
-    glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
-    update-desktop-database -q ||:
-    update-mime-database %{_datadir}/mime ||:
+if [ $1 -eq 1 ]; then
+    ln -s %{_datadir}/applications/fcitx-ui-sogou-qimpanel.desktop \
+          %{_sysconfdir}/xdg/autostart/ &>/dev/null ||:
 fi
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/bin/touch --no-create %{_datadir}/mime/packages &>/dev/null ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
+/sbin/ldconfig
 
 %if 0%{?with_selinux}
 %post selinux
@@ -330,23 +336,27 @@ fi
 
 %preun
 # uninstall
-if [ "$1" -eq "0" ];then
+if [ $1 -eq 0 ];then
     rm -rf %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop ||:
     pkill sogou &>/dev/null ||:
 fi
 
 %postun
 # uninstall
-if [ "$1" -eq "0" ]; then
-    glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
-    update-desktop-database -q ||:
-    update-mime-database %{_datadir}/mime ||:
+if [ $1 -eq 0 ]; then
+    test ! -x /usr/bin/ibus-daemon && chmod a+x /usr/bin/ibus-daemon ||:
     INPUTRC=`readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}'`
     if [ "$INPUTRC" == "fcitx.conf" ]; then
         alternatives --auto xinputrc
     fi
+
+    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+    /usr/bin/update-mime-database %{_datadir}/mime &>/dev/null ||:
     /sbin/ldconfig
 fi
+/usr/bin/update-desktop-database &>/dev/null ||:
 
 %if 0%{?with_selinux}
 %postun selinux
@@ -359,21 +369,26 @@ if [ $1 -eq 0 ]; then
 fi
 %endif # with_selinux
 
+%posttrans
+/usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/usr/bin/update-mime-database %{?fedora:-n} %{_datadir}/mime &>/dev/null ||:
+
 %files
 %defattr(-,root,root,-)
 %doc %{name}-%{version}/changelog.gz
 %license %{name}-%{version}/{copyright,license*}
+%attr(755,root,root) %{_xinitrcdir}/55-%{name}.sh
 %{_bindir}/sogou-*
-%{_libdir}/fcitx/
-%{_xinitrcdir}/
-%{_datadir}/applications/*.desktop
+%{_libdir}/fcitx/*.so
 %{_datadir}/fcitx/
-%{_datadir}/fcitx-%{name}/
-%{_datadir}/glib-2.0/
+%{_datadir}/fcitx-%{name}/SogouInput/
+%{_datadir}/glib-2.0/schemas/*.gschema.override
 %{_datadir}/icons/hicolor/*/apps/fcitx-%{name}.png
-%{_datadir}/locale/
-%{_datadir}/mime/packages/
-%{_datadir}/pixmaps/
+%{_datadir}/pixmaps/*.png
+%{_datadir}/applications/*.desktop
+%{_datadir}/locale/*/LC_MESSAGES/*.mo
+%{_datadir}/mime/packages/*.xml
 %{_datadir}/sogou-qimpanel/
 %{_datadir}/%{name}/
 
@@ -384,6 +399,9 @@ fi
 %endif # with_selinux
 
 %changelog
+* Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-1
+- Update version 2.0.0.0068
+- Update post script
 * Sun Oct 25 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-2
 - Add SELinux module (sogoupinyin 1.0.0)
 * Sat Oct 17 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-1
