@@ -1,0 +1,161 @@
+
+## <summary>policy for sogoupinyin</summary>
+
+#######################################
+## <summary>
+##      The role template for the sogoupinyin module.
+## </summary>
+## <desc>
+##      <p>
+##      This template allow a user role access the sogou_t domain.
+##      </p>
+## </desc>
+## <param name="role_prefix">
+##      <summary>
+##      The prefix of the user role (e.g., user
+##      is the prefix for user_r).
+##      </summary>
+## </param>
+## <param name="user_role">
+##      <summary>
+##      The user role.
+##      </summary>
+## </param>
+## <param name="user_domain">
+##      <summary>
+##      The user domain associated with the role.
+##      </summary>
+## </param>
+#
+interface(`sogou_role',`
+    gen_require(`
+        type sogou_t, sogou_exec_t, sogou_tmp_t, sogou_home_t;
+        type sogou_data_t, $1_dbusd_t, system_dbusd_t;
+        attribute_role sogou_roles;
+        class dbus { send_msg acquire_svc };
+    ')
+    # Allow the sogou_t domain for the user role
+    roleattribute $2 sogou_roles;
+    # ALlow domain transition for user domain to sogou_t
+    domtrans_pattern($3, sogou_exec_t, sogou_t)
+    # Interact with sogou process
+    ps_process_pattern($3, sogou_t)
+    allow $3 sogou_t : process { ptrace signal_perms };
+    # Manage sogou file resources
+    manage_dirs_pattern($3, sogou_home_t, sogou_home_t)
+    manage_files_pattern($3, sogou_home_t, sogou_home_t)
+    manage_lnk_files_pattern($3, sogou_home_t, sogou_home_t)
+    # Allow user to relabel the resources if needed
+    relabel_dirs_pattern($3, sogou_home_t, sogou_home_t)
+    relabel_files_pattern($3, sogou_home_t, sogou_home_t)
+    relabel_lnk_files_pattern($3, sogou_home_t, sogou_home_t)
+    # Delete /tmp/sogou*
+    allow $3 sogou_tmp_t : { sock_file file } unlink;
+    # fcitx read /usr/share/fcitx-sogoupinyin/SogouInput/Fuzzy.dat
+    allow $3 sogou_data_t:dir list_dir_perms;
+    allow $3 sogou_data_t:file read_file_perms;
+    # Allow Xorg -> sogou_t
+    allow $3 sogou_t:shm { unix_read read unix_write associate write getattr };
+    allow sogou_t { $1_dbusd_t $3 }:dbus { send_msg acquire_svc };
+    allow $3 sogou_t:dbus { send_msg acquire_svc };
+    # Allow connect socket
+    allow sogou_t { $1_dbusd_t $3 }:unix_stream_socket connectto;
+    allow sogou_t { $1_dbusd_t $3 }:process signull;
+    # dont access unix_stream_socket
+    dontaudit sogou_t system_dbusd_t:unix_stream_socket connectto;
+')
+
+########################################
+## <summary>
+##      Create objects in a user home ".config" directory
+##      with an automatic type transition to
+##      a specified private type.
+## </summary>
+## <param name="domain">
+##      <summary>
+##      Domain allowed access.
+##      </summary>
+## </param>
+## <param name="private_type">
+##      <summary>
+##      The type of the object to create.
+##      </summary>
+## </param>
+## <param name="object_class">
+##      <summary>
+##      The class of the object to be created.
+##      </summary>
+## </param>
+## <param name="name" optional="true">
+##      <summary>
+##      The name of the object being created.
+##      </summary>
+## </param>
+#
+interface(`userdom_config_home_content_filetrans',`
+    gen_require(`
+        type config_home_t;
+    ')
+
+    filetrans_pattern($1, config_home_t, $2, $3, $4)
+    allow $1 user_home_dir_t:dir search_dir_perms;
+    files_search_home($1)
+')
+
+########################################
+## <summary>
+##	Allow other domain to read sogou_home_t.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to read.
+## </summary>
+## </param>
+#
+interface(`sogou_read_home',`
+    gen_require(`
+        type sogou_home_t;
+    ')
+    userdom_search_user_home_dirs($1)
+    allow $1 sogou_home_t:dir list_dir_perms;
+    allow $1 sogou_home_t:file read_file_perms;
+    allow $1 sogou_home_t:lnk_file read_lnk_file_perms;
+')
+
+########################################
+## <summary>
+##	Execute sogou_exec_t in the sogou domain.
+## </summary>
+## <param name="domain">
+## <summary>
+##	Domain allowed to transition.
+## </summary>
+## </param>
+#
+interface(`sogou_domtrans',`
+	gen_require(`
+		type sogou_t, sogou_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	domtrans_pattern($1, sogou_exec_t, sogou_t)
+')
+
+######################################
+## <summary>
+##	Execute sogoupinyin in the caller domain.
+## </summary>
+## <param name="domain">
+##	<summary>
+##	Domain allowed access.
+##	</summary>
+## </param>
+#
+interface(`sogou_exec',`
+	gen_require(`
+		type sogou_exec_t;
+	')
+
+	corecmd_search_bin($1)
+	can_exec($1, sogou_exec_t)
+')

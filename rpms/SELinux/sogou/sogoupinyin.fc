@@ -1,0 +1,20 @@
+HOME_DIR/\.config/SogouPY.*(/.*)?       gen_context(system_u:object_r:sogou_home_t,s0)
+HOME_DIR/\.config/sogou-qimpanel(/.*)?  gen_context(system_u:object_r:sogou_home_t,s0)
+HOME_DIR/\.config/Trolltech.conf.*      gen_context(system_u:object_r:sogou_home_t,s0)
+
+/usr/bin/sogou-qimpanel             --  gen_context(system_u:object_r:sogou_exec_t,s0)
+/usr/bin/sogou-qimpanel-watchdog    --  gen_context(system_u:object_r:sogou_exec_t,s0)
+/usr/bin/sogou-session              --  gen_context(system_u:object_r:sogou_exec_t,s0)
+/usr/bin/sogou-diag                 --  gen_context(system_u:object_r:sogou_exec_t,s0)
+/usr/bin/sogou-sys-notify           --  gen_context(system_u:object_r:sogou_exec_t,s0)
+
+/tmp/sogou-qimpanel.*               --  gen_context(system_u:object_r:sogou_tmp_t,s0)
+/tmp/sni-qt_sogou-qimpanel.*(/.*)?      gen_context(system_u:object_r:sogou_tmp_t,s0)
+
+/usr/share/fcitx-sogoupinyin(/.*)?      gen_context(system_u:object_r:sogou_data_t,s0)
+/usr/share/sogou-qimpanel(/.*)?         gen_context(system_u:object_r:sogou_data_t,s0)
+/usr/share/sogoupinyin(/.*)?            gen_context(system_u:object_r:sogou_data_t,s0)
+
+/usr/share/fcitx-sogoupinyin/SogouInput/(.*).ini  --  gen_context(system_u:object_r:sogou_conf_t,s0)
+/usr/share/fcitx-sogoupinyin/SogouInput/(.*).txt  --  gen_context(system_u:object_r:sogou_conf_t,s0)
+
