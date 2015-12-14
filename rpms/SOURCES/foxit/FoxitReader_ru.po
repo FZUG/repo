@@ -1,0 +1,1857 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: FoxitReader-1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-22 11:45+0800\n"
+"PO-Revision-Date: 2013-10-27 22:40+0300\n"
+"Last-Translator: AlexL <loginov.alex.valer@gmail.com>\n"
+"Language-Team: Russian <loginov.alex.valer@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+msgid ""
+"\r\n"
+"Preparing to print ..."
+msgstr ""
+"\r\n"
+"Подготовка к печати..."
+
+msgid ""
+"\r\n"
+"Successful! Finished printing."
+msgstr ""
+"\r\n"
+"Успешное завершение печати."
+
+msgid "%"
+msgstr "%"
+
+msgid "%d pt"
+msgstr "%d pt"
+
+msgid "&About Foxit Reader ..."
+msgstr "&О Foxit Reader..."
+
+msgid "&Accepted"
+msgstr "&Принято"
+
+msgid "&Actual Size"
+msgstr "&Фактический размер"
+
+msgid "&All"
+msgstr "&Все"
+
+msgid "&Annotation Selection Tool"
+msgstr "&Выбор инструмента аннотации"
+
+msgid "&Application Language:"
+msgstr "&Язык приложения"
+
+msgid "&Arrow Tool"
+msgstr "&Стрелка"
+
+msgid "&Author:"
+msgstr "&Автор:"
+
+msgid "&Automatically Scroll"
+msgstr "&Автоматическая прокрутка"
+
+msgid "&Background:"
+msgstr "&Фон:"
+
+msgid "&Bookmarks"
+msgstr "&Закладки"
+
+msgid "&Cancel"
+msgstr "&Отмена"
+
+msgid "&Cancelled"
+msgstr "&Отменено"
+
+msgid "&Check for Updates"
+msgstr "П&роверка обновлений"
+
+msgid "&Clockwise"
+msgstr "По &часовой стрелке"
+
+msgid "&Close"
+msgstr "&Закрыть"
+
+msgid "&Close Properties"
+msgstr "&Закрыть свойства"
+
+msgid "&Cloudy Tool"
+msgstr "&облачный инструмент"
+
+msgid "&Color ..."
+msgstr "&Цвет"
+
+msgid "&Commenting Tools"
+msgstr "&Инструмент комментариев"
+
+msgid "&Confirmed"
+msgstr "&Подтверждено"
+
+msgid "&Continuous Facing"
+msgstr "&Страница к странице"
+
+msgid "&Continuous Scroll"
+msgstr "&Непрерывная прокрутка"
+
+msgid "&Copies:"
+msgstr "&Копии:"
+
+msgid "&Copy"
+msgstr "&Копировать"
+
+msgid "&Customize Toolbar ..."
+msgstr "&Настройки панели инструментов ..."
+
+msgid "&Delete"
+msgstr "&Удалить"
+
+msgid "&Delete Annotations\tDel"
+msgstr "Удалить аннотации\tDel"
+
+msgid "&Delete this Reply"
+msgstr "&Удалить ответ"
+
+msgid "&Dimension Tool"
+msgstr "&Измерение инструментов"
+
+msgid "&Drawing Tools"
+msgstr "&Инструменты рисования"
+
+msgid "&Edit"
+msgstr "&Редактировать"
+
+msgid "&Ellipse Tool"
+msgstr "&Инструмент Эллипс"
+
+msgid "&Exit"
+msgstr "&Выход"
+
+msgid "&Facing"
+msgstr "&По две странице"
+
+msgid "&File"
+msgstr "&Файл"
+
+msgid "&Fill color:"
+msgstr "&Цвет заливки:"
+
+msgid "&Find ..."
+msgstr "&Поиск ..."
+
+msgid "&First Page"
+msgstr "&Первая страница"
+
+msgid "&Flip"
+msgstr "&Вращение"
+
+msgid "&Foxit Corporation Home Page"
+msgstr "&Домашняя страница Foxit Corporation"
+
+msgid "&Full Screen"
+msgstr "&Полный экран"
+
+msgid "&Go To"
+msgstr "П&ерейти к"
+
+msgid "&Go To Page ..."
+msgstr "Перейти &к странице ..."
+
+msgid "&Group"
+msgstr "&Группа"
+
+msgid "&Hand Tool"
+msgstr "&Рука"
+
+msgid "&Help"
+msgstr "&Помощь"
+
+msgid "&Help for Foxit Reader"
+msgstr "&Помощь Foxit Reader"
+
+msgid "&Hide Navigation Panel"
+msgstr "&Скрыть навигационную панель"
+
+msgid "&Highlight Text Tool"
+msgstr "&Выделение"
+
+msgid "&Insert Text Tool"
+msgstr "&Вставка текста"
+
+msgid "&Last Page"
+msgstr "П&оследняя страница"
+
+msgid "&Line Tool"
+msgstr "&Линейный инструмент"
+
+msgid "&Locked"
+msgstr "&Заблокировано"
+
+msgid "&Loupe Tool"
+msgstr "&Инструмент лупа"
+
+msgid "&Magnifier"
+msgstr "&Лупа"
+
+msgid "&Merge"
+msgstr "&Объединить"
+
+msgid "&Migration"
+msgstr "&Перемещение"
+
+msgid "&Multiple Monitors:"
+msgstr "&Несколько мониторов:"
+
+msgid "&Name:"
+msgstr "&Имя:"
+
+msgid "&Navigation Panel"
+msgstr "&Навигационная панель"
+
+msgid "&Next Page"
+msgstr "&Следующая страница"
+
+msgid "&No"
+msgstr "&Нет"
+
+msgid "&None"
+msgstr "&Нет"
+
+msgid "&Note Tool"
+msgstr "&Замечание"
+
+msgid "&Ok"
+msgstr "&Ок"
+
+msgid "&Opacity:"
+msgstr "&Прозрачность:"
+
+msgid "&Open ..."
+msgstr "&Открыть"
+
+msgid "&Open Properties ..."
+msgstr "&Открыть свойства"
+
+msgid "&Owner:"
+msgstr "&Владелец:"
+
+msgid "&Page Layout"
+msgstr "&Макет страницы"
+
+msgid "&Page Thumbnails"
+msgstr "&Эскизы страниц"
+
+msgid "&Paste"
+msgstr "&Вставить"
+
+msgid "&Polygon Tool"
+msgstr "&Многоугольный инструмент"
+
+msgid "&Preferences ..."
+msgstr "&Настройки ..."
+
+msgid "&Previous Page"
+msgstr "П&редыдущая страница"
+
+msgid "&Print ..."
+msgstr "&Печать ..."
+
+msgid "&Properties"
+msgstr "&Свойства"
+
+msgid "&Rectangle Tool"
+msgstr "&Инструмент прямоугольник"
+
+msgid "&Redo"
+msgstr "&Повторить"
+
+msgid "&Rejected"
+msgstr "&Отклонено"
+
+msgid "&Remove All"
+msgstr "&Удалить все"
+
+msgid "&Replace Text Tool"
+msgstr "&Заменить текст"
+
+msgid "&Reply"
+msgstr "&Ответ"
+
+msgid "&Reply to this Reply"
+msgstr "&Ответить на этот ответ"
+
+msgid "&Review"
+msgstr "&Обзор"
+
+msgid "&Rotation"
+msgstr "П&оворот"
+
+msgid "&Save"
+msgstr "&Сохранить"
+
+msgid "&Seconds:"
+msgstr "&Секунды:"
+
+msgid "&Select All"
+msgstr "&Выделить все"
+
+msgid "&Select All Text"
+msgstr "&Выбрать весь текст"
+
+msgid "&Set Status"
+msgstr "&Установить статус"
+
+msgid "&Set To Default PDF Reader"
+msgstr "&Установить по умолчанию данный PDF Reader"
+
+msgid "&Show Find ToolBar"
+msgstr "&Показать панель поиска"
+
+msgid "&Show Navigation Panel"
+msgstr "&Показать навигационную панель"
+
+msgid "&Show Toolbar"
+msgstr "&Показать панель инструментов"
+
+msgid "&Single Page"
+msgstr "&Одна страница"
+
+msgid "&Snapshot"
+msgstr "&Сделать снимок"
+
+msgid "&Squiggly Text Tool"
+msgstr "&Волнистые линии"
+
+msgid "&Text Selection Tool"
+msgstr "&Выделение текста"
+
+msgid "&Thickness:"
+msgstr "&Толщина:"
+
+msgid "&Ticket Support"
+msgstr "&Служба поддержки"
+
+msgid "&Time-lapse Scroll"
+msgstr "&Покадровая прокрутка"
+
+msgid "&Toolbar"
+msgstr "Панель &инструментов"
+
+msgid "&Tools"
+msgstr "&Инструменты"
+
+msgid "&Underline Text Tool"
+msgstr "&Подчеркивание текста"
+
+msgid "&Undo"
+msgstr "&Отменить"
+
+msgid "&Ungroup"
+msgstr "&Разгруппировать"
+
+msgid "&View"
+msgstr "&Вид"
+
+msgid "&Zoom"
+msgstr "&Увеличение"
+
+msgid "&pattern:"
+msgstr "&Шаблон:"
+
+msgid "&to:"
+msgstr "&до:"
+
+msgid "(not identical)"
+msgstr "(не идентичны)"
+
+msgid "+"
+msgstr "+"
+
+msgid "--"
+msgstr "--"
+
+msgid "/"
+msgstr "/"
+
+msgid "8126463"
+msgstr "8126463"
+
+msgid "Accepted"
+msgstr "Принято"
+
+msgid "Actual Font Type: "
+msgstr "Текущий тип фона: "
+
+msgid "Actual Font: "
+msgstr "Текущий фон: "
+
+msgid "Actual Size"
+msgstr "Текущий размер"
+
+msgid ""
+"Actual Size\r\n"
+"Fit Width\r\n"
+"Fit Height\r\n"
+"Fit Page\r\n"
+"10%\r\n"
+"25%\r\n"
+"50%\r\n"
+"75%\r\n"
+"100%\r\n"
+"125%\r\n"
+"150%\r\n"
+"200%\r\n"
+"300%\r\n"
+"400%\r\n"
+"600%\r\n"
+"800%\r\n"
+"1200%\r\n"
+"1600%\r\n"
+"3200%\r\n"
+"6400%"
+msgstr ""
+"Текущий размер\r\n"
+"По ширине\r\n"
+"По высоте\r\n"
+"По странице\r\n"
+"10%\r\n"
+"25%\r\n"
+"50%\r\n"
+"75%\r\n"
+"100%\r\n"
+"125%\r\n"
+"150%\r\n"
+"200%\r\n"
+"300%\r\n"
+"400%\r\n"
+"600%\r\n"
+"800%\r\n"
+"1200%\r\n"
+"1600%\r\n"
+"3200%\r\n"
+"6400%"
+
+msgid "Add the selected button item into the current toolbar buttons list"
+msgstr "Добавить выбранный элемент кнопки, в текущий список кнопок панели инструментов"
+
+msgid "Advanced"
+msgstr "Расширенное"
+
+msgid "All pages in range"
+msgstr "Все страницы в диапазоне"
+
+msgid "Annot"
+msgstr "Примечание"
+
+msgid "Annotation &Properties"
+msgstr "&Свойства аннотаций"
+
+msgid "Annotation Owner"
+msgstr "Аннотация владельца"
+
+msgid "Any change of the status will be recorded in the above list for this markup. The status can be changed from the popup menu."
+msgstr "Любое изменение статуса будет записано в приведенном выше списке для этой разметки. Статус может быть изменен из всплывающего меню."
+
+msgid "Appearance"
+msgstr "Внешний вид"
+
+msgid "Arabic"
+msgstr "Арабский"
+
+msgid ""
+"Arabic (Saudi)\r\n"
+"English\r\n"
+"French (France)\r\n"
+"German\r\n"
+"Greek\r\n"
+"Italian (Italy)\r\n"
+"Portuguese (Brazil)\r\n"
+"Portuguese (Portugal)\r\n"
+"Russian\r\n"
+"Simplified Chinese\r\n"
+"Spanish (Latin America)\r\n"
+"Spanish (Spain)\r\n"
+"Turkish"
+msgstr ""
+"Арабский (Саудовский)\r\n"
+"Английский\r\n"
+"Французский (Франция)\r\n"
+"Немецкий\r\n"
+"Греческий\r\n"
+"Итальянский (Италия)\r\n"
+"Португальский (Бразилий)\r\n"
+"Португальский (Португалия)\r\n"
+"Русский\r\n"
+"Упрощенный китайский\r\n"
+"Испанский (Латинская Америка)\r\n"
+"Испанский (Испания)\r\n"
+"Турецкий"
+
+msgid "Arrow"
+msgstr "Стрелка"
+
+msgid "Author:"
+msgstr "Автор:"
+
+msgid "Auto-Center"
+msgstr "Автоцентрирование"
+
+msgid "Auto-Rotate"
+msgstr "Автоповорот"
+
+msgid "Automatically Scroll"
+msgstr "Автоматическая прокрутка"
+
+msgid "Autoscroll Speed"
+msgstr "Скорость автопрокрутки"
+
+msgid ""
+"Available physical memory in your system is too low!\r\n"
+"\r\n"
+"Foxit Reader may be unstable, so please close some documents or other applications."
+msgstr ""
+"Слишком мало свободной оперативной памяти доступно в данный момент.\r\n"
+"\r\n"
+"Foxit Reader может быть нестабильным, поэтому, пожалуйста, закройте некоторые документы или другие приложения."
+
+msgid "Available toolbar buttons:"
+msgstr "Доступные кнопки панели:"
+
+msgid "BasicLatin"
+msgstr "Базовый латинский"
+
+msgid "Before you perform print-related tasks such as page setup or printing a document, you need to install a printer."
+msgstr "Перед выполнением задачи, относящейся к печати, такой как создание страницы или печать документа, необходимо установить принтер."
+
+msgid "Bookmarks"
+msgstr "Закладки"
+
+msgid "Border st&yle:"
+msgstr "&Стиль границы:"
+
+msgid "C&lose Popup Note"
+msgstr "&Закрыть всплывающее примечание"
+
+msgid "C&ollate"
+msgstr "&Сравнение"
+
+msgid "C&ompleted"
+msgstr "&Завершено"
+
+msgid "C&urrent page"
+msgstr "&Текущая страница"
+
+msgid "Can not open the clipboard."
+msgstr "Не удается открыть буфер обмена."
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Cancelled"
+msgstr "Отменено"
+
+msgid ""
+"Cannot load resource %d(%s)!\r\n"
+"\r\n"
+"The resource file may be corrupted. Please contact your administrator or reinstall this software.\r\n"
+"\r\n"
+"It is recommended that you abort the running now to correct this error. Crash may occur without this resource.\r\n"
+"\r\n"
+"Do you want to abort the running now?"
+msgstr ""
+"Не удается открыть ресурс %d(%s)!\r\n"
+"\r\n"
+"Файл ресурсов может быть поврежден. Пожалуйста, обратитесь к администратору или переустановите программу.\r\n"
+"\r\n"
+"Вы должны прервать выполнение, чтобы исправить ошибку. Без ресусов может привести к сбоям системы.\r\n"
+"\r\n"
+"Прервать выполнение сейчас?"
+
+msgid "Cannot open the file or file is not found!"
+msgstr "Не удается открыть файл или файл не найден!"
+
+msgid ""
+"Cannot open the file!\r\n"
+"\r\n"
+"The file cannot be found or opened, the file name may be incorrect.\r\n"
+"Please verify and try again."
+msgstr ""
+"Не удается открыть файл!\r\n"
+"\r\n"
+"Файл не может быть найден или открыт, возможно некорректное имя файла.\r\n"
+"Пожалуйста, проверьте и попробуйте снова."
+
+msgid ""
+"Cannot open the file!\r\n"
+"\r\n"
+"The file is encrypted by digital certificate, and the current user doesn't have correct certificate.\r\n"
+"Please verify and try again."
+msgstr ""
+"Не удается открыть файл!\r\n"
+"\r\n"
+"Файл зашифрован цифровым сертификатом, и текущий пользователь не указал правильный сертификат.\r\n"
+"Пожалуйста, проверьте и попробуйте снова."
+
+msgid ""
+"Cannot open the file!\r\n"
+"\r\n"
+"The file is encrypted by unknown security settings and cannot be opened.\r\n"
+"Please verify and try again."
+msgstr ""
+"Не удается открыть файл!\r\n"
+"\r\n"
+"Файл зашифрован неизвестными параметрами безопасности и не может быть открыт.\r\n"
+"Пожалуйста, проверьте и попробуйте снова."
+
+msgid ""
+"Cannot save the current document!\r\n"
+"\r\n"
+"An unknown error occured when save the file. Please verify and try again."
+msgstr ""
+"Невозможно сохранить текущий документ!\r\n"
+"\r\n"
+"Произошла неизвестная ошибка при сохранении файла. Пожалуйста, проверьте и попробуйте еще раз."
+
+msgid ""
+"Cannot save the file!\r\n"
+"\r\n"
+"The destination file may be opened by another program.\r\n"
+"Please verify and try again."
+msgstr ""
+"Невозможно сохранить файл!\r\n"
+"\r\n"
+"Конечный файл может быть открыт другой программой.\r\n"
+"Пожалуйста, проверьте и попробуйте снова."
+
+msgid "Caution"
+msgstr "Внимание"
+
+msgid "Change &color..."
+msgstr "&Настройки цвета..."
+
+msgid "Change the window position"
+msgstr "Изменить положение окна"
+
+msgid "Change the window size"
+msgstr "Изменить размер окна"
+
+msgid "Changes will be applied when documents are opened."
+msgstr "Изменения будут применяться при открытии документов."
+
+msgid "Checkmark"
+msgstr "Галочка"
+
+msgid "Chinese"
+msgstr "Китайский"
+
+msgid "Circle"
+msgstr "Круг"
+
+msgid "Click and drag to draw a ellipse on the page"
+msgstr "Нажмите и перетащите, чтобы нарисовать эллипс на странице"
+
+msgid "Click and drag to draw a line"
+msgstr "Нажмите и перетащите, чтобы нарисовать линию"
+
+msgid "Click and drag to draw a rectangle on the page"
+msgstr "Нажмите и перетащите, чтобы нарисовать прямоугольник на странице"
+
+msgid "Click and drag to draw an arrow line"
+msgstr "Нажмите и перетащите, чтобы нарисовать стрелку"
+
+msgid "Click and drag to draw an arrow line with butts"
+msgstr "Нажмите и перетащите, чтобы нарисовать стрелку с утолщенными концами"
+
+msgid "Click and drag to draw freeform on the page"
+msgstr "Нажмите и перетащите, чтобы рисовать в свободной форме на странице"
+
+msgid "Click and enter certain text to find it in the document"
+msgstr "Нажмите и введите текст, чтобы найти его в документе"
+
+msgid "Click around an object or text to draw a cloud around it"
+msgstr "Нажмите вокруг объекта или текста, чтобы нарисовать облако вокруг него"
+
+msgid "Click over the Pencil Tool Object to erase it"
+msgstr "Нажмите на объект инструмента Карандаш, чтобы стереть это"
+
+msgid "Click text to add an insert mark at current cursor position"
+msgstr "Нажмите, чтобы вставить текст в текущую позицию курсора"
+
+msgid "Click the outline of the polygon shape you want to create;double-click to end"
+msgstr "Щелкните мышью для создания контура многоугольной формы; двойной клик для окончания"
+
+msgid "Click the page to add a note at that position"
+msgstr "Выберите страницу, чтобы добавить примечание в этой позиции"
+
+msgid "Click the points of the shape; double-click to end"
+msgstr "Щелкните на точках шара; двойной клик для окончания"
+
+msgid "Click to allow the PDF page to fill the entire screen"
+msgstr "Нажмите, чтобы просматривать PDF страницу во весь экран"
+
+msgid "Click to change magnification of a certain page area in a pop-up window"
+msgstr "Нажмите, чтобы изменить увеличение площади отдельных страниц во всплывающем окне"
+
+msgid "Click to change the magnification of the entire page by entering a certain number"
+msgstr "Нажмите, чтобы изменить увеличение всей страницы путем ввода определенного числа"
+
+msgid "Click to close the document"
+msgstr "Нажмите для закрытия документа"
+
+msgid "Click to continue the last find action"
+msgstr "Нажмите, чтобы продолжить предыдущий поиск"
+
+msgid "Click to decrease the magnification of the entire page"
+msgstr "Нажмите, чтобы уменьшить масштаб всей страницы"
+
+msgid "Click to find a next occurence"
+msgstr "Нажмите, чтобы найти следующее вхождение"
+
+msgid "Click to find a previous occurence"
+msgstr "Нажмите, чтобы найти предыдущее вхождение"
+
+msgid "Click to go to a certain page by entering a certain page number"
+msgstr "Нажмите для перехода на определенную страницу, введя определенный номер страницы"
+
+msgid "Click to go to the first page in the document"
+msgstr "Нажмите, чтобы перейти на первую страницу документа"
+
+msgid "Click to go to the last page in the document"
+msgstr "Нажмите, чтобы перейти к последней странице документа"
+
+msgid "Click to go to the next opened document"
+msgstr "Нажмите, чтобы перейти к следующему открытому документу"
+
+msgid "Click to go to the next page in the document"
+msgstr "Нажмите, чтобы перейти к следующей странице документа"
+
+msgid "Click to go to the next view"
+msgstr "Нажмите для перехода к следующему виду"
+
+msgid "Click to go to the previous opened document"
+msgstr "Нажмите для перехода на ранее открытый документ"
+
+msgid "Click to go to the previous page in the document"
+msgstr "Нажмите, чтобы перейти к предыдущей странице документа"
+
+msgid "Click to go to the previous view"
+msgstr "Нажмите для перехода к предыдущему виду"
+
+msgid "Click to increase the magnification of the entire page"
+msgstr "Нажмите, чтобы увеличить масштаб всей страницы"
+
+msgid "Click to make Foxit Reader as the default PDF reader"
+msgstr "Нажмите, чтобы Foxit Reader открывал PDF по умолчанию"
+
+msgid "Click to make the document fill the height of the screen"
+msgstr "Нажмите, чтобы сделать документ по высоте экрана"
+
+msgid "Click to make the document fill the width of the screen"
+msgstr "Нажмите, чтобы сделать документ по ширине экрана"
+
+msgid "Click to make the document scroll automatically"
+msgstr "Нажмите, чтобы сделать автоматическую прокрутку документа"
+
+msgid "Click to open a PDF file"
+msgstr "Нажмите для открытия PDF файла"
+
+msgid "Click to open the help file"
+msgstr "Нажмите для открытия файла справки"
+
+msgid "Click to open the support page in web browser"
+msgstr "Нажмите, чтобы открыть сайт технической поддержки через веб браузер"
+
+msgid "Click to open the update page in web browser"
+msgstr "Нажмите, чтобы открыть страницу обновлений в веб браузере"
+
+msgid "Click to pop up a real-like magnifier to help you read this PDF file"
+msgstr "Щелкните здесь для просмотра реалистичного движения и улучшения читаемости в PDF файле"
+
+msgid "Click to print this PDF file or pages from it"
+msgstr "Нажмите, чтобы распечатать PDF файл или страницы из него"
+
+msgid "Click to return the document to its actual size"
+msgstr "Нажмите, чтобы вернуть документу его фактический размер"
+
+msgid "Click to rotate the page view clockwise in 90 degree increments"
+msgstr "Щелкните здесь, чтобы вращать страницы на 90 градусов по часовой стрелке"
+
+msgid "Click to rotate the page view counterclockwise in 90 degree increments"
+msgstr "Щелкните здесь, чтобы вращать страницы на 90 градусов против часовой стрелке"
+
+msgid "Click to save this PDF file to another directory or with a different name"
+msgstr "Нажмите, чтобы сохранить этот PDF файл в другой каталог или с другим именем"
+
+msgid "Click to save this PDF file with your latest changes"
+msgstr "Нажмите, чтобы сохранить этот PDF файл с вашими последними изменениями"
+
+msgid "Click to scroll through the document continuously"
+msgstr "Нажмите, чтобы прокручивать документ непрерывно"
+
+msgid "Click to see an entire page onscreen"
+msgstr "Нажмите, чтобы увидеть всю страницу в экране"
+
+msgid "Click to see copyright and version information of Foxit Reader"
+msgstr "Нажмите, чтобы увидеть авторские права и информацию о версии Foxit Reader"
+
+msgid "Click to see the document properties"
+msgstr "Нажмите, чтобы увидеть свойства документа"
+
+msgid "Click to set output and layout for print action"
+msgstr "Щелкните здесь, чтобы установить выходной параметр макета для печати"
+
+msgid "Click to set preferences"
+msgstr "Нажмите, чтобы задать параметры"
+
+msgid "Click to show a single page at a time"
+msgstr "Кликните для просмотра одной страницы за раз"
+
+msgid "Click to show pages side-by-side"
+msgstr "Кликните для просмотра страниц бок о бок"
+
+msgid "Click to show pages side-by-side with continuous scrolling"
+msgstr "Кликните для просмотра страниц бок-о-бок с непрерывной прокруткой"
+
+msgid "Click to show the bookmark pane when it's invisible and click to hide the bookmark pane when it's visible"
+msgstr "Щелкните здесь, чтобы показать или скрыть панель закладок"
+
+msgid "Click to show the find toolbar when it's invisible and click to hide the find toolbar when it's visible"
+msgstr "Нажмите, чтобы посмотреть панель поиска, когда она невидима и нажмите, чтобы скрыть панель поиска, когда она видна"
+
+msgid "Click to show the navigation panel when it's invisible and click to hide the navigation panel when it's visible"
+msgstr "Кликните для просмотра на панели навигации, когда она невидима и нажмите, чтобы скрыть панель навигации, когда она видна"
+
+msgid "Click to show the pages pane when it's invisible and click to hide the pages pane when it's visible"
+msgstr "Кликните для просмотра страниц панели, когда она невидима и нажмите, чтобы скрыть панель страниц, если она видна"
+
+msgid "Click to view this PDF document as a text file"
+msgstr "Нажмите, чтобы посмотреть этот документ PDF в виде текстового файла"
+
+msgid "Click to visit Foxit Corporation Home Page in web browser"
+msgstr "Нажмите, чтобы посетить домашнюю страницу Foxit Corporation в веб браузере"
+
+msgid "Clockwise"
+msgstr "По часовой стрелке"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "Close all documents and exit from Foxit Reader"
+msgstr "Закрыть все документы и выйти из Foxit Reader"
+
+msgid "Close the active window and prompts to save the documents"
+msgstr "Закрыть текущее окно с запросом сохранения документов"
+
+msgid "Cloudy"
+msgstr "Облачный"
+
+msgid "Cloudy &pattern:"
+msgstr "Облачный &узор:"
+
+msgid ""
+"Cloudy 1\r\n"
+"Cloudy 2"
+msgstr ""
+"Облачный 1\r\n"
+"Облачный 2"
+
+msgid "Colo&r:"
+msgstr "&Цвет:"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Completed"
+msgstr "Завершено"
+
+msgid "Confirmed"
+msgstr "Подтверждено"
+
+msgid "Continuous &Page"
+msgstr "&Непрерывная страница"
+
+msgid "Could not get the printer's information."
+msgstr "Не удалось получить информацию о принтере."
+
+msgid "Coun&terclockwise"
+msgstr "&Против часовой стрелки"
+
+msgid "Created:"
+msgstr "Создано:"
+
+msgid "Creator:"
+msgstr "Создатель:"
+
+msgid "Cross"
+msgstr "Пересечение"
+
+msgid "Cu&t"
+msgstr "&Вырезать"
+
+msgid "Current toolbar buttons:"
+msgstr "Текущая панель кнопок:"
+
+msgid "Current view"
+msgstr "Текущий вид"
+
+msgid "Cyrillic"
+msgstr "Кириллица"
+
+msgid "Dash &pattern:"
+msgstr "&Пунктирный узор:"
+
+msgid "Dashed"
+msgstr "Пунктир"
+
+msgid ""
+"Dashed 1\r\n"
+"Dashed 2\r\n"
+"Dashed 3\r\n"
+"Dashed 4\r\n"
+"Dashed 5\r\n"
+"Dashed 6"
+msgstr ""
+"Пунктир 1\r\n"
+"Пунктир 2\r\n"
+"Пунктир 3\r\n"
+"Пунктир 4\r\n"
+"Пунктир 5\r\n"
+"Пунктир 6"
+
+msgid "Default &zoom:"
+msgstr "Масштаб по &умолчанию:"
+
+msgid "Default page &layout:"
+msgstr "&Макет страницы по умолчанию:"
+
+msgid "Delete the current selected annotations"
+msgstr "Удаление выбранной аннотации"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Dialog"
+msgstr "Диалог"
+
+msgid "Dimension"
+msgstr "Измерение"
+
+msgid "Do not show this message again"
+msgstr "Не показывать это сообщение вновь"
+
+msgid "Document Properties"
+msgstr "Свойства документа"
+
+msgid "Document:"
+msgstr "Документ:"
+
+msgid "Ellipse"
+msgstr "Эллипс"
+
+msgid "Encoding: "
+msgstr "Кодировка: "
+
+msgid "Enlarge the window to full size"
+msgstr "Увеличить окно до полного размера"
+
+msgid "Enter a password:"
+msgstr "Введите пароль:"
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid ""
+"Error! Cannot open the printer!\r\n"
+"Please contact your system administrator to confirm."
+msgstr ""
+"Ошибка! Принтер не может быть открыт! \r\n"
+"Пожалуйста, обратитесь к системному администратору."
+
+msgid ""
+"Error! Cannot start printing!\r\n"
+"Please contact your system administrator to confirm."
+msgstr ""
+"Ошибка! Не удается выполнить печать!\r\n"
+"Пожалуйста, обратитесь к системному администратору."
+
+msgid "Even pages only"
+msgstr "Только четные страницы"
+
+msgid "Exit from the full screen mode and restore to the normal display mode"
+msgstr "Выйти из полноэкранного режима и восстановить нормальный режим"
+
+msgid ""
+"File format error!\r\n"
+"\r\n"
+"The file is not a valid PDF file or corrupted.\r\n"
+"Please verify and try again."
+msgstr ""
+"Ошибка формата файла!\r\n"
+"\r\n"
+"Файл не является действительным PDF или поврежден.\r\n"
+"Проверьте файл и повторите попытку."
+
+msgid "Find"
+msgstr "Поиск"
+
+msgid "Find &Again"
+msgstr "&Искать снова"
+
+msgid "Find &Next"
+msgstr "&Следующее"
+
+msgid "Find &Previous"
+msgstr "&Предыдущее"
+
+msgid "Find &Text:"
+msgstr "Искать &текст:"
+
+msgid "Find N&ext"
+msgstr "И&скать следующее"
+
+msgid "Find Pre&vious"
+msgstr "&Искать предыдущее"
+
+msgid "Fit &Height"
+msgstr "П&о высоте"
+
+msgid "Fit &Page"
+msgstr "По &странице"
+
+msgid "Fit &Width"
+msgstr "&По ширине"
+
+msgid "Fit Height"
+msgstr "По высоте"
+
+msgid "Fit Page"
+msgstr "По странице"
+
+msgid "Fit Width"
+msgstr "По ширине"
+
+msgid "Font Families"
+msgstr "Вид шрифта"
+
+msgid "Fonts"
+msgstr "Шрифты"
+
+msgid "Fonts Used in this Document"
+msgstr "Шрифты, используемые в этом документе"
+
+msgid "Foxit Reader"
+msgstr "Foxit Reader"
+
+msgid "Foxit Reader Classmate Edition"
+msgstr "Foxit Reader Classmate редакции"
+
+msgid ""
+"FoxitReader\r\n"
+"\r\n"
+"FoxitR\r\n"
+"PDF File(.PDF)\r\n"
+".PDF\r\n"
+"FoxitReader.PDFDocument\r\n"
+"FoxitReader PDF Document"
+msgstr ""
+"FoxitReader\r\n"
+"\r\n"
+"FoxitR\r\n"
+"PDF Файл(.PDF)\r\n"
+".PDF\r\n"
+"FoxitReader.PDFDocument\r\n"
+"FoxitReader PDF Документ"
+
+msgid "Fullscreen Appearance"
+msgstr "Вид во весь экран"
+
+msgid "General"
+msgstr "Общее"
+
+msgid "Go To Page"
+msgstr "Перейти к странице"
+
+msgid "Graphics"
+msgstr "Графика"
+
+msgid "Greek"
+msgstr "Греческий"
+
+msgid "Hebrew"
+msgstr "Иврит"
+
+msgid "Help"
+msgstr "Помощь"
+
+msgid "Help for Foxit Reader Classmate Edition"
+msgstr "Помощь для Foxit Reader Classmate редакции"
+
+msgid "Highlight"
+msgstr "Подчеркивание"
+
+msgid "Info"
+msgstr "Информация"
+
+msgid "Insert"
+msgstr "Вставка"
+
+msgid "Insert Text"
+msgstr "Вставить текст"
+
+msgid "Insertion Caret"
+msgstr "Вставка каретки"
+
+msgid "Japanese"
+msgstr "Японский"
+
+msgid "Key"
+msgstr "Ключ"
+
+msgid "Keywords:"
+msgstr "Ключевые слова:"
+
+msgid "Korean"
+msgstr "Корейский"
+
+msgid "LandScape"
+msgstr "Горизонтальный"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "LatinExtA"
+msgstr "Экстра латинский"
+
+msgid "LatinOne"
+msgstr "Только латинский"
+
+msgid "Line"
+msgstr "Линия"
+
+msgid "Line &Thickness ..."
+msgstr "&Толщина линии ..."
+
+msgid "Line &ending:"
+msgstr "&Окончание строки:"
+
+msgid "Line &starting:"
+msgstr "&Начало строки:"
+
+msgid "Load &Default Settings"
+msgstr "Загрузить &стандартные настройки"
+
+msgid "Load &Last Customized Settings"
+msgstr "Загрузить последние &индивидуальные настройки"
+
+msgid "Load the customized toolbar settings"
+msgstr "Загрузить пользовательские настройки панели инструментов"
+
+msgid "Load the default toolbar settings"
+msgstr "Настройки панелей инструментов по умолчанию"
+
+msgid "Loading bookmarks ..."
+msgstr "Загрузка закладок ..."
+
+msgid "Loading page objects %d/%d ..."
+msgstr "Загрузка объектов страницы %d/%d ..."
+
+msgid "Loading page thumbnails %d/%d ..."
+msgstr "Загрузка эскизов страниц %d/%d ..."
+
+msgid "Loading pages ..."
+msgstr "Загрузка страниц ..."
+
+msgid "Loading thumbnails ..."
+msgstr "Загрузка эскизов ..."
+
+msgid "Lock"
+msgstr "Блокировать"
+
+msgid "Loupe Tool"
+msgstr "Лупа"
+
+msgid "Magnification"
+msgstr "Увеличение"
+
+msgid "Marquee select a screen area for copying as an image"
+msgstr "Выбор произвольной области экрана, чтобы скопировать его в виде рисунка"
+
+msgid "Match &sense"
+msgstr "Учитывать &регистр"
+
+msgid "Match &whole word only"
+msgstr "Только слово &целиком"
+
+msgid "Migration history"
+msgstr "История перемещения"
+
+msgid "MigrationConfirmed"
+msgstr "Подтверждение перемещения"
+
+msgid "MigrationNone"
+msgstr "Нет перемещения"
+
+msgid "MigrationPending"
+msgstr "В ожидании перемещения"
+
+msgid "Modified:"
+msgstr "Изменено:"
+
+msgid "More..."
+msgstr "Подробнее..."
+
+msgid "Move the selected button item to the lower position"
+msgstr "Перемещение выбранного объекта кнопки в нижнем положении"
+
+msgid "Move the selected button item to the upper position"
+msgstr "Перемещение выделенного элемента кнопки в верхнее положение"
+
+msgid "N&ot Confirmed"
+msgstr "&Не подтверждено"
+
+msgid "New Paragraph"
+msgstr "Новый параграф"
+
+msgid "Nex&t Document"
+msgstr "След&ующий документ"
+
+msgid "Next Vie&w"
+msgstr "Посмотреть &вперед"
+
+msgid "No Color"
+msgstr "Без цвета"
+
+msgid "None"
+msgstr "Нет"
+
+msgid ""
+"None\r\n"
+"Open\r\n"
+"Closed\r\n"
+"Open (Reverse)\r\n"
+"Closed (Reverse)\r\n"
+"Butt\r\n"
+"Diamond\r\n"
+"Round\r\n"
+"Square\r\n"
+"Slash"
+msgstr ""
+"Отсутствует\r\n"
+"Открыть\r\n"
+"Закрыть\r\n"
+"Открытие в обратном порядке\r\n"
+"Закрытие в обратном порядке\r\n"
+"Стыковка\r\n"
+"Ромб\r\n"
+"Круг\r\n"
+"Квадратный\r\n"
+"Черта"
+
+msgid "Not Confirmed"
+msgstr "Не подтвержден"
+
+msgid ""
+"Not Expand\r\n"
+"Expand to all monitors"
+msgstr ""
+"Не расширяется\r\n"
+"Развернуть на все мониторы"
+
+msgid "Note"
+msgstr "Примечание"
+
+msgid "Note Type"
+msgstr "Тип примечания"
+
+msgid "Note type:"
+msgstr "Тип примечания:"
+
+msgid "Number of Pages:"
+msgstr "Количество страниц:"
+
+msgid "O&pen Popup Note"
+msgstr "&Открыть всплывающее примечание"
+
+msgid "OK"
+msgstr "Ок"
+
+msgid "Odd pages only"
+msgstr "Только нечетные страницы"
+
+msgid "Open Status"
+msgstr "Открытый статус"
+
+msgid "Open a dialog to customize the toolbar settings"
+msgstr "Открыть диалоговое окно для настройки панелей инструментов"
+
+msgid "Open the annotation properties dialog box"
+msgstr "Открыть диалоговое окно свойства заметок"
+
+msgid "Operation"
+msgstr "Действие"
+
+msgid "Options"
+msgstr "Опции"
+
+msgid "Orientation"
+msgstr "Ориентация"
+
+msgid "Other Color ..."
+msgstr "Другие цвета..."
+
+msgid "Other Color..."
+msgstr "Другие цвета..."
+
+msgid "P&rint Setup ..."
+msgstr "&Настройка печати ..."
+
+msgid "PDF Version:"
+msgstr "Версия PDF:"
+
+msgid "Pa&ge from:"
+msgstr "&Страница из:"
+
+msgid "Page Display"
+msgstr "Вид страницы"
+
+msgid "Page Rotate:"
+msgstr "Повернуть страницу:"
+
+msgid "Page Scaling:"
+msgstr "Масштабирование страницы:"
+
+msgid "Page Size:"
+msgstr "Размер страницы:"
+
+msgid "Page through the document contents and response links"
+msgstr "Пролистывание содержимого документа и ответных ссылок"
+
+msgid "Page: %d/%d"
+msgstr "Страница: %d/%d"
+
+msgid "Pages"
+msgstr "Страницы"
+
+msgid "Paper"
+msgstr "Бумага"
+
+msgid "Paper is jammed in the printer "
+msgstr "Бумага застряла в принтере"
+
+msgid "Paper:"
+msgstr "Бумага:"
+
+msgid "Paragraph"
+msgstr "Параграф"
+
+msgid "Parse content error."
+msgstr "Ошибка контент-анализа."
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Pe&ncil Tool"
+msgstr "&Карандаш"
+
+msgid "Pencil"
+msgstr "Карандаш"
+
+msgid "Please enter a number between %d and %d."
+msgstr "Пожалуйста, введите число между %d и %d."
+
+msgid "Poly&gon Line Tool"
+msgstr "&Линия прямоугольника"
+
+msgid "Polygon"
+msgstr "Прямоугольник"
+
+msgid "Polygon Line"
+msgstr "Линия прямоугольника"
+
+msgid "Popup"
+msgstr "Всплывающее"
+
+msgid "Portrait"
+msgstr "Портрет"
+
+msgid "Preferences"
+msgstr "Настройки"
+
+msgid "Preview"
+msgstr "Предварительный просмотр"
+
+msgid "Previous &Document"
+msgstr "Пре&дыдущий документ"
+
+msgid "Previous &View"
+msgstr "Пред&ыдущий просмотр"
+
+msgid "Print"
+msgstr "Печать"
+
+msgid "Print Handling"
+msgstr "Печать заголовка"
+
+msgid "Print PDF File - Foxit Reader Classmate Edition"
+msgstr "Печать PDF файла - Foxit Reader Classmate редакция"
+
+msgid "Print Range"
+msgstr "Диапазон страниц"
+
+msgid "Printer"
+msgstr "Принтер"
+
+msgid "Printer Command"
+msgstr "Команды принтера"
+
+msgid "Printing copy %d, page %d / %d ..."
+msgstr "Печать копии %d, страница %d / %d ..."
+
+msgid "Printing page %d / %d ..."
+msgstr "Печать страницы %d / %d ..."
+
+msgid "Printing page %d / %d, copy %d ..."
+msgstr "Печать %d / %d, копия %d ..."
+
+msgid "Printing..."
+msgstr "Печатается..."
+
+msgid "Prioritized"
+msgstr "Предпочтительные"
+
+msgid "Producer:"
+msgstr "Производитель:"
+
+msgid "Progress1"
+msgstr "Прогресс1"
+
+msgid "Progress:"
+msgstr "Прогресс:"
+
+msgid "Proper&ties ..."
+msgstr "Сво&йства"
+
+msgid "Properties"
+msgstr "Свойства"
+
+msgid ""
+"Property Controller\r\n"
+"\r\n"
+"All rights reserved\r\n"
+"Copyright(C) by Foxit Corporation. 2005-2008"
+msgstr ""
+"Свойства контроллера\r\n"
+"\r\n"
+"Все права защищены\r\n"
+"Copyright(C) Foxit Corporation. 2005-2008"
+
+msgid "R&eset Popup Note"
+msgstr "&Сброс всплывающих заметок"
+
+msgid "Reader has finished searching the document. No matches were found."
+msgstr "Поиск завершен. Совпадений нет."
+
+msgid "Reader has finished searching the document. No more matches were found."
+msgstr "Поиск завершен. Больше совпадений нет."
+
+msgid "Ready"
+msgstr "Готово"
+
+msgid "Rectangle"
+msgstr "Прямоугольник"
+
+msgid "Redo"
+msgstr "Повторить"
+
+msgid "Reduce the window to an icon"
+msgstr "Уменьшить окно в значок"
+
+msgid "Rejected"
+msgstr "Отклонено"
+
+msgid "Remove the selected button item from the current toolbar buttons list"
+msgstr "Удалить выбранный элемент кнопки из текущего списка кнопок панели инструментов"
+
+msgid "Replace"
+msgstr "Заменить"
+
+msgid "Reply"
+msgstr "Ответ"
+
+msgid "Resolution:"
+msgstr "Разрешение:"
+
+msgid "Restore the window to normal size"
+msgstr "Восстановление нормального размера окна"
+
+msgid "Reverse Pages"
+msgstr "Обратить страницы"
+
+msgid "Review"
+msgstr "Просмотр"
+
+msgid "Review History"
+msgstr "История просмотра"
+
+msgid "Review history"
+msgstr "История просмотра"
+
+msgid "Right Arrow"
+msgstr "Правая стрелка"
+
+msgid "Right Pointer"
+msgstr "Правый указатель"
+
+msgid "Rotation: %d"
+msgstr "Поворот: %d"
+
+msgid "Ru&bber Tool"
+msgstr "&Резинка"
+
+msgid "S&ubject:"
+msgstr "&Тема:"
+
+msgid "Save &As ..."
+msgstr "&Сохранить как ..."
+
+msgid "Se&t Current Properties as Default"
+msgstr "&Установить текущие свойства по умолчанию"
+
+msgid "Searching %d / %d"
+msgstr "Поиск %d / %d"
+
+msgid "Security Warning"
+msgstr "Предупреждение о безопасности"
+
+msgid "Select a page:"
+msgstr "Выбрать страницу:"
+
+msgid "Select all text in the current document"
+msgstr "Выделить весь текст в текущем документе"
+
+msgid "Select annotations"
+msgstr "Выделить аннотации"
+
+msgid "Select text for copying and pasting"
+msgstr "Выделение текста для копирования и вставки"
+
+msgid "Select text to add a replace mark on it"
+msgstr "Выделить текст, чтобы добавить смену метки на нем"
+
+msgid "Select text to highlight it"
+msgstr "Выделить текст для подсветки"
+
+msgid "Select text to make it crossed out"
+msgstr "Выделить текст, чтобы сделать его перечеркнутым"
+
+msgid "Select text to make it squiggly"
+msgstr "Выделить текст, чтобы пометить его волнистыми линиями"
+
+msgid "Select text to underline it"
+msgstr "Выделить текст, чтобы подчеркнуть его"
+
+msgid "Separator"
+msgstr "Разделитель"
+
+msgid "Set color value for the selected annotations"
+msgstr "Установить значение цвета для выбранной аннотации"
+
+msgid "Set line thickness for the selected annotations"
+msgstr "Установить толщину линии для выбранной аннотации"
+
+msgid "Sho&w text in line"
+msgstr "&Показать текст на линии"
+
+msgid "Shortcuts"
+msgstr "Сочетания клавиш"
+
+msgid ""
+"Single Page\r\n"
+"Continuous\r\n"
+"Facing\r\n"
+"Continuous-Facing"
+msgstr ""
+"Одна страница\r\n"
+"Непрерывная одна страница\r\n"
+"Две страницы\r\n"
+"Непрерывные две страницы"
+
+msgid "Slider1"
+msgstr "Ползунок1"
+
+msgid "Solid"
+msgstr "Сплошной"
+
+msgid "Spin1"
+msgstr "Спин1"
+
+msgid "Squiggly"
+msgstr "Волнистый"
+
+msgid "Star"
+msgstr "Звезда"
+
+msgid "Status:"
+msgstr "Статус:"
+
+msgid "Strike&out Text Tool"
+msgstr "&Зачеркнутый"
+
+msgid "Strikeout"
+msgstr "Зачеркнуть"
+
+msgid "Subject:"
+msgstr "Тема:"
+
+msgid "Subset:"
+msgstr "Страницы из:"
+
+msgid "Tab1"
+msgstr "Вкладка1"
+
+msgid "Text &View"
+msgstr "&Только текст"
+
+msgid "Thai"
+msgstr "Тайский"
+
+msgid ""
+"The automatically scroll time elapse is invalid, must between 1 and 99.\r\n"
+"Please enter again."
+msgstr ""
+"Интервал времени для автоматической прокрутки является недействительным. Она должна быть от 1 до 99.\r\n"
+"Введите его еще раз."
+
+msgid ""
+"The document is loading now.\r\n"
+"\r\n"
+"Are you sure to abort the loading and close it now?"
+msgstr ""
+"Документ загружается.\r\n"
+"\r\n"
+"Вы уверены, что нужно отменить загрузку и закрыть документ?"
+
+msgid ""
+"The document is trying to connect to the site:\r\n"
+"\r\n"
+"%s\r\n"
+"\r\n"
+"If you trust the site, click Yes, otherwise click No\r\n"
+msgstr ""
+"Документ пытается подключиться к следующим веб-сайтам: \r\n"
+"\r\n"
+"%s\r\n"
+"\r\n"
+"Если вы думаете, что сайт заслуживает доверия, нажмите кнопку \"Да\", в противном случае нажмите \"Нет\".\r\n"
+
+msgid "The file has been changed. Do you want to save the changes?"
+msgstr "Файл был изменен. Хотите сохранить изменения?"
+
+msgid "The file is protected by security settings. And need an open password."
+msgstr "Файл защищен настройками безопасности и требует пароль для открытия."
+
+msgid "The file to be launched by this PDF may contain something that could potentially harm your computer. Only open the file if you are sure it is safe. Would you like to open the file?"
+msgstr "Данный PDF файл может содержать элементы, которые могут нанести вред Вашему компьютеру. Открывайте этот файл, только если вы уверены, что данный файл содержит безопасные элементы. Открыть этот файл?"
+
+msgid "The new display scale:"
+msgstr "Новая шкала дисплея:"
+
+msgid ""
+"The page number is invalid, must be between %d and %d.\r\n"
+"Please enter again."
+msgstr ""
+"Номер страницы является недействительным, он должен быть между %d и %d.\r\n"
+"Пожалуйста, введите еще ​​раз."
+
+msgid ""
+"The page number is invalid, must be between 1 and %d.\r\n"
+"Please enter again."
+msgstr ""
+"Неверный номер страницы. Выберите номер страницы от 1 до %d.\r\n"
+"Введите его еще раз."
+
+msgid "The page number should be smaller than %d."
+msgstr "Номер страницы должен быть меньше %d."
+
+msgid "The printer cannot print the current page."
+msgstr "Принтер не может напечатать текущую страницу."
+
+msgid "The printer door is open."
+msgstr "Лоток принтера открыт."
+
+msgid "The printer has a paper problem. "
+msgstr "Проблема с бумагой в принтере."
+
+msgid "The printer has an error that requires the user to do something."
+msgstr "Произошла ошибка принтера, которая требует вмешательства пользователя"
+
+msgid "The printer has run out of memory. "
+msgstr "У принтера закончилась память"
+
+msgid "The printer is busy. "
+msgstr "Принтер занят."
+
+msgid "The printer is deleting a print job."
+msgstr "Принтер выполняет удаление задания на печать."
+
+msgid "The printer is in a manual feed state."
+msgstr "Принтер использует ручную подачу."
+
+msgid "The printer is in an active input/output state."
+msgstr "Принтер находится в состоянии активного входа или выхода."
+
+msgid "The printer is in an error state."
+msgstr "Принтер находится в состоянии ошибки."
+
+msgid "The printer is in power save mode. "
+msgstr "Принтер находится в режиме экономии энергии."
+
+msgid "The printer is initializing. "
+msgstr "Принтер выполняет инициализацию."
+
+msgid "The printer is low on toner."
+msgstr "Низкий уровень тонера в принтере"
+
+msgid "The printer is not available for printing."
+msgstr "Принтер недоступен для печати"
+
+msgid "The printer is offline."
+msgstr "Принтер выключен."
+
+msgid "The printer is out of paper."
+msgstr "В принтере нет бумаги."
+
+msgid "The printer is out of toner."
+msgstr "В принтере закончился тонер."
+
+msgid "The printer is paused."
+msgstr "Принтер приостановлен."
+
+msgid "The printer is printing."
+msgstr "Принтер печатает."
+
+msgid "The printer is processing a print job. "
+msgstr "Принтер обрабатывает задания на печать."
+
+msgid "The printer is waiting. "
+msgstr "Принтер в режиме ожидания."
+
+msgid "The printer is warming up."
+msgstr "Принтер прогревается."
+
+msgid "The printer name is invalid."
+msgstr "Имя принтера является недействительным."
+
+msgid "The printer status is unknown. "
+msgstr "Неизвестный статус принтера."
+
+msgid "The printer's output bin is full."
+msgstr "Выходной лоток принтера заполнен."
+
+msgid "The selected area has been copied to the clipboard."
+msgstr "Выбранный участок был скопирован в буфер обмена."
+
+msgid "The value of magnification must be 'Actual Size','Fit Width','Fit Height','Fit Page', or  a value between  5% and 6400%. "
+msgstr "Величина увеличения должна быть \"Фактический размер\", \"По ширине\", \"По высоте\", \"По размеру страницы\", или значение от 5% до 6400%."
+
+msgid "This file has been opened successfully! "
+msgstr "Этот файл был успешно открыт!"
+
+msgid "This file has no page object. It's an empty file."
+msgstr "Этот файл не имеет объекта страницы. Файл пуст."
+
+msgid "Title:"
+msgstr "Название:"
+
+msgid ""
+"Top left\r\n"
+"Top center\r\n"
+"Top right\r\n"
+"Center left\r\n"
+"Center\r\n"
+"Center right\r\n"
+"Bottom left\r\n"
+"Bottom center\r\n"
+"Bottom right"
+msgstr ""
+"Вверху слева\r\n"
+"Сверху по центру\r\n"
+"Вверху справа\r\n"
+"В центре слева\r\n"
+"Центр\r\n"
+"Центр справа\r\n"
+"Внизу слева\r\n"
+"Внизу по центру\r\n"
+"Внизу справа"
+
+msgid "Tree1"
+msgstr "Дерево1"
+
+msgid "Type:"
+msgstr "Тип:"
+
+msgid "Type: "
+msgstr "Тип: "
+
+msgid "Underline"
+msgstr "Подчеркивание"
+
+msgid "Undo"
+msgstr "Вернуть"
+
+msgid "Unknown"
+msgstr "Неизвестный"
+
+msgid ""
+"Unknown error!\r\n"
+"\r\n"
+"Cannot open the file.\r\n"
+"Please verify and try again."
+msgstr ""
+"Неизвестная ошибка!\r\n"
+"\r\n"
+"Файл не может быть открыт.\r\n"
+"Пожалуйста, проверьте и попробуйте снова."
+
+msgid "Unknown user"
+msgstr "Неизвестный пользователь"
+
+msgid "Up Arrow"
+msgstr "Стрелка вверх"
+
+msgid "Up-Left Arrow"
+msgstr "Стрелка вверх-влево"
+
+msgid "Zoom &In"
+msgstr "&Увеличить"
+
+msgid "Zoom &Out"
+msgstr "У&меньшить"
+
+msgid "Zoom &Point:"
+msgstr "&Позиция увеличения:"
+
+msgid "Zoom &To ..."
+msgstr "У&величить до ..."
+
+msgid "Zoom To"
+msgstr "Увеличить до"
+
+msgid "Zoom: %d%%"
+msgstr "Увеличение: %d%%"
+
+msgid "file full path name"
+msgstr "полный путь к файлу"
+
+msgid "in"
+msgstr "в"
+
+msgid "prompt string"
+msgstr "Строка подсказок"
+
