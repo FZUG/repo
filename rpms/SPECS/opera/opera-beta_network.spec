@@ -1,6 +1,8 @@
 %global debug_package %{nil}
 %global tmproot /tmp/%{name}-%{version}
-%global appurl  http://ftp.opera.com/pub/%{name}/%{version}/linux/%{name}_%{version}_amd64.deb
+%global appfile %{name}_%{version}_amd64.deb
+%global appurl  http://ftp.opera.com/pub/%{name}/%{version}/linux/%{appfile}
+%global sha1sum af41c97190a5523834df73a5cab8a5c353be172c
 
 # Due to changes in Chromium, Opera is no longer able to use the system
 # FFmpeg library for H264 video playback on Linux, so H264-encoded videos
@@ -11,7 +13,7 @@
 
 Name:    opera-beta
 Version: 34.0.2036.24
-Release: 1
+Release: 2.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
 Summary(zh_CN): 快速安全的欧朋浏览器
@@ -49,7 +51,13 @@ Requires: /usr/bin/update-mime-database
 
 %install
 # Download opera
-test -f %{name}_%{version}_amd64.deb || axel -a %appurl
+Download() {
+    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
+    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
+        axel -a %appurl; Download
+    fi
+}
+Download
 
 # Extract DEB package
 dpkg-deb -X %{name}_%{version}_amd64.deb %{buildroot}
@@ -71,7 +79,13 @@ rm -rf %{buildroot}%{_datadir}/{menu,lintian}
 if [ $1 -ge 1 ]; then
 # Download opera
 cd /tmp
-test -f %{name}_%{version}_amd64.deb || axel -a %appurl
+Download() {
+    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
+    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
+        axel -a %appurl; Download
+    fi
+}
+Download
 
 # Extract DEB package
 mkdir %{tmproot} &>/dev/null ||:
@@ -139,6 +153,8 @@ fi
 %ghost %{_defaultdocdir}/%{name}
 
 %changelog
+* Mon Dec 14 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.24-2
+- Download complete check
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.24-1
 - Update to 34.0.2036.24
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> -32.0.1948.19-1
