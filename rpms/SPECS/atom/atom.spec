@@ -8,11 +8,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 3937312936f09c0279186c96423cc2b5a3be480f
+%global _commit 473e8856a8b209d3dba505024879a128b8777369
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.3.1
+Version: 1.3.2
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hackable text editor for the 21st century
 
@@ -102,6 +102,8 @@ fi
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 1.3.2-1.git473e885
+- Release 1.3.2
 * Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git3937312
 - Release 1.3.1
 * Thu Nov 26 2015 mosquito <sensor.wen@gmail.com> - 1.2.4-1.git05ef4c0
