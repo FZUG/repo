@@ -6,11 +6,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 783ecf841a2b21edca6d86853670cae89b4c244f
+%global _commit dfc08dc9edf6607483b193bf934d3badc3fa2e11
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.3
+Version: 0.10.5
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -22,7 +22,7 @@ Source1: about.json
 Source2: welcome.md
 
 BuildRequires: npm, node-gyp
-BuildRequires: python, make
+BuildRequires: python, make, libX11-devel
 BuildRequires: desktop-file-utils, git
 
 %description
@@ -86,10 +86,11 @@ EOT
 desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # Change appName
-sed -i -e '/Long/s|:.*,$|: "Visual Studio Code",|' \
-    -e '/Short/s|:.*,$|: "VSCode",|' \
-    -e '/OSS/s|:.*,$|: "Visual Studio Code document",|' \
-    -e '/icons/,+12d' \
+sed -i -e \
+   '/Short/s|:.*,$|: "VSCode",|
+    /Long/s|:.*,$|: "Visual Studio Code",|
+    /OSS /s|:.*,$|: "Visual Studio Code document",|
+    /icons/,+12d' \
     %{buildroot}%{_datadir}/%{name}/resources/app/product.json
 
 # About.json
@@ -131,6 +132,8 @@ fi
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 0.10.5-1
+- Release 0.10.5
 * Fri Dec 04 2015 mosquito <sensor.wen@gmail.com> - 0.10.3-1
 - Release 0.10.3
 * Thu Nov 26 2015 mosquito <sensor.wen@gmail.com> - 0.10.2-1
