@@ -13,31 +13,32 @@
 %global _commit 75fab30de2f3644fa549d497a03d3454574a0c10
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		bcloud
-Version:	3.8.1
-Release:	2.git%{_shortcommit}%{?dist}
-Summary:	Baidu Pan client for Linux Desktop users
-Summary(zh_CN):	百度网盘 Linux 桌面客户端
+Name:    bcloud
+Version: 3.8.1
+Release: 3.git%{_shortcommit}%{?dist}
+Summary: Baidu Pan client for Linux Desktop users
+Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
 # https://raw.githubusercontent.com/LiuLang/bcloud/master/LICENSE
-License:	GPLv3
-URL:		https://github.com/LiuLang/bcloud
-Source0:	https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+License: GPLv3
+URL:     https://github.com/LiuLang/bcloud
+Source0: https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Patch0:  fix_get_bdstoken.patch
 
-BuildArch:	noarch
-BuildRequires:	python3-devel
-Requires:	gnome-icon-theme-symbolic
-Requires:	gtk3
-Requires:	libnotify
-Requires:	python3-crypto
-Requires:	python3-cssselect
-Requires:	python3-dbus
-Requires:	python3-gobject
-Requires:	python3-keyring
-Requires:	python3-lxml
-Requires:	python3-inotify
-#Requires:	libgnome-keyring, gnome-keyring
-#Requires:	python3-pykde4
+BuildArch: noarch
+BuildRequires: python3-devel
+Requires: gnome-icon-theme-symbolic
+Requires: gtk3
+Requires: libnotify
+Requires: python3-crypto
+Requires: python3-cssselect
+Requires: python3-dbus
+Requires: python3-gobject
+Requires: python3-keyring
+Requires: python3-lxml
+Requires: python3-inotify
+#Requires: libgnome-keyring, gnome-keyring
+#Requires: python3-pykde4
 
 %description
 Baidu Pan client for Linux Desktop users.
@@ -47,16 +48,17 @@ Baidu Pan client for Linux Desktop users.
 
 %prep
 %setup -q -n %repo-%{_commit}
+%patch0 -p1
 
 %build
 %{__python3} setup.py build
 
 %install
 %{__python3} setup.py install \
-	-O1 \
-	--skip-build \
-	--prefix=%{_prefix} \
-	--root=%{buildroot}
+    -O1 \
+    --skip-build \
+    --prefix=%{_prefix} \
+    --root=%{buildroot}
 
 %find_lang %{name}
 
@@ -82,6 +84,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 3.8.1-3.git75fab30
+- Fix get bdstoken https://github.com/LiuLang/bcloud/pull/214
+
 * Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 3.8.1-2.git75fab30
 - Update post script
 
