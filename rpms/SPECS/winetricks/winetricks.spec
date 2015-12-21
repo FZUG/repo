@@ -2,22 +2,22 @@
 %global project winetricks
 
 %global repo %{project}
-%global _commit 7ac3ae008183fd905a2ac7eb582ac3d405bbc7ec
+%global _commit ca1a031aeaf9a3c3655b9addf17450055c9d33aa
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global zh_repo winetricks-zh
-%global zh_commit 6975d6faf176d2ae02b434dbdd5d885b40454ed6
+%global zh_commit ae55ae99ad76563142865be5675b1572c50b994f
 %global zh_scommit %(c=%{zh_commit}; echo ${c:0:7})
 
-Name: winetricks
-Version: 20150702
+Name:    winetricks
+Version: 20151116
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: an easy way to install program in Wine
 Summary(zh_CN): 快速为 Wine 安装应用程序
 
-Group: Applications/Internet
+Group:   Applications/Internet
 License: GPL
-URL: http://winetricks.org
+URL:     http://winetricks.org
 Source0: https://github.com/Winetricks/winetricks/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source1: https://github.com/hillwoodroc/winetricks-zh/archive/%{zh_commit}/%{zh_repo}-%{zh_scommit}.tar.gz
 
@@ -53,29 +53,35 @@ LineNum=$(($(grep -n Apps src/winetricks|cut -d: -f1)+2))
 head -n $LineNum src/winetricks > top
 tail -n $(expr $Total - $LineNum) src/winetricks > bottom
 
+# delete qq
+sed -i '/qq apps/,+93d' bottom
+
 pushd %{zh_repo}-%{zh_commit}/verb
 for i in *.verb; do
-    if [[ $i != qqintl.verb && $i != qq.verb ]]; then
-        cat $i >> ../../top
-        echo -e "\n#----------------------------------------------------------------\n" >> ../../top
-    fi
+    cat $i >> ../../top
+    echo -e "\n#----------------------------------------------------------------\n" >> ../../top
 done
 popd
-cat top bottom > winetricks
-
-N=$(($(grep -n 'load_qq()' winetricks|cut -d: -f1)+21))
-sed -i -e "$N a    # fix issues#10, fix crash after login\n    mkdir -p ~\/.local\/share\/wineprefixes\/qq\/drive_c\/users\/$LOGNAME\/Application\\\ Data\/Tencent\/QQ\/Misc\/com.tencent.wireless\/SDK\n    chmod 000 ~\/.local\/share\/wineprefixes\/qq\/drive_c\/users\/$LOGNAME\/Application\\\ Data\/Tencent\/QQ\/Misc\/com.tencent.wireless\/SDK\n" winetricks
+cat top bottom > %{name}
 
 %install
 install -Dm 755 %{name} %{buildroot}%{_bindir}/%{name}
 install -Dm 644 src/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 
+# Verbs
+install -d %{buildroot}%{_datadir}/%{name}/verbs
+cp %{zh_repo}-%{zh_commit}/verb/* %{buildroot}%{_datadir}/%{name}/verbs/
+
 %files
 %defattr(-,root,root,-)
 %doc README.md
+%license src/COPYING
 %{_bindir}/%{name}
+%{_datadir}/%{name}/verbs
 %{_mandir}/man1/%{name}.1.gz
 
 %changelog
-* Sat Jul  4 2015 mosquito <sensor.wen@gmail.com> - 20150702-1.git7ac3ae00
+* Tue Dec 22 2015 mosquito <sensor.wen@gmail.com> - 20151116-1.gitca1a031
+- Update to 20151116-1.gitca1a031
+* Sat Jul  4 2015 mosquito <sensor.wen@gmail.com> - 20150702-1.git7ac3ae0
 - Initial build
