@@ -15,7 +15,7 @@
 %global  with_http2          1
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.9.16
+%global  ngx_lua_version     0.9.20
 %global  ndk_version         0.2.19
 %global  with_ngx_lua        1
 
@@ -33,7 +33,7 @@
 
 # OWASP ModSecurity Core Rule Set (CRS)
 %global  modsec_crs_version  2.2.9
-%global  modsec_crs_commit   c63affc9dfa6294ecf8782ae4d1f1fb2c9fd5a18
+%global  modsec_crs_commit   60c8bc920f6f21134e9aa2df2267e98cb37f8bcb
 %global  modsec_crs_shortcommit %(c=%{modsec_crs_commit};echo ${c:0:7})
 %global  with_modsec_crs     1
 
@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.7
+Version:           1.9.9
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -554,6 +554,11 @@ fi
 
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.9-1.modsec_2.9.0
+- update to upstream release 1.9.9
+- update ngx_lua 0.9.20
+- update OWASP ModSecurity Core Rule Set to 60c8bc9
+
 * Sat Nov 21 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.7-1.modsec_2.9.0
 - update to upstream release 1.9.7
 
