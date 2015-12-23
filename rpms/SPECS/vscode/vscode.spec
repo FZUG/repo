@@ -6,11 +6,11 @@
 %global repo %{project}
 
 # commit
-%global _commit dfc08dc9edf6607483b193bf934d3badc3fa2e11
+%global _commit a80232bbcfe8a5cdad1ebc98638673d9dcb02458
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.5
+Version: 0.10.6
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -132,6 +132,8 @@ fi
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 0.10.6-1
+- Release 0.10.6
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 0.10.5-1
 - Release 0.10.5
 * Fri Dec 04 2015 mosquito <sensor.wen@gmail.com> - 0.10.3-1
