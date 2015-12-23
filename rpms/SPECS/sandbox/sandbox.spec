@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:       sandbox
-Version:    2.9
+Version:    2.10
 Release:    1%{?dist}
 Summary:    Gentoo sandbox tool to run programs in a "sandboxed" environment
 Group:      Applications/System
@@ -58,14 +58,20 @@ sed -i '/GNU/aexport SANDBOX_LIB=%{_libdir}/lib%{name}.so\nunset LD_PRELOAD' \
     %{buildroot}%{_datadir}/%{name}/%{name}.bashrc
 
 %post
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
 /sbin/ldconfig
 
 %postun
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database &>/dev/null ||:
 /sbin/ldconfig
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
@@ -79,5 +85,7 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_datadir}/%{name}/%{name}.bashrc
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 2.10-1
+- Release 2.10
 * Mon Oct 26 2015 mosquito <sensor.wen@gmail.com> - 2.9-1
-- initial build
+- Initial build
