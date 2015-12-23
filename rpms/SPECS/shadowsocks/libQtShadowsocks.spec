@@ -3,77 +3,77 @@
 %global repo %{project}
 
 # commit
-%global _commit 7b71ee0dc5975f219044f1e042ffb85497f636fa
+%global _commit 3c3aa833db855551b87d35bee854475d1fd094d0
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		libQtShadowsocks
-Version:	1.6.1
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	A lightweight and ultra-fast shadowsocks library
+Name:    libQtShadowsocks
+Version: 1.8.2
+Release: 1.git%{_shortcommit}%{?dist}
+Summary: A lightweight and ultra-fast shadowsocks library
 
-License:	LGPLv3+
-URL:		https://github.com/librehat/libQtShadowsocks
-Source0:	https://github.com/librehat/libQtShadowsocks/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+License: LGPLv3+
+URL:     https://github.com/librehat/libQtShadowsocks
+Source0: https://github.com/librehat/libQtShadowsocks/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-qttools
 BuildRequires: botan-devel
-Requires: qt5-qtbase
-Requires: botan
 
 %description
 A lightweight and ultra-fast shadowsocks library written in C++/Qt.
 
 %package devel
-Summary:	libQtShadowsocks header files
-Requires:	libQtShadowsocks
+Summary: %{name} header files
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Development files (headers) of libQtShadowsocks.
+Development files (headers) of %{name}.
 
-%package -n shadowsocks-libQtShadowsocks
-Summary:	A CLI Shadowsocks client
-Requires:	libQtShadowsocks
+%package -n shadowsocks-%{name}
+Summary: A CLI Shadowsocks client
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
-%description -n shadowsocks-libQtShadowsocks
-A shadowsocks CLI client using libQtShadowsocks.
+%description -n shadowsocks-%{name}
+A shadowsocks CLI client using %{name}.
 
 %prep
 %setup -q -n %repo-%{_commit}
 
 %build
 %ifarch x86_64
-%{_qt5_qmake} DEFINES+="LIB64"
+%{qmake_qt5} DEFINES+="LIB64"
 %else
-%{_qt5_qmake}
+%{qmake_qt5}
 %endif
-
 make %{?_smp_mflags}
 
 %install
-make install INSTALL_ROOT=%{buildroot}
+%make_install INSTALL_ROOT=%{buildroot}
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
-%doc README.md LICENSE
+%doc README.md
+%license LICENSE
 %{_libdir}/%{name}.so.*
 
 %files devel
 %defattr(-,root,root,-)
-%doc README.md LICENSE
 %{_libdir}/%{name}.so
 %{_libdir}/pkgconfig/QtShadowsocks.pc
 %{_includedir}/qtshadowsocks/*
 
 %files -n shadowsocks-%{name}
 %defattr(-,root,root,-)
-%doc README.md LICENSE
+%doc README.md
+%license LICENSE
 %{_bindir}/shadowsocks-*
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.2-1.git3c3aa83
+- Update to 1.8.2-1.git3c3aa83
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git7b71ee0
 - Update to 1.6.1-1.git7b71ee0
 * Tue Jun 02 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git96fc948
