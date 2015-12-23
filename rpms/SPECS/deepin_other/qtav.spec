@@ -1,15 +1,16 @@
+%global __strip_shared %(test $(rpm -E%?fedora) -eq 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
 %global debug_package %{nil}
 %global project QtAV
 %global repo %{project}
 
-%global _commit 83f523657fc50b9bea750726b40b630fd32a9eb9
+%global _commit 519af919f6f6ebcb971dc9918c216a8715621c6e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    qtav
-Version: 1.8.0
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.9.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
@@ -241,7 +242,7 @@ ln -sfv %{_libdir}/libQtAV.so %{buildroot}%{_libdir}/libQt5AV.so
 ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 
 # strip files
-strip --strip-all --verbose %{buildroot}%{_qt5_bindir}/*layer
+%{__strip_shared}
 
 %post devel -p /sbin/ldconfig
 %post qml-module -p /sbin/ldconfig
@@ -250,7 +251,6 @@ strip --strip-all --verbose %{buildroot}%{_qt5_bindir}/*layer
 
 %post players
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun devel -p /sbin/ldconfig
@@ -264,6 +264,9 @@ if [ $1 -eq 0 ]; then
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
 /usr/bin/update-desktop-database -q ||:
+
+%posttrans players
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files sdk
 %defattr(-,root,root,-)
@@ -332,6 +335,8 @@ fi
 
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.9.0-1.git519af91
+- Update version to 1.9.0-1.git519af91
 * Tue Dec  8 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-3.git83f5236
 - Update version to 1.8.0-3.git83f5236
 - Hardened package
