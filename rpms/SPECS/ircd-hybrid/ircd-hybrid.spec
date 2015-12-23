@@ -43,7 +43,7 @@
 %endif # with_selinux
 
 Name:     ircd-hybrid
-Version:  8.2.9
+Version:  8.2.11
 Release:  1%{?dist}
 Summary:  Internet Relay Chat Server
 
@@ -94,6 +94,7 @@ EFNet IRC network.
 %if 0%{?with_selinux}
 %package  selinux
 Summary:  SELinux policies for %{name}
+BuildArch: noarch
 BuildRequires:  selinux-policy
 BuildRequires:  selinux-policy-devel
 Requires(post): selinux-policy-base >= %{selinux_policyver}
@@ -177,7 +178,11 @@ install -p -m 644 selinux/$INTERFACES \
     %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
 
 # install policy modules
+%if 0%{?fedora} > 22
+%_format MODULES $x.cil.bz2
+%else
 %_format MODULES $x.pp.bz2
+%endif
 install -d %{buildroot}%{_datadir}/selinux/packages
 install -m 644 selinux/$MODULES %{buildroot}%{_datadir}/selinux/packages
 %endif # with_selinux
@@ -207,7 +212,7 @@ fi
 if [ $1 -eq 1 ]; then
     %{_sbindir}/setsebool -P -N global_ssp=1
 fi
-%_format MODULES %{_datadir}/selinux/packages/$x.pp.bz2
+%_format MODULES %{_datadir}/selinux/packages/$x.*.bz2
 %{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULES
 if %{_sbindir}/selinuxenabled ; then
     %{_sbindir}/load_policy
@@ -278,6 +283,9 @@ fi
 %endif # with_selinux
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 8.2.11-1
+- Update to 8.2.11
+
 * Wed Oct 14 2015 mosquito <sensor.wen@gmail.com> - 8.2.9-1
 - Update to 8.2.9
 - Add SELinux module (ircd-hybrid 1.0.0)

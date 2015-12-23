@@ -44,9 +44,9 @@ index 3d722ef..2df3c49 100644
 -#define PPATH     RUNPATH "/ircd.pid"  /* pid file */
 +#define LPATH     LOGPATH "/ircd-hybrid.log"  /* ircd logfile */
 +#define PPATH     RUNPATH "/ircd-hybrid.pid"  /* pid file */
- #define LIPATH    LIBPATH "/links.txt"  /* cached links file */
  
  /*
+  * This file is included to supply default values for things which
 diff --git a/src/Makefile.am b/src/Makefile.am
 index 5ffb12a..8549317 100644
 --- a/src/Makefile.am
@@ -57,5 +57,5 @@ index 5ffb12a..8549317 100644
 -bin_PROGRAMS = ircd
 +sbin_PROGRAMS = ircd
  
- BUILD_DATE ?= $(shell LANG=C date '+%B %-e %Y at %T%z')
+ AM_YFLAGS = -d
  
