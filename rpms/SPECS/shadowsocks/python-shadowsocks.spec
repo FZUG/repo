@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit a2bc6e19457f51a421b7d2866be5903e0d71fd2f
+%global _commit 767b9217f874db37e947f5883f06e11e64ba9861
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %if 0%{?fedora} > 12
@@ -13,26 +13,26 @@
 %{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %endif
 
-Name:           python-shadowsocks
-Version:        2.8.2
-Release:        1.git%{_shortcommit}%{?dist}
-Summary:        A fast tunnel proxy that help you get through firewalls
+Name:    python-shadowsocks
+Version: 2.8.3
+Release: 1.git%{_shortcommit}%{?dist}
+Summary: A fast tunnel proxy that help you get through firewalls
 
-License:        Apache
-URL:            http://shadowsocks.org
+License: Apache
+URL:     http://shadowsocks.org
 # https://pypi.python.org/packages/source/s/%%{repo}/%%{repo}-%%{version}.tar.gz
-Source0:        https://github.com/shadowsocks/shadowsocks/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: https://github.com/mengskysama/shadowsocks-rm/archive/%{_commit}/%{repo}-rm-%{_shortcommit}.tar.gz
 
-BuildArch:      noarch
-BuildRequires:  python2-devel
-BuildRequires:  python-setuptools
-BuildRequires:  m2crypto
-Requires:       m2crypto
+BuildArch: noarch
+BuildRequires: python2-devel
+BuildRequires: python-setuptools
+BuildRequires: m2crypto
+Requires: m2crypto
 %if 0%{?with_python3}
-BuildRequires:  python3-devel
-BuildRequires:  python3-setuptools
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
 # m2crypto is not available for python3
-#BuildRequires:  python3-m2crypto
+#BuildRequires: python3-m2crypto
 %endif
 
 %description
@@ -44,7 +44,7 @@ Python 2.
 
 %if 0%{?with_python3}
 %package -n python3-%{repo}
-Summary:        A fast tunnel proxy that help you get through firewalls (Python 3)
+Summary: A fast tunnel proxy that help you get through firewalls (Python 3)
 
 %description -n python3-%{repo}
 Shadowsocks is a socks5 tunnel proxy, designed to secure your Internet
@@ -55,11 +55,13 @@ Python 3.
 %endif
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-rm-%{_commit}
 # remove shebangs in the module files
 sed -i -e '/^#!\//, 1d' %{repo}/*.py %{repo}/crypto/*.py
 # explicitly remove the included egg
 rm -rf %{repo}*.egg-info
+# version
+sed -i -e '/version/s|".*"|"%{version}"|' setup.py
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
@@ -78,7 +80,7 @@ popd
 %install
 %if 0%{?with_python3}
 pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root %{buildroot}
+%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
 mv %{buildroot}%{_bindir}/{,python3-}sslocal
 mv %{buildroot}%{_bindir}/{,python3-}ssserver
 %endif # with_python3
@@ -94,20 +96,26 @@ popd
 %endif # with_python3
 
 %files
-%doc README.rst LICENSE
+%defattr(-,root,root,-)
+%doc README.rst
+%license LICENSE
 %{_bindir}/sslocal
 %{_bindir}/ssserver
 %{python2_sitelib}/%{repo}*
 
 %if 0%{?with_python3}
 %files -n python3-%{repo}
-%doc README.rst LICENSE
+%doc README.rst
+%license LICENSE
 %{_bindir}/python3-sslocal
 %{_bindir}/python3-ssserver
 %{python3_sitelib}/%{repo}*
 %endif
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 2.8.3-1.git767b921
+- Update to 2.8.3
+
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 2.8.2-1.gita2bc6e1
 - Update to 2.8.2
 
