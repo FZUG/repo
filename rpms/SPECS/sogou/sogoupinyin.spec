@@ -1,5 +1,6 @@
 %global debug_package %{nil}
-%define _xinitrcdir %{_sysconfdir}/X11/xinit/xinitrc.d
+%global _xinitrcdir %{_sysconfdir}/X11/xinit/xinitrc.d
+%global _xinputdir  %{_sysconfdir}/X11/xinit/xinput.d
 
 # sogoupinyin-selinux conditional
 %if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
@@ -29,7 +30,7 @@
 
 Name:       sogoupinyin
 Version:    2.0.0.0068
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
@@ -303,11 +304,41 @@ install -m 644 selinux/$MODULES %{buildroot}%{_datadir}/selinux/packages
 %endif # with_selinux
 
 %post
+USER=$(logname||who|awk '/:0/{print $1}')
+
+# stop ibus-daemon
 test -x /usr/bin/ibus-daemon && chmod a-x /usr/bin/ibus-daemon ||:
+pkill ibus &>/dev/null ||:
+
+# set xinputrc
 INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
 if [ "$INPUTRC" != "fcitx.conf" ]; then
-    alternatives --set xinputrc /etc/X11/xinit/xinput.d/fcitx.conf
+    alternatives --set xinputrc %{_xinputdir}/fcitx.conf
+    mkdir -p /home/${USER}/.config/imsettings &>/dev/null ||:
+    ln -sf %{_xinputdir}/fcitx.conf /home/${USER}/.config/imsettings/xinputrc
+    chown -R $USER:$USER /home/${USER}/.config/imsettings
 fi
+
+# set fcitx environment variable
+grep "sogou" /home/${USER}/.profile &>/dev/null || \
+cat >> /home/${USER}/.profile <<EOF
+export XIM=fcitx
+export XIM_PROGRAM=/usr/bin/fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+while(test ! -d /proc/\`pidof sogou-qimpanel||echo None\`); do
+    fcitx; sogou-qimpanel
+    sleep 15
+done &
+EOF
+chown $USER:$USER /home/${USER}/.profile
+
+# start fcitx and sogou-qimpanel
+#/bin/su -c "gsettings set org.gnome.settings-daemon.plugins.keyboard active false" - $USER &>/dev/null ||:
+#/bin/su -c "imsettings-switch -xq fcitx" - $USER &>/dev/null ||:
+#/bin/fcitx &>/dev/null ||:
+#/bin/sogou-qimpanel &>/dev/null ||:
 
 # install
 if [ $1 -eq 1 ]; then
@@ -399,6 +430,9 @@ fi
 %endif # with_selinux
 
 %changelog
+* Wed Dec 23 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-2
+- Fix sogou-qimpanel do not run
+  see https://github.com/FZUG/repo/issues/49
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-1
 - Update version 2.0.0.0068
 - Update post script
