@@ -3,18 +3,18 @@
 %global repo %{project}
 
 # commit
-%global _commit 6cd43723422c5c4f26454ef41bb748bdf620fd51
+%global _commit 7ec8a6306085531371e91d03aa8cb7f44ec728f5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name: shadowsocks-qt5
-Version: 2.4.1
+Name:    shadowsocks-qt5
+Version: 2.6.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A cross-platform shadowsocks GUI client
 Summary(zh_CN): 跨平台 shadowsocks GUI 客户端
 
-Group: Applications/Internet
+Group:   Applications/Internet
 License: LGPLv3+
-URL: https://github.com/librehat/shadowsocks-qt5
+URL:     https://github.com/librehat/shadowsocks-qt5
 Source0: https://github.com/librehat/shadowsocks-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: pkgconfig
@@ -37,30 +37,39 @@ Shadowsocks-Qt5 是一个本地跨平台 shadowsocks GUI 客户端.
 %setup -q -n %repo-%{_commit}
 
 %build
-%{_qt5_qmake} INSTALL_PREFIX=%{_prefix}
+%{qmake_qt5} INSTALL_PREFIX=%{_prefix}
 make %{?_smp_mflags}
 
 %install
-make install INSTALL_ROOT=%{buildroot}
+%make_install INSTALL_ROOT=%{buildroot}
 
 %post
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-ldconfig
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
+/sbin/ldconfig
 
 %postun
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-ldconfig
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database &>/dev/null ||:
+/sbin/ldconfig
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
-%doc README.md LICENSE
+%doc README.md
+%license LICENSE
 %{_bindir}/ss-qt5
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/*
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 2.6.0-1.git7ec8a63
+- Update to 2.6.0-1.git7ec8a63
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 2.4.1-1.git6cd4372
 - Update to 2.4.1-1.git6cd4372
 * Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 2.4.0-1.git7ef006f
