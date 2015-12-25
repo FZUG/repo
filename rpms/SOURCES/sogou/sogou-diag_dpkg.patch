@@ -1,0 +1,23 @@
+--- a/usr/bin/sogou-diag	2015-12-25 21:14:52.175686138 +0800
++++ b/usr/bin/sogou-diag	2015-12-25 21:15:12.715788484 +0800
+@@ -40,13 +40,18 @@
+ 	log_printf "Detected im-switch, please purge it and use im-config instead.\n"
+ fi
+ 
+-if `which dpkg 2>&1 1>/dev/null`; then
++if `which dpkg &>/dev/null`; then
+         log_printf "Finding im-config installation: `dpkg -l im-config`\n"
+         log_printf "Installed fcitx components:\n`dpkg -l | grep fcitx | grep "^i" | awk '{print $2"\t\t"$3}'`\n\n"
+         dpkg -l > $DPKG_INSTALLED
+         log_printf "Installed packages list (deb) collected.\n"
++elif `which rpm &>/dev/null`; then
++        log_printf "Finding im-chooser installation: `rpm -q im-chooser`\n"
++        log_printf "Installed fcitx components:\n`rpm -qa | grep fcitx`\n\n"
++        rpm -qa > $DPKG_INSTALLED
++        log_printf "Installed packages list (rpm) collected.\n"
+ else
+-        log_printf "System type is not Debian based, giving up package info collection.\n"
++        log_printf "System type is not Debian and Redhat based, giving up package info collection.\n"
+ fi
+ 
+ log_printf "Running fcitx processes:\n`ps -u $USER -o pid,ppid,state,nice,lstart,pcpu,pmem,cmd | grep fcitx | grep -v grep`\n\n"

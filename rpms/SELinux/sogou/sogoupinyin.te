@@ -1,4 +1,4 @@
-policy_module(sogoupinyin, 1.0.0)
+policy_module(sogoupinyin, 1.1.0)
 
 # Allow user_r, staff_r, unconfined_r role access sogou_t
 optional_policy(`
@@ -151,11 +151,13 @@ fs_dontaudit_getattr_xattr_fs(sogou_t)
 # execute bash script /usr/bin/sogou-session
 #!!!! WARNING: 'shell_exec_t' is a base type.
 #allow sogou_t shell_exec_t:file { execute execute_no_trans };
+corecmd_exec_shell(sogou_t)
 
 # execute fcitx-remote
 #!!!! WARNING: 'bin_t' is a base type.
 #allow sogou_t bin_t:file { execute execute_no_trans };
-corecmd_dontaudit_exec_all_executables(sogou_t)
+corecmd_exec_all_executables(sogou_t)
+#corecmd_dontaudit_exec_all_executables(sogou_t)
 
 # read /var/lib/dbus/machine-id
 #allow sogou_t system_dbusd_var_lib_t:file { read getattr open };
@@ -171,8 +173,11 @@ auth_dontaudit_read_passwd(sogou_t)
 
 # dont read /proc/meminfo
 #kernel_read_all_proc(sogou_t)
-kernel_dontaudit_read_system_state(sogou_t)
+#kernel_list_proc(sogou_t)
+#kernel_dontaudit_read_state(sogou_t)
+#kernel_dontaudit_read_system_state(sogou_t)
 kernel_dontaudit_getattr_core_if(sogou_t)
+kernel_dontaudit_list_all_proc(sogou_t)
 
 # dont read /var/lib/dpkg/status
 #!!!! WARNING: 'var_lib_t' is a base type.

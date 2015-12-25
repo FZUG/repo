@@ -30,7 +30,7 @@
 
 Name:       sogoupinyin
 Version:    2.0.0.0068
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
@@ -43,6 +43,9 @@ Source11:   %{name}.te
 Source12:   %{name}.fc
 Source13:   %{name}.if
 Source14:   Makefile
+
+# https://github.com/FZUG/repo/issues/50
+Patch0:     sogou-diag_dpkg.patch
 
 BuildRequires: dpkg
 Requires(post): /usr/bin/glib-compile-schemas
@@ -140,6 +143,10 @@ dpkg-deb -X %{SOURCE0} %{_builddir}/%{name}-%{version}
 dpkg-deb -X %{SOURCE1} %{_builddir}/%{name}-%{version}
 %endif
 
+# patch sogou-diag
+pushd %{_builddir}/%{name}-%{version}
+%patch0 -p1
+
 %if 0%{?with_selinux}
 pushd %{_builddir}/%{name}-%{version}
 mkdir selinux
@@ -165,33 +172,54 @@ set -e
 
 [ -x /usr/bin/fcitx ] || exit 0
 
-if [ -x /usr/bin/im-config ] && [ ! -f $HOME/.xinputrc ]; then
+if [ -x /usr/bin/im-config ] && [ ! -f \$HOME/.xinputrc ]; then
     /usr/bin/im-config -n fcitx && export XMODIFIERS="@im=fcitx" || :
-elif [ -x /usr/bin/imsettings-switch ] && [ ! -f $HOME/.config/imsettings/xinputrc ]; then
+elif [ -x /usr/bin/imsettings-switch ] && [ ! -f \$HOME/.config/imsettings/xinputrc ]; then
     /usr/bin/imsettings-switch -qf fcitx.conf && export XMODIFIERS="@im=fcitx" || :
 elif [ ! -x /usr/bin/im-config ] && [ ! -x /usr/bin/imsettings-switch ]; then
-    if [ "$XMODIFIERS" == "" ] || [ "$XMODIFIERS" == "@im=xim" ]; then
+    if [ "\$XMODIFIERS" == "" ] || [ "\$XMODIFIERS" == "@im=xim" ]; then
         export XMODIFIERS="@im=fcitx"
     fi
 fi
 
-if [ "$XMODIFIERS" == "@im=fcitx" ]; then
-    if [ -f /usr/lib/*/gtk-2.0/*/immodules/im-fcitx.so ] || \
+if [ "\$XMODIFIERS" == "@im=fcitx" ]; then
+    if [ -f /usr/lib/*/gtk-2.0/*/immodules/im-fcitx.so ] || \\
        [ -f /usr/lib*/gtk-2.0/*/immodules/im-fcitx.so ]; then
-        if [ -f /usr/lib/*/gtk-3.0/*/immodules/im-fcitx.so ] || \
+        if [ -f /usr/lib/*/gtk-3.0/*/immodules/im-fcitx.so ] || \\
            [ -f /usr/lib*/gtk-3.0/*/immodules/im-fcitx.so ]; then
             export GTK_IM_MODULE=fcitx
         fi
     fi
-    if [ -f /usr/lib/*/qt4/plugins/inputmethods/qtim-fcitx.so ] || \
+    if [ -f /usr/lib/*/qt4/plugins/inputmethods/qtim-fcitx.so ] || \\
        [ -f /usr/lib*/qt4/plugins/inputmethods/qtim-fcitx.so ]; then
         export QT4_IM_MODULE=fcitx
-        if [ -f /usr/lib/*/qt5/plugins/*inputcontexts/libfcitx*.so ] || \
+        if [ -f /usr/lib/*/qt5/plugins/*inputcontexts/libfcitx*.so ] || \\
            [ -f /usr/lib*/qt5/plugins/*inputcontexts/libfcitx*.so ]; then
             export QT_IM_MODULE=fcitx
         fi
     fi
 fi
+EOF
+
+# fcitx environment variable configurage file
+install -d %{buildroot}%{_sysconfdir}/sysconfig
+cat > %{buildroot}%{_sysconfdir}/sysconfig/%{name} <<EOF
+# If your system does not start automatically Sogou Pinyin,
+# create ~/.profile file and add the following command.
+#    source /etc/sysconfig/sogoupinyin
+export XIM=fcitx
+export XIM_PROGRAM=/usr/bin/fcitx
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+while(test ! -d /proc/\`pidof sogou-qimpanel||echo None\`); do
+    FCITX=\$(pidof fcitx &>/dev/null && echo y || echo n)
+    SOGOU=\$(pidof sogou-qimpanel &>/dev/null && echo y || echo n)
+    if [[ \$FCITX == "y" && \$SOGOU == "n" ]]; then
+        /usr/bin/sogou-qimpanel &>/dev/null &
+    fi
+    sleep 15
+done &
 EOF
 
 # binary files
@@ -312,33 +340,12 @@ pkill ibus &>/dev/null ||:
 
 # set xinputrc
 INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
-if [ "$INPUTRC" != "fcitx.conf" ]; then
+if [ "x$INPUTRC" != "xfcitx.conf" ]; then
     alternatives --set xinputrc %{_xinputdir}/fcitx.conf
     mkdir -p /home/${USER}/.config/imsettings &>/dev/null ||:
     ln -sf %{_xinputdir}/fcitx.conf /home/${USER}/.config/imsettings/xinputrc
     chown -R $USER:$USER /home/${USER}/.config/imsettings
 fi
-
-# set fcitx environment variable
-grep "sogou" /home/${USER}/.profile &>/dev/null || \
-cat >> /home/${USER}/.profile <<EOF
-export XIM=fcitx
-export XIM_PROGRAM=/usr/bin/fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-while(test ! -d /proc/\`pidof sogou-qimpanel||echo None\`); do
-    fcitx; sogou-qimpanel
-    sleep 15
-done &
-EOF
-chown $USER:$USER /home/${USER}/.profile
-
-# start fcitx and sogou-qimpanel
-#/bin/su -c "gsettings set org.gnome.settings-daemon.plugins.keyboard active false" - $USER &>/dev/null ||:
-#/bin/su -c "imsettings-switch -xq fcitx" - $USER &>/dev/null ||:
-#/bin/fcitx &>/dev/null ||:
-#/bin/sogou-qimpanel &>/dev/null ||:
 
 # install
 if [ $1 -eq 1 ]; then
@@ -375,8 +382,8 @@ fi
 %postun
 # uninstall
 if [ $1 -eq 0 ]; then
-    test ! -x /usr/bin/ibus-daemon && chmod a+x /usr/bin/ibus-daemon ||:
-    INPUTRC=`readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}'`
+    test ! -x /usr/bin/ibus-daemon && chmod a+x /usr/bin/ibus-daemon &>/dev/null ||:
+    INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
     if [ "$INPUTRC" == "fcitx.conf" ]; then
         alternatives --auto xinputrc
     fi
@@ -410,6 +417,7 @@ fi
 %doc %{name}-%{version}/changelog.gz
 %license %{name}-%{version}/{copyright,license*}
 %attr(755,root,root) %{_xinitrcdir}/55-%{name}.sh
+%{_sysconfdir}/sysconfig/%{name}
 %{_bindir}/sogou-*
 %{_libdir}/fcitx/*.so
 %{_datadir}/fcitx/
@@ -430,6 +438,15 @@ fi
 %endif # with_selinux
 
 %changelog
+* Fri Dec 25 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-3
+- Update SELinux module (sogoupinyin 1.1.0)
+  Fix the sogou-qimpanel-watchdog does not enable sogou-qimpanel
+- Update post script
+  Fix xinitrc script(55-sogoupinyin.sh)
+  Add fcitx environment variable file
+  see https://github.com/FZUG/repo/issues/49
+- Patch sogou-diag
+  see https://github.com/FZUG/repo/issues/50
 * Wed Dec 23 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-2
 - Fix sogou-qimpanel do not run
   see https://github.com/FZUG/repo/issues/49
