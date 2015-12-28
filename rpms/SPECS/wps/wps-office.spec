@@ -4,21 +4,34 @@
 %global __provides_exclude_from ^/opt/kingsoft/%{name}/office6/.*\\.so$
 %global __requires_exclude_from ^/opt/kingsoft/%{name}/office6/.*\\.so$
 %global __provides_exclude (font|lib)
-%global __requires_exclude (Qt|app|libc++|draw|krt|kso|spell|wpsio|xer)
+%global __requires_exclude (Qt|app|libc++|draw|krt|kso|spell|wpsio|xer|wpp)
 
 %global debug_package %{nil}
-%global tmproot /tmp/%{name}-%{version}
+%global tmproot /tmp/%{name}-%{version}_tmproot
 %global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x86_64" || echo "x86")
-%global appfile %{name}_%{version}~a19p1_%{arch}.tar.xz
-%global appurl  http://kdl.cc.ksosoft.com/wps-community/download/a19/%{appfile}
+%global appfile %{name}_%{version}~a20_%{arch}.tar.xz
+%global appurl  http://kdl.cc.ksosoft.com/wps-community/download/a20/%{appfile}
 %global sha1sum %(test %arch = x86_64 &&
-           echo "512b94132d18a896684e4470acc61c6f2f6d3a60" ||
-           echo "4529daf48c06c50ddbbe2ce4eb1362b0ddb4920a")
+           echo "3f9e68232b2ad31b1a39dc12fd65394f92932841" ||
+           echo "0fd8c6285b6e0ab357f1ebf647ab147fe99f59b1")
 %global msfonts http://linux.linuxidc.com/2014年资料/4月/20日/Ubuntu 14.04 安装 WPS/symbol-fonts_1.2_all.deb
+%global getopts -t 5 --http-user=www.linuxidc.com --http-password=www.linuxidc.com
+
+# Usage: DownloadPkg appfile appurl
+%global DownloadPkg() \
+Download() {\
+    SHA=$(test -f %1 && sha1sum %1 ||:)\
+    if [[ ! -f %1 || "${SHA/ */}" != "%sha1sum" ]]; then\
+        axel -o %1 -a %2; Download\
+    fi\
+}\
+Download\
+test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
+%{nil}
 
 Name:           wps-office
-Version:        9.1.0.4975
-Release:        1.a19p1.net
+Version:        10.1.0.5444
+Release:        1.a20.net
 Summary:        WPS Office Suite
 Summary(zh_CN): 金山 WPS Office 办公套件
 Group:          Applications/Editors
@@ -55,22 +68,14 @@ Requires:       /usr/bin/update-mime-database
  - http://community.wps.cn
 
 %prep
-# Download opera
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+%DownloadPkg %{appfile} %{appurl}
 
 # symbol-fonts
-test -f symbol-fonts_1.2_all.deb || wget --http-user=www.linuxidc.com --http-password=www.linuxidc.com "%{msfonts}"
 dpkg-deb -X symbol-fonts_1.2_all.deb .
 
 # Extract archive
 tar -xvf %{appfile}
-mv %{name}_%{version}~a19p1_%{arch} %{name}
+mv %{name}_%{version}~a20_%{arch} %{name}
 
 %build
 
@@ -92,36 +97,26 @@ cp -r resource/applications %{buildroot}%{_datadir}
 
 # Fonts config
 install -d %{buildroot}%{_datadir}/fontconfig/conf.avail
-install -d %{buildroot}%{_sysconfdir}/fonts/conf.d
 install -m 0644 fontconfig/*.conf %{buildroot}%{_datadir}/fontconfig/conf.avail/
-ln -sfv %{_datadir}/fontconfig/conf.avail/40-%{name}.conf \
-  %{buildroot}%{_sysconfdir}/fonts/conf.d/40-%{name}.conf
 
 # Execution files
-for i in wps wpp et wps_error_check.sh; do
+for i in wps wpp et; do
   install -Dm 0755 ${i} %{buildroot}%{_bindir}/${i}
 done
 
 %pre
 if [ $1 -ge 1 ]; then
-# Download opera
+# Download wps
 cd /tmp
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+%DownloadPkg %{appfile} %{appurl}
 
 # symbol-fonts
-test -f symbol-fonts_1.2_all.deb || wget -t 5 --http-user=www.linuxidc.com --http-password=www.linuxidc.com "%{msfonts}" ||:
 dpkg-deb -x symbol-fonts_1.2_all.deb . ||:
 
 # Extract archive
 mkdir %{tmproot} &>/dev/null ||:
 tar -xf %{appfile}
-mv %{name}_%{version}~a19p1_%{arch} %{name}
+mv %{name}_%{version}~a20_%{arch} %{name}
 cd %{name}
 
 # Main
@@ -132,21 +127,6 @@ cp -r office6 %{tmproot}/opt/kingsoft/%{name}
 install -d %{tmproot}%{_datadir}/fonts/%{name}
 cp -r fonts/* %{tmproot}%{_datadir}/fonts/%{name}
 find ../usr -type f | xargs cp -t %{tmproot}%{_datadir}/fonts/%{name}
-
-# Icons, Mime, Desktop
-cp -r resource/icons %{tmproot}%{_datadir}
-cp -r resource/mime %{tmproot}%{_datadir}
-cp -r resource/applications %{tmproot}%{_datadir}
-
-# Fonts config
-install -d %{tmproot}%{_datadir}/fontconfig/conf.avail
-install -d %{tmproot}%{_sysconfdir}/fonts/conf.d
-install -m 0644 fontconfig/*.conf %{tmproot}%{_datadir}/fontconfig/conf.avail/
-
-# Execution files
-for i in wps wpp et wps_error_check.sh; do
-  install -Dm 0755 ${i} %{tmproot}%{_bindir}/${i}
-done
 fi
 
 %post
@@ -154,7 +134,6 @@ if [ $1 -ge 1 ]; then
     cp -rf %{tmproot}/* /; rm -rf %{tmproot} /tmp/%{name} /tmp/usr
     ln -sf %{_datadir}/fontconfig/conf.avail/40-%{name}.conf %{_sysconfdir}/fonts/conf.d/
 fi
-
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /bin/touch --no-create %{_datadir}/mime/packages &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
@@ -162,6 +141,7 @@ fi
 
 %postun
 if [ $1 -eq 0 ]; then
+    rm -rf %{_sysconfdir}/fonts/conf.d/40-%{name}.conf
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
     /usr/bin/update-mime-database %{_datadir}/mime &>/dev/null ||:
@@ -175,16 +155,17 @@ fi
 
 %files
 %doc %{name}/README.txt
-%ghost %{_bindir}/*
-%ghost %{_sysconfdir}/fonts/conf.d/*.conf
-%ghost %{_datadir}/fontconfig/conf.avail/*.conf
+%{_bindir}/*
+%{_datadir}/fontconfig/conf.avail/*.conf
 %ghost %{_datadir}/fonts/%{name}
-%ghost %{_datadir}/applications/*.desktop
-%ghost %{_datadir}/mime/packages/*.xml
-%ghost %{_datadir}/icons/hicolor/*/apps/*.png
-%ghost %{_datadir}/icons/hicolor/*/mimetypes/*.png
+%{_datadir}/applications/*.desktop
+%{_datadir}/mime/packages/*.xml
+%{_datadir}/icons/hicolor/*/apps/*.png
+%{_datadir}/icons/hicolor/*/mimetypes/*.png
 %ghost /opt/kingsoft
 
 %changelog
+* Mon Dec 28 2015 mosquito <sensor.wen@gmail.com> - 10.1.0.5444-1
+- Release 10.1.0.5444
 * Tue Dec 15 2015 mosquito <sensor.wen@gmail.com> - 9.1.0.4975-1
 - Initial build
