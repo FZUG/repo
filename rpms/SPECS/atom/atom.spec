@@ -8,11 +8,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 473e8856a8b209d3dba505024879a128b8777369
+%global _commit e0dbf94d2d792b33ba741d32f9e77dfa869762de
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.3.2
+Version: 1.4.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hackable text editor for the 21st century
 
@@ -78,7 +78,6 @@ done
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
@@ -87,6 +86,9 @@ if [ $1 -eq 0 ]; then
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
 /usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
@@ -102,6 +104,8 @@ fi
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 1.4.0-1.gite0dbf94
+- Release 1.4.0
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 1.3.2-1.git473e885
 - Release 1.3.2
 * Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git3937312
