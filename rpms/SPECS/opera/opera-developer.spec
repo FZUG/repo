@@ -8,7 +8,7 @@
 %global __requires_exclude (libffmpeg)
 
 Name:    opera-developer
-Version: 36.0.2072.0
+Version: 36.0.2106.0
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -22,6 +22,7 @@ Source1: http://ftp.opera.com/pub/%{name}/%{version}/linux/%{name}_%{version}_i3
 
 BuildRequires: dpkg
 BuildRequires: desktop-file-utils
+Requires: chrpath
 Requires: desktop-file-utils
 Requires: /usr/bin/gtk-update-icon-cache
 Requires: /usr/bin/update-mime-database
@@ -74,12 +75,12 @@ desktop-file-install \
 # Fix symlink
 rm -f %{buildroot}%{_bindir}/*
 ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
-ln -sfv %{_libdir}/%{name}/lib/libffmpeg.so %{buildroot}%{_libdir}
 
 # Clean files
 rm -rf %{buildroot}%{_datadir}/{menu,lintian}
 
 %post
+chrpath -r %{_libdir}/%{name}/lib %{_libdir}/%{name}/%{name} &>/dev/null ||:
 chown root:root "%{_libdir}/%{name}/opera_sandbox"
 chmod 4755 "%{_libdir}/%{name}/opera_sandbox"
 
@@ -103,7 +104,6 @@ fi
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
 %{_libdir}/%{name}/*
-%{_libdir}/libffmpeg.so*
 %{_datadir}/pixmaps/%{name}.xpm
 %{_datadir}/mime/packages/%{name}.xml
 %{_datadir}/applications/%{name}.desktop
@@ -111,6 +111,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -36.0.2106.0-1
+- Update version 36.0.2106.0
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> -36.0.2072.0-1
 - Update version 36.0.2072.0
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> -34.0.1996.0-1
