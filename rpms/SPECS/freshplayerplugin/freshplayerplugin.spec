@@ -3,19 +3,19 @@
 %global repo %{project}
 
 # commit
-%global _commit 3c6567a8c32a69bfeb20b280b9dcf060b5859954
+%global _commit 2b06d00a53f7dad24018ad348d47f0736abeb16e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name: freshplayerplugin
-Version: 0.3.3
+Name:    freshplayerplugin
+Version: 0.3.4
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
 
-Group: System Environment/Libraries
+Group:   System Environment/Libraries
 # https://github.com/i-rinat/freshplayerplugin/raw/master/LICENSE
 License: MIT
-URL: https://github.com/i-rinat/freshplayerplugin
+URL:     https://github.com/i-rinat/freshplayerplugin
 Source0: https://github.com/i-rinat/freshplayerplugin/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: cmake >= 2.8.8
@@ -84,6 +84,8 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.3.4-1.git2b06d00
+- Update version to 0.3.4-1.git2b06d00
 * Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1.git3c6567a
 - Update version to 0.3.3-1.git3c6567a
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.3.2-1.git8cc1005
