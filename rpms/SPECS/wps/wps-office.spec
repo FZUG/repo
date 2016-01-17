@@ -7,13 +7,14 @@
 %global __requires_exclude (Qt|app|libc++|draw|krt|kso|spell|wpsio|xer|wpp)
 
 %global debug_package %{nil}
-%global tmproot /tmp/%{name}-%{version}_tmproot
+%global _tmppath /var/tmp
+%global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x86_64" || echo "x86")
-%global appfile %{name}_%{version}~a20_%{arch}.tar.xz
+%global appfile %{name}_%{version}~a20p1_%{arch}.tar.xz
 %global appurl  http://kdl.cc.ksosoft.com/wps-community/download/a20/%{appfile}
 %global sha1sum %(test %arch = x86_64 &&
-           echo "3f9e68232b2ad31b1a39dc12fd65394f92932841" ||
-           echo "0fd8c6285b6e0ab357f1ebf647ab147fe99f59b1")
+           echo "7fae4dfc331393035814ac6d50a3b7a92b31ba50" ||
+           echo "1425841622106ba30e37f64b0b61cb3cd98be0a1")
 %global msfonts http://linux.linuxidc.com/2014年资料/4月/20日/Ubuntu 14.04 安装 WPS/symbol-fonts_1.2_all.deb
 %global getopts -t 5 --http-user=www.linuxidc.com --http-password=www.linuxidc.com
 
@@ -30,8 +31,8 @@ test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
 %{nil}
 
 Name:           wps-office
-Version:        10.1.0.5444
-Release:        1.a20.net
+Version:        10.1.0.5460
+Release:        1.a20p1.net
 Summary:        WPS Office Suite
 Summary(zh_CN): 金山 WPS Office 办公套件
 Group:          Applications/Editors
@@ -75,7 +76,7 @@ dpkg-deb -X symbol-fonts_1.2_all.deb .
 
 # Extract archive
 tar -xvf %{appfile}
-mv %{name}_%{version}~a20_%{arch} %{name}
+mv %{name}_%{version}~a20p1_%{arch} %{name}
 
 %build
 
@@ -107,7 +108,7 @@ done
 %pre
 if [ $1 -ge 1 ]; then
 # Download wps
-cd /tmp
+cd %{_tmppath}
 %DownloadPkg %{appfile} %{appurl}
 
 # symbol-fonts
@@ -116,7 +117,7 @@ dpkg-deb -x symbol-fonts_1.2_all.deb . ||:
 # Extract archive
 mkdir %{tmproot} &>/dev/null ||:
 tar -xf %{appfile}
-mv %{name}_%{version}~a20_%{arch} %{name}
+mv %{name}_%{version}~a20p1_%{arch} %{name}
 cd %{name}
 
 # Main
@@ -131,7 +132,7 @@ fi
 
 %post
 if [ $1 -ge 1 ]; then
-    cp -rf %{tmproot}/* /; rm -rf %{tmproot} /tmp/%{name} /tmp/usr
+    cp -rf %{tmproot}/* /; rm -rf %{tmproot} %{_tmppath}/%{name} %{_tmppath}/usr
     ln -sf %{_datadir}/fontconfig/conf.avail/40-%{name}.conf %{_sysconfdir}/fonts/conf.d/
 fi
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -165,6 +166,9 @@ fi
 %ghost /opt/kingsoft
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5460-1
+- Release 10.1.0.5460
+- Change tmp directory
 * Mon Dec 28 2015 mosquito <sensor.wen@gmail.com> - 10.1.0.5444-1
 - Release 10.1.0.5444
 * Tue Dec 15 2015 mosquito <sensor.wen@gmail.com> - 9.1.0.4975-1
