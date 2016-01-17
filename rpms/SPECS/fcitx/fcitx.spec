@@ -3,14 +3,14 @@
 %{!?gtk2_binary_version: %global gtk2_binary_version %(pkg-config --variable=gtk_binary_version gtk+-2.0)}
 %{!?gtk3_binary_version: %global gtk3_binary_version %(pkg-config --variable=gtk_binary_version gtk+-3.0)}
 
-Name: fcitx
-Version: 4.2.9
+Name:    fcitx
+Version: 4.2.9.1
 Release: 1%{?dist}
 Summary: An input method framework
 Summary(zh_CN): 一个轻量级输入法框架
 License: GPLv2+
-Group: User Interface/Desktops
-URL: https://fcitx-im.org/wiki/Fcitx
+Group:   User Interface/Desktops
+URL:     https://fcitx-im.org/wiki/Fcitx
 Source0: http://download.fcitx-im.org/fcitx/%{name}-%{version}_dict.tar.xz
 Source1: xinput-%{name}
 
@@ -400,6 +400,9 @@ fi
 %{_libdir}/qt4/plugins/inputmethods/qtim-fcitx.so
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 4.2.9.1-1
+- Update to 4.2.9.1
+
 * Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 4.2.9-1
 - Update to 4.2.9
 
