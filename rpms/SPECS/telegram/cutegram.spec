@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit bd3bd34fb037e00c93957eed45dc636547439f73
+%global _commit 1dbe2792fb5a1760339379907f906e236c09db84
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    cutegram
-Version: 2.7.0
+Version: 2.7.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Cutegram telegram client
 Summary(zh_CN): Cutegram telegram 客户端
@@ -34,6 +34,7 @@ BuildRequires: pkgconfig(Qt5WebKitWidgets)
 BuildRequires: pkgconfig(Qt5Widgets)
 BuildRequires: pkgconfig(Qt5Xml)
 BuildRequires: desktop-file-utils
+BuildRequires: git
 
 Requires: qt5-qtquickcontrols
 Requires: qt5-qtgraphicaleffects
@@ -55,7 +56,7 @@ Cutegram 是一款 Telegram 第三方客户端. 它拥有智能美观的用户�
 
 %prep
 %setup -q -n %repo-%{_commit}
-sed -i '/setApplicationVersion/s|1|0|' Cutegram/main.cpp
+git clone --depth 1 https://github.com/Aseman-Land/aseman-qt-tools Cutegram/asemantools
 
 %build
 mkdir build && pushd build
@@ -77,7 +78,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/Cutegram.desktop
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
@@ -86,6 +86,9 @@ if [ $1 -eq 0 ]; then
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
 /usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
@@ -100,6 +103,8 @@ fi
 %exclude %{_datadir}/%{name}/icons
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 2.7.1-1.git1dbe279
+- Update to 2.7.1-1.git1dbe279
 * Wed Dec  9 2015 mosquito <sensor.wen@gmail.com> - 2.7.0-1.gitbd3bd34
 - Update to 2.7.0-1.gitbd3bd34
 - Strip shared files

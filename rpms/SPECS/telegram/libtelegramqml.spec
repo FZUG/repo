@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 8c5bafc424c951e532e164661015c96cabde1ffa
+%global _commit f7e7ef4ef73cf6a06f20262dd93b3f70f2d5a0e1
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    libtelegramqml
-Version: 0.9.1
+Version: 0.9.2
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Telegram API tools for QtQML and Qml
 Summary(zh_CN): Telegram Qml API 工具
@@ -78,6 +78,8 @@ make %{?_smp_mflags}
 %{_libdir}/%{name}.so
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.9.2-1.gitf7e7ef4
+- Update to 0.9.2-1.gitf7e7ef4
 * Wed Dec  9 2015 mosquito <sensor.wen@gmail.com> - 0.9.1-1.git8c5bafc
 - Update to 0.9.1-1.git8c5bafc
 - Strip shared files

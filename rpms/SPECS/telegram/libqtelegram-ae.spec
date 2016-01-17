@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 569d31bdebbc777c6be6b13aacd747f9173c9678
+%global _commit 4ad3aae253d46536f5349c234f44947489a9dcd7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    libqtelegram-ae
-Version: 6.0
+Version: 6.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Telegram protocol access library
 Summary(zh_CN): Telegram 协议库
@@ -76,6 +76,8 @@ make %{?_smp_mflags}
 %{_libdir}/%{name}.so
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 6.1-1.git4ad3aae
+- Update to 6.1-1.git4ad3aae
 * Wed Dec  9 2015 mosquito <sensor.wen@gmail.com> - 6.0-1.git569d31b
 - Update to 6.0-1.git569d31b
 - Strip shared files
