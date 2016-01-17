@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 3c3aa833db855551b87d35bee854475d1fd094d0
+%global _commit d2c76c5db3ebbadc07b8809fa3500ddb92cd9eaf
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    libQtShadowsocks
-Version: 1.8.2
+Version: 1.8.4
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A lightweight and ultra-fast shadowsocks library
 
@@ -72,6 +72,8 @@ make %{?_smp_mflags}
 %{_bindir}/shadowsocks-*
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-1.gitd2c76c5
+- Update to 1.8.4-1.gitd2c76c5
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.2-1.git3c3aa83
 - Update to 1.8.2-1.git3c3aa83
 * Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git7b71ee0
