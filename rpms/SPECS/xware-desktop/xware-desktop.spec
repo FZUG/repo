@@ -4,49 +4,49 @@
 %global repo %{project}
 
 # commit
-%global _commit 2baa049c2f7ed0060cb6eeb858e432aa3f7d862d
+%global _commit b77d20b20bf3a410e2cc9eb3a1da74098cbca4d5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		xware-desktop
-Version:	0.13
-Release:	2.git%{_shortcommit}%{?dist}
-Summary:	An attempt to bring Xware (Xunlei on routers) to desktop Linux.
-Summary(zh_CN):	Xware (迅雷路由器固件) 的 Linux 桌面前端.
+Name:    xware-desktop
+Version: 0.13
+Release: 3.git%{_shortcommit}%{?dist}
+Summary: An attempt to bring Xware (Xunlei on routers) to desktop Linux.
+Summary(zh_CN): Xware (迅雷路由器固件) 的 Linux 桌面前端.
 
-Group:		Applications/Internet
-License:	GPLv3
-URL:		https://github.com/Xinkai/XwareDesktop/wiki
-Source0:	https://github.com/Xinkai/XwareDesktop/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-Patch0:		xware-desktop_makefile.patch
+Group:   Applications/Internet
+License: GPLv3
+URL:     https://github.com/Xinkai/XwareDesktop/wiki
+Source0: https://github.com/Xinkai/XwareDesktop/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Patch0:  xware-desktop_makefile.patch
 
-BuildRequires:	glibc-devel(x86-32)
-BuildRequires:	glibc(x86-32)
-BuildRequires:	libgcc(x86-32)
-BuildRequires:	fakeroot
-BuildRequires:	python3-devel
-BuildRequires:	python3-setuptools
-BuildRequires:	python3-sip
-BuildRequires:	python3-sip-devel
-BuildRequires:	python3-qt5
-BuildRequires:	python-qt5-devel
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	coffee-script
-BuildRequires:	chrpath >= 0.14
-BuildRequires:	findutils
-BuildRequires:	sed
+BuildRequires: glibc-devel(x86-32)
+BuildRequires: glibc(x86-32)
+BuildRequires: libgcc(x86-32)
+BuildRequires: fakeroot
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
+BuildRequires: python3-sip
+BuildRequires: python3-sip-devel
+BuildRequires: python3-qt5
+BuildRequires: python-qt5-devel
+BuildRequires: qt5-qtbase-devel
+BuildRequires: coffee-script
+BuildRequires: chrpath >= 0.14
+BuildRequires: findutils
+BuildRequires: sed
 
-Requires:	glibc(x86-32)
-Requires:	zlib(x86-32)
-Requires:	python3-qt5 >= 5.2
-Requires:	python3 >= 3.3
-Requires:	qt5-qtwebkit >= 5.2
-Requires:	qt5-qtmultimedia >= 5.2
-Requires:	python3-inotify
-Requires:	python3-enum34
-Requires(post):	desktop-file-utils
-Requires(post):	libcap
-Requires(post):	chrpath >= 0.14
-Conflicts:  pointdownload
+Requires: glibc(x86-32)
+Requires: zlib(x86-32)
+Requires: python3-qt5 >= 5.2
+Requires: python3 >= 3.3
+Requires: qt5-qtwebkit >= 5.2
+Requires: qt5-qtmultimedia >= 5.2
+Requires: python3-inotify
+Requires: python3-enum34
+Requires(post): desktop-file-utils
+Requires(post): libcap
+Requires(post): chrpath >= 0.14
+Conflicts: pointdownload
 
 %description
 An attempt to bring Xware (Xunlei on routers) to desktop Linux.
@@ -82,32 +82,46 @@ install -d %{buildroot}%{python3_sitelib}
 %endif
 
 %post
-if [ $1 -eq 1 ]; then
-    update-desktop-database -q ||:
-    gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
 
-    echo "================================================="
-    echo -e "《欢迎使用 Xware Desktop》\n"
-    echo "初始设置："
-    echo "  1. 设置下载文件夹"
-    echo "     文件 -> 设置 -> 挂载 -> 添加，选择下载文件夹[TDDOWNLOADS]"
-    echo "  2. 托管 xwared 并启动"
-    echo "     文件 -> 设置 -> 启动与登录 -> xwared托管，选择「由systemd托管」或「由upstart托管」，重启后 xwared会自动启动"
-    echo "  3. 手动启动/关闭 xwared"
-    echo "     - systemd：systemctl --user [start|stop] xwared"
-    echo "     - upstart：[start|stop] xwared"
-    echo "     - 直接执行：/usr/share/xware-desktop/xwared &"
-    echo "  4. 使用迅雷帐号登陆，并激活设备即可"
-    echo "  5. 浏览器整合"
-    echo "     xware-desktop 可接受url参数，格式为"
-    echo -e "\txware-desktop URL_File1 URL_File2 ..."
-    echo "     以 Firefox 的 Flashgot 为例，添加一个新下载器，程序设置为 xware-desktop URL"
-    echo "  6. 调整窗口大小"
-    echo "     编辑 ~/.xware-desktop/profile/etc/frontend.ini，在 [legacy] 添加以下条目："
-    echo -e "\twebviewminsizeoverride = 400,200 # 设置最小宽,高"
-    echo -e "\twebviewzoom = 0.8  # 设置缩放比例"
-    echo "================================================="
+if [ $1 -eq 1 ]; then
+    cat <<EOF
+=================================================
+《欢迎使用 Xware Desktop》
+
+初始设置：
+  1. 设置下载文件夹
+     文件 -> 设置 -> 挂载 -> 添加，选择下载文件夹[TDDOWNLOADS]
+  2. 托管 xwared 并启动
+     文件 -> 设置 -> 启动与登录 -> xwared托管，选择「由systemd托管」或
+     「由upstart托管」，重启后 xwared会自动启动
+  3. 手动启动/关闭 xwared
+     - systemd：systemctl --user [start|stop] xwared
+     - upstart：[start|stop] xwared
+     - 直接执行：/usr/share/xware-desktop/xwared &
+  4. 使用迅雷帐号登陆，并激活设备即可
+  5. 浏览器整合
+     xware-desktop 可接受url参数，格式为
+       xware-desktop URL_File1 URL_File2 ...
+     以 Firefox 的 Flashgot 为例，添加一个新下载器，程序设置为 xware-desktop URL
+  6. 调整窗口大小
+     编辑 ~/.xware-desktop/profile/etc/frontend.ini，在 [legacy] 添加以下条目：
+       webviewminsizeoverride = 400,200 # 设置最小宽,高
+       webviewzoom = 0.8  # 设置缩放比例
+=================================================
+EOF
 fi
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database &>/dev/null ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
@@ -120,8 +134,10 @@ fi
 %{python3_sitelib}
 
 %changelog
-* Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 0.13-1.git2baa049
-- Update version to 0.13-1.git2baa049
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 0.13-3.gitb77d20b
+- Update version to 0.13-3.gitb77d20b
+* Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 0.13-2.git2baa049
+- Update version to 0.13-2.git2baa049
 * Wed May  6 2015 mosquito <sensor.wen@gmail.com> - 0.13-1.git0c69374
 - Rename version name
 * Tue Feb  3 2015 mosquito <sensor.wen@gmail.com> - 0.13git20150201-1
