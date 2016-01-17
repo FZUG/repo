@@ -10,12 +10,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 75fab30de2f3644fa549d497a03d3454574a0c10
+%global _commit 4b54e0fdccf2b3013285fef05c97354cfa31697b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    bcloud
-Version: 3.8.1
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 3.8.2
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Baidu Pan client for Linux Desktop users
 Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
@@ -23,7 +23,6 @@ Summary(zh_CN): 百度网盘 Linux 桌面客户端
 License: GPLv3
 URL:     https://github.com/LiuLang/bcloud
 Source0: https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-Patch0:  fix_get_bdstoken.patch
 
 BuildArch: noarch
 BuildRequires: python3-devel
@@ -48,7 +47,6 @@ Baidu Pan client for Linux Desktop users.
 
 %prep
 %setup -q -n %repo-%{_commit}
-%patch0 -p1
 
 %build
 %{__python3} setup.py build
@@ -64,7 +62,6 @@ Baidu Pan client for Linux Desktop users.
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
@@ -73,6 +70,9 @@ if [ $1 -eq 0 ]; then
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
 /usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files -f %{name}.lang
 %doc README.md HISTORY
@@ -84,6 +84,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 3.8.2-1.git4b54e0f
+- Update version to 3.8.2-1.git4b54e0f
+
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 3.8.1-3.git75fab30
 - Fix get bdstoken https://github.com/LiuLang/bcloud/pull/214
 
