@@ -1,9 +1,10 @@
 %global debug_package %{nil}
-%global tmproot /tmp/%{name}-%{version}
+%global _tmppath /var/tmp
+%global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global appname opera
 %global appfile %{name}_%{version}_amd64.deb
 %global appurl  http://ftp.opera.com/pub/%{appname}/desktop/%{version}/linux/%{appfile}
-%global sha1sum f1016c8dbad358f7f8b7157c3a21216b50584051
+%global sha1sum 95b5959684b0037beba311ec20a03e450dd2de83
 
 # Due to changes in Chromium, Opera is no longer able to use the system
 # FFmpeg library for H264 video playback on Linux, so H264-encoded videos
@@ -12,9 +13,20 @@
 # compatible FFmpeg library included into package.
 %global __requires_exclude (libffmpeg)
 
+# Usage: DownloadPkg appfile appurl
+%global DownloadPkg() \
+Download() {\
+    SHA=$(test -f %1 && sha1sum %1 ||:)\
+    if [[ ! -f %1 || "${SHA/ */}" != "%sha1sum" ]]; then\
+        axel -o %1 -a %2; Download\
+    fi\
+}\
+Download\
+%{nil}
+
 Name:    opera-stable
-Version: 34.0.2036.25
-Release: 2.net
+Version: 34.0.2036.47
+Release: 1.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
 Summary(zh_CN): 快速安全的欧朋浏览器
@@ -26,7 +38,7 @@ URL:     http://www.opera.com/browser
 ExclusiveArch: x86_64
 BuildRequires: axel dpkg
 BuildRequires: desktop-file-utils
-Requires: axel dpkg
+Requires: axel dpkg chrpath
 Requires: desktop-file-utils
 Requires: /usr/bin/gtk-update-icon-cache
 Requires: /usr/bin/update-mime-database
@@ -51,17 +63,10 @@ Requires: /usr/bin/update-mime-database
 %build
 
 %install
-# Download opera
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract DEB package
-dpkg-deb -X %{name}_%{version}_amd64.deb %{buildroot}
+dpkg-deb -X %{appfile} %{buildroot}
 
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{buildroot}/usr/lib/*-linux-gnu/%{appname} %{buildroot}/usr/lib/%{name}
@@ -71,6 +76,20 @@ mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
 # Modify desktop file
 mv %{buildroot}%{_datadir}/applications/%{appname}.desktop \
    %{buildroot}%{_datadir}/applications/%{name}.desktop
+sed -i -e '
+    s|^TryExec=%{appname}|TryExec=%{name}|
+    s|^Exec=%{appname}|Exec=%{name}|
+    s|^Icon=%{appname}|Icon=%{name}|
+    /Unity/s|^|#|' \
+  %{buildroot}%{_datadir}/applications/%{name}.desktop
+
+# Install desktop file:
+desktop-file-install \
+  --dir %{buildroot}%{_datadir}/applications \
+  --add-category Network \
+  --add-category WebBrowser \
+  --delete-original \
+  %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # Rename icon files
 for i in 256x256 128x128 48x48 32x32 16x16; do
@@ -83,7 +102,6 @@ mv %{buildroot}%{_datadir}/pixmaps/%{appname}.xpm \
 # Fix symlink
 rm -f %{buildroot}%{_bindir}/*
 ln -sfv %{_libdir}/%{name}/%{appname} %{buildroot}%{_bindir}/%{name}
-ln -sfv %{_libdir}/%{name}/lib/libffmpeg.so.34 %{buildroot}%{_libdir}
 
 # Clean files
 rm -rf %{buildroot}%{_datadir}/{menu,lintian}
@@ -91,66 +109,29 @@ rm -rf %{buildroot}%{_datadir}/{menu,lintian}
 %pre
 if [ $1 -ge 1 ]; then
 # Download opera
-cd /tmp
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+cd %{_tmppath}
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract DEB package
 mkdir %{tmproot} &>/dev/null ||:
-dpkg-deb -x %{name}_%{version}_amd64.deb %{tmproot}
+dpkg-deb -x %{appfile} %{tmproot}
 
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{tmproot}/usr/lib/*-linux-gnu/%{appname} %{tmproot}/usr/lib/%{name}
 rm -rf %{tmproot}/usr/lib/*-linux-gnu
 mv %{tmproot}/usr/lib %{tmproot}%{_libdir}
 
-# Modify desktop file
-mv %{tmproot}%{_datadir}/applications/%{appname}.desktop \
-   %{tmproot}%{_datadir}/applications/%{name}.desktop
-sed -i -e '
-    s|^TryExec=%{appname}|TryExec=%{name}|
-    s|^Exec=%{appname}|Exec=%{name}|
-    s|^Icon=%{appname}|Icon=%{name}|
-    /Unity/s|^|#|' \
-  %{tmproot}%{_datadir}/applications/%{name}.desktop
-
-# Rename icon files
-for i in 256x256 128x128 48x48 32x32 16x16; do
-mv %{tmproot}%{_datadir}/icons/hicolor/${i}/apps/%{appname}.png \
-   %{tmproot}%{_datadir}/icons/hicolor/${i}/apps/%{name}.png
-done
-mv %{tmproot}%{_datadir}/pixmaps/%{appname}.xpm \
-   %{tmproot}%{_datadir}/pixmaps/%{name}.xpm
-
-# Install *.desktop file:
-desktop-file-install \
-  --dir %{tmproot}%{_datadir}/applications \
-  --add-category Network \
-  --add-category WebBrowser \
-  --delete-original \
-  %{tmproot}%{_datadir}/applications/%{name}.desktop
-
-# Fix symlink
-rm -f %{tmproot}%{_bindir}/*
-
 # Clean files
-rm -rf %{tmproot}%{_datadir}/{menu,lintian}
+rm -rf %{tmproot}%{_bindir} %{tmproot}%{_datadir}
 fi
 
 %post
 if [ $1 -ge 1 ]; then
     cp -rf %{tmproot}/usr/* /usr/; rm -rf %{tmproot}
-    ln -sf %{_libdir}/%{name}/%{appname} %{_bindir}/%{name}
-    ln -sf %{_libdir}/%{name}/lib/libffmpeg.so.34 %{_libdir}
 
+    chrpath -r %{_libdir}/%{name}/lib %{_libdir}/%{name}/opera &>/dev/null ||:
     chown root:root "%{_libdir}/%{name}/opera_sandbox"
     chmod 4755 "%{_libdir}/%{name}/opera_sandbox"
-    chmod 0755 "%{_libdir}/%{name}/lib/libffmpeg.so.34"
 fi
 
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -171,16 +152,17 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%ghost %{_bindir}/%{name}
+%{_bindir}/%{name}
 %ghost %{_libdir}/%{name}
-%ghost %{_libdir}/libffmpeg.so.*
-%ghost %{_datadir}/pixmaps/%{name}.xpm
-%ghost %{_datadir}/mime/packages/%{name}.xml
-%ghost %{_datadir}/applications/%{name}.desktop
-%ghost %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%ghost %{_defaultdocdir}/%{name}
+%{_datadir}/pixmaps/%{name}.xpm
+%{_datadir}/mime/packages/%{name}.xml
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%{_defaultdocdir}/%{name}
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -34.0.2036.47-1
+- Update to 34.0.2036.47
 * Mon Dec 14 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.25-2
 - Download complete check
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.25-1
