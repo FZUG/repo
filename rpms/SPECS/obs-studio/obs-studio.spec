@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 725a36bc0f7c12dcfece44cf5c431e46acc55a74
+%global _commit 2c8887b5827aec39eb342cecdbdfc40bb2e08917
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.12.3
+Version:    0.12.4
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -76,15 +76,24 @@ make %{?_smp_mflags}
 %install
 %make_install -C build
 
+%post devel -p /sbin/ldconfig
+%postun devel -p /sbin/ldconfig
+
 %post
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
 /sbin/ldconfig
 
 %postun
-update-desktop-database -q ||:
-gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database -q ||:
 /sbin/ldconfig
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
@@ -104,6 +113,8 @@ gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 %{_includedir}/obs
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.12.4-1.git2c8887b
+- Update to 0.12.4-1.git2c8887b
 * Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.12.3-1.git725a36b
 - Update to 0.12.3-1.git725a36b
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.12.0-1.git80b20ab
