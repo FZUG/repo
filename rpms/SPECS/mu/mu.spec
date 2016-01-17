@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 0fdf1c60b121c2ec58bcedb5488128eeb053f2e0
+%global _commit 3fa99a13231af78bac7cf3196e06a9712e8d9730
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    mu
-Version: 0.9.184
+Version: 0.9.200
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Incredible music manager
 Summary(zh_CN): 为音乐而生的播放器
@@ -17,10 +17,8 @@ License: GPLv2
 Url:     https://kreogist.github.io/Mu
 Source0: https://github.com/Kreogist/Mu/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-# https://github.com/Kreogist/Mu/issues/17
-Patch0:  mu_translation.patch
-
 BuildRequires: qt5-qtbase-devel
+BuildRequires: qt5-qttools-devel
 BuildRequires: qt5-linguist
 BuildRequires: ffmpeg-devel
 BuildRequires: gstreamer1-devel
@@ -62,7 +60,6 @@ Kreogist Mu 是一款跨平台媒体管理器, 基于 Qt 开发.
 
 %prep
 %setup -q -n %repo-%{_commit}
-%patch0 -p1
 sed -i 's|lrelease|lrelease-qt5|' src/src.pro
 
 %build
@@ -79,8 +76,10 @@ popd
 rm -rf $RPM_BUILD_ROOT
 
 install -Dm 0755 build/bin/%{name} %{buildroot}%{_bindir}/%{name}
+
 install -Dm 0644 src/resource/icon/%{name}.png \
-   %{buildroot}%{_datadir}/pixmaps/%{name}.png
+   %{buildroot}%{_datadir}/icons/hicolor/256x256/apps/%{name}.png
+
 install -d %{buildroot}%{_datadir}/applications
 cat > %{buildroot}%{_datadir}/applications/%{name}.desktop <<EOF
 [Desktop Entry]
@@ -97,27 +96,40 @@ MimeType=audio/flac;audio/aac;audio/mp2;audio/mp4;audio/mpeg;audio/x-ape;audio/x
 EOF
 
 # translation
-install -d %{buildroot}%{_datadir}/%{name}/locale/
-%{__cp} src/i18n/Simplified*.{qm,png}  %{buildroot}%{_datadir}/%{name}/locale/
-%{__cp} src/i18n/Traditional*.{qm,png} %{buildroot}%{_datadir}/%{name}/locale/
-%{__cp} src/i18n/Japanese.{qm,png}     %{buildroot}%{_datadir}/%{name}/locale/
+for i in Japanese Simplified_Chinese Traditional_Chinese; do
+  install -d %{buildroot}%{_datadir}/Kreogist/%{name}/Language/${i}
+  %{__cp} src/i18n/${i}.{qm,png} %{buildroot}%{_datadir}/Kreogist/%{name}/Language/${i}
+done
 
 # stripe shared files
 %{__strip_shared}
 
 %post
-update-desktop-database -q ||:
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database &>/dev/null ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %defattr(-,root,root,-)
 %doc AUTHOR NEWS Readme.md
 %license LICENSE
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/*
-%{_datadir}/%{name}/*
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%{_datadir}/Kreogist/%{name}/
 %{_bindir}/%{name}
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.9.200-1.git3fa99a1
+- Update to 0.9.200-1.git3fa99a1
 * Mon Dec  7 2015 mosquito <sensor.wen@gmail.com> - 0.9.184-1.git0fdf1c6
 - Update to 0.9.184-1.git0fdf1c6
 - Fix translation, see https://github.com/Kreogist/Mu/issues/17
