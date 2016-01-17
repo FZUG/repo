@@ -3,31 +3,31 @@
 %global repo %{project}
 
 # commit
-%global _commit bbf096ece7d451bbfa0b0a2b38a955e4d1f938ac
+%global _commit a2005f20734e532e9cf5469b5b15c877827d3756
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		moonplayer
-Version:	0.49
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	Video player that can play online videos
-Summary(zh_CN):	一款可点播优酷, 土豆等网站在线视频的视频播放器
+Name:    moonplayer
+Version: 0.54
+Release: 1.git%{_shortcommit}%{?dist}
+Summary: Video player that can play online videos
+Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播放器
 
-Group:		Applications/Multimedia
-License:	GPLv3
-URL:		https://github.com/coslyk/moonplayer
-Source0:	https://github.com/coslyk/moonplayer/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Group:   Applications/Multimedia
+License: GPLv3
+URL:     https://github.com/coslyk/moonplayer
+Source0: https://github.com/coslyk/moonplayer/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # https://code.google.com/p/moonplayer/wiki/PluginTutorial
 # http://forum.ubuntu.org.cn/viewtopic.php?f=74&t=456351
-Source1:	plugin_56.py
-Source2:	plugin_funshion.py
-Source3:	plugin_iqiyi.py
-Source4:	plugin_sohu.py
+Source1: plugin_56.py
+Source2: plugin_funshion.py
+Source3: plugin_iqiyi.py
+Source4: plugin_sohu.py
 
-#BuildRequires:	qt-devel
-BuildRequires:	python-devel
-BuildRequires:	qt5-qtbase-devel
-Requires:	mplayer
-Requires:	mencoder
+#BuildRequires: qt-devel
+BuildRequires: python-devel
+BuildRequires: qt5-qtbase-devel
+Requires: mplayer
+Requires: mencoder
 
 %description
 Video player that can play online videos from youku, tudou etc.
@@ -55,6 +55,20 @@ install -m 0644 %{S:2} %{buildroot}%{_datadir}/%{name}/plugins/
 install -m 0644 %{S:3} %{buildroot}%{_datadir}/%{name}/plugins/
 install -m 0644 %{S:4} %{buildroot}%{_datadir}/%{name}/plugins/
 
+%post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+
 %files
 %defattr(-,root,root,-)
 %doc README.md
@@ -65,6 +79,9 @@ install -m 0644 %{S:4} %{buildroot}%{_datadir}/%{name}/plugins/
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.54-1.gita2005f2
+- Update version to 0.54-1.gita2005f2
+
 * Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.49-1.gitbbf096e
 - Update version to 0.49-1.gitbbf096e
 
