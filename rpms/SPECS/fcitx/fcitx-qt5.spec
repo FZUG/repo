@@ -3,27 +3,27 @@
 %global repo %{project}
 
 # commit
-%global _commit 73337c53f704f083c8269728ae8912fb47c4282f
+%global _commit 3726be634fb8ed473b91c825632ee669347b302e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		fcitx-qt5
-Version:	1.0.4
-Release:	2.git%{_shortcommit}%{?dist}
-Summary:	Fcitx IM module for Qt5
-Summary(zh_CN):	Fcitx QT5 输入模块
+Name:    fcitx-qt5
+Version: 1.0.5
+Release: 1.git%{_shortcommit}%{?dist}
+Summary: Fcitx IM module for Qt5
+Summary(zh_CN): Fcitx QT5 输入模块
 
 # The entire source code is GPLv2+ except
 # platforminputcontext/keyserver_x11.h which is LGPLv2+
-License:	GPLv2+ and LGPLv2+
-Url:		https://github.com/fcitx/fcitx-qt5
-Source0:	https://github.com/fcitx/fcitx-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+License: GPLv2+ and LGPLv2+
+Url:     https://github.com/fcitx/fcitx-qt5
+Source0: https://github.com/fcitx/fcitx-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildRequires:	cmake
-BuildRequires:	libicu-devel
-BuildRequires:	fcitx-devel
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	libxkbcommon-devel
-BuildRequires:	extra-cmake-modules
+BuildRequires: cmake
+BuildRequires: libicu-devel
+BuildRequires: fcitx-devel
+BuildRequires: qt5-qtbase-devel
+BuildRequires: libxkbcommon-devel
+BuildRequires: extra-cmake-modules
 
 %description
 A QT5 input context plugin of Fcitx IM Framework.
@@ -32,10 +32,10 @@ A QT5 input context plugin of Fcitx IM Framework.
 Fcitx 输入法框架的 QT5 输入模块.
 
 %package devel
-Summary:	Development files for %{name}
-Summary(zh_CN):	%{name} 开发文件
-Group:		Development/Libraries
-Requires:	%{name}%{?_isa} = %{version}-%{release}
+Summary: Development files for %{name}
+Summary(zh_CN): %{name} 开发文件
+Group:   Development/Libraries
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Development header files for Fcitx input method framework (Qt5).
@@ -59,6 +59,7 @@ make %{?_smp_mflags}
 %files
 %defattr(-,root,root,-)
 %doc README
+%license COPYING
 %{_libdir}/libFcitxQt5DBusAddons.so.*
 %{_libdir}/libFcitxQt5WidgetsAddons.so.*
 %dir %{_qt5_plugindir}/platforminputcontexts/
@@ -75,11 +76,13 @@ make %{?_smp_mflags}
 %{_libdir}/cmake/FcitxQt5WidgetsAddons/FcitxQt5WidgetsAddons*.cmake
 
 %changelog
-* Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-2
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 1.0.5-1.git3726be6
+- Update version to 1.0.5
+* Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-2.git73337c5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_22_Mass_Rebuild
-* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-1
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-1.git73337c5
 - Update version to 1.0.4
-* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-1
+* Wed May 06 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-1.git6d57ea5
 - Update version to 1.0.2
 - Rename version name
 * Sun Jan 18 2015 mosquito <sensor.wen@gmail.com> - 1.0.0git20150118-1
