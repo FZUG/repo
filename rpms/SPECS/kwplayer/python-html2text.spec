@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 9157181c09a7c630b633f41e0d108490aae8751f
+%global _commit 0c70c8f06354f9ed4d3fa4c316e2953ca847f2fa
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
@@ -14,21 +14,21 @@
 %global with_python2 1
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
-Name:		python-html2text
-Version:	2015.11.4
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	Converts a page of HTML into plain ASCII text
-Summary(zh_CN):	转换页面中的 HTML 为 ASCII 字符
+Name:    python-html2text
+Version: 2016.1.8
+Release: 1.git%{_shortcommit}%{?dist}
+Summary: Converts a page of HTML into plain ASCII text
+Summary(zh_CN): 转换页面中的 HTML 为 ASCII 字符
 
-Group:		Development/Languages
-License:	GPLv3
-URL:		http://alir3z4.github.io/html2text
-Source0:	https://github.com/Alir3z4/html2text/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Group:   Development/Languages
+License: GPLv3
+URL:     http://alir3z4.github.io/html2text
+Source0: https://github.com/Alir3z4/html2text/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildArch:	noarch
-BuildRequires:	python-devel
-BuildRequires:	python-setuptools
-BuildRequires:	python-coverage
+BuildArch: noarch
+BuildRequires: python-devel
+BuildRequires: python-setuptools
+BuildRequires: python-coverage
 
 %description
 html2text is a Python script that converts a page of HTML into clean,
@@ -46,11 +46,11 @@ html2text 还被称为: THE ASCIINATOR, html to text, htm to txt, htm2txt, ...
 
 %if 0%{?with_python3}
 %package -n python3-html2text
-Summary:	Converts a page of HTML into plain ASCII text
-Summary(zh_CN):	转换页面中的 HTML 为 ASCII 字符
-BuildArch:	noarch
-BuildRequires:	python3-devel
-BuildRequires:	python3-setuptools
+Summary: Converts a page of HTML into plain ASCII text
+Summary(zh_CN): 转换页面中的 HTML 为 ASCII 字符
+BuildArch: noarch
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
 
 %description -n python3-html2text
 html2text is a Python script that converts a page of HTML into clean,
@@ -127,6 +127,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} coverage run --source=html2text setup.
 
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 2016.1.8-1.git0c70c8f
+- Update version to 2016.1.8
+
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> - 2015.11.4-1.git9157181
 - Update version to 2015.11.4
 
