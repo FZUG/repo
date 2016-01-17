@@ -1,8 +1,12 @@
 %global debug_package %{nil}
-%global tmproot /tmp/%{name}-%{version}
-%global appfile %{name}_%{version}_amd64.deb
+%global _tmppath /var/tmp
+%global tmproot %{_tmppath}/%{name}-%{version}_tmproot
+%global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "amd64" || echo "i386")
+%global appfile %{name}_%{version}_%{arch}.deb
 %global appurl  http://ftp.opera.com/pub/%{name}/%{version}/linux/%{appfile}
-%global sha1sum af41c97190a5523834df73a5cab8a5c353be172c
+%global sha1sum %(test %arch = amd64 &&
+           echo "e555d31164dcec68922d50c87cffcadc2c9703f8" ||
+           echo "bf9e67ceacefd41da06e6983138a5c9682aa4b37")
 
 # Due to changes in Chromium, Opera is no longer able to use the system
 # FFmpeg library for H264 video playback on Linux, so H264-encoded videos
@@ -11,9 +15,20 @@
 # compatible FFmpeg library included into package.
 %global __requires_exclude (libffmpeg)
 
+# Usage: DownloadPkg appfile appurl
+%global DownloadPkg() \
+Download() {\
+    SHA=$(test -f %1 && sha1sum %1 ||:)\
+    if [[ ! -f %1 || "${SHA/ */}" != "%sha1sum" ]]; then\
+        axel -o %1 -a %2; Download\
+    fi\
+}\
+Download\
+%{nil}
+
 Name:    opera-beta
-Version: 34.0.2036.24
-Release: 2.net
+Version: 35.0.2066.23
+Release: 1.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
 Summary(zh_CN): 快速安全的欧朋浏览器
@@ -22,10 +37,9 @@ Group:   Applications/Internet
 License: Proprietary
 URL:     http://www.opera.com/browser
 
-ExclusiveArch: x86_64
 BuildRequires: axel dpkg
 BuildRequires: desktop-file-utils
-Requires: axel dpkg
+Requires: axel dpkg chrpath
 Requires: desktop-file-utils
 Requires: /usr/bin/gtk-update-icon-cache
 Requires: /usr/bin/update-mime-database
@@ -50,27 +64,32 @@ Requires: /usr/bin/update-mime-database
 %build
 
 %install
-# Download opera
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract DEB package
-dpkg-deb -X %{name}_%{version}_amd64.deb %{buildroot}
+dpkg-deb -X %{appfile} %{buildroot}
 
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{buildroot}/usr/lib/*-linux-gnu/%{name} %{buildroot}/usr/lib/
 rm -rf %{buildroot}/usr/lib/*-linux-gnu
+%ifarch x86_64
 mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
+%endif
+
+# Modify desktop file:
+sed -i '/Unity/s|^|#|' %{buildroot}%{_datadir}/applications/%{name}.desktop
+
+# Install *.desktop file:
+desktop-file-install \
+  --dir %{buildroot}%{_datadir}/applications \
+  --add-category Network \
+  --add-category WebBrowser \
+  --delete-original \
+  %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # Fix symlink
 rm -f %{buildroot}%{_bindir}/*
 ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
-ln -sfv %{_libdir}/%{name}/lib/libffmpeg.so.34 %{buildroot}%{_libdir}
 
 # Clean files
 rm -rf %{buildroot}%{_datadir}/{menu,lintian}
@@ -78,51 +97,31 @@ rm -rf %{buildroot}%{_datadir}/{menu,lintian}
 %pre
 if [ $1 -ge 1 ]; then
 # Download opera
-cd /tmp
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+cd %{_tmppath}
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract DEB package
 mkdir %{tmproot} &>/dev/null ||:
-dpkg-deb -x %{name}_%{version}_amd64.deb %{tmproot}
+dpkg-deb -x %{appfile} %{tmproot}
 
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{tmproot}/usr/lib/*-linux-gnu/%{name} %{tmproot}/usr/lib/
 rm -rf %{tmproot}/usr/lib/*-linux-gnu
+%ifarch x86_64
 mv %{tmproot}/usr/lib %{tmproot}%{_libdir}
-
-# Modify desktop file:
-sed -i '/Unity/s|^|#|' %{tmproot}%{_datadir}/applications/%{name}.desktop
-
-# Install *.desktop file:
-desktop-file-install \
-  --dir %{tmproot}%{_datadir}/applications \
-  --add-category Network \
-  --add-category WebBrowser \
-  --delete-original \
-  %{tmproot}%{_datadir}/applications/%{name}.desktop
-
-# Fix symlink
-rm -f %{tmproot}%{_bindir}/*
+%endif
 
 # Clean files
-rm -rf %{tmproot}%{_datadir}/{menu,lintian}
+rm -rf %{tmproot}%{_bindir} %{tmproot}%{_datadir}
 fi
 
 %post
 if [ $1 -ge 1 ]; then
     cp -rf %{tmproot}/usr/* /usr/; rm -rf %{tmproot}
-    ln -sf %{_libdir}/%{name}/%{name} %{_bindir}
-    ln -sf %{_libdir}/%{name}/lib/libffmpeg.so.34 %{_libdir}
 
+    chrpath -r %{_libdir}/%{name}/lib %{_libdir}/%{name}/%{name} &>/dev/null ||:
     chown root:root "%{_libdir}/%{name}/opera_sandbox"
     chmod 4755 "%{_libdir}/%{name}/opera_sandbox"
-    chmod 0755 "%{_libdir}/%{name}/lib/libffmpeg.so.34"
 fi
 
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -143,16 +142,17 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%ghost %{_bindir}/%{name}
+%{_bindir}/%{name}
 %ghost %{_libdir}/%{name}
-%ghost %{_libdir}/libffmpeg.so.*
-%ghost %{_datadir}/pixmaps/%{name}.xpm
-%ghost %{_datadir}/mime/packages/%{name}.xml
-%ghost %{_datadir}/applications/%{name}.desktop
-%ghost %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%ghost %{_defaultdocdir}/%{name}
+%{_datadir}/pixmaps/%{name}.xpm
+%{_datadir}/mime/packages/%{name}.xml
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%{_defaultdocdir}/%{name}
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.23-1
+- Update to 35.0.2066.23
 * Mon Dec 14 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.24-2
 - Download complete check
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.24-1
