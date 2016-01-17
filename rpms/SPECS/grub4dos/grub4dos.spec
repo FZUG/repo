@@ -5,41 +5,41 @@
 %global repo %{project}
 
 # commit
-%global _commit c6048e89b7e5c43c1a65a0f5afa330f555d13347
+%global _commit 8a69be915e7b3f60e23252f43ebaf0d95d4fc8e5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		grub4dos
-Version:	0.4.6a.20151118
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	This is GNU GRUB, the GRand Unified Bootloader
-Summary(zh_CN):	多功能启动引导管理器
+Name:    grub4dos
+Version: 0.4.6a.20160114
+Release: 1.git%{_shortcommit}%{?dist}
+Summary: This is GNU GRUB, the GRand Unified Bootloader
+Summary(zh_CN): 多功能启动引导管理器
 
 # https://raw.githubusercontent.com/chenall/grub4dos/master/COPYING
-License:	GPLv2
-Group:		Applications/System
-Url:		https://code.google.com/p/grub4dos-chenall
-Source0:	https://github.com/chenall/grub4dos/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+License: GPLv2
+Group:   Applications/System
+Url:     https://code.google.com/p/grub4dos-chenall
+Source0: https://github.com/chenall/grub4dos/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # http://ipxe.org (git clone --depth 1 git://git.ipxe.org/ipxe.git)
 # find . -name ".git*" | xargs rm -f
-#Source1:	ipxe-a0f60d2.tar.xz
+#Source1: ipxe-a0f60d2.tar.xz
 # https://code.google.com/p/grub4dos-help-doc
 # http://bbs.wuyou.net/forum.php?mod=viewthread&tid=185938
-Source2:	%{name}-help-%{helpdate}.chm
-Source3:	https://grub4dos-chenall.googlecode.com/files/unifont.hex.gz
+Source2: %{name}-help-%{helpdate}.chm
+Source3: https://grub4dos-chenall.googlecode.com/files/unifont.hex.gz
 # git checkout 558e12a9b38613d827117c8da9b8e905c4c0eb2b , patch-chinese.diff
-Source4:	patch-chinese-%{zhcndate}.diff
+Source4: patch-chinese-%{zhcndate}.diff
 
-BuildRequires:	git
-BuildRequires:	autoconf
-BuildRequires:	automake
-BuildRequires:	upx
-BuildRequires:	nasm
-BuildRequires:	xz-devel
-BuildRequires:	/usr/bin/xxd
+BuildRequires: git
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: upx
+BuildRequires: nasm
+BuildRequires: xz-devel
+BuildRequires: /usr/bin/xxd
 %ifarch x86_64
-BuildRequires:	glibc-devel(x86-32)
-BuildRequires:	libstdc++(x86-32)
-BuildRequires:	libgcc(x86-32)
+BuildRequires: glibc-devel(x86-32)
+BuildRequires: libstdc++(x86-32)
+BuildRequires: libgcc(x86-32)
 %endif
 
 %description
@@ -244,6 +244,8 @@ chmod 0755 %{_datadir}/%{name}/bootlace64.com
 %{_datadir}/%{name}
 
 %changelog
+* Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.6a.20160114-1
+- Update version to 0.4.6a.20160114
 * Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20151118-1
 - Update version to 0.4.6a.20151118
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 0.4.6a.20150915-1
