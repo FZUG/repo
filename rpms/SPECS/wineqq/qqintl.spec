@@ -1,12 +1,24 @@
 %global debug_package %{nil}
-%global tmproot /tmp/%{name}-%{version}
+%global _tmppath /var/tmp
+%global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global appfile %{name}_%{version}-2_i386.deb
-%global appurl  http://packages.linuxdeepin.com/enterprise/pool/non-free/d/deepin%{name}/%{appfile}
+%global appurl  http://packages.deepin.com/deepin/pool/non-free/d/deepin%{name}/%{appfile}
 %global sha1sum c51fb6d5cbb02513319ee478f7b6f0403839b83f
+
+# Usage: DownloadPkg appfile appurl
+%global DownloadPkg() \
+Download() {\
+    SHA=$(test -f %1 && sha1sum %1 ||:)\
+    if [[ ! -f %1 || "${SHA/ */}" != "%sha1sum" ]]; then\
+        axel -o %1 -a %2; Download\
+    fi\
+}\
+Download\
+%{nil}
 
 Name:    wine-qqintl
 Version: 0.1.3
-Release: 1.net
+Release: 2.net
 Summary: Tencent QQ International Edition
 Summary(zh_CN): 腾讯 QQ 国际版
 Group:   Applications/Communications
@@ -46,13 +58,7 @@ Requires: wqy-microhei-fonts
 
 %prep
 # Download qqintl
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract archive
 dpkg-deb -X %{appfile} .
@@ -74,14 +80,8 @@ ln -sfv %{_datadir}/deepinwine/qqintl/%{name} %{buildroot}%{_bindir}/%{name}
 %pre
 if [ $1 -ge 1 ]; then
 # Download qqintl
-cd /tmp
-Download() {
-    SHA=$(test -f %{appfile} && sha1sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha1sum" ]]; then
-        axel -a %appurl; Download
-    fi
-}
-Download
+cd %{_tmppath}
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract archive
 mkdir %{tmproot} &>/dev/null ||:
@@ -92,18 +92,13 @@ rm -rf usr/share/deepinwine/qqintl/wine usr/share/doc
 
 # Main
 install -d %{tmproot}%{_datadir}
-cp -r usr/share/{deepinwine,applications,icons} %{tmproot}%{_datadir}/
-
-# Link files
-install -d %{tmproot}%{_bindir}
+cp -r usr/share/deepinwine %{tmproot}%{_datadir}/
 sed -i '/WINEDIR=/s|=.*|=/usr|' %{tmproot}%{_datadir}/deepinwine/qqintl/%{name}
 fi
 
 %post
 if [ $1 -ge 1 ]; then
-    cp -rf %{tmproot}/usr/* /usr; rm -rf %{tmproot} /tmp/usr
-    # Link files
-    ln -sf %{_datadir}/deepinwine/qqintl/%{name} %{_bindir}/%{name}
+    cp -rf %{tmproot}/usr/* /usr; rm -rf %{tmproot} %{_tmppath}/usr
 fi
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
@@ -120,11 +115,13 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%ghost %{_bindir}/%{name}
+%{_bindir}/%{name}
 %ghost %{_datadir}/deepinwine/qqintl
-%ghost %{_datadir}/applications/qqintl.desktop
-%ghost %{_datadir}/icons/hicolor/*/apps/qqintl.png
+%{_datadir}/applications/qqintl.desktop
+%{_datadir}/icons/hicolor/*/apps/qqintl.png
 
 %changelog
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.1.3-2
+- Change tmp directory
 * Mon Dec 21 2015 mosquito <sensor.wen@gmail.com> - 0.1.3-1
 - Initial build
