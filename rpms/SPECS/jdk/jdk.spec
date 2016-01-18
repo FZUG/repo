@@ -1,9 +1,11 @@
+# http://pkgs.fedoraproject.org/cgit/rpms/java-1.8.0-openjdk.git
 %global __provides_exclude_from ^%{jdkhome}/.*
 %global __requires_exclude_from ^%{jdkhome}/.*
 
 %global debug_package %{nil}
 %global __jar_repack %{nil}
-%global tmproot /tmp/%{name}-%{version}
+%global _tmppath /var/tmp
+%global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 
 %global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "i586")
 %global appfile jdk-8u66-linux-%{arch}.tar.gz
@@ -17,11 +19,88 @@
 %global getopts --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O
 %global jdkdir  jdk1.8.0_66
 %global jdkhome %{_jvmdir}/%{jdkdir}
+%global jdkbindir %{_jvmdir}/%{jdkdir}/bin
+%global jredir  %{jdkdir}/jre
+%global jrebindir %{_jvmdir}/%{jredir}/bin
 %global jdkvars %{_sysconfdir}/sysconfig/%{name}
 
-Name:    oracle-jdk
+# Usage: DownloadPkg appfile appurl
+%global DownloadPkg() %{expand:
+Download() {
+    SHA=$(test -f %1 && sha256sum %1 ||:)
+    if [[ ! -f %1 || "${SHA/ */}" != "%sha256" ]]; then
+        wget %getopts %1 %2; Download
+    fi
+}
+Download
+}
+
+%global priority 20000
+%global post_script() %{expand:
+PRIORITY=%{priority}
+
+alternatives \\
+    --install %{_bindir}/java java %{jrebindir}/java $PRIORITY --family java-1.8.0-openjdk \\
+    --slave %{_jvmdir}/jre jre %{_jvmdir}/%{jredir} \\
+    --slave %{_bindir}/javaws javaws %{jrebindir}/javaws \\
+    --slave %{_bindir}/jcontrol jcontrol %{jrebindir}/jcontrol \\
+    --slave %{_bindir}/jjs jjs %{jrebindir}/jjs \\
+    --slave %{_bindir}/keytool keytool %{jrebindir}/keytool \\
+    --slave %{_bindir}/orbd orbd %{jrebindir}/orbd \\
+    --slave %{_bindir}/pack200 pack200 %{jrebindir}/pack200 \\
+    --slave %{_bindir}/policytool policytool %{jrebindir}/policytool \\
+    --slave %{_bindir}/rmid rmid %{jrebindir}/rmid \\
+    --slave %{_bindir}/rmiregistry rmiregistry %{jrebindir}/rmiregistry \\
+    --slave %{_bindir}/servertool servertool %{jrebindir}/servertool \\
+    --slave %{_bindir}/tnameserv tnameserv %{jrebindir}/tnameserv \\
+    --slave %{_bindir}/unpack200 unpack200 %{jrebindir}/unpack200
+
+alternatives \\
+    --install %{_bindir}/javac javac %{jdkbindir}/javac $PRIORITY --family java-1.8.0-openjdk \\
+    --slave %{_jvmdir}/java java_sdk %{_jvmdir}/%{jdkdir} \\
+    --slave %{_bindir}/appletviewer appletviewer %{jdkbindir}/appletviewer \\
+    --slave %{_bindir}/extcheck extcheck %{jdkbindir}/extcheck \\
+    --slave %{_bindir}/idlj idlj %{jdkbindir}/idlj \\
+    --slave %{_bindir}/jar jar %{jdkbindir}/jar \\
+    --slave %{_bindir}/jarsigner jarsigner %{jdkbindir}/jarsigner \\
+    --slave %{_bindir}/javadoc javadoc %{jdkbindir}/javadoc \\
+    --slave %{_bindir}/javafxpackager javafxpackager %{jdkbindir}/javafxpackager \\
+    --slave %{_bindir}/javah javah %{jdkbindir}/javah \\
+    --slave %{_bindir}/javap javap %{jdkbindir}/javap \\
+    --slave %{_bindir}/javapackager javapackager %{jdkbindir}/javapackager \\
+    --slave %{_bindir}/java-rmi.cgi java-rmi.cgi %{jdkbindir}/java-rmi.cgi \\
+    --slave %{_bindir}/jcmd jcmd %{jdkbindir}/jcmd \\
+    --slave %{_bindir}/jconsole jconsole %{jdkbindir}/jconsole \\
+    --slave %{_bindir}/jdb jdb %{jdkbindir}/jdb \\
+    --slave %{_bindir}/jdeps jdeps %{jdkbindir}/jdeps \\
+    --slave %{_bindir}/jhat jhat %{jdkbindir}/jhat \\
+    --slave %{_bindir}/jinfo jinfo %{jdkbindir}/jinfo \\
+    --slave %{_bindir}/jmap jmap %{jdkbindir}/jmap \\
+    --slave %{_bindir}/jmc jmc %{jdkbindir}/jmc \\
+    --slave %{_bindir}/jps jps %{jdkbindir}/jps \\
+    --slave %{_bindir}/jrunscript jrunscript %{jdkbindir}/jrunscript \\
+    --slave %{_bindir}/jsadebugd jsadebugd %{jdkbindir}/jsadebugd \\
+    --slave %{_bindir}/jstack jstack %{jdkbindir}/jstack \\
+    --slave %{_bindir}/jstat jstat %{jdkbindir}/jstat \\
+    --slave %{_bindir}/jstatd jstatd %{jdkbindir}/jstatd \\
+    --slave %{_bindir}/jvisualvm jvisualvm %{jdkbindir}/jvisualvm \\
+    --slave %{_bindir}/native2ascii native2ascii %{jdkbindir}/native2ascii \\
+    --slave %{_bindir}/rmic rmic %{jdkbindir}/rmic \\
+    --slave %{_bindir}/schemagen schemagen %{jdkbindir}/schemagen \\
+    --slave %{_bindir}/serialver serialver %{jdkbindir}/serialver \\
+    --slave %{_bindir}/wsgen wsgen %{jdkbindir}/wsgen \\
+    --slave %{_bindir}/wsimport wsimport %{jdkbindir}/wsimport \\
+    --slave %{_bindir}/xjc xjc %{jdkbindir}/xjc
+}
+
+%global postun_script() %{expand:
+alternatives --remove java %{jrebindir}/java
+alternatives --remove javac %{jdkbindir}/javac
+}
+
+Name:    oracle-jdk8
 Version: 1.8.0.66
-Release: 1.net
+Release: 2.net
 Summary: Java Platform Standard Edition Development Kit
 Summary(zh_CN): Oracle Java SE 开发套件
 Group:   Development/Tools
@@ -32,6 +111,8 @@ BuildRequires: wget tar
 Requires: wget tar
 Provides: jdk = %{version}-%{release}
 Provides: jre = %{version}-%{release}
+Provides: oracle-jdk = %{version}-%{release}
+Obsoletes: oracle-jdk = 1.8.0.66-1.net
 
 %description
 The Java Platform Standard Edition Development Kit (JDK) includes both
@@ -52,13 +133,7 @@ Environment) 的应用程序, applets, 组件的开发环境.
 
 %prep
 # Download JDK
-Download() {
-    SHA=$(test -f %{appfile} && sha256sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha256" ]]; then
-        wget %getopts %appfile %appurl; Download
-    fi
-}
-Download
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract archive
 tar -xvf %{appfile}
@@ -69,10 +144,7 @@ tar -xvf %{appfile}
 # Main
 install -d %{buildroot}%{jdkhome}
 cp -r %{jdkdir}/* %{buildroot}%{jdkhome}
-
-# Link files
-ln -sfv %{jdkhome} %{buildroot}%{_jvmdir}/latest
-ln -sfv %{_jvmdir}/latest %{buildroot}%{_jvmdir}/default
+rm -rf %{buildroot}%{jdkhome}/{README.html,COPYRIGHT,LICENSE,THIRDPARTYLICENSE*}
 
 # Variable file
 install -d %{buildroot}%{_sysconfdir}/sysconfig
@@ -81,14 +153,8 @@ touch %{buildroot}%{jdkvars}
 %pre
 if [ $1 -ge 1 ]; then
 # Download JDK
-cd /tmp
-Download() {
-    SHA=$(test -f %{appfile} && sha256sum %{appfile} ||:)
-    if [[ ! -f %{appfile} || "${SHA/ */}" != "%sha256" ]]; then
-        wget %getopts %appfile %appurl; Download
-    fi
-}
-Download
+cd %{_tmppath}
+%DownloadPkg %{appfile} %{appurl}
 
 # Extract archive
 mkdir %{tmproot} &>/dev/null ||:
@@ -96,16 +162,21 @@ tar -xf %{appfile}
 
 # Main
 install -d %{tmproot}%{jdkhome}
+rm -rf %{jdkdir}/{README.html,COPYRIGHT,LICENSE,THIRDPARTYLICENSE*}
 cp -r %{jdkdir}/* %{tmproot}%{jdkhome}
 
 # Variable file
 install -d %{tmproot}%{_sysconfdir}/sysconfig
 cat > %{tmproot}%{jdkvars} <<EOF
+# Please add follow command to ~/.bash_profile file for load variables.
+#  # JDK variables
+#  test -f %{jdkvars} && . %{jdkvars} ||:
+
 # Enable JDK environment variables
 Enable_JDK=1
 
 # Java environment variables
-JAVA_HOME=%{_jvmdir}/default
+JAVA_HOME=%{_jvmdir}/%{jdkdir}
 JRE_HOME=\$JAVA_HOME/jre
 CLASSPATH=.:\$JAVA_HOME/lib/tools.jar:\$JAVA_HOME/lib/dt.jar
 
@@ -135,26 +206,24 @@ fi
 
 %post
 if [ $1 -ge 1 ]; then
-    cp -rf %{tmproot}/* /; rm -rf %{tmproot} /tmp/%{jdkdir}
-    # Link files
-    ln -sf %{jdkhome} %{_jvmdir}/latest
-    ln -sf %{_jvmdir}/latest %{_jvmdir}/default
-    # load variables
-    for i in $(ls /home/*/.bashrc); do
-        grep -q "JDK" $i || \
-        echo -e "\n# JDK variables\ntest -f %{jdkvars} && . %{jdkvars} ||:" >> $i
-    done
+    cp -rf %{tmproot}/* /; rm -rf %{tmproot} %{_tmppath}/%{jdkdir}
+    %{post_script}
+fi
+
+%postun
+if [ $1 -eq 0 ]; then
+    %{postun_script}
 fi
 
 %files
 %defattr(-,root,root,-)
 %doc %{jdkdir}/README.html
-%license %{jdkdir}/LICENSE
+%license %{jdkdir}/{COPYRIGHT,LICENSE,THIRDPARTYLICENSE*}
 %config(noreplace) %{jdkvars}
-%ghost %{_jvmdir}/latest
-%ghost %{_jvmdir}/default
 %ghost %{jdkhome}
 
 %changelog
+* Tue Jan 19 2016 mosquito <sensor.wen@gmail.com> - 1.8.0.66-2
+- Add alternatives support
 * Mon Dec 21 2015 mosquito <sensor.wen@gmail.com> - 1.8.0.66-1
 - Initial build
