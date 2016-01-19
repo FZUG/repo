@@ -36,11 +36,13 @@ Download
 }
 
 %global priority 20000
+%global family_option %(test $(rpm -E%?fedora) -ge 22 && echo "--family java-1.8.0-openjdk")
+%global req_vers %(test $(rpm -E%?fedora) -ge 22 && echo ">= 1.7")
 %global post_script() %{expand:
 PRIORITY=%{priority}
 
 alternatives \\
-    --install %{_bindir}/java java %{jrebindir}/java $PRIORITY --family java-1.8.0-openjdk \\
+    --install %{_bindir}/java java %{jrebindir}/java $PRIORITY %{family_option} \\
     --slave %{_jvmdir}/jre jre %{_jvmdir}/%{jredir} \\
     --slave %{_bindir}/java_vm java_vm %{jrebindir}/java_vm \\
     --slave %{_bindir}/javaws javaws %{jrebindir}/javaws \\
@@ -56,7 +58,7 @@ alternatives \\
     --slave %{_bindir}/unpack200 unpack200 %{jrebindir}/unpack200
 
 alternatives \\
-    --install %{_bindir}/javac javac %{jdkbindir}/javac $PRIORITY --family java-1.8.0-openjdk \\
+    --install %{_bindir}/javac javac %{jdkbindir}/javac $PRIORITY %{family_option} \\
     --slave %{_jvmdir}/java java_sdk %{_jvmdir}/%{jdkdir} \\
     --slave %{_bindir}/appletviewer appletviewer %{jdkbindir}/appletviewer \\
     --slave %{_bindir}/japt apt %{jdkbindir}/apt \\
@@ -99,7 +101,7 @@ alternatives --remove javac %{jdkbindir}/javac
 
 Name:    oracle-jdk7
 Version: 1.7.0.80
-Release: 1.net
+Release: 2.net
 Summary: Java Platform Standard Edition Development Kit
 Summary(zh_CN): Oracle Java SE 开发套件
 Group:   Development/Tools
@@ -108,6 +110,7 @@ URL:     http://www.oracle.com/technetwork/java/javase
 
 BuildRequires: wget tar
 Requires: wget tar
+Requires: chkconfig %{req_vers}
 Provides: jdk = %{version}-%{release}
 Provides: jre = %{version}-%{release}
 Provides: oracle-jdk = %{version}-%{release}
@@ -221,5 +224,7 @@ fi
 %ghost %{jdkhome}
 
 %changelog
+* Tue Jan 19 2016 mosquito <sensor.wen@gmail.com> - 1.7.0.80-2
+- Fix https://github.com/FZUG/repo/issues/58
 * Tue Jan 19 2016 mosquito <sensor.wen@gmail.com> - 1.7.0.80-1
 - Initial build
