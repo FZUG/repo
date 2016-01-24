@@ -5,13 +5,13 @@
 %global repo %{project}
 
 # commit
-%global _commit0 cf9cf46984290a7bdcd21e6b222c1040042d4d79
+%global _commit0 3df0ac6fa18b1ccfc34f6d234da2aa8c43643a93
 %global _scommit0 %(c=%{_commit0}; echo ${c:0:7})
-%global _commit1 1363c8918b44b93db085c57ee056fddd786e7f03
+%global _commit1 84acfeeefdfd99fd3567875fb8240aba9811e764
 %global _scommit1 %(c=%{_commit1}; echo ${c:0:7})
 
 Name:    brackets
-Version: 1.5.0
+Version: 1.6
 Release: 1%{?dist}
 Summary: An open source code editor for the web
 
@@ -23,6 +23,7 @@ Source1: GettingStarted-zhcn.html
 
 Requires: gtk2, alsa-lib, GConf2
 BuildRequires: %{requires}, gtk2-devel, npm, nspr, gyp, desktop-file-utils, git
+Obsoletes: %{name} <= 1.5.0
 
 # libcef.so require libgcrypt.so.11, libudev.so.0
 # https://github.com/adobe/brackets/issues/10255
@@ -129,5 +130,7 @@ fi
 %attr(755,root,root) %{_datadir}/%{name}/lib/libcef.so
 
 %changelog
-* Sun Nov 22 2015 mosquito <sensor.wen@gmail.com> - 1.5.0-1
+* Mon Jan 25 2016 mosquito <sensor.wen@gmail.com> - 1.6-1
+- Release 1.6
+* Sun Nov 22 2015 mosquito <sensor.wen@gmail.com> - 1.5-1
 - Initial build
