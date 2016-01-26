@@ -13,7 +13,7 @@
 
 Name:    atom
 Version: 1.4.1
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hackable text editor for the 21st century
 
 Group:   Applications/Editors
@@ -64,10 +64,7 @@ npm config delete ca
 
 %install
 script/grunt install --install-dir "%{buildroot}%{_prefix}"
-%{__rm} -f %{buildroot}%{_datadir}/atom/resources/app/apm/bin/node
-pushd %{buildroot}%{_datadir}/atom/resources/app/apm/bin/
-%{__ln_s}f %{_bindir}/node node
-%{__sed} -i -e "s/=.*atom/=atom/g" -e "s/atom.png/atom/g" \
+%{__sed} -i -e 's|=.*atom|=atom|g' -e 's|atom.png|atom|g' \
     %{buildroot}%{_datadir}/applications/atom.desktop
 
 # copy over icons in sizes that most desktop environments like
@@ -99,11 +96,13 @@ fi
 %dir %{_datadir}/atom
 %{_datadir}/atom/*
 %{_datadir}/applications/atom.desktop
-%{_datadir}/icons/hicolor/
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
 %exclude %{_datadir}/%{name}/libgcrypt.so.*
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Wed Jan 27 2016 mosquito <sensor.wen@gmail.com> - 1.4.1-2.git2cf2ccb
+- Fix https://github.com/FZUG/repo/issues/64
 * Tue Jan 26 2016 mosquito <sensor.wen@gmail.com> - 1.4.1-1.git2cf2ccb
 - Release 1.4.1
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 1.4.0-1.gite0dbf94
