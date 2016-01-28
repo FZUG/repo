@@ -28,7 +28,7 @@
 %endif
 
 # nginx mainline version
-%global  ngx_version         1.9.5
+%global  ngx_version         1.9.10
 %global  with_ngx_mainline   1
 
 # ModSecurity module
@@ -46,7 +46,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.3.5
+%global  fancy_version       0.3.6
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -73,11 +73,11 @@
 
 Name:              openresty
 Epoch:             1
-Version:           1.9.3.1
+Version:           1.9.7.2
 %if 0%{?with_modsec}
-Release:           3.modsec_%{modsec_version}%{dist}
+Release:           1.modsec_%{modsec_version}%{dist}
 %else
-Release:           3%{?dist}
+Release:           1%{?dist}
 %endif
 
 Summary:           a fast Web App Server by extending Nginx
@@ -599,6 +599,9 @@ fi
 
 
 %changelog
+* Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.7.2-1.modsec_2.9.0
+- update to upstream release 1.9.10
+- update ngx_fancyindex 0.3.6
 * Mon Oct  5 2015 mosquito <sensor.wen@gmail.com> - 1:1.9.3.1-3.modsec_2.9.0
 - support el5
 - don't provide luajit library
