@@ -18,7 +18,7 @@
 %global  with_http2          0
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.9.16
+%global  ngx_lua_version     0.10.0
 %global  with_ngx_lua_latest 1
 
 # ModSecurity module
@@ -36,7 +36,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.3.5
+%global  fancy_version       0.3.6
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -63,11 +63,11 @@
 
 Name:              tengine
 Epoch:             1
-Version:           2.1.1
+Version:           2.1.2
 %if 0%{?with_modsec}
-Release:           3.modsec_%{modsec_version}%{?dist}
+Release:           1.modsec_%{modsec_version}%{?dist}
 %else
-Release:           3%{?dist}
+Release:           1%{?dist}
 %endif
 
 Summary:           A high performance web server and reverse proxy server
@@ -601,6 +601,10 @@ fi
 
 
 %changelog
+* Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> - 1:2.1.2-1.modsec_2.9.0
+- update to upstream release 2.1.2
+- update ngx_lua 0.10.0
+- update ngx_fancyindex 0.3.6
 * Fri Oct  2 2015 mosquito <sensor.wen@gmail.com> - 1:2.1.1-3.modsec_2.9.0
 - support el5
 * Thu Oct  1 2015 mosquito <sensor.wen@gmail.com> - 1:2.1.1-2.modsec_2.9.0
