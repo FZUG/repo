@@ -5,8 +5,8 @@
 %global appfile %{name}_%{version}_%{arch}.deb
 %global appurl  http://ftp.opera.com/pub/%{name}/%{version}/linux/%{appfile}
 %global sha1sum %(test %arch = amd64 &&
-           echo "e555d31164dcec68922d50c87cffcadc2c9703f8" ||
-           echo "bf9e67ceacefd41da06e6983138a5c9682aa4b37")
+           echo "876cc2b80f9dd0472cb26b780afa474567beda22" ||
+           echo "96717602e78437b282fffb3aef381ee68db07a69")
 
 # Due to changes in Chromium, Opera is no longer able to use the system
 # FFmpeg library for H264 video playback on Linux, so H264-encoded videos
@@ -27,7 +27,7 @@ Download\
 %{nil}
 
 Name:    opera-beta
-Version: 35.0.2066.23
+Version: 35.0.2066.35
 Release: 1.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -151,6 +151,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.35-1
+- Update to 35.0.2066.35
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.23-1
 - Update to 35.0.2066.23
 * Mon Dec 14 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.24-2
