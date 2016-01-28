@@ -8,7 +8,7 @@
 %global __requires_exclude (libffmpeg)
 
 Name:    opera-beta
-Version: 35.0.2066.23
+Version: 35.0.2066.35
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -105,6 +105,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.35-1
+- Update to 35.0.2066.35
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.23-1
 - Update to 35.0.2066.23
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> -34.0.2036.24-1
