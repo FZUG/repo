@@ -4,12 +4,13 @@
 %global __jar_repack  %{nil}
 %global __os_install_post %{nil}
 
-%global tmproot /tmp/%{name}-%{version}_tmproot
+%global _tmppath /var/tmp
+%global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global approot /opt/JetBrains/%{name}
 %global appfile %{name}-%{version}.tar.gz
 %global appurl  http://download.jetbrains.com/python/%{appfile}
 # http://download.jetbrains.com/python/Name-Version.tar.gz.sha256
-%global sha256  82116e6e5bf41ecd48f4fab04012e4a75eefef9f5856083642c4524461c763f5
+%global sha256  edd4bdd74a05fc4bf05c0b9cc3117a320050e1360f5d8adf8de29288d1a19972
 
 # Usage: DownloadPkg appfile appurl
 %global DownloadPkg() \
@@ -23,7 +24,7 @@ Download\
 %{nil}
 
 Name:    pycharm-community
-Version: 5.0.3
+Version: 5.0.4
 Release: 1.net
 Summary: Powerful Python and Django IDE. Community version
 Group:   Development/Tools
@@ -99,7 +100,7 @@ EOF
 %pre
 if [ $1 -ge 1 ]; then
 # Download pycharm
-cd /tmp
+cd %{_tmppath}
 %DownloadPkg %{appfile} %{appurl}
 
 # Extract archive
@@ -133,7 +134,7 @@ fi
 
 %post
 if [ $1 -ge 1 ]; then
-    cp -rf %{tmproot}/* /; rm -rf %{tmproot} /tmp/%{name}-%{version}
+    cp -rf %{tmproot}/* /; rm -rf %{tmproot} %{_tmppath}/%{name}-%{version}
 fi
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
@@ -174,5 +175,7 @@ fi
 %exclude %{approot}/license
 
 %changelog
+* Fri Jan 29 2016 mosquito <sensor.wen@gmail.com> - 5.0.4-1
+- Release 5.0.4
 * Sat Dec 26 2015 mosquito <sensor.wen@gmail.com> - 5.0.3-1
 - Initial build
