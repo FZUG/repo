@@ -152,6 +152,8 @@ skip_if_unavailable=1''']
             except IndexError:
                 continue
             pkg_out = os.path.join(rootdir, 'rpm', arch, pkg_full[0])
+            if os.path.exists(pkg_out):
+                continue
             print('Downloading', pkg_full[0])
             urllib.request.urlretrieve(pkg_url, filename=pkg_out)
 
@@ -187,6 +189,8 @@ deb http://repo.fdzh.org/chrome/deb/ stable main''']
             except IndexError:
                 continue
             pkg_out = os.path.join(pooldir + pkg +'/'+ pkg_full[0])
+            if os.path.exists(pkg_out):
+                continue
             print('Downloading', pkg_full[0])
             urllib.request.urlretrieve(pkg_url, filename=pkg_out)
 
@@ -210,11 +214,13 @@ def get_pkg():
 
                 # Download Pkg (exe and dmg)
                 item = json.loads(json_data)
+                dirname = 'exe' if i == 'win' else 'dmg'
+                pkg_out = os.path.join(rootdir, dirname, item.get('name'))
+                if os.path.exists(pkg_out):
+                    continue
                 print('Downloading', item.get('name'))
                 f = get(item.get('url')[2])
-                dirname = 'exe' if i == 'win' else 'dmg'
-                local = os.path.join(rootdir, dirname, item.get('name'))
-                output(local, f)
+                output(pkg_out, f)
 
 def helper():
     ''' display help information. '''
