@@ -8,12 +8,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 2cf2ccbc0410ee11ac7f76494c2733e638432681
+%global _commit 164201e7bba5681594ac80ef1430c3afd9b58911
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.4.1
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.4.3
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hackable text editor for the 21st century
 
 Group:   Applications/Editors
@@ -101,6 +101,8 @@ fi
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Fri Feb  5 2016 mosquito <sensor.wen@gmail.com> - 1.4.3-1.git164201e
+- Release 1.4.3
 * Wed Jan 27 2016 mosquito <sensor.wen@gmail.com> - 1.4.1-2.git2cf2ccb
 - Fix https://github.com/FZUG/repo/issues/64
 * Tue Jan 26 2016 mosquito <sensor.wen@gmail.com> - 1.4.1-1.git2cf2ccb
