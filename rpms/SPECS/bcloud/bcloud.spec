@@ -15,7 +15,7 @@
 
 Name:    bcloud
 Version: 3.8.2
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Baidu Pan client for Linux Desktop users
 Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
@@ -47,6 +47,9 @@ Baidu Pan client for Linux Desktop users.
 
 %prep
 %setup -q -n %repo-%{_commit}
+# not bind cellphone
+# https://github.com/LiuLang/bcloud/pull/177
+sed -i '/err.*18/s|=.*18|in (18, 400032)|' bcloud/auth.py
 
 %build
 %{__python3} setup.py build
@@ -84,6 +87,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Feb  6 2016 mosquito <sensor.wen@gmail.com> - 3.8.2-2.git4b54e0f
+- Not bind cellphone
+
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 3.8.2-1.git4b54e0f
 - Update version to 3.8.2-1.git4b54e0f
 
