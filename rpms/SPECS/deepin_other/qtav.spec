@@ -3,22 +3,23 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit 519af919f6f6ebcb971dc9918c216a8715621c6e
+%global _commit fafd3b042707ad4e67b6cb71db32ec6748146f16
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    qtav
 Version: 1.9.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
-License: LGPLv2.1
+License: LGPLv2+
 Group:   Development/Libraries
 Url:     http://www.qtav.org
 Source0: https://github.com/wang-bin/QtAV/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
+BuildRequires: dos2unix
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-qtdeclarative-devel
 BuildRequires: libass-devel
@@ -53,24 +54,29 @@ Requires: qtav-qml-module = %{version}-%{release}
 QtAV can help you to write a player with less effort than ever before.
 
 Features include:
-  * Hardware decoding suppprt: DXVA2, VAAPI, VDA, CedarX, CUDA.
+  * Hardware decoding support: DXVA2, VAAPI, VDA, CedarX, CUDA.
   * OpenGL and ES2 support for Hi10P and other 16-bit YUV videos.
-  * Video capture in rgb and yuv format.
+  * Real time preview.
+  * Video capture in RGB and YUV format.
   * OSD and custom filters.
-  * filters in libavfilter, for example stero3d, blur.
-  * Subtitle.
+  * Filters in libavfilter, for example stero3d, blur.
+  * Subtitle track select. Dynamic change FFmpeg and libass engine.
   * Transform video using GraphicsItemRenderer. (rotate, shear, etc)
-  * Playing frame by frame (currently support forward playing).
-  * Playback speed control. At any speed.
-  * Variant streams: locale file, http, rtsp, etc.
-  * Choose audio channel.
+  * Playing frame by frame.
+  * Playback speed control.
+  * Variant streams: locale file, HTTP, RTSP, etc. and your custom streams.
+  * Audio channel, tracks and external audio tracks.
   * Choose media stream, e.g. play a desired audio track.
-  * Multiple render engine support. Currently supports QPainter, GDI+, Direct2D, XV and OpenGL(and ES2).
+  * Multiple render engine support. Currently supports QPainter, GDI+,
+    Direct2D, XV and OpenGL(and ES2).
   * Dynamically change render engine when playing.
+  * Dynamically change video decoder.
   * Multiple video outputs for 1 player.
-  * Region of interest(ROI), i.e. video cropping.
-  * Video eq: brightness, contrast, saturation, hue.
-  * QML support as a plugin. Most playback APIs are compatible with QtMultiMedia module.
+  * Video eq(software and OpenGL): brightness, contrast, saturation, hue.
+  * QML support as a plugin. Most playback APIs are compatible with
+    QtMultiMedia module.
+  * Compatiblity: QtAV can be built with both Qt4 and Qt5, FFmpeg(>=1.0)
+    and Libav (>=9.0). Latest FFmpeg release is recommended.
 
 %description sdk -l zh_CN
 QtAV 能够帮助您花费较少的精力来编写高质量影音播放器.
@@ -78,23 +84,26 @@ QtAV 能够帮助您花费较少的精力来编写高质量影音播放器.
 功能特性:
   * 硬解码支持: DXVA2, VAAPI, VDA, CedarX, CUDA.
   * OpenGL, ES2 支持 Hi10P 和其他 16-bit YUV 视频.
-  * 视频捕捉支持 rgb 和 yuv 格式.
+  * 实时预览.
+  * 视频捕捉支持 RGB 和 YUV 格式.
   * 支持 OSD 和自定义过滤器.
   * 支持 libavfilter 过滤器, 可实现例如 stero3d, blur 特效.
-  * 字幕.
+  * 可选字幕. 动态更改 FFmpeg 和 libass 引擎.
   * 使用 GraphicsItemRenderer 转换视频. (旋转, 剪切等)
-  * 逐帧播放 (目前仅支持向前播放).
+  * 逐帧播放.
   * 可控制播放速度. 支持任何速度.
-  * 支持播放流媒体: 本地文件, http, rtsp 等.
-  * 选择音频信道.
+  * 支持播放流媒体: 本地文件, HTTP, RTSP 以及自定义流.
+  * 选择音频声道, 音轨和外部音轨.
   * 选择媒体流, 如播放期望的音轨.
   * 多渲染引擎支持. 目前支持 QPainter, GDI+, Direct2D, XV 和 OpenGL(ES2).
-  * 播放时动态修改渲染引擎.
+  * 播放时动态更改渲染引擎.
+  * 动态更改视频解码器.
   * 单播放器输出多视频.
   * Region of interest(ROI), 即视频裁剪.
-  * 视频效果: 亮度, 对比度, 饱和度, 色调.
+  * 视频效果(软件和OpenGL): 亮度, 对比度, 饱和度, 色调.
   * QML 支持插件. 大多数播放 API 兼容 QtMultiMedia 模式.
-
+  * 兼容性: QtAV 支持使用 Qt4 或 Qt5, FFmpeg(>=1.0) 或 Libav(>=9.0) 编译.
+    建议使用最新版本的 FFmpeg.
 
 %package -n lib%{name}
 Summary: QtAV library
@@ -211,6 +220,7 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台高性能多媒体播放库.
 
 %prep
 %setup -q -n %repo-%{_commit}
+dos2unix README.md qtc_packaging/debian_generic/*.desktop
 
 %build
 export QT_SELECT=qt5
@@ -335,6 +345,8 @@ fi
 
 
 %changelog
+* Sat Feb  6 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-2.gitfafd3b0
+- Update version to 1.9.0-2.gitfafd3b0
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.9.0-1.git519af91
 - Update version to 1.9.0-1.git519af91
 * Tue Dec  8 2015 mosquito <sensor.wen@gmail.com> - 1.8.0-3.git83f5236
