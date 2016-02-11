@@ -6,11 +6,11 @@
 %global repo %{project}
 
 # commit
-%global _commit a80232bbcfe8a5cdad1ebc98638673d9dcb02458
+%global _commit 149e7a0debf3e32f95978a606e00d3c09bcac3d6
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.6
+Version: 0.10.8
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -19,7 +19,6 @@ License: MIT
 URL:     https://github.com/Microsoft/vscode
 Source0: https://github.com/Microsoft/vscode/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source1: about.json
-Source2: welcome.md
 
 BuildRequires: npm, node-gyp
 BuildRequires: python, make, libX11-devel
@@ -86,22 +85,17 @@ EOT
 desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # Change appName
+install -m 0644 %{S:1} %{buildroot}%{_datadir}/%{name}/resources/app/product.json
 sed -i -e \
    '/Short/s|:.*,$|: "VSCode",|
-    /Long/s|:.*,$|: "Visual Studio Code",|
-    /OSS /s|:.*,$|: "Visual Studio Code document",|
-    /icons/,+12d' \
+    /Long/s|:.*,$|: "Visual Studio Code",|' \
     %{buildroot}%{_datadir}/%{name}/resources/app/product.json
 
 # About.json
-cat %{S:1} >> %{buildroot}%{_datadir}/%{name}/resources/app/product.json
 sed -i '$a\\t"commit": "%{_commit}",\n\t"date": "'`date -u +%FT%T.%3NZ`'"\n}' \
     %{buildroot}%{_datadir}/%{name}/resources/app/product.json
 sed -i '2s|:.*,$|: "VSCode",|' \
     %{buildroot}%{_datadir}/%{name}/resources/app/package.json
-
-# Welcome.md
-install -m 0644 %{S:2} %{buildroot}%{_datadir}/%{name}/resources/app/resources/
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -132,6 +126,9 @@ fi
 %exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Thu Feb 11 2016 mosquito <sensor.wen@gmail.com> - 0.10.8-1
+- Release 0.10.8
+- Remove welcome.md
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 0.10.6-1
 - Release 0.10.6
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 0.10.5-1

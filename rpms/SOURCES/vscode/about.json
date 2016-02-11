@@ -1,18 +1,22 @@
+{
+	"nameShort": "Code",
+	"nameLong": "Visual Studio Code",
 	"dataFolderName": ".vscode",
+	"win32MutexName": "vscode",
+	"win32ShortcutName": "code",
+	"licenseUrl": "https://go.microsoft.com/fwlink/?LinkID=533485#vscode",
+	"darwinBundleIdentifier": "com.microsoft.VSCode",
+	"welcomePage": "https://go.microsoft.com/fwlink/?LinkId=723048",
+	"win32AppId": "{{F8A2A208-72B3-4D61-95FC-8A65D340689B}",
+	"win32NameVersion": "Microsoft Visual Studio Code",
+	"win32DirName": "Microsoft VS Code",
+	"win32SetupExeBasename": "VSCodeSetup",
+	"win32AppUserModelId": "Microsoft.VisualStudioCode",
+	"win32RegValueName": "VSCode",
+	"darwinCredits": "resources/darwin/Credits.rtf",
 	"downloadUrl": "https://code.visualstudio.com",
-	"welcomePage": "resources/welcome.md",
-	"icons": {
-		"application": {
-			"png": "resources/linux/vscode.png",
-			"icns": "resources/darwin/vscode.icns",
-			"ico": "resources/win32/vscode.ico"
-		},
-		"file": {
-			"icns": "resources/darwin/vscode_file.icns",
-			"ico": "resources/win32/vscode_file.ico"
-		}
-	},
-	"updateUrl": "https://ticino-builds.azurewebsites.net",
+	"updateUrl": "https://vscode-update.azurewebsites.net",
+	"quality": "stable",
 	"expiryDate": 1485817200000,
 	"expiryUrl": "http://go.microsoft.com/fwlink/?LinkID=533481",
 	"extensionsGallery": {
@@ -22,7 +26,7 @@
 	"crashReporter": {
 		"productName": "VSCode",
 		"companyName": "Microsoft",
-		"submitUrl": "https://ticinocrashreporter.azurewebsites.net/crash",
+		"submitURL": "https://ticinocrashreporter.azurewebsites.net/crash",
 		"extra": {
 			"vscode_sessionId": "$(sessionId)",
 			"vscode_version": "$(version)",
@@ -35,7 +39,6 @@
 		"asimovKey": "AIF-444c3af9-8e69-4462-ab49-4191e6ad1916"
 	},
 	"sendASmile": {
-		"submitUrl": "https://sendvsfeedback.cloudapp.net/api/verbatim",
 		"reportIssueUrl": "http://go.microsoft.com/fwlink/?LinkId=534872",
 		"requestFeatureUrl": "http://go.microsoft.com/fwlink/?LinkID=533482"
 	},
@@ -44,5 +47,4 @@
 	"twitterUrl": "http://go.microsoft.com/fwlink/?LinkID=533687",
 	"requestFeatureUrl": "http://go.microsoft.com/fwlink/?LinkID=533482",
 	"reportIssueUrl": "http://go.microsoft.com/fwlink/?LinkId=534872",
-	"licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=533485#vscode",
 	"privacyStatementUrl": "http://go.microsoft.com/fwlink/?LinkID=528096&clcid=0x409",
