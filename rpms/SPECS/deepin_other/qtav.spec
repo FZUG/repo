@@ -3,23 +3,23 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit fafd3b042707ad4e67b6cb71db32ec6748146f16
+%global _commit ed374dc559f1689288579e19f23b4f6c92633adc
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    qtav
 Version: 1.9.0
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
-License: LGPLv2+
+License: LGPLv2+ and GPLv3 and BSD
 Group:   Development/Libraries
-Url:     http://www.qtav.org
+Url:     http://www.qtav.org/
 Source0: https://github.com/wang-bin/QtAV/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildRequires: dos2unix
+BuildRequires: desktop-file-utils
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-qtdeclarative-devel
 BuildRequires: libass-devel
@@ -27,31 +27,15 @@ BuildRequires: ffmpeg-devel
 BuildRequires: openal-soft-devel
 BuildRequires: libXv-devel
 BuildRequires: libva-devel
-BuildRequires: portaudio-devel
 BuildRequires: pulseaudio-libs-devel
 %if 0%{?with_llvm}
 BuildRequires: clang
 %endif
+Requires: hicolor-icon-theme
 
 %description
 QtAV is a multimedia playback library based on Qt and FFmpeg.
 It can help you to write a player with less effort than ever before.
-
-%description -l zh_CN
-QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
-它能够帮助您花费较少的精力来编写高质量影音播放器.
-
-
-%package sdk
-Summary: FFmpeg powered multimedia playback SDK for Qt
-Summary(zh_CN): 基于 FFmpeg 和 Qt 驱动的多媒体播放 SDK
-Buildarch: noarch
-Requires: qtav-devel = %{version}-%{release}
-Requires: qtav-private-devel = %{version}-%{release}
-Requires: qtav-qml-module = %{version}-%{release}
-
-%description sdk
-QtAV can help you to write a player with less effort than ever before.
 
 Features include:
   * Hardware decoding support: DXVA2, VAAPI, VDA, CedarX, CUDA.
@@ -78,8 +62,9 @@ Features include:
   * Compatiblity: QtAV can be built with both Qt4 and Qt5, FFmpeg(>=1.0)
     and Libav (>=9.0). Latest FFmpeg release is recommended.
 
-%description sdk -l zh_CN
-QtAV 能够帮助您花费较少的精力来编写高质量影音播放器.
+%description -l zh_CN
+QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
+它能够帮助您花费较少的精力来编写高质量影音播放器.
 
 功能特性:
   * 硬解码支持: DXVA2, VAAPI, VDA, CedarX, CUDA.
@@ -105,6 +90,7 @@ QtAV 能够帮助您花费较少的精力来编写高质量影音播放器.
   * 兼容性: QtAV 支持使用 Qt4 或 Qt5, FFmpeg(>=1.0) 或 Libav(>=9.0) 编译.
     建议使用最新版本的 FFmpeg.
 
+
 %package -n lib%{name}
 Summary: QtAV library
 Summary(zh_CN): QtAV 库
@@ -125,7 +111,7 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 %package -n lib%{name}widgets
 Summary: QtAV Widgets module
 Summary(zh_CN): QtAV Widgets 模块
-Requires: libqtav = %{version}-%{release}
+#Requires: libqtav%%{?_isa} = %%{version}-%%{release}
 
 %description -n lib%{name}widgets
 QtAV is a multimedia playback library based on Qt and FFmpeg.
@@ -143,8 +129,9 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 %package devel
 Summary: QtAV development files
 Summary(zh_CN): QtAV 开发文件
-Requires: libqtav = %{version}-%{release}
-Requires: libqtavwidgets = %{version}-%{release}
+Requires: libqtav%{?_isa} = %{version}-%{release}
+Requires: libqtavwidgets%{?_isa} = %{version}-%{release}
+Requires: qtav-qml-module%{?_isa} = %{version}-%{release}
 Requires: qt5-qtbase-devel
 
 %description devel
@@ -159,26 +146,6 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 它能够帮助您花费较少的精力来编写高质量影音播放器.
 
 此包包含编译基于 QtAV 开发的应用程序所需的头文件.
-
-
-%package private-devel
-Summary: QtAV private development files
-Summary(zh_CN): QtAV 私有开发文件
-Buildarch: noarch
-Requires: qtav-devel = %{version}-%{release}
-
-%description private-devel
-QtAV is a multimedia playback library based on Qt and FFmpeg.
-It can help you to write a player with less effort than ever before.
-
-This package contains the private header development files for building some
-QtAV applications using QtAV private headers.
-
-%description private-devel -l zh_CN
-QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
-它能够帮助您花费较少的精力来编写高质量影音播放器.
-
-此包包含编译基于 QtAV private 头文件开发的应用程序所需的头文件.
 
 
 %package qml-module
@@ -202,9 +169,9 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台多媒体播放库.
 Summary: QtAV/QML players
 Summary(zh_CN): QtAV/QML 播放器
 License: GPLv3
-Requires: libqtav = %{version}-%{release}
-Requires: libqtavwidgets = %{version}-%{release}
-Requires: qtav-qml-module = %{version}-%{release}
+#Requires: libqtav%%{?_isa} = %%{version}-%%{release}
+#Requires: libqtavwidgets%%{?_isa} = %%{version}-%%{release}
+Requires: qtav-qml-module%{?_isa} = %{version}-%{release}
 
 %description players
 QtAV is a multimedia playback framework based on Qt and FFmpeg.
@@ -220,7 +187,6 @@ QtAV 是一款基于 Qt 和 FFmpeg 的跨平台高性能多媒体播放库.
 
 %prep
 %setup -q -n %repo-%{_commit}
-dos2unix README.md qtc_packaging/debian_generic/*.desktop
 
 %build
 export QT_SELECT=qt5
@@ -228,9 +194,9 @@ export CPATH="`pkg-config --variable=includedir libavformat`"
 mkdir build; pushd build
 # debug mode: CONFIG+=debug
 %if 0%{?with_llvm}
-%{qmake_qt5} "CONFIG+=recheck" -spec linux-clang ..
+%{qmake_qt5} CONFIG+="no_rpath recheck config_libass_link" -spec linux-clang ..
 %else
-%{qmake_qt5} "CONFIG+=recheck" ..
+%{qmake_qt5} CONFIG+="no_rpath recheck config_libass_link" ..
 %endif
 make %{?_smp_mflags}
 
@@ -245,7 +211,7 @@ rm -rf %{buildroot}%{_qt5_headerdir}/*.h
 install -d %{buildroot}%{_bindir}
 ln -sfv %{_qt5_bindir}/player %{buildroot}%{_bindir}
 ln -sfv %{_qt5_bindir}/QMLPlayer %{buildroot}%{_bindir}
-install -D src/QtAV.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/QtAV.svg
+install -Dm644 src/QtAV.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/QtAV.svg
 
 # library links
 ln -sfv %{_libdir}/libQtAV.so %{buildroot}%{_libdir}/libQt5AV.so
@@ -254,34 +220,25 @@ ln -sfv %{_libdir}/libQtAVWidgets.so %{buildroot}%{_libdir}/libQt5AVWidgets.so
 # strip files
 %{__strip_shared}
 
-%post devel -p /sbin/ldconfig
-%post qml-module -p /sbin/ldconfig
 %post -n lib%{name} -p /sbin/ldconfig
 %post -n lib%{name}widgets -p /sbin/ldconfig
 
 %post players
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
 
-%postun devel -p /sbin/ldconfig
-%postun qml-module -p /sbin/ldconfig
 %postun -n lib%{name} -p /sbin/ldconfig
 %postun -n lib%{name}widgets -p /sbin/ldconfig
 
 %postun players
 if [ $1 -eq 0 ]; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 fi
-/usr/bin/update-desktop-database -q ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
 
 %posttrans players
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
-%files sdk
-%defattr(-,root,root,-)
-%doc README.md Changelog
-%license lgpl-2.1.txt
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
 %files -n lib%{name}
 %defattr(-,root,root,-)
@@ -299,10 +256,10 @@ fi
 %defattr(-,root,root,-)
 %doc README.md Changelog
 %license lgpl-2.1.txt
-%{_qt5_headerdir}/QtAV/*.h
-%{_qt5_headerdir}/QtAV/QtAV
-%{_qt5_headerdir}/QtAVWidgets/*.h
-%{_qt5_headerdir}/QtAVWidgets/QtAVWidgets
+%dir %{_qt5_headerdir}/QtAV/
+%dir %{_qt5_headerdir}/QtAVWidgets/
+%{_qt5_headerdir}/QtAV/*
+%{_qt5_headerdir}/QtAVWidgets/*
 %{_libdir}/libQtAV.so
 %{_libdir}/libQtAV.prl
 %{_libdir}/libQt5AV.so
@@ -313,12 +270,6 @@ fi
 %{_qt5_archdatadir}/mkspecs/features/avwidgets.prf
 %{_qt5_archdatadir}/mkspecs/modules/qt_lib_av.pri
 %{_qt5_archdatadir}/mkspecs/modules/qt_lib_avwidgets.pri
-
-%files private-devel
-%defattr(-,root,root,-)
-%doc README.md Changelog
-%license lgpl-2.1.txt
-%{_qt5_headerdir}/QtAV/%{_qt5_version}/QtAV/private/*.h
 %{_qt5_archdatadir}/mkspecs/modules/qt_lib_av_private.pri
 %{_qt5_archdatadir}/mkspecs/modules/qt_lib_avwidgets_private.pri
 
@@ -326,6 +277,7 @@ fi
 %defattr(-,root,root,-)
 %doc README.md Changelog
 %license lgpl-2.1.txt
+%dir %{_qt5_archdatadir}/qml/QtAV/
 %{_qt5_archdatadir}/qml/QtAV/libQmlAV.so
 %{_qt5_archdatadir}/qml/QtAV/plugins.qmltypes
 %{_qt5_archdatadir}/qml/QtAV/qmldir
@@ -345,6 +297,14 @@ fi
 
 
 %changelog
+* Thu Feb 11 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-3.gited374dc
+- Update version to 1.9.0-3.gited374dc
+- added BReq desktop-file-utils, Req hicolor-icon-theme
+- removed BReq portaudio-devel
+- removed empty sdk sub-package
+- append private-devel files to devel sub-package
+- removed ldconfig for devel sub-package
+- added QMAKE flag CONFIG+=no_rpath
 * Sat Feb  6 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-2.gitfafd3b0
 - Update version to 1.9.0-2.gitfafd3b0
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.9.0-1.git519af91
