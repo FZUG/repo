@@ -7,20 +7,19 @@
 %global with_python3 1
 %endif
 
-Name:		python-%{realname}
-Version:	1.31
-Release:	1%{?dist}
-Summary:	Mutagen is a Python module to handle audio metadata
-Summary(zh_CN):	一个处理音频元数据的Python模块
+Name:           python-%{realname}
+Version:        1.31
+Release:        2%{?dist}
+Summary:        Mutagen is a Python module to handle audio metadata
+Summary(zh_CN): 一个处理音频元数据的Python模块
 
-Group:		Development/Languages
-# https://bitbucket.org/lazka/mutagen/raw/b27f57a13d47bf861bf69e95c250d12a5d7db489/COPYING
-License:	GPLv2
-URL:		https://bitbucket.org/lazka/mutagen/overview
-Source0:	https://bitbucket.org/lazka/mutagen/downloads/%{realname}-%{version}.tar.gz
+Group:          Development/Languages
+License:        GPLv2
+URL:            https://bitbucket.org/lazka/mutagen/overview
+Source0:        https://bitbucket.org/lazka/mutagen/downloads/%{realname}-%{version}.tar.gz
 
-BuildArch:	noarch
-BuildRequires:	python2-devel
+BuildArch:      noarch
+BuildRequires:  python2-devel
 
 %description
 Mutagen is a Python module to handle audio metadata. It supports
@@ -32,18 +31,17 @@ includes a module to handle generic Ogg bitstreams.
 
 %if 0%{?with_python3}
 %package -n python3-%{realname}
-Summary:	Read and write audio tags for many formats in Python 3
-Summary(zh_CN):	一个处理音频元数据的Python3模块
-BuildRequires:	python3-devel
+Summary:        Read and write audio tags for many formats in Python 3
+Summary(zh_CN): 一个处理音频元数据的Python3模块
+BuildRequires:  python3-devel
 
 %description -n python3-%{realname}
-A fork of the mutagen package, modified to support Python 3.3+.
-I take no credit for the original mutagen - the copyright for that
-is owned by the original developers.
-This package isn't compatible with Python 2.x, and will never be.
-The intention is to improve the existing code over time,
-making it more Pythonic and better documented,
-and possibly adding new features such as id3v2.3 support.
+Mutagen is a Python module to handle audio meta-data. It supports
+reading ID3 (all versions), APEv2, FLAC, and Ogg Vorbis/FLAC/Theora.
+It can write ID3v1.1, ID3v2.4, APEv2, FLAC, and Ogg Vorbis/FLAC/Theora
+comments. It can also read MPEG audio and Xing headers, FLAC stream
+info blocks, and Ogg Vorbis/FLAC/Theora stream headers. Finally, it
+includes a module to handle generic Ogg bit-streams.
 %endif # with_python3
 
 %prep
@@ -55,10 +53,8 @@ cp -a . %{py3dir}
 %endif # with_python3
 
 %build
-# Python 2 build:
 %{__python} setup.py build
 
-# Python 3 build:
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py build
@@ -66,14 +62,12 @@ popd
 %endif # with_python3
 
 %install
-# Install mutagen for Python 3:
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install -O1 --skip-build --root %{buildroot}
 popd
 %endif # with_python3
 
-# Install mutagen for Python 2:
 %{__python} setup.py install -O1 --skip-build --root %{buildroot}
 %{__install} -d %{buildroot}%{_mandir}/man1
 %{__install} -p -m 0644 man/*.1 %{buildroot}%{_mandir}/man1
@@ -94,22 +88,28 @@ pushd %{py3dir}
 %defattr(-,root,root,-)
 %doc NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
 %license COPYING
-%{_bindir}/*
+%if ! 0%{?with_python3}
+%{_bindir}/m*
 %{_mandir}/man1/m*.1*
+%endif
 %{python_sitelib}/%{realname}
-%{python_sitelib}/%{realname}-%{version}-py%{python_version}.egg-info
+%{python_sitelib}/%{realname}-%{version}-*.egg-info
 
 %if 0%{?with_python3}
 %files -n python3-mutagen
 %defattr(-,root,root,-)
 %doc NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
 %license COPYING
+%{_bindir}/m*
+%{_mandir}/man1/m*.1*
 %{python3_sitelib}/%{realname}
-%{python3_sitelib}/%{realname}-%{version}-py%{python3_version}.egg-info
-%exclude %{python3_sitelib}/mutagen/__pycache__
+%{python3_sitelib}/%{realname}-%{version}-*.egg-info
 %endif # with_python3
 
 %changelog
+* Thu Feb 11 2016 mosquito <sensor.wen@gmail.com> - 1.31-2
+- Move the scripts to the python3 package
+
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.31-1
 - Update to 1.31
 
