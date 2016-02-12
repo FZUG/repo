@@ -15,7 +15,7 @@
 %global  with_http2          1
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.10.0
+%global  ngx_lua_version     0.10.1rc0
 %global  ndk_version         0.2.19
 %global  with_ngx_lua        1
 
@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.10
+Version:           1.9.11
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -554,6 +554,10 @@ fi
 
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.11-1.modsec_2.9.0
+- update to upstream release 1.9.11
+- update ngx_lua 0.10.1-rc0
+
 * Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.10-1.modsec_2.9.0
 - update to upstream release 1.9.10
 - update ngx_lua 0.10.0
