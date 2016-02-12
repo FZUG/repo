@@ -3,18 +3,18 @@
 %global repo %{project}
 
 # commit
-%global _commit 930577896e08eb98e0cc8e08486b963b34374050
+%global _commit a2e8235e4fa37506dd0c4f00a859c2fba44b619d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name: package-query
-Version: 1.6.2
-Release: 3.git%{_shortcommit}%{?dist}
+Name:    package-query
+Version: 1.7
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Query ALPM and AUR
 Summary(zh_CN): 查询 ALPM 和 AUR
 
 License: GPL
-Group: Applications/System
-Url: https://github.com/archlinuxfr/package-query
+Group:   Applications/System
+Url:     https://github.com/archlinuxfr/package-query
 Source0: https://github.com/archlinuxfr/package-query/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: libalpm-devel
@@ -58,6 +58,8 @@ gzip -9 %{buildroot}%{_mandir}/man8/*
 %{_mandir}/man8/*.gz
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 1.7-1.gita2e8235
+- Update to 1.7-1.gita2e8235
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.6.2-3.git9305778
 - Update to 1.6.2-3.git9305778
 * Sun Jul 26 2015 mosquito <sensor.wen@gmail.com> - 1.6.2-2.git3d1115f
