@@ -1,16 +1,15 @@
 %global debug_package %{nil}
 %global gtest_version 1.7.0
-%global _libdir %{_prefix}/lib
 
 Name:          apt
-Version:       1.0.10.2
+Version:       1.2.3
 Release:       1%{?dist}
 Summary:       Debian's commandline package manager
 
 License:       GPLv2
-Url:           http://packages.debian.org/sid/apt
-Source0:       http://ftp.debian.org/debian/pool/main/a/%{name}/%{name}_%{version}.tar.xz
-Source1:       http://googletest.googlecode.com/files/gtest-%{gtest_version}.zip
+Url:           https://packages.debian.org/sid/apt
+Source0:       https://ftp.debian.org/debian/pool/main/a/%{name}/%{name}_%{version}.tar.xz
+Source1:       https://github.com/google/googletest/archive/release-%{gtest_version}/googletest-release-%{gtest_version}.tar.gz
 
 BuildRequires: libdb-devel
 BuildRequires: curl-devel
@@ -47,7 +46,7 @@ These include:
 
 %package devel
 Summary: Development headers for APT's libapt-pkg
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 This package contains development files for developing with APT's
@@ -58,11 +57,11 @@ libapt-pkg package manipulation library.
 
 %build
 # gtest source
-mkdir src; cp gtest-%{gtest_version}/src/* src/
+mkdir src; cp googletest-release-%{gtest_version}/src/* src/
 sed -i '/#include/s|src/||' src/gtest-all.cc
 sed -i -r '/(GTEST_SRCS|CXX)/s|\$\(GTEST_DIR\)|../..|g' test/libapt/makefile
 # this only copies config.{guess,sub} and displays errors
-automake --add-missing --no-force -W none &> /dev/null ||:
+automake --add-missing --force -W none ||:
 _stylesheet=$(ls -d /usr/share/sgml/docbook/xsl-stylesheets-*|xargs basename)
 sed -i "s|stylesheet/nwalsh|$_stylesheet|" doc/manpage-style.xsl
 find doc/ -name "manpage-style.xsl" | xargs sed -i 's|xml/docbook|sgml/docbook|'
@@ -87,13 +86,13 @@ done
 
 install -d %{buildroot}%{_libdir}
 # libapt-inst
-install -m755 bin/libapt-inst.so.1.7.0 %{buildroot}%{_libdir}
-ln -sfv %{_libdir}/libapt-inst.so.1.7.0 %{buildroot}%{_libdir}/libapt-inst.so.1.7
-ln -sfv %{_libdir}/libapt-inst.so.1.7.0 %{buildroot}%{_libdir}/libapt-inst.so
+install -m755 bin/libapt-inst.so.2.0.0 %{buildroot}%{_libdir}
+ln -sfv %{_libdir}/libapt-inst.so.2.0.0 %{buildroot}%{_libdir}/libapt-inst.so.2.0
+ln -sfv %{_libdir}/libapt-inst.so.2.0.0 %{buildroot}%{_libdir}/libapt-inst.so
 # libapt-pkg
-install -m755 bin/libapt-pkg.so.4.16.0 %{buildroot}%{_libdir}
-ln -sfv %{_libdir}/libapt-pkg.so.4.16.0 %{buildroot}%{_libdir}/libapt-pkg.so.4.16
-ln -sfv %{_libdir}/libapt-pkg.so.4.16.0 %{buildroot}%{_libdir}/libapt-pkg.so
+install -m755 bin/libapt-pkg.so.5.0.0 %{buildroot}%{_libdir}
+ln -sfv %{_libdir}/libapt-pkg.so.5.0.0 %{buildroot}%{_libdir}/libapt-pkg.so.5.0
+ln -sfv %{_libdir}/libapt-pkg.so.5.0.0 %{buildroot}%{_libdir}/libapt-pkg.so
 # libapt-private
 install -m755 bin/libapt-private.so.0.0.0 %{buildroot}%{_libdir}
 ln -sfv %{_libdir}/libapt-private.so.0.0.0 %{buildroot}%{_libdir}/libapt-private.so.0.0
@@ -105,11 +104,11 @@ install -Dm755 bin/apt-dump-solver %{buildroot}%{_libdir}/apt/solvers/dump
 install -d %{buildroot}%{_libdir}/apt/methods
 install -m755 bin/apt-helper %{buildroot}%{_libdir}/apt/
 install -m755 bin/methods/* %{buildroot}%{_libdir}/apt/methods/
-rm -f %{buildroot}%{_libdir}/apt/methods/{bzip2,lzma,ssh,xz}
-ln -sfv %{_libdir}/apt/methods/gzip %{buildroot}%{_libdir}/apt/methods/bzip2
-ln -sfv %{_libdir}/apt/methods/gzip %{buildroot}%{_libdir}/apt/methods/lzma
-ln -sfv %{_libdir}/apt/methods/gzip %{buildroot}%{_libdir}/apt/methods/xz
+rm -f %{buildroot}%{_libdir}/apt/methods/{bzip2,gzip,lzma,ssh,xz}
 ln -sfv %{_libdir}/apt/methods/rsh %{buildroot}%{_libdir}/apt/methods/ssh
+for i in bzip2 gzip lzma xz; do
+ln -sfv %{_libdir}/apt/methods/store %{buildroot}%{_libdir}/apt/methods/${i}
+done
 install -d %{buildroot}%{_libdir}/dpkg/methods/apt
 install -m755 dselect/{install,setup,update} %{buildroot}%{_libdir}/dpkg/methods/apt/
 install -m644 dselect/{desc.apt,names} %{buildroot}%{_libdir}/dpkg/methods/apt/
@@ -117,7 +116,7 @@ install -m644 dselect/{desc.apt,names} %{buildroot}%{_libdir}/dpkg/methods/apt/
 # ALL manpages
 install -d %{buildroot}%{_mandir}/man{1,5,8}
 for part in {1,5,8}; do
-  for lang in {de,en,es,fr,it,ja,pl,pt}; do
+  for lang in {de,en,es,fr,it,ja,nl,pl,pt}; do
     install -d %{buildroot}%{_mandir}/$lang/man$part
     gzip -f doc/$lang/*.$part ||:
     install -m644 doc/$lang/*.$part.gz %{buildroot}%{_mandir}/$lang/man$part/ ||:
@@ -236,6 +235,8 @@ install -d %{buildroot}%{_var}/log/apt
 %{_libdir}/libapt-private.so
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-1
+- Update to 1.2.3
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.0.10.2-1
 - Update to 1.0.10.2
 * Thu Jul 30 2015 mosquito <sensor.wen@gmail.com> - 1.0.10.1-1
