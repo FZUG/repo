@@ -3,7 +3,7 @@
 # directory.
 %global __requires_exclude pkg-config
 
-%global libmajor 9
+%global libmajor 10
 %global libminor 0
 
 # Use the same directory of the main package for subpackage licence and docs
@@ -11,18 +11,19 @@
 
 # commit
 %global debug_package %{nil}
-%global _commit 578035075108a90d20f084f077badf05d1c8527c
+%global _commit fea9abc8db3b8161ab32774a0ddd7c405cfbe44f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           pacman
-Version:        4.2.1
-Release:        3.git%{_shortcommit}%{?dist}
+Version:        5.0.0
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Package manager for the Arch distribution
 License:        GPLv2+
 Url:            https://www.archlinux.org/pacman
 Source0:        https://projects.archlinux.org/%{name}.git/snapshot/%{name}-%{_shortcommit}.tar.gz
 # mirrorlist retrieved from https://www.archlinux.org/mirrorlist/all
 # with mirrors.kernel.org uncommented
+# wget https://www.archlinux.org/mirrorlist/all && sed -r 's+^#(Server = https://mirrors.kernel.org/)+\1+' <all >mirrorlist)'
 Source1:        mirrorlist
 
 BuildRequires:  libtool
@@ -37,6 +38,7 @@ BuildRequires:  libcurl-devel
 Requires:       %{name}-filesystem = %{version}-%{release}
 Requires:       bsdtar
 Requires:       fakeroot
+Recommends:     arch-install-scripts
 
 %description
 Pacman is the package manager used by the Arch distribution. It is a
@@ -79,7 +81,7 @@ packages.
 
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{_shortcommit}
 
 %build
 autoreconf -i
@@ -112,7 +114,7 @@ cat >>%{buildroot}%{_sysconfdir}/pacman.conf <<EOF
 #Include = /etc/pacman.d/mirrorlist
 
 [core]
-SigLevel = Never
+SigLevel = Required DatabaseOptional
 Include = /etc/pacman.d/mirrorlist
 
 [extra]
@@ -203,6 +205,9 @@ EOF
 
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 5.0.0-1.gitfea9abc
+- Update to version 5.0.0-1.gitfea9abc
+
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 4.2.1-3.git5780350
 - Update to version 4.2.1-3.git5780350
 
