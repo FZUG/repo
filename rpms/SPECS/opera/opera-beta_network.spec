@@ -5,7 +5,7 @@
 %global appfile %{name}_%{version}_%{arch}.deb
 %global appurl  http://ftp.opera.com/pub/%{name}/%{version}/linux/%{appfile}
 %global sha1sum %(test %arch = amd64 &&
-           echo "876cc2b80f9dd0472cb26b780afa474567beda22" ||
+           echo "c3b12e246052c855796263f213f31f014e613475" ||
            echo "96717602e78437b282fffb3aef381ee68db07a69")
 
 # Due to changes in Chromium, Opera is no longer able to use the system
@@ -27,7 +27,7 @@ Download\
 %{nil}
 
 Name:    opera-beta
-Version: 35.0.2066.35
+Version: 36.0.2130.2
 Release: 1.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -151,6 +151,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> -36.0.2130.2-1
+- Update to 36.0.2130.2
 * Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.35-1
 - Update to 35.0.2066.35
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.23-1
