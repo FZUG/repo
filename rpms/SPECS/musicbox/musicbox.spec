@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 0d677393ac2ac4d9de2b983a2aedec822ded0d6d
+%global _commit f0d05ae8e4126f32d4eee9bd32c0867219ed4354
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    musicbox
-Version: 0.2.0.8
+Version: 0.2.1.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A sexy command line interface musicbox
 Summary(zh_CN): 命令行版的网易云音乐
@@ -88,6 +88,8 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 0.2.1.0-1.gitf0d05ae
+- Update version to 0.2.1.0-1.gitf0d05ae
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.2.0.8-1.git0d67739
 - Update version to 0.2.0.8-1.git0d67739
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 0.1.5.6-1.git65c2742
