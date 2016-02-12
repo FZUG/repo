@@ -1,10 +1,13 @@
 %global debug_package %{nil}
 %global _tmppath /var/tmp
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
+%global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "amd64" || echo "i386")
 %global appname opera
-%global appfile %{name}_%{version}_amd64.deb
+%global appfile %{name}_%{version}_%{arch}.deb
 %global appurl  http://ftp.opera.com/pub/%{appname}/desktop/%{version}/linux/%{appfile}
-%global sha1sum c26257aa436c7ab74df280772f9f831a6b1ba8f9
+%global sha1sum %(test %arch = amd64 &&
+           echo "04548bcf8746653523b40da05a88d125fe71913f" ||
+           echo "51968bd969ea786923dab03e2fa99726638c8234")
 
 # Due to changes in Chromium, Opera is no longer able to use the system
 # FFmpeg library for H264 video playback on Linux, so H264-encoded videos
@@ -25,7 +28,7 @@ Download\
 %{nil}
 
 Name:    opera-stable
-Version: 34.0.2036.50
+Version: 35.0.2066.37
 Release: 1.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -35,7 +38,6 @@ Group:   Applications/Internet
 License: Proprietary
 URL:     http://www.opera.com/browser
 
-ExclusiveArch: x86_64
 BuildRequires: axel dpkg
 BuildRequires: desktop-file-utils
 Requires: axel dpkg chrpath
@@ -71,7 +73,9 @@ dpkg-deb -X %{appfile} %{buildroot}
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{buildroot}/usr/lib/*-linux-gnu/%{appname} %{buildroot}/usr/lib/%{name}
 rm -rf %{buildroot}/usr/lib/*-linux-gnu
+%ifarch x86_64
 mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
+%endif
 
 # Modify desktop file
 mv %{buildroot}%{_datadir}/applications/%{appname}.desktop \
@@ -119,7 +123,9 @@ dpkg-deb -x %{appfile} %{tmproot}
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{tmproot}/usr/lib/*-linux-gnu/%{appname} %{tmproot}/usr/lib/%{name}
 rm -rf %{tmproot}/usr/lib/*-linux-gnu
+%ifarch x86_64
 mv %{tmproot}/usr/lib %{tmproot}%{_libdir}
+%endif
 
 # Clean files
 rm -rf %{tmproot}%{_bindir} %{tmproot}%{_datadir}
@@ -161,6 +167,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.37-1
+- Update to 35.0.2066.37
 * Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> -34.0.2036.50-1
 - Update to 34.0.2036.50
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> -34.0.2036.47-1
