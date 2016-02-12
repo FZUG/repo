@@ -3,18 +3,18 @@
 %global repo %{project}
 
 # commit
-%global _commit e75e9b8b5a6a671f3e750da66b45445d7ae925de
+%global _commit 56818c08c94be17dd5a5319ac15cea4f58b47cf7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name: yaourt
-Version: 1.6
-Release: 5.git%{_shortcommit}%{?dist}
+Name:    yaourt
+Version: 1.7
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A pacman wrapper with extended features and AUR support
 Summary(zh_CN): 支持 AUR 的 pacman 前端
 
-License: GPL
-Group: Applications/System
-Url: https://archlinux.fr/yaourt-en
+License: GPLv2
+Group:   Applications/System
+Url:     https://archlinux.fr/yaourt-en
 Source0: https://github.com/archlinuxfr/yaourt/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source1: https://github.com/FZUG/repo/raw/master/rpms/SOURCES/pacman/yaourt-link
 
@@ -32,19 +32,24 @@ A pacman wrapper with extended features and AUR support.
 
 %prep
 %setup -q -n %repo-%{_commit}
+find -name 'es_419.po' -exec rm -f '{}' \;
 
 %build
 pushd src
-make PREFIX=%{_prefix} sysconfdir=%{_sysconfdir} localstatedir=%{_var}
+make PREFIX=%{_prefix} \
+    sysconfdir=%{_sysconfdir} \
+    localstatedir=%{_var} \
+    libdir=%{_libexecdir}
 
 %install
 %make_install -C src \
     PREFIX=%{_prefix} \
     sysconfdir=%{_sysconfdir} \
     localstatedir=%{_var} \
+    libdir=%{_libexecdir} \
     DESTDIR=%{buildroot}
 gzip -9 %{buildroot}%{_mandir}/man{5,8}/*
-install -m 755 %{S:1} %{buildroot}%{_bindir}/
+install -m 755 %{S:1} %{buildroot}%{_bindir}
 
 %find_lang %{name}
 
@@ -54,11 +59,13 @@ install -m 755 %{S:1} %{buildroot}%{_bindir}/
 %license src/COPYING
 %config(noreplace) %{_sysconfdir}/%{name}rc
 %{_bindir}/*
-%{_prefix}/lib/%{name}/
+%attr(755,-,-) %{_libexecdir}/%{name}/*.sh
 %{_mandir}/man*/*.gz
 %exclude %{_datadir}/bash-completion/
 
 %changelog
+* Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 1.7-1.git56818c0
+- Update to 1.7-1.git56818c0
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.6-5.gite75e9b8
 - Update to 1.6-5.gite75e9b8
 * Sun Aug  2 2015 mosquito <sensor.wen@gmail.com> - 1.6-4.gitd2d8300
