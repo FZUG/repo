@@ -1,0 +1,12 @@
+--- a/bin/apm
++++ b/bin/apm
+@@ -25,4 +17,8 @@
+
+ binDir=`pwd -P`
+ builtin cd "$initialCwd"
+-"$binDir/$nodeBin" --harmony_collections "$binDir/../lib/cli.js" "$@"
++if [ -x "$binDir/$nodeBin" ]; then
++    "$binDir/$nodeBin" --harmony_collections "$binDir/../lib/cli.js" "$@"
++else
++    "/usr/bin/$nodeBin" "$binDir/../lib/cli.js" "$@"
++fi
