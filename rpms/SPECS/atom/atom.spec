@@ -1,11 +1,18 @@
-# https://copr.fedoraproject.org/coprs/helber/atom
+# build Atom and Electron packages: https://github.com/tensor5/arch-atom
+# RPM spec: https://github.com/helber/fedora-specs
+# Error: Module version mismatch. Expected 47, got 43.
+# see https://github.com/tensor5/arch-atom/issues/3
 %{?nodejs_find_provides_and_requires}
 %global debug_package %{nil}
 %global _hardened_build 1
-%global __requires_exclude (libnode)
-%global npm_ver 2.7.6
+%global __provides_exclude_from %{_libdir}/%{name}/node_modules
+%global __requires_exclude_from %{_libdir}/%{name}/node_modules
+%global __requires_exclude (npm|libnode)
+
 %global project atom
 %global repo %{project}
+%global npm_ver 2.13.3
+%global electron_ver 0.36.8
 
 # commit
 %global _commit 3e71894a59950a5c88247a2cd9a64c35ee60d26e
@@ -13,32 +20,34 @@
 
 Name:    atom
 Version: 1.5.3
-Release: 1.git%{_shortcommit}%{?dist}
-Summary: A hackable text editor for the 21st century
+Release: 2.git%{_shortcommit}%{?dist}
+Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
 License: MIT
 URL:     https://atom.io/
 Source0: https://github.com/atom/atom/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-ExclusiveArch: %{nodejs_arches} noarch
-%else
-ExclusiveArch: %{ix86} x86_64 %{arm} noarch
-%endif
+Patch0:  fix-atom-sh.patch
+Patch1:  fix-license-path.patch
+Patch2:  use-system-apm.patch
+Patch3:  use-system-electron.patch
 
 BuildRequires: npm
 BuildRequires: node-gyp
+BuildRequires: nodejs >= 0.10.0
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
 BuildRequires: git-core
-Requires:      nodejs
-Requires:      http-parser
+BuildRequires: nodejs-atom-package-manager
+Requires: nodejs-atom-package-manager
+Requires: electron
+Requires: http-parser
 
 %description
-Atom is a text editor that's modern, approachable, yet hackable to the core
+Atom is a text editor that's modern, approachable, yet hack-able to the core
 - a tool you can customize to do anything but also use productively without
 ever touching a config file.
 
@@ -46,61 +55,175 @@ Visit https://atom.io to learn more.
 
 %prep
 %setup -q -n %repo-%{_commit}
+sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
+%patch0 -p1
+%patch1 -p1
+%patch2 -p1
+%patch3 -p1
+
+# apm with system (updated) nodejs cannot 'require' modules inside asar
+sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
+
+# They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
+sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 
 %build
 # Hardened package
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
-## Upgrade npm
-# Install new npm to INSTALL_PREFIX for build package
+
+# Upgrade npm (>=1.4.0)
+## Install new npm to INSTALL_PREFIX for build package
 npm config set registry="http://registry.npmjs.org/"
 npm config set ca ""
 npm config set strict-ssl false
+npm config set python `which python2`
 npm install -g --ca=null --prefix %{buildroot}%{_prefix} npm@%{npm_ver}
-# Export PATH to new npm version
+## Export PATH to new npm version
 export PATH="%{buildroot}%{_bindir}:$PATH"
-script/build 2>&1
-npm config delete ca
+node-gyp -v; node -v; npm -v; apm -v
+
+# Build package
+## https://github.com/atom/atom/blob/master/script/bootstrap
+export ATOM_RESOURCE_PATH=`pwd`
+# If unset, ~/.atom/.node-gyp/.atom/.npm is used
+## https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
+export npm_config_cache="${HOME}/.atom/.npm"
+export npm_config_disturl="https://atom.io/download/atom-shell"
+export npm_config_target="%{electron_ver}"
+#export npm_config_target_arch="x64|ia32"
+export npm_config_runtime="electron"
+# The npm_config_target is no effect, set ATOM_NODE_VERSION
+## https://github.com/atom/apm/blob/master/src/command.coffee
+export ATOM_ELECTRON_VERSION="%{electron_ver}"
+
+_packagesToDedupe=(
+    'abbrev'
+    'amdefine'
+    'atom-space-pen-views'
+    'cheerio'
+    'domelementtype'
+    'fs-plus'
+    'grim'
+    'highlights'
+    'humanize-plus'
+    'iconv-lite'
+    'inherits'
+    'loophole'
+    'oniguruma'
+    'q'
+    'request'
+    'rimraf'
+    'roaster'
+    'season'
+    'sigmund'
+    'semver'
+    'through'
+    'temp'
+)
+
+# Installing packages
+apm clean
+apm install --verbose
+apm dedupe ${_packagesToDedupe[@]}
+# Installing build modules
+pushd build
+npm install --loglevel info
+popd
+script/grunt --build-dir='atom-build' --channel=stable
 
 %install
-script/grunt install --install-dir "%{buildroot}%{_prefix}"
-%{__sed} -i -e 's|=.*atom|=atom|g' -e 's|atom.png|atom|g' \
-    %{buildroot}%{_datadir}/applications/atom.desktop
+install -d %{buildroot}%{_libdir}/%{name}
+cp -r atom-build/Atom/resources/app/* %{buildroot}%{_libdir}/%{name}
+rm -rf %{buildroot}%{_libdir}/%{name}/node_modules
+
+install -d %{buildroot}%{_datadir}/applications
+sed -e \
+   's|<%= appName %>|Atom|
+    s|<%= description %>|%{summary}|
+    s|<%= installDir %>/share/<%= appFileName %>/||
+    s|<%= iconPath %>|%{name}|' \
+    resources/linux/atom.desktop.in > \
+    %{buildroot}%{_datadir}/applications/%{name}.desktop
+
+install -Dm0755 atom-build/Atom/resources/new-app/atom.sh \
+    %{buildroot}%{_bindir}/%{name}
 
 # copy over icons in sizes that most desktop environments like
 for i in 1024 512 256 128 64 48 32 24 16; do
-    install -D -m 0644 /tmp/atom-build/icons/${i}.png \
+    install -D -m 0644 atom-build/icons/${i}.png \
       %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps/%{name}.png
 done
 
+# find all *.js files and generate node.file-list
+pushd atom-build/Atom/resources/app/node_modules
+for ext in js json less png svg; do
+  find -type f \( -iname *.${ext} -or -perm 755 \) \
+    ! -name '.*' \
+    ! -name '*.md' \
+    ! -name 'CONTRIBUTORS*' \
+    ! -name 'CHANGELOG*' \
+    ! -name 'LICENSE*' \
+    ! -name 'README*' \
+    ! -name 'Makefile*' \
+    ! -path '*test*' \
+    ! -path '*example*' \
+    ! -path '*benchmark*' \
+    ! -path '*js-beautify/tools*' \
+    ! -path '*acorn/bin/*.sh*' \
+    -exec install -D '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \; \
+    -exec echo '%%{_libdir}/%{name}/node_modules/{}' >> %{_builddir}/%{repo}-%{_commit}/node.file-list \;
+done
+popd
+sed -i '/ /s|ars/.*.json|ars/*.json|g' node.file-list
+sort -u -o node.file-list node.file-list
+
+find %{buildroot} -type f -regextype posix-extended \( \
+    -regex '.*js$' -exec sh -c "head -n2 '{}'|grep -q '^#\!/usr/bin/env' && chmod a+x '{}' || chmod 644 '{}'" \; -or \
+    -regex '.*(json|less|svg|conf)$' -exec chmod 644 '{}' \; -or \
+    -regex '.*node$' -perm 755 -exec strip '{}' \; -or \
+    -regex '.*.gitignore' -exec rm -f '{}' \; -or \
+    -size 0 -exec rm -f '{}' \; \)
+
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
 
 %postun
 if [ $1 -eq 0 ]; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
-/usr/bin/update-desktop-database -q ||:
+/usr/bin/update-desktop-database &>/dev/null ||:
 
 %posttrans
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
-%files
+%files -f node.file-list
 %defattr(-,root,root,-)
-%doc README.md docs/
+%doc README.md CONTRIBUTING.md docs/
 %license LICENSE.md
-%{_bindir}/atom
-%{_bindir}/apm
-%dir %{_datadir}/atom
-%{_datadir}/atom/*
-%{_datadir}/applications/atom.desktop
+%{_bindir}/%{name}
+%dir %{_libdir}/%{name}
+%{_libdir}/%{name}/dot-atom/
+%{_libdir}/%{name}/exports/
+%{_libdir}/%{name}/less-compile-cache/
+%{_libdir}/%{name}/package.json
+%{_libdir}/%{name}/resources/
+%{_libdir}/%{name}/spec/
+%{_libdir}/%{name}/src/
+%{_libdir}/%{name}/static/
+%{_libdir}/%{name}/vendor/
+%{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%exclude %{_datadir}/%{name}/libgcrypt.so.*
-%exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Sun Feb 14 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-2.git3e71894
+- The package is split into atom, nodejs-atom-package-manager and electron
+- Use system apm and electron
+- Not generated asar file
+- Remove exception-reporting and metrics dependencies from package.json
+- Remove unnecessary files
 * Sat Feb 13 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-1.git3e71894
 - Release 1.5.3
 * Sat Feb 13 2016 mosquito <sensor.wen@gmail.com> - 1.5.2-1.git05731e3

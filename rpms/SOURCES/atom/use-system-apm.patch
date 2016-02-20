@@ -1,0 +1,29 @@
+--- a/build/tasks/build-task.coffee
++++ b/build/tasks/build-task.coffee
+@@ -148,10 +148,6 @@
+     cp 'src', path.join(appDir, 'src'), filter: /.+\.(cson|coffee)$/
+     cp 'static', path.join(appDir, 'static')
+ 
+-    cp path.join('apm', 'node_modules', 'atom-package-manager'), path.resolve(appDir, '..', 'new-app', 'apm'), filter: filterNodeModule
+-    if process.platform isnt 'win32'
+-      fs.symlinkSync(path.join('..', '..', 'bin', 'apm'), path.resolve(appDir, '..', 'new-app', 'apm', 'node_modules', '.bin', 'apm'))
+-
+     channel = grunt.config.get('atom.channel')
+ 
+     cp path.join('resources', 'app-icons', channel, 'png', '1024.png'), path.join(appDir, 'resources', 'atom.png')
+--- a/src/package-manager.coffee
++++ b/src/package-manager.coffee
+@@ -132,12 +132,7 @@
+   getApmPath: ->
+     return @apmPath if @apmPath?
+ 
+-    commandName = 'apm'
+-    commandName += '.cmd' if process.platform is 'win32'
+-    apmRoot = path.join(process.resourcesPath, 'app', 'apm')
+-    @apmPath = path.join(apmRoot, 'bin', commandName)
+-    unless fs.isFileSync(@apmPath)
+-      @apmPath = path.join(apmRoot, 'node_modules', 'atom-package-manager', 'bin', commandName)
++    @apmPath = '/usr/lib/node_modules/atom-package-manager/bin/apm'
+     @apmPath
+ 
+   # Public: Get the paths being used to look for packages.
