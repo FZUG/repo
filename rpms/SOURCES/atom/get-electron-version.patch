@@ -1,0 +1,28 @@
+--- a/lib/command.js
++++ b/lib/command.js
+@@ -1,10 +1,12 @@
+ (function() {
+-  var Command, child_process, config, git, path, semver, _,
++  var Command, child_process, config, fs, git, path, semver, _,
+     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+     __slice = [].slice;
+
+   child_process = require('child_process');
+
++  fs = require('fs');
++
+   path = require('path');
+
+   _ = require('underscore-plus');
+@@ -124,6 +126,11 @@
+               _this.installedAtomVersion = version;
+             }
+           } catch (_error) {}
++          if (electronVersion === undefined) {
++            try {
++              electronVersion = fs.readFileSync('/usr/<lib>/electron/version', 'utf8').slice(1);
++            } catch (_error) {}
++          }
+           _this.electronVersion = (_ref2 = (_ref3 = (_ref4 = process.env.ATOM_ELECTRON_VERSION) != null ? _ref4 : process.env.ATOM_NODE_VERSION) != null ? _ref3 : electronVersion) != null ? _ref2 : '0.22.0';
+           return callback();
+         };

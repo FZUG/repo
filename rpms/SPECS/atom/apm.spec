@@ -10,7 +10,6 @@
 %global project apm
 %global repo %{project}
 %global npm_ver 2.13.3
-%global electron_ver 0.36.8
 
 # commit
 %global _commit 829b81a1f7c55e882ea0523d4f325b5c1b8b283f
@@ -26,6 +25,7 @@ License: MIT
 URL:     https://github.com/atom/apm/
 Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Patch0:  use-system-nodejs.patch
+Patch1:  get-electron-version.patch
 
 BuildRequires: npm
 BuildRequires: node-gyp
@@ -40,7 +40,9 @@ Discover and install Atom packages powered by https://atom.io
 
 %prep
 %setup -q -n %repo-%{_commit}
+sed -i 's|<lib>|%{_lib}|' %{P:1}
 %patch0 -p1
+%patch1 -p1
 
 %build
 export CFLAGS="%{optflags}"
@@ -66,8 +68,6 @@ cp -pr deprecated-packages.json package.json bin lib native-module script templa
     %{buildroot}%{nodejs_sitelib}/atom-package-manager
 
 mkdir -p %{buildroot}%{_bindir}
-sed -i '/set/aexport ATOM_ELECTRON_VERSION="%{electron_ver}"' \
-    %{buildroot}%{nodejs_sitelib}/atom-package-manager/bin/apm
 ln -sfv %{nodejs_sitelib}/atom-package-manager/bin/apm %{buildroot}%{_bindir}
 
 pushd node_modules
