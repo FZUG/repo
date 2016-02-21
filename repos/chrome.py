@@ -120,9 +120,10 @@ def get_rpm():
     repofile = [os.path.join(rootdir, 'google-chrome-mirrors.repo'),
 '''[google-chrome-mirrors]
 name=Google Chrome mirrors
-#baseurl=http://dl.google.com/linux/chrome/rpm/stable/$basearch
-baseurl=http://repo.fdzh.org/chrome/rpm/$basearch
-gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+#baseurl=https://dl.google.com/linux/chrome/rpm/stable/$basearch
+#gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+baseurl=https://repo.fdzh.org/chrome/rpm/$basearch
+gpgkey=https://repo.fdzh.org/chrome/linux_signing_key.pub
 gpgcheck=1
 enabled=1
 skip_if_unavailable=1''']
@@ -159,8 +160,8 @@ skip_if_unavailable=1''']
 
 def get_deb():
     listfile = [os.path.join(rootdir, 'google-chrome.list'),
-'''deb http://dl.google.com/linux/chrome/deb/ stable main
-deb http://repo.fdzh.org/chrome/deb/ stable main''']
+'''deb https://dl.google.com/linux/chrome/deb/ stable main
+deb https://repo.fdzh.org/chrome/deb/ stable main''']
     output(listfile[0], listfile[1], 'w')
 
     url = 'http://dl.google.com/linux/chrome/deb/dists/stable/'
