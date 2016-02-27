@@ -11,11 +11,11 @@
 
 # commit
 %global debug_package %{nil}
-%global _commit fea9abc8db3b8161ab32774a0ddd7c405cfbe44f
+%global _commit f38de43eb68f1d9c577b4378310640c1eaa93338
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           pacman
-Version:        5.0.0
+Version:        5.0.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Package manager for the Arch distribution
 License:        GPLv2+
@@ -205,6 +205,9 @@ EOF
 
 
 %changelog
+* Sat Feb 27 2016 mosquito <sensor.wen@gmail.com> - 5.0.1-1.gitf38de43
+- Update to version 5.0.1-1.gitf38de43
+
 * Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 5.0.0-1.gitfea9abc
 - Update to version 5.0.0-1.gitfea9abc
 
