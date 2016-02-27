@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 4fae2afd34b3053146b9a668ac423301d9f7cb04
+%global _commit 166205e831276ddbab9dee925f86cbbc1d27ee58
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    feeluown
-Version: 7.0
+Version: 7.1
 Release: 0.1.git%{_shortcommit}%{?dist}
 Summary: Net Ease Music for Linux
 Summary(zh_CN): 网易云音乐 for Linux
@@ -29,6 +29,7 @@ Requires: python3-dbus
 Requires: python3-xlib
 Requires: python3-requests
 Requires: python3-sqlalchemy
+Requires: python3-PyYAML
 Requires: gstreamer1-plugins-base
 Requires: gstreamer1-plugins-good
 Requires: gstreamer1-plugins-ugly
@@ -113,5 +114,7 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> - 7.1-0.1.git166205e
+- Pre-release 7.1a
 * Sat Feb  6 2016 mosquito <sensor.wen@gmail.com> - 7.0-0.1.git4fae2af
 - Initial build
