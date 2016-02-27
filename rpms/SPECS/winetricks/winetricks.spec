@@ -2,7 +2,7 @@
 %global project winetricks
 
 %global repo %{project}
-%global _commit 07ba4a06112f0fa8e7bb6a45d8e20071e3e7786d
+%global _commit 4c2dc6ce393082a53b7045ba9b70af7320c3a170
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global zh_repo winetricks-zh
@@ -10,7 +10,7 @@
 %global zh_scommit %(c=%{zh_commit}; echo ${c:0:7})
 
 Name:    winetricks
-Version: 20160109
+Version: 20160219
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: an easy way to install program in Wine
 Summary(zh_CN): 快速为 Wine 安装应用程序
@@ -81,6 +81,8 @@ cp %{zh_repo}-%{zh_commit}/verb/* %{buildroot}%{_datadir}/%{name}/verbs/
 %{_mandir}/man1/%{name}.1.gz
 
 %changelog
+* Sat Feb 27 2016 mosquito <sensor.wen@gmail.com> - 20160219-1.git4c2dc6c
+- Update to 20160219-1.git4c2dc6c
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 20160109-1.git07ba4a0
 - Update to 20160109-1.git07ba4a0
 * Tue Dec 22 2015 mosquito <sensor.wen@gmail.com> - 20151116-1.gitca1a031
