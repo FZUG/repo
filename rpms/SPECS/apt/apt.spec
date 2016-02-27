@@ -1,14 +1,18 @@
 %global debug_package %{nil}
 %global gtest_version 1.7.0
 
+# commit
+%global _commit ab4d5741b5836bb01a38d71d329df4ff4bddc85b
+%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+
 Name:          apt
-Version:       1.2.3
+Version:       1.2.4
 Release:       1%{?dist}
 Summary:       Debian's commandline package manager
 
 License:       GPLv2
 Url:           https://packages.debian.org/sid/apt
-Source0:       https://ftp.debian.org/debian/pool/main/a/%{name}/%{name}_%{version}.tar.xz
+Source0:       https://anonscm.debian.org/cgit/apt/apt.git/snapshot/%{name}-%{_shortcommit}.tar.xz
 Source1:       https://github.com/google/googletest/archive/release-%{gtest_version}/googletest-release-%{gtest_version}.tar.gz
 
 BuildRequires: libdb-devel
@@ -53,7 +57,7 @@ This package contains development files for developing with APT's
 libapt-pkg package manipulation library.
 
 %prep
-%setup -q -a1
+%setup -q -a1 -n %{name}-%{_shortcommit}
 
 %build
 # gtest source
@@ -61,6 +65,7 @@ mkdir src; cp googletest-release-%{gtest_version}/src/* src/
 sed -i '/#include/s|src/||' src/gtest-all.cc
 sed -i -r '/(GTEST_SRCS|CXX)/s|\$\(GTEST_DIR\)|../..|g' test/libapt/makefile
 # this only copies config.{guess,sub} and displays errors
+autoreconf -ifv ||:
 automake --add-missing --force -W none ||:
 _stylesheet=$(ls -d /usr/share/sgml/docbook/xsl-stylesheets-*|xargs basename)
 sed -i "s|stylesheet/nwalsh|$_stylesheet|" doc/manpage-style.xsl
@@ -235,6 +240,8 @@ install -d %{buildroot}%{_var}/log/apt
 %{_libdir}/libapt-private.so
 
 %changelog
+* Sat Feb 27 2016 mosquito <sensor.wen@gmail.com> - 1.2.4-1
+- Update to 1.2.4
 * Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-1
 - Update to 1.2.3
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.0.10.2-1
