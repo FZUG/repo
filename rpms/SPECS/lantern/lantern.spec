@@ -1,13 +1,15 @@
+# https://aur.archlinux.org/packages/lantern-headless-git
+# https://github.com/getlantern/lantern/blob/valencia/Makefile
 %global arch %(test $(rpm -E%?_arch) = x86_64 && echo "amd64" || echo "386")
 %global debug_package %{nil}
 %global project lantern
 %global repo %{project}
 
-# commit
-%global _commit fdff338235569a69d2120717247439ecc7f774c3
+# commit, git rev-parse --short HEAD
+%global _commit 8166903220593ba349ee69fc80cfa28b9aabf1e9
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 # git show -s --format=%ci "%%{_shortcommit}"
-%global _revision_date 2016-01-29 12:04:37 -0800
+%global _revision_date 2016-02-26 15:19:58 -0600
 %global _build_date %(date -u '+%Y%m%d.%H%M%%S')
 %global go_arch %(go env GOHOSTARCH)
 %global go_root %(go env GOROOT)
@@ -28,8 +30,8 @@ fi\
 %global with_build 1
 
 Name:    golang-github-getlantern-lantern
-Version: 2.0.11
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 2.1.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: fast, reliable and secure access to the open Internet
 Summary(zh_CN): 快速, 可靠, 安全的访问互联网的代理软件
 
@@ -40,6 +42,7 @@ Source0: https://github.com/getlantern/lantern/archive/%{_commit}/%{repo}-%{_sho
 
 Provides: %{repo} = %{version}-%{release}
 Obsoletes: %{repo} <= 2.0.11-1.gitfdff338
+BuildRequires: npm
 BuildRequires: systemd
 BuildRequires: golang-bin
 BuildRequires: gtk3-devel
@@ -54,7 +57,6 @@ BuildRequires: golang-github-gorilla-websocket-devel
 BuildRequires: golang-gopkg-check-devel
 BuildRequires: %{name}-devel
 %endif
-Requires: %{name}-ui-devel = %{version}-%{release}
 %{systemd_requires}
 
 %description
@@ -82,9 +84,6 @@ BuildArch: noarch
 lantern source code
 
 %package -n %{name}-ui-devel
-%if 0%{?with_build}
-Requires: %{name}
-%endif
 Summary: lantern-ui source code
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
 BuildArch: noarch
@@ -112,25 +111,40 @@ sed -i '/kardianos/s|github.com|bitbucket.org|g' \
 %build
 export GOPATH=%{gopath}
 
+# Build lantern-ui
+%if ! 0%{?with_build}
+LANTERN_UI="src/github.com/getlantern/lantern-ui"
+APP="$LANTERN_UI/app"
+DIST="$LANTERN_UI/dist"
+DEST="src/github.com/getlantern/flashlight/ui/resources.go"
+echo 'var LANTERN_BUILD_REVISION = "%{_shortcommit}";' > $APP/js/revision.js
+pushd $LANTERN_UI
+npm install
+node_modules/gulp/bin/gulp.js build
+popd
+go build -a -v -o tarfs github.com/getlantern/tarfs/tarfs
+echo -e "// +build !stub\n" > $DEST
+./tarfs -pkg ui $DIST >> $DEST
+%endif
+
+# Build lantern
 build_tags='prod'
 %if 0%{?with_headless}
 build_tags+=' headless'
 %endif
-sed -e '/packageVersion/s|=.*|= "%{version}"|' -e 's|!prod|prod|' \
-    src/github.com/getlantern/flashlight/autoupdate.go > \
-    src/github.com/getlantern/flashlight/autoupdate-prod.go
-
-logger_token=$(sed -n '/^LOGGLY_TOKEN /s|.*=[[:space:]]\(.*\)$|\1|p' Makefile)
-ldflags="-s -w -X \"main.version=%{_shortcommit}\" \
-    -X \"main.revisionDate=%{_revision_date}\" \
-    -X \"main.buildDate=%{_build_date}\" \
-    -X \"github.com/getlantern/flashlight/logging.logglyToken=${logger_token}\""
+loggly_token=$(sed -n '/^LOGGLY_TOKEN /s|.*=[[:space:]]\(.*\)$|\1|p' Makefile)
+ldflags="-s -w \
+    -X \"github.com/getlantern/flashlight.Version=%{_shortcommit}\" \
+    -X \"github.com/getlantern/flashlight.RevisionDate=%{_revision_date}\" \
+    -X \"github.com/getlantern/flashlight.BuildDate=%{_build_date}\" \
+    -X \"github.com/getlantern/flashlight/logging.logglyToken=${loggly_token}\" \
+    -X \"github.com/getlantern/flashlight.compileTimePackageVersion=%{version}\""
 
 %if 0%{?with_build}
 CGO_ENABLED=1 GOOS=linux GOARCH=%{arch} \
 go build -a -v -o %{repo}_linux_%{arch} -tags="$build_tags" \
     -ldflags="${ldflags} -linkmode internal -extldflags \"-static\"" \
-    github.com/getlantern/flashlight
+    github.com/getlantern/flashlight/main
 %endif
 
 %install
@@ -233,6 +247,9 @@ fi
 %{gopath}/src/github.com/get%{repo}/%{repo}-ui/
 
 %changelog
+* Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-1.git8166903
+- Release 2.1.0
+- Do not require lantern-ui, due to static links.
 * Fri Feb  5 2016 mosquito <sensor.wen@gmail.com> - 2.0.11-2.gitfdff338
 - Add source code subpackage
 * Thu Feb  4 2016 mosquito <sensor.wen@gmail.com> - 2.0.11-1.gitfdff338
