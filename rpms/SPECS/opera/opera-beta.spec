@@ -8,7 +8,7 @@
 %global __requires_exclude (libffmpeg)
 
 Name:    opera-beta
-Version: 36.0.2130.2
+Version: 36.0.2130.21
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -18,8 +18,8 @@ Group:   Applications/Internet
 License: Proprietary
 URL:     http://www.opera.com/browser
 Source0: http://ftp.opera.com/pub/%{name}/%{version}/linux/%{name}_%{version}_amd64.deb
+Source1: http://ftp.opera.com/pub/%{name}/%{version}/linux/%{name}_%{version}_i386.deb
 
-ExclusiveArch: x86_64
 BuildRequires: dpkg
 BuildRequires: desktop-file-utils
 Requires: chrpath
@@ -48,12 +48,18 @@ Requires: /usr/bin/update-mime-database
 
 %install
 # Extract DEB package
+%ifarch x86_64
 dpkg-deb -X %{SOURCE0} %{buildroot}
+%else
+dpkg-deb -X %{SOURCE1} %{buildroot}
+%endif
 
 # Move /usr/lib/x86_64-linux-gnu/#{name} to #{_libdir}
 mv %{buildroot}/usr/lib/*-linux-gnu/%{name} %{buildroot}/usr/lib/
 rm -rf %{buildroot}/usr/lib/*-linux-gnu
+%ifarch x86_64
 mv %{buildroot}/usr/lib %{buildroot}%{_libdir}
+%endif
 
 # Modify desktop file:
 sed -i '/Unity/s|^|#|' %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -105,6 +111,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> -36.0.2130.21-1
+- Update to 36.0.2130.21
 * Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> -36.0.2130.2-1
 - Update to 36.0.2130.2
 * Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.35-1
