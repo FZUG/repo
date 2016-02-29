@@ -3,11 +3,18 @@
 %global repo %{project}
 
 # commit
-%global _commit 84585b1399a83307660a4be913de9fc363d0804a
+%global _commit 262bc7343f2ee8533df66316e8c5d1c1b00ec796
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
+%global systemd_user_post() \
+if [ $1 -eq 1 ] ; then\
+     # Initial installation\
+     systemctl preset --user --global %* >/dev/null 2>&1 || :\
+fi\
+%{nil}
+
 Name:    xx-net
-Version: 2.8.10
+Version: 2.9.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A stable, easy to use and fast proxy based on GAE
 Summary(zh_CN): 基于 GAE 的代理工具
@@ -16,6 +23,7 @@ Group:   Applications/Internet
 License: BSD
 URL:     https://github.com/XX-net/XX-Net
 Source0: https://github.com/XX-net/XX-Net/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Patch0:  use-home-config.path
 
 BuildArch: noarch
 BuildRequires: systemd
@@ -38,34 +46,32 @@ More https://github.com/XX-net/XX-Net/wiki
 
 %prep
 %setup -q -n %repo-%{_commit}
-
-sed -i "/^noarch_lib/s|join(.[a-z,_ ']*)|join(root_path,'lib')|" \
-  php_proxy/local/{cert_util,web_control,proxy}.py \
-  gae_proxy/local/{check_local_network,cert_util,check_ip,proxy}.py \
-  launcher/{update_from_github,start,gtk_tray,setup,web_control}.py
+%patch0 -p1
+find -type f -regextype posix-extended \( \
+    -name '*.py' -exec sed -i '/^#!\/usr\/bin/d' '{}' \; -or \
+    -name '.gitignore' -exec rm -f '{}' \; -or \
+    -name '*.sh' -exec rm -f '{}' \; -or \
+    -regex '.*.(py|js|css)$' -exec chmod 644 '{}' \; \)
 
 %build
 
 %install
 install -d %{buildroot}%{_datadir}/%{name}
 mv python27/1.0/lib/noarch lib
-cp -r README.md gae_proxy launcher php_proxy lib %{buildroot}%{_datadir}/%{name}
+cp -r README.md launcher gae_proxy php_proxy x_tunnel lib \
+    %{buildroot}%{_datadir}/%{name}
 
 # bin script
 install -d %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/%{name} <<EOF
 #!/bin/bash
 cd %{_datadir}/%{name}
-if hash python2 2>/dev/null; then
-    python2 launcher/start.py
-else
-    python launcher/start.py
-fi
+/usr/bin/python2 launcher/start.py
 EOF
 
 # systemd unit file
-install -d %{buildroot}%{_unitdir}
-cat > %{buildroot}%{_unitdir}/%{name}.service <<EOF
+install -d %{buildroot}%{_userunitdir}
+cat > %{buildroot}%{_userunitdir}/%{name}.service <<EOF
 [Unit]
 Description=A stable, fast proxy based on GAE
 Documentation=https://github.com/XX-net/XX-Net/wiki
@@ -73,7 +79,7 @@ After=network.target remote-fs.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python %{_datadir}/%{name}/launcher/start.py
+ExecStart=%{_bindir}/python2 %{_datadir}/%{name}/launcher/start.py
 # Send SIGINT for graceful stop
 KillSignal=SIGINT
 
@@ -81,24 +87,11 @@ KillSignal=SIGINT
 WantedBy=multi-user.target
 EOF
 
-# dont check update
-install -d %{buildroot}%{_datadir}/%{name}/data/launcher
-cat > %{buildroot}%{_datadir}/%{name}/data/launcher/config.yaml <<EOF
-modules:
-  gae_proxy: {auto_start: 1, show_detail: 1}
-  launcher: {allow_remote_connect: 0, control_port: 8085, proxy: pac}
-  php_proxy: {control_port: 8083}
-update: {check_update: dont-check, last_path: /usr/share/xx-net/launcher, uuid: `uuidgen`}
-EOF
-
 %post
-%systemd_post %{name}.service
+%systemd_user_post %{name}.service
 
 %preun
-%systemd_preun %{name}.service
-
-%postun
-%systemd_postun %{name}.service
+%systemd_user_preun %{name}.service
 
 %files
 %defattr(-,root,root,-)
@@ -106,8 +99,11 @@ EOF
 %license LICENSE.txt
 %attr(0755,-,-) %{_bindir}/%{name}
 %{_datadir}/%{name}
-%{_unitdir}/%{name}.service
+%{_userunitdir}/%{name}.service
 
 %changelog
+* Mon Feb 29 2016 mosquito <sensor.wen@gmail.com> - 2.9.1-1.git262bc73
+- Release 2.9.1
+- Use user home to save config file
 * Mon Jan 25 2016 mosquito <sensor.wen@gmail.com> - 2.8.10-1.git84585b1
 - Initial build

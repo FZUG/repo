@@ -1,0 +1,516 @@
+diff --git a/gae_proxy/local/cert_util.py b/gae_proxy/local/cert_util.py
+index 4b7dd5c..ac0e23a 100644
+--- a/gae_proxy/local/cert_util.py
++++ b/gae_proxy/local/cert_util.py
+@@ -14,12 +14,14 @@ import subprocess
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+ python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+-data_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
++home_path = os.path.expanduser('~')
++root_path = os.path.abspath(os.path.join('/usr', 'share', 'xx-net'))
++data_path = os.path.abspath(os.path.join(home_path, '.xx-net', 'gae_proxy'))
+ if not os.path.isdir(data_path):
+     data_path = current_path
+ 
+ if __name__ == "__main__":
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+     if sys.platform == "win32":
+diff --git a/gae_proxy/local/check_ip.py b/gae_proxy/local/check_ip.py
+index 68ad7f3..94ca16d 100644
+--- a/gae_proxy/local/check_ip.py
++++ b/gae_proxy/local/check_ip.py
+@@ -9,11 +9,12 @@ import struct
+ import binascii
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ 
+ if __name__ == "__main__":
+     python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+ 
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+     if sys.platform == "win32":
+@@ -200,4 +201,4 @@ if __name__ == "__main__":
+         res = test_gae_ip(ip)
+         print res
+     else:
+-        xlog.info("check_ip <ip>")
+\ No newline at end of file
++        xlog.info("check_ip <ip>")
+diff --git a/gae_proxy/local/check_local_network.py b/gae_proxy/local/check_local_network.py
+index 5e40b1c..9498e38 100644
+--- a/gae_proxy/local/check_local_network.py
++++ b/gae_proxy/local/check_local_network.py
+@@ -8,11 +8,12 @@ import socket
+ import threading
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ 
+ if __name__ == "__main__":
+     python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+ 
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+     if sys.platform == "win32":
+diff --git a/gae_proxy/local/config.py b/gae_proxy/local/config.py
+index 249591e..051c45f 100644
+--- a/gae_proxy/local/config.py
++++ b/gae_proxy/local/config.py
+@@ -23,7 +23,8 @@ class Config(object):
+         self.CONFIG = ConfigParser.ConfigParser()
+         self.CONFIG_FILENAME = os.path.abspath( os.path.join(current_path, 'proxy.ini'))
+ 
+-        self.DATA_PATH = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'data', 'gae_proxy'))
++        self.home_path = os.path.expanduser('~')
++        self.DATA_PATH = os.path.abspath( os.path.join(self.home_path, '.xx-net', 'gae_proxy'))
+         if not os.path.isdir(self.DATA_PATH):
+             self.DATA_PATH = current_path
+ 
+diff --git a/gae_proxy/local/pac_server.py b/gae_proxy/local/pac_server.py
+index 8670bea..8114da0 100644
+--- a/gae_proxy/local/pac_server.py
++++ b/gae_proxy/local/pac_server.py
+@@ -21,8 +21,9 @@ default_pacfile = os.path.join(os.path.dirname(os.path.abspath(__file__)), confi
+ user_pacfile = os.path.join(config.DATA_PATH, config.PAC_FILE)
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir))
+-data_root = os.path.join(root_path, 'data')
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
++home_path = os.path.expanduser('~')
++data_root = os.path.join(home_path, '.xx-net')
+ 
+ gae_proxy_listen = "GOAGENT_LISTEN"
+ pac_listen = "PAC_LISTEN"
+diff --git a/gae_proxy/local/proxy.py b/gae_proxy/local/proxy.py
+index 7f0cea1..7a22d59 100644
+--- a/gae_proxy/local/proxy.py
++++ b/gae_proxy/local/proxy.py
+@@ -40,12 +40,13 @@ import sys
+ import os
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir))
+-data_path = os.path.join(root_path, 'data')
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
++home_path = os.path.expanduser('~')
++data_path = os.path.join(home_path, '.xx-net')
+ data_gae_proxy_path = os.path.join(data_path, 'gae_proxy')
+ python_path = os.path.abspath( os.path.join(root_path, 'python27', '1.0'))
+ 
+-noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+ sys.path.append(noarch_lib)
+ 
+ if sys.platform == "win32":
+diff --git a/gae_proxy/local/web_control.py b/gae_proxy/local/web_control.py
+index 57d0e7e..bb96688 100644
+--- a/gae_proxy/local/web_control.py
++++ b/gae_proxy/local/web_control.py
+@@ -37,7 +37,8 @@ import test_appid
+ 
+ os.environ['HTTPS_PROXY'] = ''
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir))
++home_path = os.path.expanduser('~')
++root_path = os.path.abspath(os.path.join('/usr', 'share', 'xx-net'))
+ web_ui_path = os.path.join(current_path, os.path.pardir, "web_ui")
+ 
+ 
+@@ -75,7 +76,7 @@ class User_config(object):
+ 
+ 
+         self.USER_CONFIG = ConfigParser.ConfigParser()
+-        CONFIG_USER_FILENAME = os.path.abspath( os.path.join(root_path, 'data', 'gae_proxy', 'config.ini'))
++        CONFIG_USER_FILENAME = os.path.abspath( os.path.join(home_path, '.xx-net', 'gae_proxy', 'config.ini'))
+ 
+         try:
+             if os.path.isfile(DEFAULT_CONFIG_FILENAME):
+@@ -126,7 +127,7 @@ class User_config(object):
+             xlog.warn("User_config.load except:%s", e)
+ 
+     def save(self):
+-        CONFIG_USER_FILENAME = os.path.abspath( os.path.join(root_path, 'data', 'gae_proxy', 'config.ini'))
++        CONFIG_USER_FILENAME = os.path.abspath( os.path.join(home_path, '.xx-net', 'gae_proxy', 'config.ini'))
+         try:
+             f = open(CONFIG_USER_FILENAME, 'w')
+             if self.user_special.appid != "":
+@@ -339,7 +340,7 @@ class ControlHandler(simple_http_server.HttpServerHandler):
+         self.send_response(mimetype, data)
+ 
+     def get_launcher_version(self):
+-        data_path = os.path.abspath( os.path.join(root_path, 'data', 'launcher', 'config.yaml'))
++        data_path = os.path.abspath( os.path.join(home_path, '.xx-net', 'launcher', 'config.yaml'))
+         try:
+             config = yaml.load(file(data_path, 'r'))
+             return config["modules"]["launcher"]["current_version"]
+@@ -514,7 +515,7 @@ class ControlHandler(simple_http_server.HttpServerHandler):
+         reqs = urlparse.parse_qs(req, keep_blank_values=True)
+         data = ''
+ 
+-        log_path = os.path.abspath(os.path.join(current_path, os.pardir, "server", 'upload.log'))
++        log_path = os.path.abspath(os.path.join(home_path, '.xx-net', 'gae_proxy', 'upload.log'))
+         time_now = datetime.datetime.today().strftime('%H:%M:%S-%a/%d/%b/%Y')
+ 
+         if reqs['cmd'] == ['deploy']:
+diff --git a/launcher/autorun.py b/launcher/autorun.py
+index c01b4a6..e03ea06 100644
+--- a/launcher/autorun.py
++++ b/launcher/autorun.py
+@@ -8,7 +8,7 @@ from instances import xlog
+ 
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ 
+ if sys.platform == 'win32':
+     import _winreg
+diff --git a/launcher/config.py b/launcher/config.py
+index c4c8a4b..4e8b899 100644
+--- a/launcher/config.py
++++ b/launcher/config.py
+@@ -6,8 +6,9 @@ from distutils.version import LooseVersion
+ 
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
+-data_path = os.path.join(root_path, 'data')
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
++home_path = os.path.expanduser('~')
++data_path = os.path.join(home_path, '.xx-net')
+ config_path = os.path.join(data_path, 'launcher', 'config.yaml')
+ 
+ config = {}
+diff --git a/launcher/gtk_tray.py b/launcher/gtk_tray.py
+index ff114e6..e08dbbd 100644
+--- a/launcher/gtk_tray.py
++++ b/launcher/gtk_tray.py
+@@ -12,8 +12,9 @@ import pygtk
+ import config
+ if __name__ == "__main__":
+     current_path = os.path.dirname(os.path.abspath(__file__))
++    root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+     python_path = os.path.abspath( os.path.join(current_path, os.pardir, 'python27', '1.0'))
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+ pygtk.require('2.0')
+diff --git a/launcher/instances.py b/launcher/instances.py
+index 276ea8b..add4ad7 100644
+--- a/launcher/instances.py
++++ b/launcher/instances.py
+@@ -2,8 +2,9 @@ import os
+ 
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
+-data_path = os.path.join(root_path, 'data')
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
++home_path = os.path.expanduser('~')
++data_path = os.path.join(home_path, '.xx-net')
+ data_launcher_path = os.path.join(data_path, 'launcher')
+ 
+ 
+diff --git a/launcher/module_init.py b/launcher/module_init.py
+index 1e1cc15..f711add 100644
+--- a/launcher/module_init.py
++++ b/launcher/module_init.py
+@@ -11,7 +11,7 @@ proc_handler = {}
+ 
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ if root_path not in sys.path:
+     sys.path.append(root_path)
+ 
+diff --git a/launcher/setup.py b/launcher/setup.py
+index 24adb58..28da65a 100644
+--- a/launcher/setup.py
++++ b/launcher/setup.py
+@@ -5,7 +5,8 @@ import sys
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+ python_path = os.path.abspath( os.path.join(current_path, os.pardir, 'python27', '1.0'))
+-noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
++noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+ sys.path.append(noarch_lib)
+ 
+ import urllib2
+@@ -19,8 +20,8 @@ import shutil
+ 
+ opener = urllib2.build_opener()
+ 
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
+-download_path = os.path.abspath( os.path.join(root_path, 'data', 'downloads'))
++home_path = os.path.expanduser('~')
++download_path = os.path.abspath( os.path.join(home_path, '.xx-net', 'downloads'))
+ 
+ xxnet_unzip_path = ""
+ 
+diff --git a/launcher/start.py b/launcher/start.py
+index 6fb1631..8fe7b08 100644
+--- a/launcher/start.py
++++ b/launcher/start.py
+@@ -11,11 +11,12 @@ import threading
+ threading.stack_size(128*1024)
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
+-data_path = os.path.join(root_path, 'data')
++root_path = os.path.abspath(os.path.join('/usr', 'share', 'xx-net'))
++home_path = os.path.expanduser('~')
++data_path = os.path.join(home_path, '.xx-net')
+ data_launcher_path = os.path.join(data_path, 'launcher')
+ python_path = os.path.abspath( os.path.join(root_path, 'python27', '1.0'))
+-noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+ sys.path.append(noarch_lib)
+ 
+ 
+diff --git a/launcher/update.py b/launcher/update.py
+index 2f5702f..48925df 100644
+--- a/launcher/update.py
++++ b/launcher/update.py
+@@ -28,8 +28,9 @@ new_gae_proxy_version = ""
+ gae_proxy_path = ""
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
+-data_root = os.path.join(root_path, 'data')
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
++home_path = os.path.expanduser('~')
++data_root = os.path.join(home_path, '.xx-net')
+ 
+ def get_opener():
+     autoproxy = '127.0.0.1:8087'
+@@ -134,7 +135,7 @@ def download_module(module, new_version):
+     global update_content, update_dict
+ 
+     current_path = os.path.dirname(os.path.abspath(__file__))
+-    download_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'data', 'downloads'))
++    download_path = os.path.abspath( os.path.join(data_root, 'downloads'))
+     if not os.path.isdir(download_path):
+         os.mkdir(download_path)
+ 
+@@ -158,7 +159,7 @@ def download_module(module, new_version):
+                 xlog.warn("download %s sha1 wrong", url)
+                 continue
+ 
+-            module_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, module))
++            module_path = os.path.abspath( os.path.join(data_root, module))
+             if not os.path.isdir(module_path):
+                 os.path.mkdir(module_path, "755")
+ 
+@@ -404,4 +405,4 @@ if __name__ == "__main__":
+     #get_uuid()
+     #check_update()
+     #sys_tray.serve_forever()
+-    create_desktop_shortcut()
+\ No newline at end of file
++    create_desktop_shortcut()
+diff --git a/launcher/update_from_github.py b/launcher/update_from_github.py
+index 2245b7c..e0b6c74 100644
+--- a/launcher/update_from_github.py
++++ b/launcher/update_from_github.py
+@@ -11,17 +11,17 @@ import shutil
+ import ssl
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ python_path = os.path.join(root_path, 'python27', '1.0')
+-noarch_lib = os.path.join(python_path, 'lib', 'noarch')
++noarch_lib = os.path.join(root_path, 'lib')
+ sys.path.append(noarch_lib)
+ 
+ from instances import xlog
+ import config
+ import update
+ 
+-
+-data_root = os.path.join(root_path, 'data')
++home_path = os.path.expanduser('~')
++data_root = os.path.join(home_path, '.xx-net')
+ if not os.path.isdir(data_root):
+     os.mkdir(data_root)
+ 
+@@ -250,4 +250,4 @@ def clean_old_file():
+     delete_file(os.path.join(root_path, "gae_proxy", "local", "xlog.py"))
+     delete_file(os.path.join(root_path, "gae_proxy", "local", "xlog.pyc"))
+ 
+-clean_old_file()
+\ No newline at end of file
++clean_old_file()
+diff --git a/launcher/web_control.py b/launcher/web_control.py
+index c6d5702..d68c8a5 100644
+--- a/launcher/web_control.py
++++ b/launcher/web_control.py
+@@ -4,9 +4,10 @@
+ import os, sys
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ if __name__ == "__main__":
+     python_path = os.path.abspath( os.path.join(current_path, os.pardir, 'python27', '1.0'))
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+ import re
+@@ -16,8 +17,6 @@ import threading
+ import urllib2
+ import time
+ 
+-root_path = os.path.abspath(os.path.join(current_path, os.pardir))
+-
+ import yaml
+ import json
+ 
+@@ -224,7 +223,7 @@ class Http_Handler(simple_http_server.HttpServerHandler):
+ 
+         if reqs['cmd'] == ['get_config']:
+             config.load()
+-            check_update = config.get(["update", "check_update"], 1)
++            check_update = config.get(["update", "check_update"], 0)
+             if check_update == 0:
+                 check_update = "dont-check"
+             elif check_update == 1:
+diff --git a/php_proxy/local/cert_util.py b/php_proxy/local/cert_util.py
+index f39bb1a..3d1d43b 100644
+--- a/php_proxy/local/cert_util.py
++++ b/php_proxy/local/cert_util.py
+@@ -15,13 +15,15 @@ import subprocess
+ import logging
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+-data_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, 'data', 'php_proxy'))
++home_path = os.path.expanduser('~')
++data_path = os.path.abspath(os.path.join(home_path, '.xx-net', 'php_proxy'))
+ if not os.path.isdir(data_path):
+     data_path = current_path
+ 
+ if __name__ == "__main__":
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+     if sys.platform == "win32":
+diff --git a/php_proxy/local/proxy.py b/php_proxy/local/proxy.py
+index 63a826f..3e869b2 100755
+--- a/php_proxy/local/proxy.py
++++ b/php_proxy/local/proxy.py
+@@ -65,10 +65,10 @@ sys.dont_write_bytecode = True
+ 
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ python_path = os.path.join(root_path, 'python27', '1.0')
+ 
+-noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+ sys.path.append(noarch_lib)
+ 
+ if sys.platform == "win32":
+@@ -785,7 +785,8 @@ class Common(object):
+         ConfigParser.RawConfigParser.OPTCRE = re.compile(r'(?P<option>\S+)\s+(?P<vi>[=])\s+(?P<value>.*)$')
+         self.CONFIG = ConfigParser.ConfigParser()
+         self.CONFIG_FILENAME = os.path.splitext(os.path.abspath(__file__))[0]+'.ini'
+-        self.DATA_PATH = os.path.join(root_path, "data", "php_proxy")
++        self.home_path = os.path.expanduser('~')
++        self.DATA_PATH = os.path.join(self.home_path, ".xx-net", "php_proxy")
+         if not os.path.isdir(self.DATA_PATH):
+             os.mkdir(self.DATA_PATH)
+ 
+diff --git a/php_proxy/local/web_control.py b/php_proxy/local/web_control.py
+index 4606f55..115edda 100644
+--- a/php_proxy/local/web_control.py
++++ b/php_proxy/local/web_control.py
+@@ -5,11 +5,12 @@ import sys
+ import os
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
++root_path = os.path.abspath( os.path.join('/usr', 'share', 'xx-net'))
+ 
+ if __name__ == "__main__":
+     python_path = os.path.abspath( os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+ 
+-    noarch_lib = os.path.abspath( os.path.join(python_path, 'lib', 'noarch'))
++    noarch_lib = os.path.abspath( os.path.join(root_path, 'lib'))
+     sys.path.append(noarch_lib)
+ 
+     if sys.platform == "win32":
+@@ -35,7 +36,6 @@ import ConfigParser
+ 
+ os.environ['HTTPS_PROXY'] = ''
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir))
+ 
+ 
+ class User_config(object):
+@@ -49,7 +49,8 @@ class User_config(object):
+     proxy_user = ""
+     proxy_passwd = ""
+ 
+-    CONFIG_USER_FILENAME = os.path.abspath( os.path.join(root_path, 'data', 'php_proxy', 'config.ini'))
++    home_path = os.path.expanduser('~')
++    CONFIG_USER_FILENAME = os.path.abspath( os.path.join(home_path, '.xx-net', 'php_proxy', 'config.ini'))
+ 
+     def __init__(self):
+         self.load()
+@@ -257,4 +258,4 @@ class RemoteContralServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+         self.send_response(mimetype, data)
+ 
+ if __name__ == "__main__":
+-    pass
+\ No newline at end of file
++    pass
+diff --git a/x_tunnel/local/client.py b/x_tunnel/local/client.py
+index 0d0acc6..3d6dea8 100644
+--- a/x_tunnel/local/client.py
++++ b/x_tunnel/local/client.py
+@@ -5,11 +5,12 @@ import threading
+ current_path = os.path.dirname(os.path.abspath(__file__))
+ python_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir, 'python27', '1.0'))
+ 
+-noarch_lib = os.path.abspath(os.path.join(python_path, 'lib', 'noarch'))
++root_path = os.path.abspath(os.path.join('/usr', 'share', 'xx-net'))
++noarch_lib = os.path.abspath(os.path.join(root_path, 'lib'))
+ sys.path.append(noarch_lib)
+ 
+-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir))
+-data_path = os.path.join(root_path, 'data')
++home_path = os.path.expanduser('~')
++data_path = os.path.join(home_path, '.xx-net')
+ data_xtunnel_path = os.path.join(data_path, 'x_tunnel')
+ 
+ lib_path = os.path.abspath(os.path.join(current_path, os.pardir, 'common'))
+diff --git a/x_tunnel/local/web_control.py b/x_tunnel/local/web_control.py
+index fd4dfc3..a5112f4 100644
+--- a/x_tunnel/local/web_control.py
++++ b/x_tunnel/local/web_control.py
+@@ -15,7 +15,7 @@ import global_var as g
+ import proxy_session
+ 
+ current_path = os.path.dirname(os.path.abspath(__file__))
+-root_path = os.path.abspath(os.path.join(current_path, os.pardir, os.pardir))
++root_path = os.path.abspath(os.path.join('/usr', 'share', 'xx-net'))
+ web_ui_path = os.path.join(current_path, os.path.pardir, "web_ui")
+ 
+ 
