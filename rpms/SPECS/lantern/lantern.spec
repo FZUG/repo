@@ -6,10 +6,10 @@
 %global repo %{project}
 
 # commit, git rev-parse --short HEAD
-%global _commit 8166903220593ba349ee69fc80cfa28b9aabf1e9
+%global _commit 273a629fde2113a8acc0802fe5d222b5cfd6e003
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 # git show -s --format=%ci "%%{_shortcommit}"
-%global _revision_date 2016-02-26 15:19:58 -0600
+%global _revision_date 2016-02-27 13:12:55 -0800
 %global _build_date %(date -u '+%Y%m%d.%H%M%%S')
 %global go_arch %(go env GOHOSTARCH)
 %global go_root %(go env GOROOT)
@@ -31,7 +31,7 @@ fi\
 
 Name:    golang-github-getlantern-lantern
 Version: 2.1.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: fast, reliable and secure access to the open Internet
 Summary(zh_CN): 快速, 可靠, 安全的访问互联网的代理软件
 
@@ -247,6 +247,8 @@ fi
 %{gopath}/src/github.com/get%{repo}/%{repo}-ui/
 
 %changelog
+* Mon Feb 29 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-2.git273a629
+- Update to 2.1.0-2.git273a629
 * Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-1.git8166903
 - Release 2.1.0
 - Do not require lantern-ui, due to static links.
