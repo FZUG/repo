@@ -25,13 +25,9 @@ fi\
 # and will not show systray or UI.
 %global with_headless 0
 
-# Lantern needs to be compiled twice. Because it requires source code
-# in the /usr/share/gocode/src/ directory.
-%global with_build 1
-
 Name:    golang-github-getlantern-lantern
 Version: 2.1.0
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: fast, reliable and secure access to the open Internet
 Summary(zh_CN): 快速, 可靠, 安全的访问互联网的代理软件
 
@@ -41,13 +37,12 @@ URL:     https://getlantern.org
 Source0: https://github.com/getlantern/lantern/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 Provides: %{repo} = %{version}-%{release}
-Obsoletes: %{repo} <= 2.0.11-1.gitfdff338
+Obsoletes: %{repo} < %{version}-%{release}
 BuildRequires: npm
 BuildRequires: systemd
 BuildRequires: golang-bin
 BuildRequires: gtk3-devel
 BuildRequires: libappindicator-gtk3-devel
-%if 0%{?with_build}
 BuildRequires: golang-github-hashicorp-golang-lru-devel
 BuildRequires: golang-github-skratchdot-open-golang-devel
 BuildRequires: golang-github-davecgh-go-spew-devel
@@ -55,8 +50,6 @@ BuildRequires: golang-bitbucket-kardianos-osext-devel
 BuildRequires: golang-googlecode-uuid-devel
 BuildRequires: golang-github-gorilla-websocket-devel
 BuildRequires: golang-gopkg-check-devel
-BuildRequires: %{name}-devel
-%endif
 %{systemd_requires}
 
 %description
@@ -74,7 +67,6 @@ Proxy: tcp://127.0.0.1:8787
 WebUI: http://127.0.0.1:16823
 
 %package devel
-Requires: %{name}-ui-devel = %{version}-%{release}
 Summary: lantern source code
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
 BuildArch: noarch
@@ -82,15 +74,6 @@ BuildArch: noarch
 
 %description devel
 lantern source code
-
-%package -n %{name}-ui-devel
-Summary: lantern-ui source code
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-BuildArch: noarch
-%endif
-
-%description -n %{name}-ui-devel
-lantern-ui source code
 
 %prep
 %setup -q -n %repo-%{_commit}
@@ -109,10 +92,9 @@ sed -i '/kardianos/s|github.com|bitbucket.org|g' \
     src/github.com/getlantern/launcher/launcher_windows.go
 
 %build
-export GOPATH=%{gopath}
+export GOPATH=`pwd`:%{gopath}
 
 # Build lantern-ui
-%if ! 0%{?with_build}
 LANTERN_UI="src/github.com/getlantern/lantern-ui"
 APP="$LANTERN_UI/app"
 DIST="$LANTERN_UI/dist"
@@ -125,7 +107,7 @@ popd
 go build -a -v -o tarfs github.com/getlantern/tarfs/tarfs
 echo -e "// +build !stub\n" > $DEST
 ./tarfs -pkg ui $DIST >> $DEST
-%endif
+rm -rf $LANTERN_UI/node_modules
 
 # Build lantern
 build_tags='prod'
@@ -140,15 +122,12 @@ ldflags="-s -w \
     -X \"github.com/getlantern/flashlight/logging.logglyToken=${loggly_token}\" \
     -X \"github.com/getlantern/flashlight.compileTimePackageVersion=%{version}\""
 
-%if 0%{?with_build}
 CGO_ENABLED=1 GOOS=linux GOARCH=%{arch} \
 go build -a -v -o %{repo}_linux_%{arch} -tags="$build_tags" \
     -ldflags="${ldflags} -linkmode internal -extldflags \"-static\"" \
     github.com/getlantern/flashlight/main
-%endif
 
 %install
-%if 0%{?with_build}
 installer_resources='./installer-resources/linux'
 packaged_yaml='.packaged-lantern.yaml'
 packaged_settings='startupurl:'
@@ -191,9 +170,9 @@ EOF
 
 install -Dm644 ${installer_resources}/icon*.png \
     %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{repo}.png
-%endif
 
 # lantern source code
+find -iname "testdata" -or -iname "example*" | xargs rm -rf
 install -d %{buildroot}%{gopath}
 # find all *.go but no *_test.go files and generate devel.file-list
 for ext in go cfg c s js map html scss less css json topojson conf yaml tmpl gif png svg ico webp jpeg bmp tiff otf woff h cpp def; do
@@ -202,13 +181,7 @@ for ext in go cfg c s js map html scss less css json topojson conf yaml tmpl gif
         echo "%%{gopath}/$file" >> devel.file-list
     done
 done
-# remove unit test files
-for dir in $(find %{buildroot} -iname "testdata" -or -iname "example*"); do
-    rm -rf $dir
-done
-
 sort -u -o devel.file-list devel.file-list
-sed -E -i '/(testdata|example*|%{name}-ui)/d' devel.file-list
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -228,7 +201,6 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
-%if 0%{?with_build}
 %files
 %defattr(-,root,root,-)
 %doc README.md
@@ -237,16 +209,14 @@ fi
 %{_datadir}/applications/%{repo}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{repo}.png
 %{_userunitdir}/%{repo}.service
-%endif
 
 %files devel -f devel.file-list
 %defattr(-,root,root,-)
 
-%files -n %{name}-ui-devel
-%defattr(-,root,root,-)
-%{gopath}/src/github.com/get%{repo}/%{repo}-ui/
-
 %changelog
+* Wed Mar  2 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-3.git273a629
+- Do not need to build twice, due to links lantern-ui.
+- Remove lantern-ui package
 * Mon Feb 29 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-2.git273a629
 - Update to 2.1.0-2.git273a629
 * Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-1.git8166903
