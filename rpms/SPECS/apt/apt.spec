@@ -27,7 +27,7 @@ BuildRequires: libxslt
 BuildRequires: w3m
 BuildRequires: po4a
 BuildRequires: graphviz
-BuildRequires: gettext
+BuildRequires: gettext-devel
 BuildRequires: dash
 Requires: gnupg
 #Provides: libapt-inst apt-utils
