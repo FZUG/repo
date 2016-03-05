@@ -1,16 +1,20 @@
+%global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
 %global debug_package %{nil}
 %global _hardened_build 1
-%global __provides_exclude (libnode)
-%global __requires_exclude (libnode)
+%global __provides_exclude (npm)
+%global __requires_exclude (npm)
+
 %global project vscode
 %global repo %{project}
+%global electron_ver 0.36.10
+%global node_ver 0.12
 
 # commit
-%global _commit 149e7a0debf3e32f95978a606e00d3c09bcac3d6
+%global _commit 97d4ad1c55a82369f65078406ed770e8a34055fc
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.8
+Version: 0.10.10
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -23,6 +27,7 @@ Source1: about.json
 BuildRequires: npm, node-gyp
 BuildRequires: python, make, libX11-devel
 BuildRequires: desktop-file-utils, git
+Requires: electron
 
 %description
  VS Code is a new type of tool that combines the simplicity of a code editor
@@ -32,39 +37,48 @@ BuildRequires: desktop-file-utils, git
 
 %prep
 %setup -q -n %{repo}-%{_commit}
+# https://github.com/Microsoft/vscode/pull/2559
+sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
+sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
 git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
-nvm install 0.12
-nvm use 0.12
-npm config set python `which python`
-npm install -g gulp
+nvm install %{node_ver}
+npm config set python=`which python2`
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
-
 source .nvm/nvm.sh
-nvm use 0.12
-scripts/npm.sh install
-%ifarch x86_64
-gulp vscode-linux-x64
-%else
-gulp vscode-linux-ia32
-%endif
+nvm use %{node_ver}
+scripts/npm.sh install --loglevel info
+node_modules/.bin/gulp vscode-linux-%{arch}
+npm dedupe
 
 %install
 # Data files
-mkdir --parents %{buildroot}%{_datadir}/%{name}
-cp -a ../VSCode-linux-*/. %{buildroot}%{_datadir}/%{name}
-mv %{buildroot}%{_datadir}/%{name}/{Code*,%{name}}
+mkdir --parents %{buildroot}%{_libdir}/%{name}
+cp -a ../VSCode-linux-*/. %{buildroot}%{_libdir}/%{name}
+rm -rf %{buildroot}%{_libdir}/%{name}/node_modules
 
 # Bin file
 mkdir --parents %{buildroot}%{_bindir}
-ln -sfv %{_datadir}/%{name}/%{name} %{buildroot}%{_bindir}/
+cat <<EOT >> %{buildroot}%{_bindir}/%{name}
+#!/usr/bin/env bash
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License. See License.txt in the project root
+# for license information.
+
+NAME="%{name}"
+VSCODE_PATH="%{_libdir}/\$NAME"
+ELECTRON="%{_bindir}/electron"
+CLI="\$VSCODE_PATH/out/cli.js"
+ATOM_SHELL_INTERNAL_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" "\$VSCODE_PATH" "\$@"
+exit \$?
+EOT
 
 # Icon files
-install -Dm 0644 resources/linux/code.png %{buildroot}%{_datadir}/pixmaps/%{name}.png
-mv %{buildroot}%{_datadir}/%{name}/resources/app/resources/linux/{code,%{name}}.png
+install -Dm 0644 resources/linux/code.png \
+    %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
 
 # Desktop file
 mkdir --parents %{buildroot}%{_datadir}/applications
@@ -85,17 +99,35 @@ EOT
 desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 # Change appName
-install -m 0644 %{S:1} %{buildroot}%{_datadir}/%{name}/resources/app/product.json
+install -m 0644 %{S:1} %{buildroot}%{_libdir}/%{name}/product.json
 sed -i -e \
    '/Short/s|:.*,$|: "VSCode",|
     /Long/s|:.*,$|: "Visual Studio Code",|' \
-    %{buildroot}%{_datadir}/%{name}/resources/app/product.json
+    %{buildroot}%{_libdir}/%{name}/product.json
 
 # About.json
 sed -i '$a\\t"commit": "%{_commit}",\n\t"date": "'`date -u +%FT%T.%3NZ`'"\n}' \
-    %{buildroot}%{_datadir}/%{name}/resources/app/product.json
+    %{buildroot}%{_libdir}/%{name}/product.json
 sed -i '2s|:.*,$|: "VSCode",|' \
-    %{buildroot}%{_datadir}/%{name}/resources/app/package.json
+    %{buildroot}%{_libdir}/%{name}/package.json
+
+# find all *.js files and generate node.file-list
+pushd ../VSCode-linux-*/node_modules
+for ext in js json node; do
+    find -iname "*.${ext}" \
+    ! -path '*doc*' \
+    ! -path '*test*' \
+    ! -path '*tools*' \
+    ! -path '*example*' \
+    ! -path '*obj.target*' \
+    -exec sh -c "strip '{}' &>/dev/null ||:" \; \
+    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \; \
+    -exec echo '%%{_libdir}/%{name}/node_modules/{}' >> \
+    %{_builddir}/%{repo}-%{_commit}/node.file-list \;
+done
+popd
+sort -u -o node.file-list node.file-list
+find %{buildroot} -name '*.node' -exec chmod 755 '{}' \;
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -111,21 +143,20 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
-%files
+%files -f node.file-list
 %defattr(-,root,root,-)
 %doc README.md ThirdPartyNotices.txt
 %license LICENSE.txt
-%{_bindir}/%{name}
-%dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/*
-%{_datadir}/pixmaps/%{name}.png
+%attr(755,-,-) %{_bindir}/%{name}
+%{_libdir}/%{name}/
+%{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
-%attr(755,root,root) %{_datadir}/%{name}/%{name}
-%attr(755,root,root) %{_datadir}/%{name}/libnode.so
-%exclude %{_datadir}/%{name}/libgcrypt.so.*
-%exclude %{_datadir}/%{name}/libnotify.so.*
 
 %changelog
+* Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-1
+- Release 0.10.10
+- Spilt package
+- Update electron to 0.36.10
 * Thu Feb 11 2016 mosquito <sensor.wen@gmail.com> - 0.10.8-1
 - Release 0.10.8
 - Remove welcome.md
