@@ -8,11 +8,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 4b18317e7c2a05e440e8a04c3ab4a12f4b573dcd
+%global _commit 33978455b807647ab75c411639c717f245fe04e8
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.36.8
+Version: 0.36.10
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -67,6 +67,8 @@ ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
 %{_libdir}/%{name}/
 
 %changelog
+* Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 0.36.10-1.git3397845
+- Release 0.36.10
 * Sat Feb 20 2016 mosquito <sensor.wen@gmail.com> - 0.36.8-1.git4b18317
 - Release 0.36.8
 * Sun Feb 14 2016 mosquito <sensor.wen@gmail.com> - 0.36.7-1.git9d8e23c
