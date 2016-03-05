@@ -12,15 +12,15 @@
 %global project atom
 %global repo %{project}
 %global npm_ver 2.13.3
-%global electron_ver 0.36.8
+%global electron_ver 0.36.10
 
 # commit
-%global _commit 3e71894a59950a5c88247a2cd9a64c35ee60d26e
+%global _commit b8cc0b4fc51965f3ee6e84f3a23ee29230fd5b4b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.5.3
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.5.4
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -72,6 +72,7 @@ sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
 
+%if 0%{?fedora} <= 23 || 0%{?rhel}
 # Upgrade npm (>=1.4.0)
 ## Install new npm to INSTALL_PREFIX for build package
 npm config set registry="http://registry.npmjs.org/"
@@ -81,9 +82,10 @@ npm config set python `which python2`
 npm install -g --ca=null --prefix %{buildroot}%{_prefix} npm@%{npm_ver}
 ## Export PATH to new npm version
 export PATH="%{buildroot}%{_bindir}:$PATH"
-node-gyp -v; node -v; npm -v; apm -v
+%endif
 
 # Build package
+node-gyp -v; node -v; npm -v; apm -v
 ## https://github.com/atom/atom/blob/master/script/bootstrap
 export ATOM_RESOURCE_PATH=`pwd`
 # If unset, ~/.atom/.node-gyp/.atom/.npm is used
@@ -218,6 +220,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-1.gitb8cc0b4
+- Release 1.5.4
 * Sun Feb 14 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-2.git3e71894
 - The package is split into atom, nodejs-atom-package-manager and electron
 - Use system apm and electron

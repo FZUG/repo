@@ -1,6 +1,6 @@
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -297,7 +297,7 @@
+@@ -284,7 +284,7 @@
    ciTasks.push('publish-build') unless process.env.CI
    grunt.registerTask('ci', ciTasks)
  
