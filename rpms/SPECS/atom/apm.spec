@@ -12,11 +12,11 @@
 %global npm_ver 2.13.3
 
 # commit
-%global _commit 829b81a1f7c55e882ea0523d4f325b5c1b8b283f
+%global _commit 955326e9361d7b03499e21b7c06905864ef616c9
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.7.0
+Version: 1.7.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
@@ -42,12 +42,12 @@ Discover and install Atom packages powered by https://atom.io
 %setup -q -n %repo-%{_commit}
 sed -i 's|<lib>|%{_lib}|' %{P:1}
 %patch0 -p1
-%patch1 -p1
 
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
 
+%if 0%{?fedora} <= 23 || 0%{?rhel}
 # Upgrade npm
 ## Install new npm to INSTALL_PREFIX for build package
 npm config set registry="http://registry.npmjs.org/"
@@ -57,15 +57,17 @@ npm config set python `which python2`
 npm install -g --ca=null --prefix %{buildroot}%{_prefix} npm@%{npm_ver}
 ## Export PATH to new npm version
 export PATH="%{buildroot}%{_bindir}:$PATH"
-node-gyp -v; node -v; npm -v
+%endif
 
 # Build package
+node-gyp -v; node -v; npm -v
 npm install --loglevel info
 
 %install
 mkdir -p %{buildroot}%{nodejs_sitelib}/atom-package-manager
 cp -pr deprecated-packages.json package.json bin lib native-module script templates \
     %{buildroot}%{nodejs_sitelib}/atom-package-manager
+patch -Np1 -d %{buildroot}%{nodejs_sitelib}/atom-package-manager -i %{P:1}
 
 mkdir -p %{buildroot}%{_bindir}
 ln -sfv %{nodejs_sitelib}/atom-package-manager/bin/apm %{buildroot}%{_bindir}
@@ -128,5 +130,7 @@ find %{buildroot} -type f -regextype posix-extended \( \
 %{nodejs_sitelib}/atom*/deprecated-packages.json
 
 %changelog
+* Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-1.git955326e
+- Release 1.7.1
 * Sun Feb 14 2016 mosquito <sensor.wen@gmail.com> - 1.7.0-1.git829b81a
 - Initial package
