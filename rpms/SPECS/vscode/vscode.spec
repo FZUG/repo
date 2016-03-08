@@ -10,18 +10,19 @@
 %global node_ver 0.12
 
 # commit
-%global _commit 97d4ad1c55a82369f65078406ed770e8a34055fc
+%global _commit 5b5f4db87c10345b9d5c8d0bed745bcad4533135
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
 Version: 0.10.10
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
 License: MIT
 URL:     https://github.com/Microsoft/vscode
 Source0: https://github.com/Microsoft/vscode/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+# https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
 Source1: about.json
 
 BuildRequires: npm, node-gyp
@@ -153,6 +154,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-2
+- Fixed extensionsGallery url
 * Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-1
 - Release 0.10.10
 - Spilt package
