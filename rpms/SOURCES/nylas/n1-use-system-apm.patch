@@ -1,0 +1,57 @@
+diff --git a/build/Gruntfile.coffee b/build/Gruntfile.coffee
+index e348093..e846b82 100644
+--- a/build/Gruntfile.coffee
++++ b/build/Gruntfile.coffee
+@@ -400,7 +400,7 @@ module.exports = (grunt) ->
+ 
+   grunt.registerTask('ci', ciTasks)
+ 
+-  defaultTasks = ['download-electron', 'build', 'set-version', 'generate-asar']
++  defaultTasks = ['build', 'set-version', 'generate-asar']
+   defaultTasks.push 'mkdmg' if process.platform is 'darwin'
+   defaultTasks.push 'install' unless process.platform is 'linux'
+   grunt.registerTask('default', defaultTasks)
+diff --git a/build/tasks/copy-files-for-build-task.coffee b/build/tasks/copy-files-for-build-task.coffee
+index b0bb6f3..a686896 100644
+--- a/build/tasks/copy-files-for-build-task.coffee
++++ b/build/tasks/copy-files-for-build-task.coffee
+@@ -42,9 +42,6 @@ module.exports = (grunt) ->
+       cp path.join(shellAppDir, 'electron.exe'), path.join(shellAppDir, 'nylas.exe')
+       rm path.join(shellAppDir, 'electron.exe')
+     else
+-      cp 'electron', shellAppDir, filter: /default_app/
+-      cp path.join(shellAppDir, 'electron'), path.join(shellAppDir, 'nylas')
+-      rm path.join(shellAppDir, 'electron')
+ 
+     mkdir appDir
+ 
+@@ -175,16 +172,11 @@ module.exports = (grunt) ->
+     # Move all of the node modules inside /apm/node_modules to new-app/apm/node_modules
+     apmInstallDir = path.resolve(appDir, '..', 'new-app', 'apm')
+     mkdir apmInstallDir
+-    cp path.join('apm', 'node_modules'), path.resolve(apmInstallDir, 'node_modules'), filter: filterNodeModule
+ 
+     # Move /apm/node_modules/atom-package-manager to new-app/apm. We're essentially
+     # pulling the atom-package-manager module up outside of the node_modules folder,
+     # which is necessary because npmV3 installs nested dependencies in the same dir.
+     apmPackageDir = path.join(apmInstallDir, 'node_modules', 'atom-package-manager')
+-    for name in fs.readdirSync(apmPackageDir)
+-      fs.renameSync path.join(apmPackageDir, name), path.join(apmInstallDir, name)
+-    fs.unlinkSync(path.join(apmInstallDir, 'node_modules', '.bin', 'apm'))
+-    fs.rmdirSync(apmPackageDir)
+ 
+     if process.platform is 'darwin'
+       grunt.file.recurse path.join('build', 'resources', 'mac'), (sourcePath, rootDirectory, subDirectory='', filename) ->
+diff --git a/src/package-manager.coffee b/src/package-manager.coffee
+index 1be4f5b..75b5e7c 100644
+--- a/src/package-manager.coffee
++++ b/src/package-manager.coffee
+@@ -150,6 +150,8 @@ class PackageManager
+       @apmPath = path.join(@resourcePath, 'apm', 'bin', commandName)
+     if not fs.isFileSync(@apmPath)
+       @apmPath = path.join(@resourcePath, 'apm', 'node_modules', 'atom-package-manager', 'bin', commandName)
++    if not fs.isFileSync(@apmPath)
++      @apmPath = path.join('/bin', commandName)
+     @apmPath
+ 
+   # Public: Get the paths being used to look for packages.
