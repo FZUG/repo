@@ -12,7 +12,7 @@
 %global project atom
 %global repo %{project}
 %global npm_ver 2.13.3
-%global electron_ver 0.36.10
+%global electron_ver 0.36.11
 
 # commit
 %global _commit b8cc0b4fc51965f3ee6e84f3a23ee29230fd5b4b
@@ -20,7 +20,7 @@
 
 Name:    atom
 Version: 1.5.4
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -174,7 +174,8 @@ for ext in js json less png svg; do
     ! -path '*js-beautify/tools*' \
     ! -path '*acorn/bin/*.sh*' \
     -exec install -D '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \; \
-    -exec echo '%%{_libdir}/%{name}/node_modules/{}' >> %{_builddir}/%{repo}-%{_commit}/node.file-list \;
+    -exec echo '%%{_libdir}/%{name}/node_modules/{}' >> \
+    %{_builddir}/%{repo}-%{_commit}/node.file-list \;
 done
 popd
 sed -i '/ /s|ars/.*.json|ars/*.json|g' node.file-list
@@ -206,20 +207,13 @@ fi
 %doc README.md CONTRIBUTING.md docs/
 %license LICENSE.md
 %{_bindir}/%{name}
-%dir %{_libdir}/%{name}
-%{_libdir}/%{name}/dot-atom/
-%{_libdir}/%{name}/exports/
-%{_libdir}/%{name}/less-compile-cache/
-%{_libdir}/%{name}/package.json
-%{_libdir}/%{name}/resources/
-%{_libdir}/%{name}/spec/
-%{_libdir}/%{name}/src/
-%{_libdir}/%{name}/static/
-%{_libdir}/%{name}/vendor/
+%{_libdir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-2.gitb8cc0b4
+- rebuild for electron 0.36.11
 * Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-1.gitb8cc0b4
 - Release 1.5.4
 * Sun Feb 14 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-2.git3e71894
