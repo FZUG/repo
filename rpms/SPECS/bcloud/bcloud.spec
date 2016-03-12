@@ -15,7 +15,7 @@
 
 Name:    bcloud
 Version: 3.8.2
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: Baidu Pan client for Linux Desktop users
 Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
@@ -36,8 +36,8 @@ Requires: python3-gobject
 Requires: python3-keyring
 Requires: python3-lxml
 Requires: python3-inotify
-#Requires: libgnome-keyring, gnome-keyring
-#Requires: python3-pykde4
+Recommends: libgnome-keyring, gnome-keyring
+Recommends: python3-pykde4
 
 %description
 Baidu Pan client for Linux Desktop users.
@@ -87,6 +87,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 3.8.2-3.git4b54e0f
+- Add requires libgnome-keyring, python3-pykde4
+
 * Sat Feb  6 2016 mosquito <sensor.wen@gmail.com> - 3.8.2-2.git4b54e0f
 - Not bind cellphone
 
