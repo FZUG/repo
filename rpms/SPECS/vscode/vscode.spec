@@ -6,7 +6,7 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 0.36.10
+%global electron_ver 0.36.11
 %global node_ver 0.12
 
 # commit
@@ -15,7 +15,7 @@
 
 Name:    vscode
 Version: 0.10.10
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -128,7 +128,6 @@ for ext in js json node; do
 done
 popd
 sort -u -o node.file-list node.file-list
-find %{buildroot} -name '*.node' -exec chmod 755 '{}' \;
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -154,6 +153,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-3
+- Rebuild for electron 0.36.11
 * Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-2
 - Fixed extensionsGallery url
 * Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-1
