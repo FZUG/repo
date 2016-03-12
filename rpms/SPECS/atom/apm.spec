@@ -17,7 +17,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.7.1
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -31,8 +31,10 @@ BuildRequires: npm
 BuildRequires: node-gyp
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
-BuildRequires: python2-devel
 BuildRequires: git-core
+Requires: libgnome-keyring
+Requires: git-core
+Requires: python2
 
 %description
 apm - Atom Package Manager
@@ -120,16 +122,11 @@ find %{buildroot} -type f -regextype posix-extended \( \
 %doc README.md
 %license LICENSE.md
 %{_bindir}/apm
-%dir %{nodejs_sitelib}/atom*
-%{nodejs_sitelib}/atom*/bin/
-%{nodejs_sitelib}/atom*/lib/
-%{nodejs_sitelib}/atom*/native-module/
-%{nodejs_sitelib}/atom*/script/
-%{nodejs_sitelib}/atom*/templates/
-%{nodejs_sitelib}/atom*/package.json
-%{nodejs_sitelib}/atom*/deprecated-packages.json
+%{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-2.git955326e
+- Add requires python2, git-core, libgnome-keyring
 * Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-1.git955326e
 - Release 1.7.1
 * Sun Feb 14 2016 mosquito <sensor.wen@gmail.com> - 1.7.0-1.git829b81a
