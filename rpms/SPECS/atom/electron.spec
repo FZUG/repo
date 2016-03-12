@@ -3,16 +3,17 @@
 %global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
 %global debug_package %{nil}
 %global _hardened_build 1
-%global __requires_exclude (libnode)
+%global __provides_exclude (libnode)
+%global __requires_exclude (libnode|ffmpeg)
 %global project electron
 %global repo %{project}
 
 # commit
-%global _commit 33978455b807647ab75c411639c717f245fe04e8
+%global _commit ead94b7b1f1286e5ce06fd6cfa9b4218c3c9ab0f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.36.10
+Version: 0.36.11
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -21,9 +22,6 @@ License: MIT
 URL:     https://github.com/atom/electron
 #Source0: https://github.com/atom/electron/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
 
-%if ! 0%{?rhel}
-BuildRequires: upx
-%endif
 BuildRequires: wget
 #BuildRequires: node-gyp
 #BuildRequires: nodejs-packaging
@@ -54,9 +52,6 @@ Files="content_shell.pak electron icudtl.dat libffmpeg.so libnode.so locales \
        natives_blob.bin resources snapshot_blob.bin version"
 install -d %{buildroot}%{_libdir}/%{name}
 cp -a $Files %{buildroot}%{_libdir}/%{name}
-%if ! 0%{?rhel}
-upx %{buildroot}%{_libdir}/%{name}/%{name}
-%endif
 
 install -d %{buildroot}%{_bindir}
 ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
@@ -67,6 +62,8 @@ ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
 %{_libdir}/%{name}/
 
 %changelog
+* Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.36.11-1.gitead94b7
+- Release 0.36.11
 * Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 0.36.10-1.git3397845
 - Release 0.36.10
 * Sat Feb 20 2016 mosquito <sensor.wen@gmail.com> - 0.36.8-1.git4b18317
