@@ -19,7 +19,7 @@ import gzip, ssl, json
 import argparse
 import xml.etree.ElementTree as tree
 
-def get(url, data=None, timeout=100):
+def get(url, data=None, timeout=200):
     ''' 获取数据
     return str '''
     ualist = ['Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36',
@@ -133,7 +133,7 @@ skip_if_unavailable=1''']
 
     url = 'https://dl.google.com/linux/chrome/rpm/stable/'
     pkgname = ['google-chrome-unstable', 'google-chrome-beta', 'google-chrome-stable']
-    archs = ['x86_64', 'i386']
+    archs = ['x86_64']
     metafile = ['repomd.xml', 'primary.xml.gz', 'filelists.xml.gz', 'other.xml.gz']
 
     for arch in archs:
@@ -166,7 +166,7 @@ deb https://repo.fdzh.org/chrome/deb/ stable main''']
 
     url = 'http://dl.google.com/linux/chrome/deb/dists/stable/'
     pkgname = ['google-chrome-unstable', 'google-chrome-beta', 'google-chrome-stable']
-    archs = ['amd64', 'i386']
+    archs = ['amd64']
     metafile = ['Release', 'Packages', 'Packages.gz', 'Packages.bz2']
     dist = os.path.join(rootdir, 'deb')
     metadir = os.path.join(dist, 'dists/stable/main/')
@@ -220,7 +220,7 @@ def get_pkg():
                 if os.path.exists(pkg_out):
                     continue
                 print('Downloading', item.get('name'))
-                f = get(item.get('url')[2])
+                f = get(item.get('url')[1])
                 output(pkg_out, f)
 
 def helper():
