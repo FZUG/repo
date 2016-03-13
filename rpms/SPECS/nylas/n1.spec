@@ -16,7 +16,7 @@
 
 Name:    n1
 Version: 0.4.14
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
 Group:   Applications/System
@@ -24,6 +24,8 @@ License: MIT
 URL:     https://nylas.com/N1/
 Source0: https://github.com/nylas/N1/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Patch0:  n1-use-system-apm.patch
+# https://github.com/nylas/N1/issues/107, https://github.com/atom/electron/issues/4778
+Patch1:  n1-fix-renderer-path.patch
 
 BuildRequires: npm
 BuildRequires: git-core
@@ -45,6 +47,7 @@ Visit https://nylas.com/N1/ to learn more.
 %prep
 %setup -q -n %repo-%{_commit}
 %patch0 -p1
+%patch1 -p1
 
 # apm with system (updated) nodejs cannot 'require' modules inside asar
 sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
@@ -221,5 +224,7 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sun Mar 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.14-2.git53cd69b
+- Fixes renderer path
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.4.14-1.git53cd69b
 - Initial package
