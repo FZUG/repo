@@ -20,7 +20,7 @@
 
 Name:    atom
 Version: 1.5.4
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -32,14 +32,13 @@ Patch0:  fix-atom-sh.patch
 Patch1:  fix-license-path.patch
 Patch2:  use-system-apm.patch
 Patch3:  use-system-electron.patch
+Patch4:  fix-renderer-path.patch
 
 BuildRequires: npm
 BuildRequires: node-gyp
 BuildRequires: nodejs >= 0.10.0
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
-BuildRequires: python2-devel
-BuildRequires: python-setuptools
 BuildRequires: git-core
 BuildRequires: nodejs-atom-package-manager
 Requires: nodejs-atom-package-manager
@@ -60,6 +59,7 @@ sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # apm with system (updated) nodejs cannot 'require' modules inside asar
 sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
@@ -212,6 +212,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sun Mar 13 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-3.gitb8cc0b4
+- Fixes renderer path
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-2.gitb8cc0b4
 - rebuild for electron 0.36.11
 * Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-1.gitb8cc0b4

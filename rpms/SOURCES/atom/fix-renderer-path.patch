@@ -1,0 +1,30 @@
+diff --git a/src/module-cache.coffee b/src/module-cache.coffee
+index cd7b248..2ec7b08 100644
+--- a/src/module-cache.coffee
++++ b/src/module-cache.coffee
+@@ -194,8 +194,8 @@
+   return
+ 
+ registerBuiltins = (devMode) ->
++  fs = require 'fs-plus'
+   if devMode or not cache.resourcePath.startsWith("/usr/lib64/atom")
+-    fs = require 'fs-plus'
+     atomCoffeePath = path.join(cache.resourcePath, 'exports', 'atom.coffee')
+     cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
+   cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
+@@ -203,11 +203,15 @@
+   atomShellRoot = path.join(process.resourcesPath, 'atom.asar')
+ 
+   commonRoot = path.join(atomShellRoot, 'common', 'api', 'lib')
++  if not fs.existsSync(commonRoot)
++    commonRoot = path.join(atomShellRoot, 'common', 'api')
+   commonBuiltins = ['callbacks-registry', 'clipboard', 'crash-reporter', 'screen', 'shell']
+   for builtin in commonBuiltins
+     cache.builtins[builtin] = path.join(commonRoot, "#{builtin}.js")
+ 
+   rendererRoot = path.join(atomShellRoot, 'renderer', 'api', 'lib')
++  if not fs.existsSync(rendererRoot)
++    rendererRoot = path.join(atomShellRoot, 'renderer', 'api')
+   rendererBuiltins = ['ipc', 'remote']
+   for builtin in rendererBuiltins
+     cache.builtins[builtin] = path.join(rendererRoot, "#{builtin}.js")
