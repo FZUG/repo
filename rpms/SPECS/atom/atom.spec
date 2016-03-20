@@ -15,12 +15,12 @@
 %global electron_ver 0.36.11
 
 # commit
-%global _commit b8cc0b4fc51965f3ee6e84f3a23ee29230fd5b4b
+%global _commit 01c7777fcd849080e6b5987829db8472f5ceeba2
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.5.4
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.6.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -212,6 +212,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-1.git01c7777
+- Release 1.6.0
 * Sun Mar 13 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-3.gitb8cc0b4
 - Fixes renderer path
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-2.gitb8cc0b4
