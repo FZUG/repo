@@ -9,7 +9,6 @@
 
 %global project apm
 %global repo %{project}
-%global npm_ver 2.13.3
 
 # commit
 %global _commit 955326e9361d7b03499e21b7c06905864ef616c9
@@ -17,7 +16,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.7.1
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -44,80 +43,48 @@ Discover and install Atom packages powered by https://atom.io
 %setup -q -n %repo-%{_commit}
 sed -i 's|<lib>|%{_lib}|' %{P:1}
 %patch0 -p1
+%patch1 -p1
+
+# Fix location of Atom app
+sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
 
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
-
-%if 0%{?fedora} <= 23 || 0%{?rhel}
-# Upgrade npm
-## Install new npm to INSTALL_PREFIX for build package
-npm config set registry="http://registry.npmjs.org/"
-npm config set ca ""
-npm config set strict-ssl false
-npm config set python `which python2`
-npm install -g --ca=null --prefix %{buildroot}%{_prefix} npm@%{npm_ver}
-## Export PATH to new npm version
-export PATH="%{buildroot}%{_bindir}:$PATH"
-%endif
-
-# Build package
-node-gyp -v; node -v; npm -v
 npm install --loglevel info
+npm install --loglevel info -g --prefix build/usr
 
 %install
-mkdir -p %{buildroot}%{nodejs_sitelib}/atom-package-manager
-cp -pr deprecated-packages.json package.json bin lib native-module script templates \
-    %{buildroot}%{nodejs_sitelib}/atom-package-manager
-patch -Np1 -d %{buildroot}%{nodejs_sitelib}/atom-package-manager -i %{P:1}
+cp -pr build/. %{buildroot}
+rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/node_modules
 
-mkdir -p %{buildroot}%{_bindir}
-ln -sfv %{nodejs_sitelib}/atom-package-manager/bin/apm %{buildroot}%{_bindir}
-
-pushd node_modules
-Mods="asar-require async colors exit first-mate fs-plus git-utils keytar mv ncp \
-      npm open plist q read season temp underscore-plus wordwrap wrench yargs"
-
-# Find all *.js files and generate node.file-list
-for mod in `echo $Mods`; do
-  for ext in js json py gypi; do
-    find $mod -regextype posix-extended -type f \
-      \( -iname "*.${ext}" -or -perm 755 \) \
-      ! -regex '.*\.(bat|cmd|sh)$' \
-      ! -name '.*' \
-      ! -name 'cibuild' \
-      ! -name 'LICENSE*' \
-      ! -name 'README*' \
-      ! -name 'Makefile*' \
-      ! -path '*deps*' \
-      ! -path '*test*' \
-      ! -path '*obj.target*' \
-      ! -regex '.*(oniguruma|git-utils|keytar)/node.*' -prune \
-      ! -name 'config.gypi' \
-      ! -path '*html*' \
-      ! -path '*sample*' \
-      ! -path '*example*' \
-      ! -path '*benchmark*' \
-      -exec install -D '{}' '%{buildroot}%{nodejs_sitelib}/atom-package-manager/node_modules/{}' \; \
-      -exec echo '%%{nodejs_sitelib}/atom-package-manager/node_modules/{}' >> ../node.file-list \;
-  done
+pushd build/%{nodejs_sitelib}/atom-package-manager/node_modules
+npm dedupe
+for ext in js json node gypi; do
+    find -regextype posix-extended \
+      -iname "*.${ext}" \
+    ! -name '.*' \
+    ! -name 'config.gypi' \
+    ! -path '*deps' \
+    ! -path '*test*' \
+    ! -path '*obj.target*' \
+    ! -path '*html*' \
+    ! -path '*example*' \
+    ! -path '*sample*' \
+    ! -path '*benchmark*' \
+    ! -regex '.*(oniguruma|git-utils|keytar)/node.*' \
+      -exec install -Dm644 '{}' '%{buildroot}%{nodejs_sitelib}/atom-package-manager/node_modules/{}' \;
 done
-popd
-sort -u -o node.file-list node.file-list
-sed -i 's|py$|py\*|' node.file-list
 
-# Fix location of Atom app
-sed -e 's|share/atom/resources/app.asar|%{_lib}/atom|g' \
-    -i %{buildroot}%{nodejs_sitelib}/atom-package-manager/lib/apm.js
+# Remove some files
+find %{buildroot} -regextype posix-extended -type f \
+    -regex '.*js$' -exec sh -c "sed -i '/^#\!\/usr\/bin\/env/d' '{}'" \; -or \
+    -regex '.*node' -exec strip '{}' \; -or \
+    -name '.*' -exec rm -rf '{}' \; -or \
+    -name '*.md' -delete -or \
+    -name 'apm.cmd' -delete
 
-# Remove the executable bits
-find %{buildroot} -type f -regextype posix-extended \( \
-    -regex '.*(js|py)$' -exec sh -c "head -n2 '{}'|grep -q '^#\!/usr/bin/env' && chmod a+x '{}' || chmod 644 '{}'" \; -or \
-    -regex '.*(json|conf|gypi)$' -exec chmod 644 '{}' \; -or \
-    -regex '.*node' -perm 755 -exec strip '{}' \; -or \
-    -regex '.*(.gitignore.*|apm.cmd|binding.gyp$)' -exec rm -f '{}' \; \)
-
-%files -f node.file-list
+%files
 %defattr(-,root,root,-)
 %doc README.md
 %license LICENSE.md
@@ -125,6 +92,9 @@ find %{buildroot} -type f -regextype posix-extended \( \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-3.git955326e
+- Fixed fc24 build error
+- Rewrite install script
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-2.git955326e
 - Add requires python2, git-core, libgnome-keyring
 * Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-1.git955326e
