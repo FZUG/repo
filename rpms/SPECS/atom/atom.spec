@@ -11,7 +11,6 @@
 
 %global project atom
 %global repo %{project}
-%global npm_ver 2.13.3
 %global electron_ver 0.36.11
 
 # commit
@@ -20,7 +19,7 @@
 
 Name:    atom
 Version: 1.6.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -32,7 +31,6 @@ Patch0:  fix-atom-sh.patch
 Patch1:  fix-license-path.patch
 Patch2:  use-system-apm.patch
 Patch3:  use-system-electron.patch
-Patch4:  fix-renderer-path.patch
 
 BuildRequires: npm
 BuildRequires: node-gyp
@@ -59,7 +57,6 @@ sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 
 # apm with system (updated) nodejs cannot 'require' modules inside asar
 sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
@@ -71,18 +68,6 @@ sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 # Hardened package
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
-
-%if 0%{?fedora} <= 23 || 0%{?rhel}
-# Upgrade npm (>=1.4.0)
-## Install new npm to INSTALL_PREFIX for build package
-npm config set registry="http://registry.npmjs.org/"
-npm config set ca ""
-npm config set strict-ssl false
-npm config set python `which python2`
-npm install -g --ca=null --prefix %{buildroot}%{_prefix} npm@%{npm_ver}
-## Export PATH to new npm version
-export PATH="%{buildroot}%{_bindir}:$PATH"
-%endif
 
 # Build package
 node-gyp -v; node -v; npm -v; apm -v
@@ -159,34 +144,23 @@ done
 
 # find all *.js files and generate node.file-list
 pushd atom-build/Atom/resources/app/node_modules
-for ext in js json less png svg; do
-  find -type f \( -iname *.${ext} -or -perm 755 \) \
+for ext in js json node less png svg; do
+    find -regextype posix-extended \
+      -iname *.${ext} \
     ! -name '.*' \
-    ! -name '*.md' \
-    ! -name 'CONTRIBUTORS*' \
-    ! -name 'CHANGELOG*' \
-    ! -name 'LICENSE*' \
-    ! -name 'README*' \
-    ! -name 'Makefile*' \
     ! -path '*test*' \
     ! -path '*example*' \
+    ! -path '*sample*' \
     ! -path '*benchmark*' \
-    ! -path '*js-beautify/tools*' \
-    ! -path '*acorn/bin/*.sh*' \
-    -exec install -D '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \; \
-    -exec echo '%%{_libdir}/%{name}/node_modules/{}' >> \
-    %{_builddir}/%{repo}-%{_commit}/node.file-list \;
+      -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \;
 done
 popd
-sed -i '/ /s|ars/.*.json|ars/*.json|g' node.file-list
-sort -u -o node.file-list node.file-list
 
-find %{buildroot} -type f -regextype posix-extended \( \
-    -regex '.*js$' -exec sh -c "head -n2 '{}'|grep -q '^#\!/usr/bin/env' && chmod a+x '{}' || chmod 644 '{}'" \; -or \
-    -regex '.*(json|less|svg|conf)$' -exec chmod 644 '{}' \; -or \
-    -regex '.*node$' -perm 755 -exec strip '{}' \; -or \
-    -regex '.*.gitignore' -exec rm -f '{}' \; -or \
-    -size 0 -exec rm -f '{}' \; \)
+find %{buildroot} -type f -regextype posix-extended \
+    -regex '.*js$' -exec sh -c "sed -i '/^#\!\/usr\/bin\/env/d' '{}'" \; -or \
+    -regex '.*node$' -type f -exec strip '{}' \; -or \
+    -name '.*?' -print -or \
+    -size 0 -print | xargs rm -rf
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -202,7 +176,7 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
-%files -f node.file-list
+%files
 %defattr(-,root,root,-)
 %doc README.md CONTRIBUTING.md docs/
 %license LICENSE.md
@@ -212,6 +186,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-2.git01c7777
+- Fixes not found nodegit.node module
+- Rewrite install script
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-1.git01c7777
 - Release 1.6.0
 * Sun Mar 13 2016 mosquito <sensor.wen@gmail.com> - 1.5.4-3.gitb8cc0b4

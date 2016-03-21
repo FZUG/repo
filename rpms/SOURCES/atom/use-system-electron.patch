@@ -1,6 +1,8 @@
+diff --git a/build/Gruntfile.coffee b/build/Gruntfile.coffee
+index d9375d0..91a7c24 100644
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -284,7 +284,7 @@
+@@ -293,7 +293,7 @@ module.exports = (grunt) ->
    ciTasks.push('publish-build') unless process.env.CI
    grunt.registerTask('ci', ciTasks)
  
@@ -9,9 +11,11 @@
    unless process.platform is 'linux' or grunt.option('no-install')
      defaultTasks.push 'install'
    grunt.registerTask('default', defaultTasks)
+diff --git a/build/tasks/build-task.coffee b/build/tasks/build-task.coffee
+index 9164f8d..7b0c47a 100644
 --- a/build/tasks/build-task.coffee
 +++ b/build/tasks/build-task.coffee
-@@ -14,19 +14,6 @@
+@@ -14,19 +14,6 @@ module.exports = (grunt) ->
      rm path.join(buildDir, 'installer')
      mkdir path.dirname(buildDir)
  
@@ -31,6 +35,8 @@
      mkdir appDir
  
      if process.platform isnt 'win32'
+diff --git a/package.json b/package.json
+index 4667caa..9222d9c 100644
 --- a/package.json
 +++ b/package.json
 @@ -12,7 +12,6 @@
@@ -41,20 +47,42 @@
    "dependencies": {
      "async": "0.2.6",
      "atom-keymap": "^6.2.0",
+diff --git a/src/module-cache.coffee b/src/module-cache.coffee
+index e9245cf..e47b508 100644
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
-@@ -194,7 +194,7 @@
+@@ -194,8 +194,8 @@ resolveModulePath = (relativePath, parentModule) ->
    return
  
  registerBuiltins = (devMode) ->
 -  if devMode or not cache.resourcePath.startsWith("#{process.resourcesPath}#{path.sep}")
+-    fs = require 'fs-plus'
++  fs = require 'fs-plus'
 +  if devMode or not cache.resourcePath.startsWith("/usr/<lib>/atom")
-     fs = require 'fs-plus'
      atomCoffeePath = path.join(cache.resourcePath, 'exports', 'atom.coffee')
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
+   cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
+@@ -203,11 +203,15 @@ registerBuiltins = (devMode) ->
+   atomShellRoot = path.join(process.resourcesPath, 'atom.asar')
+ 
+   commonRoot = path.join(atomShellRoot, 'common', 'api', 'lib')
++  if not fs.existsSync(commonRoot)
++    commonRoot = path.join(atomShellRoot, 'common', 'api')
+   commonBuiltins = ['callbacks-registry', 'clipboard', 'crash-reporter', 'screen', 'shell']
+   for builtin in commonBuiltins
+     cache.builtins[builtin] = path.join(commonRoot, "#{builtin}.js")
+ 
+   rendererRoot = path.join(atomShellRoot, 'renderer', 'api', 'lib')
++  if not fs.existsSync(rendererRoot)
++    rendererRoot = path.join(atomShellRoot, 'renderer', 'api')
+   rendererBuiltins = ['ipc', 'remote']
+   for builtin in rendererBuiltins
+     cache.builtins[builtin] = path.join(rendererRoot, "#{builtin}.js")
+diff --git a/src/package-manager.coffee b/src/package-manager.coffee
+index 1ecdc54..10ccad2 100644
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -511,7 +511,7 @@
+@@ -511,7 +511,7 @@ class PackageManager
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
@@ -63,6 +91,8 @@
  
      @resourcePathWithTrailingSlash ?= "#{@resourcePath}#{path.sep}"
      packagePath?.startsWith(@resourcePathWithTrailingSlash)
+diff --git a/static/index.js b/static/index.js
+index 6d65d3c..96a78a6 100644
 --- a/static/index.js
 +++ b/static/index.js
 @@ -29,7 +29,7 @@
