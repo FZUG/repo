@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 166205e831276ddbab9dee925f86cbbc1d27ee58
+%global _commit a6d4cde2419d662c4e2bdb15c2c4d5a284f16102
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    feeluown
-Version: 7.1
+Version: 8.0
 Release: 0.1.git%{_shortcommit}%{?dist}
 Summary: Net Ease Music for Linux
 Summary(zh_CN): 网易云音乐 for Linux
@@ -55,9 +55,9 @@ sed -i '/icons/s|\.\./||g' \
 %build
 
 %install
-install -d %{buildroot}%{python3_sitelib}/%{name}/icons
-cp -r %{name}/* %{buildroot}%{python3_sitelib}/%{name}/
-cp -r icons/*.{png,bmp} %{buildroot}%{python3_sitelib}/%{name}/icons/
+install -d %{buildroot}%{_datadir}/%{name}/icons
+cp -r %{name}/* %{buildroot}%{_datadir}/%{name}/
+cp -r icons/*.{png,bmp} %{buildroot}%{_datadir}/%{name}/icons/
 
 # icon file
 install -Dm644 icons/FeelUOwn.png \
@@ -83,7 +83,7 @@ desktop-file-install \
 install -d %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/%{name} <<EOF
 #!/bin/bash
-python3 %{python3_sitelib}/%{name}/main.py
+python3 %{_datadir}/%{name}/main.py
 EOF
 
 %post
@@ -108,12 +108,14 @@ fi
 %defattr(-,root,root,-)
 %doc README.md docs/*
 %license LICENSE
-%{python3_sitelib}/%{name}
+%{_datadir}/%{name}
 %attr(0755,-,-) %{_bindir}/%{name}
 %{_datadir}/icons/hicolor/*/apps/*.png
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 8.0-0.1.gita6d4cde
+- Pre-release 8.0a
 * Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> - 7.1-0.1.git166205e
 - Pre-release 7.1a
 * Sat Feb  6 2016 mosquito <sensor.wen@gmail.com> - 7.0-0.1.git4fae2af
