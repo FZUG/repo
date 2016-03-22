@@ -6,10 +6,10 @@
 %global repo %{project}
 
 # commit, git rev-parse --short HEAD
-%global _commit 273a629fde2113a8acc0802fe5d222b5cfd6e003
+%global _commit fd97e0e047d1fd491b5739e9501419b8ea78b7dd
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 # git show -s --format=%ci "%%{_shortcommit}"
-%global _revision_date 2016-02-27 13:12:55 -0800
+%global _revision_date 2016-03-16 10:55:52 -0700
 %global _build_date %(date -u '+%Y%m%d.%H%M%%S')
 %global go_arch %(go env GOHOSTARCH)
 %global go_root %(go env GOROOT)
@@ -26,8 +26,8 @@ fi\
 %global with_headless 0
 
 Name:    golang-github-getlantern-lantern
-Version: 2.1.0
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 2.1.1
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: fast, reliable and secure access to the open Internet
 Summary(zh_CN): 快速, 可靠, 安全的访问互联网的代理软件
 
@@ -43,6 +43,7 @@ BuildRequires: systemd
 BuildRequires: golang-bin
 BuildRequires: gtk3-devel
 BuildRequires: libappindicator-gtk3-devel
+%if 0%{?fedora}
 BuildRequires: golang-github-hashicorp-golang-lru-devel
 BuildRequires: golang-github-skratchdot-open-golang-devel
 BuildRequires: golang-github-davecgh-go-spew-devel
@@ -50,6 +51,7 @@ BuildRequires: golang-bitbucket-kardianos-osext-devel
 BuildRequires: golang-googlecode-uuid-devel
 BuildRequires: golang-github-gorilla-websocket-devel
 BuildRequires: golang-gopkg-check-devel
+%endif
 %{systemd_requires}
 
 %description
@@ -66,17 +68,9 @@ Lantern 是一个免费的代理程序, 可以快速、可靠、安全地访问�
 Proxy: tcp://127.0.0.1:8787
 WebUI: http://127.0.0.1:16823
 
-%package devel
-Summary: lantern source code
-%if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
-BuildArch: noarch
-%endif
-
-%description devel
-lantern source code
-
 %prep
 %setup -q -n %repo-%{_commit}
+%if 0%{?fedora}
 rm -rf src/github.com/getlantern/pac-cmd/binaries \
     src/gopkg.in/check.v1 \
     src/github.com/hashicorp/golang-lru \
@@ -90,6 +84,7 @@ sed -i '/kardianos/s|github.com|bitbucket.org|g' \
     src/github.com/getlantern/go-update/check/check.go \
     src/github.com/getlantern/launcher/launcher_darwin.go \
     src/github.com/getlantern/launcher/launcher_windows.go
+%endif
 
 %build
 export GOPATH=`pwd`:%{gopath}
@@ -107,7 +102,6 @@ popd
 go build -a -v -o tarfs github.com/getlantern/tarfs/tarfs
 echo -e "// +build !stub\n" > $DEST
 ./tarfs -pkg ui $DIST >> $DEST
-rm -rf $LANTERN_UI/node_modules
 
 # Build lantern
 build_tags='prod'
@@ -145,7 +139,7 @@ ln -sfv %{_libdir}/%{repo}/%{repo}-binary %{buildroot}%{_bindir}/%{repo}-bin
 install -d %{buildroot}%{_userunitdir}
 cat > %{buildroot}%{_userunitdir}/%{repo}.service <<EOF
 [Unit]
-Description=%{Summary}
+Description=%{summary}
 Documentation=https://github.com/getlantern/lantern
 After=network.target
 
@@ -170,18 +164,6 @@ EOF
 
 install -Dm644 ${installer_resources}/icon*.png \
     %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{repo}.png
-
-# lantern source code
-find -iname "testdata" -or -iname "example*" | xargs rm -rf
-install -d %{buildroot}%{gopath}
-# find all *.go but no *_test.go files and generate devel.file-list
-for ext in go cfg c s js map html scss less css json topojson conf yaml tmpl gif png svg ico webp jpeg bmp tiff otf woff h cpp def; do
-    for file in $(find src -type f -and -iname "*.${ext}" \! -iname "*_test.go"); do
-        install -D $file %{buildroot}%{gopath}/$file
-        echo "%%{gopath}/$file" >> devel.file-list
-    done
-done
-sort -u -o devel.file-list devel.file-list
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -210,10 +192,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{repo}.png
 %{_userunitdir}/%{repo}.service
 
-%files devel -f devel.file-list
-%defattr(-,root,root,-)
-
 %changelog
+* Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 2.1.1-1.gitfd97e0e
+- Release 2.1.1
+- Remove devel package
 * Wed Mar  2 2016 mosquito <sensor.wen@gmail.com> - 2.1.0-3.git273a629
 - Do not need to build twice, due to links lantern-ui.
 - Remove lantern-ui package
