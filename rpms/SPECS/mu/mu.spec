@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 38bee1a01dc95ba1fa111da71a9217b6afb1b012
+%global _commit 3aae86e88684ba08cf0a21c2bc439823474f0ccc
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    mu
-Version: 0.9.210
+Version: 0.9.245
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Incredible music manager
 Summary(zh_CN): 为音乐而生的播放器
@@ -128,6 +128,8 @@ fi
 %{_bindir}/%{name}
 
 %changelog
+* Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 0.9.245-1.git3aae86e
+- Update to 0.9.245-1.git3aae86e
 * Mon Feb 29 2016 mosquito <sensor.wen@gmail.com> - 0.9.210-1.git38bee1a
 - Update to 0.9.210-1.git38bee1a
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.9.200-1.git3fa99a1
