@@ -9,12 +9,12 @@
 %global node_ver 0.12
 
 # commit
-%global _commit abb7b81d2a888d94867a66026d5a37438f72b66d
+%global _commit f74b8254b81549ebd39d7176b204e2fc08464093
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    rocketchat
 Version: 1.2.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: an open-source chat client
 
 Group:   Applications/System
@@ -116,5 +116,7 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Mar 23 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-2.gitf74b825
+- Release 1.2.0
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1.gitabb7b81
 - Initial package
