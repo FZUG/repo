@@ -30,7 +30,7 @@
 
 Name:       sogoupinyin
 Version:    2.0.0.0068
-Release:    3%{?dist}
+Release:    4%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
@@ -212,7 +212,7 @@ export XIM_PROGRAM=/usr/bin/fcitx
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
-while(test ! -d /proc/\`pidof sogou-qimpanel||echo None\`); do
+while (test ! -d /proc/\`pidof sogou-qimpanel||echo None\`); do
     FCITX=\$(pidof fcitx &>/dev/null && echo y || echo n)
     SOGOU=\$(pidof sogou-qimpanel &>/dev/null && echo y || echo n)
     if [[ \$FCITX == "y" && \$SOGOU == "n" ]]; then
@@ -365,10 +365,10 @@ fi
 if %{_sbindir}/selinuxenabled ; then
     %{_sbindir}/load_policy
     %relabel_files
-fi
-if [ $1 -eq 1 ]; then
-    %{_sbindir}/setsebool -P -N sogou_access_network=1
-    %{_sbindir}/setsebool -P -N sogou_enable_homedirs=0
+    if [ $1 -eq 1 ]; then
+        %{_sbindir}/setsebool -P -N sogou_access_network=1
+        %{_sbindir}/setsebool -P -N sogou_enable_homedirs=0
+    fi
 fi
 %endif # with_selinux
 
@@ -438,6 +438,8 @@ fi
 %endif # with_selinux
 
 %changelog
+* Sun Mar 27 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-4
+- Fix https://github.com/FZUG/repo/issues/81
 * Fri Dec 25 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-3
 - Update SELinux module (sogoupinyin 1.1.0)
   Fix the sogou-qimpanel-watchdog does not enable sogou-qimpanel
