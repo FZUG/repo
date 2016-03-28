@@ -11,11 +11,11 @@
 %global electron_ver 0.36.11
 
 # commit
-%global _commit 8cb7748b80536ae3c12fc2d81d4b38dec770035c
+%global _commit d41e72c650e8b45471580b46c06449de8a7eed92
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    n1
-Version: 0.4.16
+Version: 0.4.19
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
@@ -224,6 +224,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-1.gitd41e72c
+- Release 0.4.19
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 0.4.16-1.git8cb7748
 - Release 0.4.16
 * Sun Mar 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.14-2.git53cd69b
