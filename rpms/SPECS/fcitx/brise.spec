@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit d6ad1644161fd250b1be82efc2c75802f9025dd0
+%global _commit 7dbd56b9ce08f75228a7c897109ec397cb48b057
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           brise
 Version:        0.35
-Release:        2.git%{_shortcommit}%{?dist}
+Release:        3.git%{_shortcommit}%{?dist}
 Summary:        The official Rime schema repository
 Summary(zh_CN): Rime 输入法规则库
 
@@ -41,6 +41,9 @@ make %{?_smp_mflags}
 %{_datadir}/rime-data
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 0.35-3.git7dbd56b
+- Update to 0.35-3.git7dbd56b
+
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 0.35-2.gitd6ad164
 - Update to 0.35-2.gitd6ad164
 

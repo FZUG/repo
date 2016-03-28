@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 4eade83bfee8490345556782fc6945c325e0c730
+%global _commit 1da0c637d98c6381f755b24d15bb2ec358246348
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           librime
 Version:        1.2
-Release:        8.git%{_shortcommit}%{?dist}
+Release:        9.git%{_shortcommit}%{?dist}
 Summary:        Rime Input Method Engine Library
 Summary(zh_CN): Rime 输入法引擎应用程序库
 
@@ -105,6 +105,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/rime_dict_manager
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.2-9.git1da0c63
+- Update to 1.2-9.git1da0c63
+
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 1.2-8.git4eade83
 - Update to 1.2-8.git4eade83
 
@@ -201,4 +204,3 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 * Thu May  9 2013 Peng Wu <pwu@redhat.com> - 0.9.8-1
 - The Initial Version
-
