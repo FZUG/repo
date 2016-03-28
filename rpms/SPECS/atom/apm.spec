@@ -11,12 +11,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 955326e9361d7b03499e21b7c06905864ef616c9
+%global _commit 24807ff4fdc5db95e40695e3d8a66a70fd0cfd11
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.7.1
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.9.1
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -59,7 +59,6 @@ cp -pr build/. %{buildroot}
 rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/node_modules
 
 pushd build/%{nodejs_sitelib}/atom-package-manager/node_modules
-npm dedupe
 for ext in js json node gypi; do
     find -regextype posix-extended \
       -iname "*.${ext}" \
@@ -92,6 +91,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.1-1.git24807ff
+- Release 1.9.1
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-3.git955326e
 - Fixed fc24 build error
 - Rewrite install script
