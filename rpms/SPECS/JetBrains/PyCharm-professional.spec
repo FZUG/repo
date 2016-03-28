@@ -10,7 +10,7 @@
 %global appfile %{name}-%{version}.tar.gz
 %global appurl  http://download.jetbrains.com/python/%{appfile}
 # http://download.jetbrains.com/python/Name-Version.tar.gz.sha256
-%global sha256  8cd7e85435f0ad04a0540037436ae9593608cf7f456bf8ff1d44f659572ec8dc
+%global sha256  76f9debcf5621f03a859afa37534e400685d2064664a57af9a47c4859ab407a7
 
 # Usage: DownloadPkg appfile appurl
 %global DownloadPkg() \
@@ -24,7 +24,7 @@ Download\
 %{nil}
 
 Name:    pycharm-professional
-Version: 5.0.4
+Version: 2016.1
 Release: 1.net
 Summary: Powerful Python and Django IDE. Professional version
 Group:   Development/Tools
@@ -36,15 +36,17 @@ Requires: axel tar
 # Oracel JDK, java-1.8.0-openjdk-devel
 Requires: oracle-jdk
 # For enhanced interactive Python shell inside pycharm
-Requires: python-ipython python-ipython-console
+Recommends: python-ipython python3-ipython
 # For deployment and remote connections
-Requires: openssh
+Recommends: openssh
 # Packages manager for Python
-Requires: python-setuptools
+Recommends: python-setuptools python3-setuptools
 # For support code coverage measurement
-Requires: python-coverage
+Recommends: python-coverage python3-coverage
+# For performance debugger
+Recommends: Cython python3-Cython
 # For support virtualized development environments
-Requires: vagrant
+Recommends: vagrant
 
 %description
  Powerful Python and Django IDE. Professional version.
@@ -175,6 +177,8 @@ fi
 %exclude %{approot}/license
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 2016.1-1
+- Release 2016.1
 * Fri Jan 29 2016 mosquito <sensor.wen@gmail.com> - 5.0.4-1
 - Release 5.0.4
 * Sat Dec 26 2015 mosquito <sensor.wen@gmail.com> - 5.0.3-1
