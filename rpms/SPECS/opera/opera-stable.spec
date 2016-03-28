@@ -9,7 +9,7 @@
 %global __requires_exclude (libffmpeg)
 
 Name:    opera-stable
-Version: 35.0.2066.82
+Version: 36.0.2130.32
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -127,6 +127,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> -36.0.2130.32-1
+- Update to 36.0.2130.32
 * Sun Feb 28 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.82-1
 - Update to 35.0.2066.82
 * Fri Feb 12 2016 mosquito <sensor.wen@gmail.com> -35.0.2066.37-1
