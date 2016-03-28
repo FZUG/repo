@@ -19,7 +19,7 @@
 
 Name:    atom
 Version: 1.6.0
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -144,7 +144,7 @@ done
 
 # find all *.js files and generate node.file-list
 pushd atom-build/Atom/resources/app/node_modules
-for ext in js json node less png svg; do
+for ext in js json node types less png svg; do
     find -regextype posix-extended \
       -iname *.${ext} \
     ! -name '.*' \
@@ -186,6 +186,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-3.git01c7777
+- Fixes not found mime.types file
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-2.git01c7777
 - Fixes not found nodegit.node module
 - Rewrite install script
