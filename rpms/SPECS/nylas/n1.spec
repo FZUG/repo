@@ -16,7 +16,7 @@
 
 Name:    n1
 Version: 0.4.19
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
 Group:   Applications/System
@@ -32,6 +32,7 @@ BuildRequires: git-core
 BuildRequires: node-gyp
 BuildRequires: nodejs >= 0.10.0
 BuildRequires: nodejs-packaging
+BuildRequires: libgnome-keyring-devel
 BuildRequires: nodejs-atom-package-manager
 Requires: nodejs-atom-package-manager
 Requires: electron
@@ -170,16 +171,16 @@ for i in 512 256 128 64 32; do
 done
 
 # find all *.js files and generate node.file-list
-pushd n1-build/Nylas/resources/app/node_modules
-for ext in js json node less png; do
-  find -iname *.${ext} \
+pushd n1-build/Nylas/resources/app
+for ext in js json node types less png; do
+  find node_modules -iname \*.${ext} \
     ! -name '.*' \
     ! -path '*/test*' \
     ! -path '*tests*' \
     ! -path '*example*' \
     ! -path '*benchmark*' \
     -exec sh -c "strip '{}' &>/dev/null ||:" \; \
-    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/nylas/node_modules/{}' \;
+    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/nylas/{}' \;
 done
 popd
 
@@ -224,6 +225,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-2.gitd41e72c
+- Fixes keytar build error, require libgnome-keyring-devel
+- Fixes no found mime.types file
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-1.gitd41e72c
 - Release 0.4.19
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 0.4.16-1.git8cb7748
