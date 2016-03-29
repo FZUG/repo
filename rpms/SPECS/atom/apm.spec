@@ -16,7 +16,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.1
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -48,6 +48,9 @@ sed -i 's|<lib>|%{_lib}|' %{P:1}
 # Fix location of Atom app
 sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
 
+# Do not download node 0.10
+sed -i '/download-node/d' package.json
+
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
@@ -56,11 +59,14 @@ npm install --loglevel info -g --prefix build/usr
 
 %install
 cp -pr build/. %{buildroot}
-rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/node_modules
+rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/{node_modules,script}
 
-pushd build/%{nodejs_sitelib}/atom-package-manager/node_modules
+# Copy system node binary
+cp -p %{_bindir}/node %{buildroot}%{nodejs_sitelib}/atom-package-manager/bin
+
+pushd build/%{nodejs_sitelib}/atom-package-manager
 for ext in js json node gypi; do
-    find -regextype posix-extended \
+    find node_modules -regextype posix-extended \
       -iname "*.${ext}" \
     ! -name '.*' \
     ! -name 'config.gypi' \
@@ -72,7 +78,7 @@ for ext in js json node gypi; do
     ! -path '*sample*' \
     ! -path '*benchmark*' \
     ! -regex '.*(oniguruma|git-utils|keytar)/node.*' \
-      -exec install -Dm644 '{}' '%{buildroot}%{nodejs_sitelib}/atom-package-manager/node_modules/{}' \;
+      -exec install -Dm644 '{}' '%{buildroot}%{nodejs_sitelib}/atom-package-manager/{}' \;
 done
 
 # Remove some files
@@ -91,6 +97,10 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.1-2.git24807ff
+- Fixed fc24 running error: undefined symbol node_module_register
+  https://github.com/atom/atom/issues/3385
+- Copy system node binary
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.1-1.git24807ff
 - Release 1.9.1
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-3.git955326e
