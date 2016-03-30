@@ -14,12 +14,12 @@
 %global electron_ver 0.36.11
 
 # commit
-%global _commit 01c7777fcd849080e6b5987829db8472f5ceeba2
+%global _commit cd9b7d3180f779040d38a74fd037def18f27d87d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.6.0
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.6.1
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -32,16 +32,14 @@ Patch1:  fix-license-path.patch
 Patch2:  use-system-apm.patch
 Patch3:  use-system-electron.patch
 
+# In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
 BuildRequires: npm
 BuildRequires: node-gyp
-BuildRequires: nodejs >= 0.10.0
 BuildRequires: nodejs-packaging
-BuildRequires: libgnome-keyring-devel
-BuildRequires: git-core
 BuildRequires: nodejs-atom-package-manager
 Requires: nodejs-atom-package-manager
 Requires: electron
-Requires: http-parser
+Requires: desktop-file-utils
 
 %description
 Atom is a text editor that's modern, approachable, yet hack-able to the core
@@ -143,16 +141,16 @@ for i in 1024 512 256 128 64 48 32 24 16; do
 done
 
 # find all *.js files and generate node.file-list
-pushd atom-build/Atom/resources/app/node_modules
+pushd atom-build/Atom/resources/app
 for ext in js json node types less png svg; do
-    find -regextype posix-extended \
-      -iname *.${ext} \
+    find node_modules -regextype posix-extended \
+      -iname \*.${ext} \
     ! -name '.*' \
     ! -path '*test*' \
     ! -path '*example*' \
     ! -path '*sample*' \
     ! -path '*benchmark*' \
-      -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \;
+      -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/{}' \;
 done
 popd
 
@@ -186,6 +184,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Mar 30 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1.gitcd9b7d3
+- Release 1.6.1
+- Remove BReq nodejs, libgnome-keyring-devel, git-core
+- Replace Req http-parser to desktop-file-utils
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-3.git01c7777
 - Fixes not found mime.types file
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.6.0-2.git01c7777
