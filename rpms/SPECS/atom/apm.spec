@@ -11,12 +11,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 24807ff4fdc5db95e40695e3d8a66a70fd0cfd11
+%global _commit def66c925db5282c690699de329b36d9f58d8c88
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.9.1
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.9.2
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -26,14 +26,10 @@ Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.
 Patch0:  use-system-nodejs.patch
 Patch1:  get-electron-version.patch
 
-BuildRequires: npm
-BuildRequires: node-gyp
+BuildRequires: npm, git
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
-BuildRequires: git-core
-Requires: libgnome-keyring
-Requires: git-core
-Requires: python2
+Requires: git, python2
 
 %description
 apm - Atom Package Manager
@@ -97,6 +93,10 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Wed Mar 30 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-1.gitdef66c9
+- Release 1.9.2
+- Remove BReq node-gyp, Req libgnome-keyring
+- Replace BReq git-core to git
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.1-2.git24807ff
 - Fixed fc24 running error: undefined symbol node_module_register
   https://github.com/atom/atom/issues/3385
