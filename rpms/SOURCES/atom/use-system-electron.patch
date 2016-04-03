@@ -46,7 +46,7 @@ index 4667caa..9222d9c 100644
 -  "electronVersion": "0.34.5",
    "dependencies": {
      "async": "0.2.6",
-     "atom-keymap": "^6.2.0",
+     "atom-keymap": "6.3.2",
 diff --git a/src/module-cache.coffee b/src/module-cache.coffee
 index e9245cf..e47b508 100644
 --- a/src/module-cache.coffee

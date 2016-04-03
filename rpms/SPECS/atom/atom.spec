@@ -14,11 +14,11 @@
 %global electron_ver 0.36.11
 
 # commit
-%global _commit cd9b7d3180f779040d38a74fd037def18f27d87d
+%global _commit 42d7c406425126f22b9931d44c3052419a802a9d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.6.1
+Version: 1.6.2
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
@@ -184,6 +184,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sun Apr  3 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-1.git42d7c40
+- Release 1.6.2
 * Wed Mar 30 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1.gitcd9b7d3
 - Release 1.6.1
 - Remove BReq nodejs, libgnome-keyring-devel, git-core
