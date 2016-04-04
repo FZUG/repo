@@ -16,7 +16,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -30,6 +30,7 @@ BuildRequires: npm, git
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
 Requires: git, python2
+Requires: node-gyp
 
 %description
 apm - Atom Package Manager
@@ -93,6 +94,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Tue Apr  5 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-2.gitdef66c9
+- Add Req node-gyp
 * Wed Mar 30 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-1.gitdef66c9
 - Release 1.9.2
 - Remove BReq node-gyp, Req libgnome-keyring
