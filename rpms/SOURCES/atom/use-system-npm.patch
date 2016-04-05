@@ -1,0 +1,191 @@
+--- a/package.json
++++ b/package.json
+@@ -31,7 +31,6 @@
+     "keytar": "^3.0",
+     "mv": "2.0.0",
+     "ncp": "~0.5.1",
+-    "npm": "2.13.3",
+     "open": "0.0.4",
+     "plist": "git+https://github.com/nathansobo/node-plist.git",
+     "q": "~0.9.7",
+--- a/src/apm-cli.coffee
++++ b/src/apm-cli.coffee
+@@ -95,7 +95,7 @@ showHelp = (options) ->
+ 
+ printVersions = (args, callback) ->
+   apmVersion =  require('../package.json').version ? ''
+-  npmVersion = require('npm/package.json').version ? ''
++  npmVersion = require('../../npm/package.json').version ? ''
+   nodeVersion = process.versions.node ? ''
+ 
+   getPythonVersion (pythonVersion) ->
+--- a/src/apm.coffee
++++ b/src/apm.coffee
+@@ -2,7 +2,7 @@ child_process = require 'child_process'
+ fs = require './fs'
+ path = require 'path'
+ npm = require 'npm'
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ 
+ module.exports =
+   getHomeDirectory: ->
+--- a/src/clean.coffee
++++ b/src/clean.coffee
+@@ -14,7 +14,7 @@ class Clean extends Command
+   @commandNames: ['clean']
+ 
+   constructor: ->
+-    @atomNpmPath = require.resolve('npm/bin/npm-cli')
++    @atomNpmPath = require.resolve('/bin/npm')
+ 
+   getDependencies: (modulePath, allDependencies) ->
+     try
+--- a/src/command.coffee
++++ b/src/command.coffee
+@@ -1,7 +1,7 @@
+ fs = require 'fs'
+ path = require 'path'
+ _ = require 'underscore-plus'
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ config = require './apm'
+ git = require './git'
+ 
+--- a/src/config.coffee
++++ b/src/config.coffee
+@@ -11,7 +11,7 @@ class Config extends Command
+   constructor: ->
+     atomDirectory = apm.getAtomDirectory()
+     @atomNodeDirectory = path.join(atomDirectory, '.node-gyp')
+-    @atomNpmPath = require.resolve('npm/bin/npm-cli')
++    @atomNpmPath = require.resolve('/bin/npm')
+ 
+   parseOptions: (argv) ->
+     options = yargs(argv).wrap(100)
+--- a/src/dedupe.coffee
++++ b/src/dedupe.coffee
+@@ -16,8 +16,8 @@ class Dedupe extends Command
+     @atomDirectory = config.getAtomDirectory()
+     @atomPackagesDirectory = path.join(@atomDirectory, 'packages')
+     @atomNodeDirectory = path.join(@atomDirectory, '.node-gyp')
+-    @atomNpmPath = require.resolve('npm/bin/npm-cli')
+-    @atomNodeGypPath = require.resolve('npm/node_modules/node-gyp/bin/node-gyp')
++    @atomNpmPath = require.resolve('/bin/npm')
++    @atomNodeGypPath = require.resolve('/bin/node-gyp')
+ 
+   parseOptions: (argv) ->
+     options = yargs(argv).wrap(100)
+--- a/src/deprecated-packages.coffee
++++ b/src/deprecated-packages.coffee
+@@ -1,4 +1,4 @@
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ deprecatedPackages = null
+ 
+ exports.isDeprecatedPackage = (name, version) ->
+--- a/src/fs.coffee
++++ b/src/fs.coffee
+@@ -1,7 +1,7 @@
+ _ = require 'underscore-plus'
+ fs = require 'fs-plus'
+ ncp = require 'ncp'
+-rm = require 'npm/node_modules/rimraf'
++rm = require 'rimraf'
+ wrench = require 'wrench'
+ 
+ fsAdditions =
+--- a/src/install.coffee
++++ b/src/install.coffee
+@@ -6,7 +6,7 @@ async = require 'async'
+ CSON = require 'season'
+ yargs = require 'yargs'
+ Git = require 'git-utils'
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ temp = require 'temp'
+ hostedGitInfo = require 'hosted-git-info'
+ 
+@@ -25,8 +25,8 @@ class Install extends Command
+     @atomDirectory = config.getAtomDirectory()
+     @atomPackagesDirectory = path.join(@atomDirectory, 'packages')
+     @atomNodeDirectory = path.join(@atomDirectory, '.node-gyp')
+-    @atomNpmPath = require.resolve('npm/bin/npm-cli')
+-    @atomNodeGypPath = require.resolve('npm/node_modules/node-gyp/bin/node-gyp')
++    @atomNpmPath = require.resolve('/bin/npm')
++    @atomNodeGypPath = require.resolve('/bin/node-gyp')
+ 
+   parseOptions: (argv) ->
+     options = yargs(argv).wrap(100)
+--- a/src/package-converter.coffee
++++ b/src/package-converter.coffee
+@@ -6,7 +6,7 @@ _ = require 'underscore-plus'
+ CSON = require 'season'
+ plist = require 'plist'
+ {ScopeSelector} = require 'first-mate'
+-tar = require 'npm/node_modules/tar'
++tar = require 'tar'
+ temp = require 'temp'
+ 
+ fs = require './fs'
+--- a/src/publish.coffee
++++ b/src/publish.coffee
+@@ -3,7 +3,7 @@ url = require 'url'
+ 
+ yargs = require 'yargs'
+ Git = require 'git-utils'
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ 
+ fs = require './fs'
+ config = require './apm'
+@@ -18,7 +18,7 @@ class Publish extends Command
+ 
+   constructor: ->
+     @userConfigPath = config.getUserConfigPath()
+-    @atomNpmPath = require.resolve('npm/bin/npm-cli')
++    @atomNpmPath = require.resolve('/bin/npm')
+ 
+   parseOptions: (argv) ->
+     options = yargs(argv).wrap(100)
+--- a/src/rebuild.coffee
++++ b/src/rebuild.coffee
+@@ -13,7 +13,7 @@ class Rebuild extends Command
+ 
+   constructor: ->
+     @atomNodeDirectory = path.join(config.getAtomDirectory(), '.node-gyp')
+-    @atomNpmPath = require.resolve('npm/bin/npm-cli')
++    @atomNpmPath = require.resolve('/bin/npm')
+ 
+   parseOptions: (argv) ->
+     options = yargs(argv).wrap(100)
+--- a/src/request.coffee
++++ b/src/request.coffee
+@@ -1,5 +1,5 @@
+ npm = require 'npm'
+-request = require 'npm/node_modules/request'
++request = require 'request'
+ 
+ config = require './apm'
+ 
+--- a/src/upgrade.coffee
++++ b/src/upgrade.coffee
+@@ -4,7 +4,7 @@ _ = require 'underscore-plus'
+ async = require 'async'
+ yargs = require 'yargs'
+ read = require 'read'
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ Git = require 'git-utils'
+ 
+ Command = require './command'
+--- a/src/view.coffee
++++ b/src/view.coffee
+@@ -1,6 +1,6 @@
+ _ = require 'underscore-plus'
+ yargs = require 'yargs'
+-semver = require 'npm/node_modules/semver'
++semver = require 'semver'
+ 
+ Command = require './command'
+ config = require './apm'

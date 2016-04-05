@@ -1,5 +1,6 @@
 # build Atom and Electron packages: https://github.com/tensor5/arch-atom
 # RPM spec: http://pkgs.fedoraproject.org/cgit/rpms/?q=nodejs
+# https://fedoraproject.org/wiki/Packaging:Node.js
 %{?nodejs_find_provides_and_requires}
 %global debug_package %{nil}
 %global _hardened_build 1
@@ -16,20 +17,23 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
 License: MIT
 URL:     https://github.com/atom/apm/
 Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+
 Patch0:  use-system-nodejs.patch
 Patch1:  get-electron-version.patch
+Patch2:  use-system-npm.patch
 
 BuildRequires: npm, git
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
-Requires: git, python2
+Requires: npm, git, python2
+# In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
 Requires: node-gyp
 
 %description
@@ -41,6 +45,7 @@ Discover and install Atom packages powered by https://atom.io
 sed -i 's|<lib>|%{_lib}|' %{P:1}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # Fix location of Atom app
 sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
@@ -56,7 +61,7 @@ npm install --loglevel info -g --prefix build/usr
 
 %install
 cp -pr build/. %{buildroot}
-rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/{node_modules,script}
+rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/{node_modules,script,src}
 
 # Copy system node binary
 cp -p %{_bindir}/node %{buildroot}%{nodejs_sitelib}/atom-package-manager/bin
@@ -94,6 +99,9 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Tue Apr  5 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-3.gitdef66c9
+- Add Req npm
+- Use system npm
 * Tue Apr  5 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-2.gitdef66c9
 - Add Req node-gyp
 * Wed Mar 30 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-1.gitdef66c9
