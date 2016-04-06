@@ -11,7 +11,7 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 0.36.11
+%global electron_ver 0.37.4
 
 # commit
 %global _commit 42d7c406425126f22b9931d44c3052419a802a9d
@@ -19,7 +19,7 @@
 
 Name:    atom
 Version: 1.6.2
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -62,6 +62,9 @@ sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 
+# Set CSP header to allow load images.
+sed -i '/meta/s|ent="|ent="img-src * data:; |' static/index.html
+
 %build
 # Hardened package
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -74,13 +77,14 @@ export ATOM_RESOURCE_PATH=`pwd`
 # If unset, ~/.atom/.node-gyp/.atom/.npm is used
 ## https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
 export npm_config_cache="${HOME}/.atom/.npm"
-export npm_config_disturl="https://atom.io/download/atom-shell"
-export npm_config_target="%{electron_ver}"
+npm_config_disturl="https://atom.io/download/atom-shell"
+npm_config_target="%{electron_ver}"
 #export npm_config_target_arch="x64|ia32"
 export npm_config_runtime="electron"
 # The npm_config_target is no effect, set ATOM_NODE_VERSION
 ## https://github.com/atom/apm/blob/master/src/command.coffee
 export ATOM_ELECTRON_VERSION="%{electron_ver}"
+export ATOM_ELECTRON_URL="$npm_config_disturl"
 
 _packagesToDedupe=(
     'abbrev'
@@ -184,6 +188,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-2.git42d7c40
+- Rebuild for electron 0.37.4
+- Set CSP header to allow load images
+- Use ATOM_ELECTRON_URL instead of npm_config_disturl
 * Sun Apr  3 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-1.git42d7c40
 - Release 1.6.2
 * Wed Mar 30 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1.gitcd9b7d3
