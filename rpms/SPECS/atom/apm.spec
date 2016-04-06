@@ -10,6 +10,7 @@
 
 %global project apm
 %global repo %{project}
+%global node_ver v4
 
 # commit
 %global _commit def66c925db5282c690699de329b36d9f58d8c88
@@ -17,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 3.git%{_shortcommit}%{?dist}
+Release: 4.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -45,7 +46,9 @@ Discover and install Atom packages powered by https://atom.io
 sed -i 's|<lib>|%{_lib}|' %{P:1}
 %patch0 -p1
 %patch1 -p1
+%if 0%{?fedora} > 23
 %patch2 -p1
+%endif
 
 # Fix location of Atom app
 sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
@@ -56,17 +59,27 @@ sed -i '/download-node/d' package.json
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
+
+# Update node
+# In electron 0.37.4, some modules need to be build using node 4.x
+%if 0%{?fedora} < 24 || 0%{?rhel}
+git clone https://github.com/creationix/nvm.git .nvm
+source .nvm/nvm.sh
+nvm install %{node_ver}
+nvm use %{node_ver}
+%endif
+
 npm install --loglevel info
 npm install --loglevel info -g --prefix build/usr
+
+# Copy system node binary
+cp -p "`which node`" build%{nodejs_sitelib}/atom-package-manager/bin
 
 %install
 cp -pr build/. %{buildroot}
 rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/{node_modules,script,src}
 
-# Copy system node binary
-cp -p %{_bindir}/node %{buildroot}%{nodejs_sitelib}/atom-package-manager/bin
-
-pushd build/%{nodejs_sitelib}/atom-package-manager
+pushd build%{nodejs_sitelib}/atom-package-manager
 for ext in js json node gypi; do
     find node_modules -regextype posix-extended \
       -iname "*.${ext}" \
@@ -99,6 +112,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-4.gitdef66c9
+- Use node 4.x to build native modules for electron 0.37.4
 * Tue Apr  5 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-3.gitdef66c9
 - Add Req npm
 - Use system npm

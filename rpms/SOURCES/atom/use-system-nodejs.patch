@@ -5,7 +5,7 @@
  binDir=`pwd -P`
  builtin cd "$initialCwd"
 -"$binDir/$nodeBin" --harmony_collections "$binDir/../lib/cli.js" "$@"
-+nodeVer=`node -v`
++nodeVer=`$binDir/node -v`
 +if [[ -x "$binDir/$nodeBin" && "${nodeVer:1:4}" == '0.10' ]]; then
 +    "$binDir/$nodeBin" --harmony_collections "$binDir/../lib/cli.js" "$@"
 +else
