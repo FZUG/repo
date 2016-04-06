@@ -6,16 +6,16 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 0.36.11
-%global node_ver 0.12
+%global electron_ver 0.37.4
+%global node_ver v4
 
 # commit
-%global _commit 5b5f4db87c10345b9d5c8d0bed745bcad4533135
+%global _commit 0787cde294d5eadf12dfd1ad38f2996241021f0c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.10
-Release: 3%{?dist}
+Version: 0.10.14
+Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -25,9 +25,9 @@ Source0: https://github.com/Microsoft/vscode/archive/%{_commit}/%{repo}-%{_short
 # https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
 Source1: about.json
 
-BuildRequires: npm, node-gyp
-BuildRequires: python, make, libX11-devel
-BuildRequires: desktop-file-utils, git
+BuildRequires: npm, node-gyp, git
+BuildRequires: python, libX11-devel
+BuildRequires: desktop-file-utils
 Requires: electron
 
 %description
@@ -38,13 +38,23 @@ Requires: electron
 
 %prep
 %setup -q -n %{repo}-%{_commit}
-# https://github.com/Microsoft/vscode/pull/2559
-sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
-sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
 git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
 nvm install %{node_ver}
 npm config set python=`which python2`
+
+# https://github.com/Microsoft/vscode/pull/2559
+sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
+
+# Do not download electron
+sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
+
+# Fix build oniguruma native module for electron 0.37.4
+sed -E -i '/(version|resolve)/s|2.0.9|2.2.0|' npm-shrinkwrap.json
+
+# Fix crash by remove value of aiConfig for electron 0.37.4
+# https://github.com/electron/electron/issues/4299
+sed -i '/[Kk]ey/s|:.*"|: ""|' %{S:1}
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -122,12 +132,9 @@ for ext in js json node; do
     ! -path '*example*' \
     ! -path '*obj.target*' \
     -exec sh -c "strip '{}' &>/dev/null ||:" \; \
-    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \; \
-    -exec echo '%%{_libdir}/%{name}/node_modules/{}' >> \
-    %{_builddir}/%{repo}-%{_commit}/node.file-list \;
+    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \;
 done
 popd
-sort -u -o node.file-list node.file-list
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -143,7 +150,7 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
-%files -f node.file-list
+%files
 %defattr(-,root,root,-)
 %doc README.md ThirdPartyNotices.txt
 %license LICENSE.txt
@@ -153,6 +160,13 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 0.10.14-1
+- Release 0.10.14 (insiders)
+- Build test for electron 0.37.4, but running crash
+- Use node 4.x to build native module
+- Update nan 2.2.0, fixes oniguruma native module build error
+- Fix crash by remove value of aiConfig
+  https://github.com/electron/electron/issues/4299
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-3
 - Rebuild for electron 0.36.11
 * Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-2
