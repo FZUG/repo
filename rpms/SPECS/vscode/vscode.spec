@@ -6,8 +6,8 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 0.37.4
-%global node_ver v4
+%global electron_ver 0.37.5
+%global node_ver 0.12
 
 # commit
 %global _commit 0787cde294d5eadf12dfd1ad38f2996241021f0c
@@ -15,7 +15,7 @@
 
 Name:    vscode
 Version: 0.10.14
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -54,7 +54,7 @@ sed -E -i '/(version|resolve)/s|2.0.9|2.2.0|' npm-shrinkwrap.json
 
 # Fix crash by remove value of aiConfig for electron 0.37.4
 # https://github.com/electron/electron/issues/4299
-sed -i '/[Kk]ey/s|:.*"|: ""|' %{S:1}
+#sed -i '/[Kk]ey/s|:.*"|: ""|' %{S:1}
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -123,16 +123,16 @@ sed -i '2s|:.*,$|: "VSCode",|' \
     %{buildroot}%{_libdir}/%{name}/package.json
 
 # find all *.js files and generate node.file-list
-pushd ../VSCode-linux-*/node_modules
+pushd ../VSCode-linux-*/
 for ext in js json node; do
-    find -iname "*.${ext}" \
+    find node_modules -iname "*.${ext}" \
     ! -path '*doc*' \
     ! -path '*test*' \
     ! -path '*tools*' \
     ! -path '*example*' \
     ! -path '*obj.target*' \
     -exec sh -c "strip '{}' &>/dev/null ||:" \; \
-    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/node_modules/{}' \;
+    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/{}' \;
 done
 popd
 
@@ -160,6 +160,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 0.10.14-2
+- Build test for electron 0.37.5
+- Use node 0.12 to build native module
 * Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 0.10.14-1
 - Release 0.10.14 (insiders)
 - Build test for electron 0.37.4, but running crash
