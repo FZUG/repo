@@ -11,7 +11,7 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 0.37.4
+%global electron_ver 0.37.5
 
 # commit
 %global _commit 42d7c406425126f22b9931d44c3052419a802a9d
@@ -19,7 +19,7 @@
 
 Name:    atom
 Version: 1.6.2
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -73,7 +73,6 @@ export CXXFLAGS="%{optflags} -fPIC -pie"
 # Build package
 node-gyp -v; node -v; npm -v; apm -v
 ## https://github.com/atom/atom/blob/master/script/bootstrap
-export ATOM_RESOURCE_PATH=`pwd`
 # If unset, ~/.atom/.node-gyp/.atom/.npm is used
 ## https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
 export npm_config_cache="${HOME}/.atom/.npm"
@@ -85,6 +84,8 @@ export npm_config_runtime="electron"
 ## https://github.com/atom/apm/blob/master/src/command.coffee
 export ATOM_ELECTRON_VERSION="%{electron_ver}"
 export ATOM_ELECTRON_URL="$npm_config_disturl"
+export ATOM_RESOURCE_PATH=`pwd`
+export ATOM_HOME="$npm_config_cache"
 
 _packagesToDedupe=(
     'abbrev'
@@ -188,6 +189,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-3.git42d7c40
+- Rebuild for electron 0.37.5
 * Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-2.git42d7c40
 - Rebuild for electron 0.37.4
 - Set CSP header to allow load images
