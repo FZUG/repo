@@ -10,7 +10,7 @@
 
 Name:    lighttable
 Version: 0.8.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: LightTable - An open source code editor
 
 Group:   Development/Tools
@@ -39,6 +39,11 @@ anything a Chromium browser can.
 # Build the core cljs
 rm -f deploy/core/node_modules/lighttable/bootstrap.js
 lein cljsbuild once app
+
+# Fixes Invalid match arg /\./ for electron 0.37.x
+#https://github.com/lazerwalker/clojurescript-koans/issues/13#issuecomment-184464285
+sed -i '/b.hasOwnProperty/s@))@))||true@' \
+    deploy/core/node_modules/lighttable/bootstrap.js
 
 # Fetch plugins
 PLUGINS=(
@@ -147,5 +152,7 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-2
+- Fixes Invalid match arg /\./ for electron 0.37.x
 * Mon Mar 28 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-1
 - Initial build
