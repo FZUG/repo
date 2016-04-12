@@ -1,5 +1,3 @@
-diff --git a/build/Gruntfile.coffee b/build/Gruntfile.coffee
-index e348093..e846b82 100644
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
 @@ -400,7 +400,7 @@ module.exports = (grunt) ->
@@ -11,8 +9,6 @@ index e348093..e846b82 100644
    defaultTasks.push 'mkdmg' if process.platform is 'darwin'
    defaultTasks.push 'install' unless process.platform is 'linux'
    grunt.registerTask('default', defaultTasks)
-diff --git a/build/tasks/copy-files-for-build-task.coffee b/build/tasks/copy-files-for-build-task.coffee
-index b0bb6f3..a686896 100644
 --- a/build/tasks/copy-files-for-build-task.coffee
 +++ b/build/tasks/copy-files-for-build-task.coffee
 @@ -42,9 +42,6 @@ module.exports = (grunt) ->
@@ -42,8 +38,6 @@ index b0bb6f3..a686896 100644
  
      if process.platform is 'darwin'
        grunt.file.recurse path.join('build', 'resources', 'mac'), (sourcePath, rootDirectory, subDirectory='', filename) ->
-diff --git a/src/package-manager.coffee b/src/package-manager.coffee
-index 1be4f5b..75b5e7c 100644
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
 @@ -150,6 +150,8 @@ class PackageManager

@@ -7,8 +7,7 @@
 
 %global project N1
 %global repo %{project}
-%global npm_ver 2.13.3
-%global electron_ver 0.36.11
+%global electron_ver 0.37.5
 
 # commit
 %global _commit d41e72c650e8b45471580b46c06449de8a7eed92
@@ -16,7 +15,7 @@
 
 Name:    n1
 Version: 0.4.19
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
 Group:   Applications/System
@@ -28,9 +27,7 @@ Patch0:  n1-use-system-apm.patch
 Patch1:  n1-fix-renderer-path.patch
 
 BuildRequires: npm
-BuildRequires: git-core
 BuildRequires: node-gyp
-BuildRequires: nodejs >= 0.10.0
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
 BuildRequires: nodejs-atom-package-manager
@@ -62,17 +59,17 @@ node-gyp -v; node -v; npm -v; apm -v
 ## https://github.com/nylas/N1/blob/master/script/bootstrap
 # If unset, ~/.atom/.node-gyp/.atom/.npm is used
 ## https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
-npm_config_cache="${HOME}/.nylas/"
+npm_config_cache="${HOME}/.nylas"
 npm_config_disturl="https://atom.io/download/atom-shell"
 npm_config_target="%{electron_ver}"
-#export npm_config_target_arch="x64|ia32"
+#npm_config_target_arch="x64|ia32"
 npm_config_runtime="electron"
 # The npm_config_target is no effect, set ATOM_NODE_VERSION
 ## https://github.com/atom/apm/blob/master/src/command.coffee
 ATOM_ELECTRON_VERSION="%{electron_ver}"
 ATOM_ELECTRON_URL="$npm_config_disturl"
 ATOM_RESOURCE_PATH="`pwd`"
-ATOM_HOME="${HOME}/.nylas"
+ATOM_HOME="$npm_config_cache"
 
 _packagesToDedupe=(
     'fs-plus'
@@ -94,12 +91,8 @@ script/grunt add-nylas-build-resources
 # 2.2 Cleaning apm
 # ../atom-package-manager/bin/apm clean
 
-export npm_config_cache  npm_config_disturl \
-       npm_config_target npm_config_runtime \
-       ATOM_ELECTRON_VERSION ATOM_ELECTRON_URL \
+export ATOM_ELECTRON_VERSION ATOM_ELECTRON_URL \
        ATOM_RESOURCE_PATH ATOM_HOME
-export NPM="`pwd`/build/node_modules/.bin/npm"
-export nodeGyp="`pwd`/build/node_modules/npm/node_modules/.bin/node-gyp"
 
 # 3. build internal package
 pushd internal_packages
@@ -125,11 +118,11 @@ popd
 #popd
 
 # 6. Building sqlite3
-$NPM install https://github.com/bengotow/node-sqlite3/archive/bengotow/usleep.tar.gz \
+npm install https://github.com/bengotow/node-sqlite3/archive/bengotow/usleep.tar.gz \
   --ignore-scripts --loglevel error && pushd node_modules/sqlite3 && \
-$nodeGyp configure rebuild --target="%{electron_ver}" --target_platform=linux \
+node-gyp configure rebuild --target="%{electron_ver}" --target_platform=linux \
   --arch="%{arch}" --dist-url="$npm_config_disturl" --module_name=node_sqlite3 \
-  --module_path="../lib/binding/node-v47-linux-%{arch}" && popd
+  --module_path="../lib/binding/electron-v0.37-linux-%{arch}" && popd
 
 # 7. Packaging files
 script/grunt --build-dir='n1-build'
@@ -225,6 +218,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-3.gitd41e72c
+- Rebuild for electron 0.37.5
+- Remove BReq git-core nodejs
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-2.gitd41e72c
 - Fixes keytar build error, require libgnome-keyring-devel
 - Fixes no found mime.types file
