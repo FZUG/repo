@@ -10,12 +10,12 @@
 %global node_ver 0.12
 
 # commit
-%global _commit 0787cde294d5eadf12dfd1ad38f2996241021f0c
+%global _commit 67567498285c2081312077cc24370d97676fc20a
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.14
-Release: 2%{?dist}
+Version: 0.10.15
+Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -55,6 +55,9 @@ sed -E -i '/(version|resolve)/s|2.0.9|2.2.0|' npm-shrinkwrap.json
 # Fix crash by remove value of aiConfig for electron 0.37.4
 # https://github.com/electron/electron/issues/4299
 #sed -i '/[Kk]ey/s|:.*"|: ""|' %{S:1}
+
+# Use gulp-tsb 1.10.3 for node 0.12
+sed -i '/tsb/s|"^.*"|"1.10.3"|' package.json
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -160,6 +163,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.10.15-1
+- Release 0.10.15 (insiders)
+- Use gulp-tsb 1.10.3 for node 0.12
 * Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 0.10.14-2
 - Build test for electron 0.37.5
 - Use node 0.12 to build native module
