@@ -9,18 +9,18 @@
 %global repo %{project}
 
 # commit
-%global _commit ead94b7b1f1286e5ce06fd6cfa9b4218c3c9ab0f
+%global _commit 55b8e9aa440057705c12169c3d80af5e0a40f95d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.36.11
+Version: 0.37.5
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
 Group:   Applications/Editors
 License: MIT
-URL:     https://github.com/atom/electron
-#Source0: https://github.com/atom/electron/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
+URL:     https://github.com/electron/electron
+#Source0: https://github.com/electron/electron/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
 
 BuildRequires: wget
 #BuildRequires: node-gyp
@@ -40,7 +40,7 @@ Visit http://electron.atom.io/ to learn more.
 #%%setup -q -n %%repo-%%{_commit}
 mkdir %{name}_build
 pushd %{name}_build
-wget https://github.com/atom/electron/releases/download/v%{version}/%{name}-v%{version}-linux-%{arch}.zip
+wget https://github.com/electron/electron/releases/download/v%{version}/%{name}-v%{version}-linux-%{arch}.zip
 unzip %{name}-v%{version}-linux-%{arch}.zip
 
 %build
@@ -62,6 +62,8 @@ ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
 %{_libdir}/%{name}/
 
 %changelog
+* Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.37.5-1.git55b8e9a
+- Release 0.37.5
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.36.11-1.gitead94b7
 - Release 0.36.11
 * Sat Mar  5 2016 mosquito <sensor.wen@gmail.com> - 0.36.10-1.git3397845
