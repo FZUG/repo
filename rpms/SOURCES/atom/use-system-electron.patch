@@ -37,7 +37,7 @@
      "url": "https://github.com/atom/atom/issues"
    },
    "license": "MIT",
--  "electronVersion": "0.34.5",
+-  "electronVersion": "0.36.8",
    "dependencies": {
      "async": "0.2.6",
      "atom-keymap": "6.3.2",
@@ -68,12 +68,12 @@
    rendererRoot = path.join(atomShellRoot, 'renderer', 'api', 'lib')
 +  if not fs.existsSync(rendererRoot)
 +    rendererRoot = path.join(atomShellRoot, 'renderer', 'api')
-   rendererBuiltins = ['ipc', 'remote']
+   rendererBuiltins = ['ipc-renderer', 'remote']
    for builtin in rendererBuiltins
      cache.builtins[builtin] = path.join(rendererRoot, "#{builtin}.js")
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -511,7 +511,7 @@
+@@ -524,7 +524,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode

@@ -3,6 +3,7 @@
 # Error: Module version mismatch. Expected 47, got 43.
 # see https://github.com/tensor5/arch-atom/issues/3
 %{?nodejs_find_provides_and_requires}
+%global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
 %global debug_package %{nil}
 %global _hardened_build 1
 %global __provides_exclude_from %{_libdir}/%{name}/node_modules
@@ -14,12 +15,12 @@
 %global electron_ver 0.37.5
 
 # commit
-%global _commit 42d7c406425126f22b9931d44c3052419a802a9d
+%global _commit 1e7dc02da76a0f9af44603371ccfe3c47ff139bb
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.6.2
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.7.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -33,7 +34,7 @@ Patch2:  use-system-apm.patch
 Patch3:  use-system-electron.patch
 
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
-BuildRequires: npm
+BuildRequires: npm, wget
 BuildRequires: node-gyp
 BuildRequires: nodejs-packaging
 BuildRequires: nodejs-atom-package-manager
@@ -65,6 +66,9 @@ sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 # Set CSP header to allow load images.
 sed -i '/meta/s|ent="|ent="img-src * data:; |' static/index.html
 
+# Update nodegit 0.12.2 for electron 0.37.5
+sed -i '/nodegit/s|12.0|12.2|' package.json
+
 %build
 # Hardened package
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -75,11 +79,11 @@ node-gyp -v; node -v; npm -v; apm -v
 ## https://github.com/atom/atom/blob/master/script/bootstrap
 # If unset, ~/.atom/.node-gyp/.atom/.npm is used
 ## https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
-export npm_config_cache="${HOME}/.atom/.npm"
+npm_config_cache="${HOME}/.atom/.npm"
 npm_config_disturl="https://atom.io/download/atom-shell"
 npm_config_target="%{electron_ver}"
 #export npm_config_target_arch="x64|ia32"
-export npm_config_runtime="electron"
+npm_config_runtime="electron"
 # The npm_config_target is no effect, set ATOM_NODE_VERSION
 ## https://github.com/atom/apm/blob/master/src/command.coffee
 export ATOM_ELECTRON_VERSION="%{electron_ver}"
@@ -112,8 +116,23 @@ _packagesToDedupe=(
     'temp'
 )
 
+# Fix nodegit build error for node 0.10
+#npm install nodegit --ignore-scripts --verbose && pushd node_modules/nodegit && \
+#npm install; cp vendor/libssh2/win32/libssh2_config.h vendor/libssh2/include && \
+#node-gyp configure rebuild --target="%{electron_ver}" --target_platform=linux \
+#  --arch="%{arch}" --dist-url="$npm_config_disturl" && popd
+nodeVer=`node -v`
+File="nodegit-v0.12.2-electron-v0.37-linux-%{arch}.tar.gz"
+URL="https://nodegit.s3.amazonaws.com/nodegit/nodegit/$File"
+if [ "${nodeVer:1:4}" == '0.10' ]; then
+    npm install nodegit --verbose
+    wget "$URL"; tar xf "$File"; rm -f "$File"
+    mkdir node_modules/nodegit/build
+    mv Release node_modules/nodegit/build
+fi
+
 # Installing packages
-apm clean
+#apm clean
 apm install --verbose
 apm dedupe ${_packagesToDedupe[@]}
 # Installing build modules
@@ -189,6 +208,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 1.7.0-1.git1e7dc02
+- Release 1.7.0
+- Update nodegit 0.12.2 for electron 0.37.5
+- Fix nodegit build error for node 0.10
 * Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-3.git42d7c40
 - Rebuild for electron 0.37.5
 * Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 1.6.2-2.git42d7c40

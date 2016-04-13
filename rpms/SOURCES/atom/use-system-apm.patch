@@ -1,6 +1,6 @@
 --- a/build/tasks/build-task.coffee
 +++ b/build/tasks/build-task.coffee
-@@ -148,10 +148,6 @@
+@@ -169,10 +169,6 @@
      cp 'src', path.join(appDir, 'src'), filter: /.+\.(cson|coffee)$/
      cp 'static', path.join(appDir, 'static')
  
@@ -13,8 +13,8 @@
      cp path.join('resources', 'app-icons', channel, 'png', '1024.png'), path.join(appDir, 'resources', 'atom.png')
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -132,12 +132,7 @@
-   getApmPath: ->
+@@ -136,12 +136,7 @@
+     return configPath if configPath
      return @apmPath if @apmPath?
  
 -    commandName = 'apm'
