@@ -10,12 +10,12 @@
 %global electron_ver 0.37.5
 
 # commit
-%global _commit d41e72c650e8b45471580b46c06449de8a7eed92
+%global _commit a22631a34e424f97be5111d21ec5f35c919c7875
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    n1
-Version: 0.4.19
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 0.4.25
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
 Group:   Applications/System
@@ -118,7 +118,7 @@ popd
 #popd
 
 # 6. Building sqlite3
-npm install https://github.com/bengotow/node-sqlite3/archive/bengotow/usleep.tar.gz \
+npm install https://github.com/bengotow/node-sqlite3/archive/bengotow/fts5.tar.gz \
   --ignore-scripts --loglevel error && pushd node_modules/sqlite3 && \
 node-gyp configure rebuild --target="%{electron_ver}" --target_platform=linux \
   --arch="%{arch}" --dist-url="$npm_config_disturl" --module_name=node_sqlite3 \
@@ -218,6 +218,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.25-1.gita22631a
+- Release 0.4.25
 * Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-3.gitd41e72c
 - Rebuild for electron 0.37.5
 - Remove BReq git-core nodejs
