@@ -6,7 +6,7 @@
  path = require 'path'
  _ = require 'underscore-plus'
  semver = require 'npm/node_modules/semver'
-@@ -78,6 +79,10 @@
+@@ -90,6 +91,10 @@
          version = @normalizeVersion(version)
          @installedAtomVersion = version if semver.valid(version)
  

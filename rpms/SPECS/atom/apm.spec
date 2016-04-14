@@ -18,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 5.git%{_shortcommit}%{?dist}
+Release: 6.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -100,6 +100,9 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri Apr 15 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-6.gitdef66c9
+- Fix only be one child in node_modules
+  https://github.com/FZUG/repo/issues/88
 * Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-5.gitdef66c9
 - Use system node for electron 0.37.5
 - Link system node for fc24+

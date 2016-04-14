@@ -10,7 +10,7 @@
      "q": "~0.9.7",
 --- a/src/apm-cli.coffee
 +++ b/src/apm-cli.coffee
-@@ -95,7 +95,7 @@ showHelp = (options) ->
+@@ -95,7 +95,7 @@
  
  printVersions = (args, callback) ->
    apmVersion =  require('../package.json').version ? ''
@@ -21,7 +21,7 @@
    getPythonVersion (pythonVersion) ->
 --- a/src/apm.coffee
 +++ b/src/apm.coffee
-@@ -2,7 +2,7 @@ child_process = require 'child_process'
+@@ -2,7 +2,7 @@
  fs = require './fs'
  path = require 'path'
  npm = require 'npm'
@@ -32,7 +32,7 @@
    getHomeDirectory: ->
 --- a/src/clean.coffee
 +++ b/src/clean.coffee
-@@ -14,7 +14,7 @@ class Clean extends Command
+@@ -14,7 +14,7 @@
    @commandNames: ['clean']
  
    constructor: ->
@@ -43,7 +43,7 @@
      try
 --- a/src/command.coffee
 +++ b/src/command.coffee
-@@ -1,7 +1,7 @@
+@@ -2,7 +2,7 @@
  fs = require 'fs'
  path = require 'path'
  _ = require 'underscore-plus'
@@ -54,7 +54,7 @@
  
 --- a/src/config.coffee
 +++ b/src/config.coffee
-@@ -11,7 +11,7 @@ class Config extends Command
+@@ -11,7 +11,7 @@
    constructor: ->
      atomDirectory = apm.getAtomDirectory()
      @atomNodeDirectory = path.join(atomDirectory, '.node-gyp')
@@ -65,7 +65,7 @@
      options = yargs(argv).wrap(100)
 --- a/src/dedupe.coffee
 +++ b/src/dedupe.coffee
-@@ -16,8 +16,8 @@ class Dedupe extends Command
+@@ -16,8 +16,8 @@
      @atomDirectory = config.getAtomDirectory()
      @atomPackagesDirectory = path.join(@atomDirectory, 'packages')
      @atomNodeDirectory = path.join(@atomDirectory, '.node-gyp')
@@ -97,7 +97,7 @@
  fsAdditions =
 --- a/src/install.coffee
 +++ b/src/install.coffee
-@@ -6,7 +6,7 @@ async = require 'async'
+@@ -6,7 +6,7 @@
  CSON = require 'season'
  yargs = require 'yargs'
  Git = require 'git-utils'
@@ -106,7 +106,7 @@
  temp = require 'temp'
  hostedGitInfo = require 'hosted-git-info'
  
-@@ -25,8 +25,8 @@ class Install extends Command
+@@ -25,8 +25,8 @@
      @atomDirectory = config.getAtomDirectory()
      @atomPackagesDirectory = path.join(@atomDirectory, 'packages')
      @atomNodeDirectory = path.join(@atomDirectory, '.node-gyp')
@@ -117,9 +117,17 @@
  
    parseOptions: (argv) ->
      options = yargs(argv).wrap(100)
+@@ -98,6 +98,7 @@
+     installArgs.push('--silent') if options.argv.silent
+     installArgs.push('--quiet') if options.argv.quiet
+     installArgs.push('--production') if options.argv.production
++    installArgs.push('--legacy-bundling')
+ 
+     if vsArgs = @getVisualStudioFlags()
+       installArgs.push(vsArgs)
 --- a/src/package-converter.coffee
 +++ b/src/package-converter.coffee
-@@ -6,7 +6,7 @@ _ = require 'underscore-plus'
+@@ -6,7 +6,7 @@
  CSON = require 'season'
  plist = require 'plist'
  {ScopeSelector} = require 'first-mate'
@@ -130,7 +138,7 @@
  fs = require './fs'
 --- a/src/publish.coffee
 +++ b/src/publish.coffee
-@@ -3,7 +3,7 @@ url = require 'url'
+@@ -3,7 +3,7 @@
  
  yargs = require 'yargs'
  Git = require 'git-utils'
@@ -139,7 +147,7 @@
  
  fs = require './fs'
  config = require './apm'
-@@ -18,7 +18,7 @@ class Publish extends Command
+@@ -18,7 +18,7 @@
  
    constructor: ->
      @userConfigPath = config.getUserConfigPath()
@@ -150,7 +158,7 @@
      options = yargs(argv).wrap(100)
 --- a/src/rebuild.coffee
 +++ b/src/rebuild.coffee
-@@ -13,7 +13,7 @@ class Rebuild extends Command
+@@ -13,7 +13,7 @@
  
    constructor: ->
      @atomNodeDirectory = path.join(config.getAtomDirectory(), '.node-gyp')
@@ -170,7 +178,7 @@
  
 --- a/src/upgrade.coffee
 +++ b/src/upgrade.coffee
-@@ -4,7 +4,7 @@ _ = require 'underscore-plus'
+@@ -4,7 +4,7 @@
  async = require 'async'
  yargs = require 'yargs'
  read = require 'read'
