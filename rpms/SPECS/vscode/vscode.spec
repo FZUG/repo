@@ -10,11 +10,11 @@
 %global node_ver 0.12
 
 # commit
-%global _commit 67567498285c2081312077cc24370d97676fc20a
+%global _commit fa6d0f03813dfb9df4589c30121e9fcffa8a8ec8
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 0.10.15
+Version: 1.0.0
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -24,6 +24,7 @@ URL:     https://github.com/Microsoft/vscode
 Source0: https://github.com/Microsoft/vscode/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
 Source1: about.json
+Patch0:  improve-i18n.patch
 
 BuildRequires: npm, node-gyp, git
 BuildRequires: python, libX11-devel
@@ -38,6 +39,7 @@ Requires: electron
 
 %prep
 %setup -q -n %{repo}-%{_commit}
+%patch0 -p1
 git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
 nvm install %{node_ver}
@@ -51,10 +53,6 @@ sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
 
 # Fix build oniguruma native module for electron 0.37.4
 sed -E -i '/(version|resolve)/s|2.0.9|2.2.0|' npm-shrinkwrap.json
-
-# Fix crash by remove value of aiConfig for electron 0.37.4
-# https://github.com/electron/electron/issues/4299
-#sed -i '/[Kk]ey/s|:.*"|: ""|' %{S:1}
 
 # Use gulp-tsb 1.10.3 for node 0.12
 sed -i '/tsb/s|"^.*"|"1.10.3"|' package.json
@@ -163,6 +161,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Thu Apr 14 2016 mosquito <sensor.wen@gmail.com> - 1.0.0-1
+- Release 1.0.0
+- Improve i18n
 * Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.10.15-1
 - Release 0.10.15 (insiders)
 - Use gulp-tsb 1.10.3 for node 0.12

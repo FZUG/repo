@@ -4,7 +4,7 @@
 	"applicationName": "vscode",
 	"dataFolderName": ".vscode",
 	"win32MutexName": "vscode",
-	"licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=533485#vscode",
+	"licenseUrl": "http://go.microsoft.com/fwlink/?LinkID=533485",
 	"darwinBundleIdentifier": "com.microsoft.VSCode",
 	"welcomePage": "http://go.microsoft.com/fwlink/?LinkId=723048",
 	"win32AppId": "{{F8A2A208-72B3-4D61-95FC-8A65D340689B}",
@@ -69,7 +69,7 @@
 		"requestFeatureUrl": "http://go.microsoft.com/fwlink/?LinkID=533482"
 	},
 	"documentationUrl": "http://go.microsoft.com/fwlink/?LinkID=533484#vscode",
-	"releaseNotesUrl": "http://go.microsoft.com/fwlink/?LinkId=724002",
+	"releaseNotesUrl": "http://go.microsoft.com/fwlink/?LinkID=533483#vscode",
 	"twitterUrl": "http://go.microsoft.com/fwlink/?LinkID=533687",
 	"requestFeatureUrl": "http://go.microsoft.com/fwlink/?LinkID=533482",
 	"reportIssueUrl": "http://go.microsoft.com/fwlink/?LinkId=534872",
