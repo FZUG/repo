@@ -7,7 +7,7 @@
 
 Name:            xorg-x11-drv-nvidia
 Epoch:           1
-Version:         364.12
+Version:         364.15
 Release:         1%{?dist}
 Summary:         NVIDIA's proprietary display driver for NVIDIA graphic cards
 Summary(zh_CN):  NVIDIA 显卡专有显示驱动
@@ -565,6 +565,9 @@ fi ||:
 %{_nvidia_libdir}/libOpenGL.so
 
 %changelog
+* Thu Apr 14 2016 mosquito <sensor.wen@gmail.com> - 1:364.15-1
+- Update to 364.15
+
 * Sun Apr  3 2016 mosquito <sensor.wen@gmail.com> - 1:364.12-1
 - Update to 364.12
 
