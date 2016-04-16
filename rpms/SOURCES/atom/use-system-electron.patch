@@ -73,7 +73,7 @@
      cache.builtins[builtin] = path.join(rendererRoot, "#{builtin}.js")
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -524,7 +524,7 @@
+@@ -526,7 +526,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
