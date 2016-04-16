@@ -18,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 6.git%{_shortcommit}%{?dist}
+Release: 7.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -29,6 +29,7 @@ Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.
 Patch0:  use-system-nodejs.patch
 Patch1:  get-electron-version.patch
 Patch2:  use-system-npm.patch
+Patch3:  fetch-local-pkgs.patch
 
 BuildRequires: npm, git
 BuildRequires: nodejs-packaging
@@ -47,6 +48,7 @@ sed -i 's|<lib>|%{_lib}|' %{P:1}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # Fix location of Atom app
 sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
@@ -100,6 +102,9 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Sat Apr 16 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-7.gitdef66c9
+- Fix fetch local packages failed
+  https://github.com/FZUG/repo/issues/88
 * Fri Apr 15 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-6.gitdef66c9
 - Fix only be one child in node_modules
   https://github.com/FZUG/repo/issues/88
