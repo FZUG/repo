@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 2b06d00a53f7dad24018ad348d47f0736abeb16e
+%global _commit 51946f8dbc569993270ae2bedbd96b685502295e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    freshplayerplugin
-Version: 0.3.4
+Version: 0.3.5
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
@@ -84,6 +84,8 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 0.3.5-1.git51946f8
+- Update version to 0.3.5-1.git51946f8
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.3.4-1.git2b06d00
 - Update version to 0.3.4-1.git2b06d00
 * Sun Dec  6 2015 mosquito <sensor.wen@gmail.com> - 0.3.3-1.git3c6567a
