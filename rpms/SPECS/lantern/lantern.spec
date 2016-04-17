@@ -6,10 +6,10 @@
 %global repo %{project}
 
 # commit, git rev-parse --short HEAD
-%global _commit fd97e0e047d1fd491b5739e9501419b8ea78b7dd
+%global _commit 65615be886ed283b67e6681fbf049de548aff1af
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 # git show -s --format=%ci "%%{_shortcommit}"
-%global _revision_date 2016-03-16 10:55:52 -0700
+%global _revision_date 2016-04-15 16:28:36 -0700
 %global _build_date %(date -u '+%Y%m%d.%H%M%%S')
 %global go_arch %(go env GOHOSTARCH)
 %global go_root %(go env GOROOT)
@@ -26,7 +26,7 @@ fi\
 %global with_headless 0
 
 Name:    golang-github-getlantern-lantern
-Version: 2.1.1
+Version: 2.2.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: fast, reliable and secure access to the open Internet
 Summary(zh_CN): 快速, 可靠, 安全的访问互联网的代理软件
@@ -83,7 +83,8 @@ sed -i '/kardianos/s|github.com|bitbucket.org|g' \
     src/github.com/getlantern/go-update/update.go \
     src/github.com/getlantern/go-update/check/check.go \
     src/github.com/getlantern/launcher/launcher_darwin.go \
-    src/github.com/getlantern/launcher/launcher_windows.go
+    src/github.com/getlantern/launcher/launcher_windows.go \
+    src/github.com/mitchellh/panicwrap/panicwrap.go
 %endif
 
 %build
@@ -193,6 +194,8 @@ fi
 %{_userunitdir}/%{repo}.service
 
 %changelog
+* Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 2.2.0-1.git65615be
+- Release 2.2.0
 * Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 2.1.1-1.gitfd97e0e
 - Release 2.1.1
 - Remove devel package
