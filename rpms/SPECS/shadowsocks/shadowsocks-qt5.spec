@@ -8,7 +8,7 @@
 
 Name:    shadowsocks-qt5
 Version: 2.6.1
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A cross-platform shadowsocks GUI client
 Summary(zh_CN): 跨平台 shadowsocks GUI 客户端
 
@@ -68,6 +68,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 2.6.1-2.gitba70fd1
+- Rebuild for Qt 5.6.0
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 2.6.1-1.gitba70fd1
 - Update to 2.6.1-1.gitba70fd1
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 2.6.0-1.git7ec8a63
