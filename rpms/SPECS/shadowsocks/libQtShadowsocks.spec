@@ -8,7 +8,7 @@
 
 Name:    libQtShadowsocks
 Version: 1.8.4
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A lightweight and ultra-fast shadowsocks library
 
 License: LGPLv3+
@@ -72,6 +72,8 @@ make %{?_smp_mflags}
 %{_bindir}/shadowsocks-*
 
 %changelog
+* Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-2.gitd2c76c5
+- Rebuild for botan and Qt 5.6.0
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-1.gitd2c76c5
 - Update to 1.8.4-1.gitd2c76c5
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.2-1.git3c3aa83
