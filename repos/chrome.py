@@ -160,8 +160,8 @@ skip_if_unavailable=1''']
 
 def get_deb():
     listfile = [os.path.join(rootdir, 'google-chrome.list'),
-'''deb https://dl.google.com/linux/chrome/deb/ stable main
-deb https://repo.fdzh.org/chrome/deb/ stable main''']
+'''deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main
+deb [arch=amd64] https://repo.fdzh.org/chrome/deb/ stable main''']
     output(listfile[0], listfile[1], 'w')
 
     url = 'http://dl.google.com/linux/chrome/deb/dists/stable/'
