@@ -44,7 +44,7 @@
 --- a/src/command.coffee
 +++ b/src/command.coffee
 @@ -2,7 +2,7 @@
- fs = require 'fs'
+ fs = require './fs'
  path = require 'path'
  _ = require 'underscore-plus'
 -semver = require 'npm/node_modules/semver'

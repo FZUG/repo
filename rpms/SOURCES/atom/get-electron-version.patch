@@ -2,7 +2,7 @@
 +++ b/src/command.coffee
 @@ -1,4 +1,5 @@
  child_process = require 'child_process'
-+fs = require 'fs'
++fs = require './fs'
  path = require 'path'
  _ = require 'underscore-plus'
  semver = require 'npm/node_modules/semver'

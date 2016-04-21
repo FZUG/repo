@@ -18,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 8.git%{_shortcommit}%{?dist}
+Release: 9.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -30,6 +30,7 @@ Patch0:  use-system-nodejs.patch
 Patch1:  get-electron-version.patch
 Patch2:  use-system-npm.patch
 Patch3:  fetch-local-pkgs.patch
+Patch4:  use-local-node-devel.patch
 
 BuildRequires: npm, git
 BuildRequires: nodejs-packaging
@@ -44,11 +45,12 @@ Discover and install Atom packages powered by https://atom.io
 
 %prep
 %setup -q -n %repo-%{_commit}
-sed -i 's|<lib>|%{_lib}|' %{P:1}
+sed -i 's|<lib>|%{_lib}|' %{P:1} %{P:4}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # Fix location of Atom app
 sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
@@ -105,6 +107,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Thu Apr 21 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-9.gitdef66c9
+- Use local node devel files
 * Sat Apr 16 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-8.gitdef66c9
 - Fix system arch of dedupe for fc24+
 * Sat Apr 16 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-7.gitdef66c9

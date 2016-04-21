@@ -1,0 +1,14 @@
+--- a/src/command.coffee
++++ b/src/command.coffee
+@@ -98,6 +98,11 @@
+       # TODO Remove ATOM_NODE_VERSION env var support after a couple releases
+       @electronVersion = process.env.ATOM_ELECTRON_VERSION ? process.env.ATOM_NODE_VERSION ? electronVersion ? '0.22.0'
+ 
++      electronNodeDir = path.join('/usr/<lib>/electron/node')
++      atomNodeDevDir = path.join(config.getAtomDirectory(), '.node-gyp', '.node-gyp', electronVersion)
++      if fs.existsSync(electronNodeDir) and not fs.existsSync(atomNodeDevDir)
++        fs.copySync(electronNodeDir, atomNodeDevDir)
++
+       callback()
+ 
+   getResourcePath: (callback) ->
