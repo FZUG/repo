@@ -1,0 +1,10 @@
+--- a/electron.gyp
++++ b/electron.gyp
+@@ -182,7 +182,6 @@
+                   }, {
+                     'copied_libraries': [
+                       '<(PRODUCT_DIR)/lib/libnode.so',
+-                      '<(libchromiumcontent_dir)/libffmpeg.so',
+                     ],
+                   }],
+                 ],

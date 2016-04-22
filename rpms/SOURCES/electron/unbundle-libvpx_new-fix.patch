@@ -1,0 +1,11 @@
+--- i/build/linux/unbundle/libvpx.gyp
++++ w/build/linux/unbundle/libvpx.gyp
+@@ -4,7 +4,7 @@
+ {
+   'targets': [
+     {
+-      'target_name': 'libvpx',
++      'target_name': 'libvpx_new',
+       'type': 'none',
+       'direct_dependent_settings': {
+         'cflags': [

@@ -1,0 +1,38 @@
+--- a/script/build
++++ b/script/build
+@@ -13,7 +13,7 @@
+ TARGETS = ['chromiumcontent_all']
+ COMPONENTS = ['static_library', 'shared_library', 'ffmpeg']
+ 
+-NINJA = os.path.join(VENDOR_DIR, 'depot_tools', 'ninja')
++NINJA = 'ninja-build'
+ if sys.platform == 'win32':
+   NINJA = '{0}.exe'.format(NINJA)
+ 
+--- a/script/update
++++ b/script/update
+@@ -31,13 +31,9 @@
+   if not is_source_tarball_updated(version):
+     download_source_tarball(version)
+ 
+-  if sys.platform == 'linux2':
+-    install_sysroot()
+-
+   target_arch = args.target_arch
+   return (apply_patches() or
+           copy_chromiumcontent_files() or
+-          update_clang() or
+           run_gyp(target_arch))
+ 
+ 
+--- a/script/lib/util.py
++++ b/script/lib/util.py
+@@ -6,7 +6,7 @@ import sys
+ def get_output_dir(target_arch, component):
+   # Build in "out_ffmpeg" for Chromium branding of ffmpeg.
+   if component == 'ffmpeg':
+-    return 'out_ffmpeg'
++    return 'out'
+ 
+   # Build in "out_component" for component build.
+   output_dir = 'out'

@@ -1,0 +1,41 @@
+--- a/script/bootstrap.py
++++ b/script/bootstrap.py
+@@ -43,9 +43,6 @@
+                       args.libcc_source_path, args.libcc_shared_library_path,
+                       args.libcc_static_library_path)
+ 
+-  if PLATFORM == 'linux':
+-    download_sysroot(args.target_arch)
+-
+   create_chrome_version_h()
+   touch_config_gypi()
+   run_update()
+--- a/toolchain.gypi
++++ b/toolchain.gypi
+@@ -53,10 +53,10 @@
+               'sysroot%': '<(source_root)/vendor/debian_wheezy_arm-sysroot',
+             }],
+             ['target_arch=="ia32"', {
+-              'sysroot%': '<(source_root)/vendor/debian_wheezy_i386-sysroot',
++              'sysroot%': '/',
+             }],
+             ['target_arch=="x64"', {
+-              'sysroot%': '<(source_root)/vendor/debian_wheezy_amd64-sysroot',
++              'sysroot%': '/',
+             }],
+           ],
+         },
+@@ -142,11 +142,10 @@
+         'target_conditions': [
+           ['_toolset=="target"', {
+             'cflags': [
+-              '--sysroot=<(sysroot)',
++              '',
+             ],
+             'ldflags': [
+-              '--sysroot=<(sysroot)',
+-              '<!(<(source_root)/tools/linux/sysroot_ld_path.sh <(sysroot))',
++              '',
+             ],
+           }]
+         ],

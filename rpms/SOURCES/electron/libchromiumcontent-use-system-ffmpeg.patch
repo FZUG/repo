@@ -1,0 +1,18 @@
+--- a/script/create-dist
++++ b/script/create-dist
+@@ -88,7 +88,6 @@
+     'libsystem_wrappers.a',
+     'libcdm_renderer.a',
+     'libsecurity_state.a',
+-    os.path.join('lib', 'libffmpeg.so'),
+   ],
+   'win32': [
+     'chromedriver.exe',
+@@ -293,7 +292,6 @@
+       copy_generated_sources(target_arch, component, output_dir)
+       copy_locales(target_arch, component, output_dir)
+ 
+-  copy_ffmpeg(target_arch)
+   copy_sources()
+   generate_licenses()
+ 

@@ -1,0 +1,34 @@
+--- a/script/bootstrap.py
++++ b/script/bootstrap.py
+@@ -33,9 +33,6 @@
+   if sys.platform == 'cygwin':
+     update_win32_python()
+ 
+-  if PLATFORM != 'win32':
+-    update_clang()
+-
+   update_submodules()
+   setup_python_libs()
+   update_node_modules('.')
+@@ -125,8 +122,8 @@
+     # Use prebuilt clang for building native modules.
+     llvm_dir = os.path.join(SOURCE_ROOT, 'vendor', 'llvm-build',
+                             'Release+Asserts', 'bin')
+-    env['CC']  = os.path.join(llvm_dir, 'clang')
+-    env['CXX'] = os.path.join(llvm_dir, 'clang++')
++    env['CC']  = 'clang'
++    env['CXX'] = 'clang++'
+     env['npm_config_clang'] = '1'
+   with scoped_cwd(dirname):
+     args = [NPM, 'install']
+--- a/toolchain.gypi
++++ b/toolchain.gypi
+@@ -1,7 +1,7 @@
+ {
+   'variables': {
+     # Clang stuff.
+-    'make_clang_dir%': 'vendor/llvm-build/Release+Asserts',
++    'make_clang_dir%': '/usr',
+     # Set this to true when building with Clang.
+     'clang%': 1,
+ 

@@ -1,0 +1,11 @@
+--- a/script/build.py
++++ b/script/build.py
+@@ -15,7 +15,7 @@
+ def main():
+   os.chdir(SOURCE_ROOT)
+ 
+-  ninja = os.path.join('vendor', 'depot_tools', 'ninja')
++  ninja = 'ninja-build'
+   if sys.platform == 'win32':
+     ninja += '.exe'
+ 
