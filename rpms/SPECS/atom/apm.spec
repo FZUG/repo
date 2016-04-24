@@ -18,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.2
-Release: 9.git%{_shortcommit}%{?dist}
+Release: 10.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -35,7 +35,7 @@ Patch4:  use-local-node-devel.patch
 BuildRequires: npm, git
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
-Requires: npm, git, python2
+Requires: /usr/bin/npm, git, python2
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
 Requires: node-gyp
 
@@ -107,6 +107,9 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Sun Apr 24 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-10.gitdef66c9
+- Use npm path instead of package name
+  https://github.com/FZUG/repo/issues/91
 * Thu Apr 21 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-9.gitdef66c9
 - Use local node devel files
 * Sat Apr 16 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-8.gitdef66c9
