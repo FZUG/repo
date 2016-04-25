@@ -9,11 +9,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 55b8e9aa440057705c12169c3d80af5e0a40f95d
+%global _commit c04d43ca132bea2bbd048c2bf3d347b920089438
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.37.5
+Version: 0.37.7
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -23,12 +23,6 @@ URL:     https://github.com/electron/electron
 #Source0: https://github.com/electron/electron/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
 
 BuildRequires: wget
-#BuildRequires: node-gyp
-#BuildRequires: nodejs-packaging
-#BuildRequires: libgnome-keyring-devel
-#BuildRequires: python2-devel
-#BuildRequires: git-core
-#Requires: http-parser
 
 %description
 The Electron framework lets you write cross-platform desktop applications
@@ -37,17 +31,21 @@ using JavaScript, HTML and CSS. It is based on Node.js and Chromium.
 Visit http://electron.atom.io/ to learn more.
 
 %prep
-#%%setup -q -n %%repo-%%{_commit}
 mkdir %{name}_build
 pushd %{name}_build
+
 wget https://github.com/electron/electron/releases/download/v%{version}/%{name}-v%{version}-linux-%{arch}.zip
 unzip %{name}-v%{version}-linux-%{arch}.zip
+
+wget https://atom.io/download/atom-shell/v%{version}/node-v%{version}.tar.gz
+tar xf node-v%{version}.tar.gz
 
 %build
 
 %install
 pushd %{name}_build
 
+# Install electron
 Files="content_shell.pak electron icudtl.dat libffmpeg.so libnode.so locales \
        natives_blob.bin resources snapshot_blob.bin version"
 install -d %{buildroot}%{_libdir}/%{name}
@@ -56,12 +54,19 @@ cp -a $Files %{buildroot}%{_libdir}/%{name}
 install -d %{buildroot}%{_bindir}
 ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
 
+# Install node headers
+install -d %{buildroot}%{_libdir}/%{name}/node
+cp -r node-v%{version}/* %{buildroot}%{_libdir}/%{name}/node
+
 %files
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
 
 %changelog
+* Mon Apr 25 2016 mosquito <sensor.wen@gmail.com> - 0.37.7-1.gitc04d43c
+- Release 0.37.7
+- Add node headers
 * Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.37.5-1.git55b8e9a
 - Release 0.37.5
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.36.11-1.gitead94b7
