@@ -20,11 +20,11 @@
 %global repo %{project}
 
 # commit
-%global _commit aefb67239323da516f6f4b83bbf52fa09ef2404d
+%global _commit c04d43ca132bea2bbd048c2bf3d347b920089438
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.37.6
+Version: 0.37.7
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -246,6 +246,7 @@ export srcdir="%{_builddir}"
 
 # Install electron
 cd ${srcdir}/%{name}/out/R
+strip %{name} *.so
 install -d %{buildroot}%{_libdir}/%{name}
 # namcap warning: Referenced library 'libnode.so' is an uninstalled dependency
 # Fixable by moving libnode.so to /usr/lib
@@ -280,5 +281,7 @@ echo '9' > "${_headers_dest}/installVersion"
 %{_libdir}/%{name}/
 
 %changelog
+* Mon Apr 25 2016 mosquito <sensor.wen@gmail.com> - 0.37.7-1.gitc04d43c
+- Release 0.37.7
 * Wed Apr 20 2016 mosquito <sensor.wen@gmail.com> - 0.37.6-1.gitaefb672
 - Initial package
