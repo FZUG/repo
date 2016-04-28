@@ -156,9 +156,9 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir):
     return getoutput(command)
 
 if __name__ == '__main__':
-    #outDir = os.path.join('/path', 'to', 'output')
+    rootDir = outDir
     if len(sys.argv) > 1:
-        outDir = sys.argv[1]
+        rootDir = sys.argv[1]
 
     for commit in get_commit_list():
         if commit in os.environ['GIT_PREVIOUS_COMMIT']:
@@ -178,5 +178,6 @@ if __name__ == '__main__':
 
         for rel in Releases:
             for arch in Archs:
+                outDir = os.path.join(rootDir, rel, arch)
                 print('Build fedora {} {} log:\n'.format(rel, arch),
                       build_rpm(srpmFile, release=rel, arch=arch, output=outDir))
