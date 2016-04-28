@@ -100,8 +100,8 @@ def get_sources(itemList, output=srcDir):
                 urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
                 #call(['wget', '-q', '-P', output, item])
             else:
-                for item in find_files(item):
-                    shutil.copy(item, output)
+                for src in find_files(item, 'rpms'):
+                    shutil.copy(src, output)
 
 def find_files(pattern, path=os.getcwd()):
     '''Search specify file.
