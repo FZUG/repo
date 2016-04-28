@@ -13,12 +13,12 @@
 %global repo %{project}
 
 # commit
-%global _commit def66c925db5282c690699de329b36d9f58d8c88
+%global _commit 38ff5b5902032f5c0cc0d4c6151e4ac5402fab81
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.9.2
-Release: 10.git%{_shortcommit}%{?dist}
+Version: 1.9.3
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -107,6 +107,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.3-1.git38ff5b5
+- Release 1.9.3
 * Sun Apr 24 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-10.gitdef66c9
 - Use npm path instead of package name
   https://github.com/FZUG/repo/issues/91
