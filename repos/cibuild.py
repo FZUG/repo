@@ -155,6 +155,18 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir):
         output, release, arch, srpmFile)
     return getoutput(command)
 
+def create_repo(output=outDir):
+    '''Creates metadata of rpm repository.
+
+    Args:
+        output: A string of RPM metadata output directory.
+
+    Returns:
+        Return the command running log.
+    '''
+
+    return getoutput('/bin/createrepo_c {}'.format(output))
+
 if __name__ == '__main__':
     rootDir = outDir
     if len(sys.argv) > 1:
@@ -181,3 +193,5 @@ if __name__ == '__main__':
                 outDir = os.path.join(rootDir, rel, arch)
                 print('Build fedora {} {} log:\n'.format(rel, arch),
                       build_rpm(srpmFile, release=rel, arch=arch, output=outDir))
+                print('Create metadata for fc{} - {}'.format(rel, arch),
+                      create_repo(outDir))
