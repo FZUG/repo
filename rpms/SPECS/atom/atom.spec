@@ -12,14 +12,14 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 0.37.5
+%global electron_ver 0.37.7
 
 # commit
-%global _commit 19699036cf35e1d06e80eae55408da37ca8ca0d2
+%global _commit 1b3da6b4b7ce479494f7d9444192c34ad9f3fda3
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.7.2
+Version: 1.7.3
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
@@ -62,9 +62,6 @@ sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
-
-# Set CSP header to allow load images.
-sed -i '/meta/s|ent="|ent="img-src * data:; |' static/index.html
 
 # Update nodegit 0.12.2 for electron 0.37.5
 sed -i '/nodegit/s|12.0|12.2|' package.json
@@ -208,6 +205,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.7.3-1.git1b3da6b
+- Release 1.7.3
+- Build for electron 0.37.7
+- Remove reduplicate CSP header
 * Tue Apr 19 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-1.git1969903
 - Release 1.7.2
 * Sat Apr 16 2016 mosquito <sensor.wen@gmail.com> - 1.7.1-1.git5dda304
