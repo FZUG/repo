@@ -17,6 +17,8 @@ Releases = '22', '23'
 blackList = 'electron',
 srcDir = os.path.join(os.getcwd(), 'build')
 outDir = os.path.join(os.getcwd(), 'output')
+
+getoutput('/bin/git clean -f -d -x')
 if not os.path.isdir(srcDir):
     os.mkdir(srcDir)
 
