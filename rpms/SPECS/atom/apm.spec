@@ -18,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.9.3
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -107,6 +107,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.3-2.git38ff5b5
+- Fix arguments to path.join must be strings
 * Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.3-1.git38ff5b5
 - Release 1.9.3
 * Sun Apr 24 2016 mosquito <sensor.wen@gmail.com> - 1.9.2-10.gitdef66c9
