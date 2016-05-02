@@ -13,12 +13,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 38ff5b5902032f5c0cc0d4c6151e4ac5402fab81
+%global _commit 87b4bcb678682ff9e64f8aa1e11dd8d51c1ab2c5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.9.3
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.10.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -107,6 +107,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Mon May  2 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-1.git87b4bcb
+- Release 1.10.0
 * Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.3-2.git38ff5b5
 - Fix arguments to path.join must be strings
 * Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.3-1.git38ff5b5
