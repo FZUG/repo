@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+    <title>${ENV, var="JOB_NAME"}-第${BUILD_NUMBER}次构建日志</title>
+    <style type="text/css">
+        div, p, a, li, td {-webkit-text-size-adjust: none;}
+        body {
+            width: 100%;
+            height: 100%;
+            background-color: #F3F3F3;
+            margin: 0;
+            padding: 0;
+            font-family: "Noto Sans", "Hiragino Sans GB", "PingFang SC", "Source Han Sans SC", "Source Han Sans CN", "Source Han Sans", "Ubuntu", "WenQuanYi Zen Hei", "Microsoft YaHei", "Tahoma", "Arial", "Helvetica", sans-serif;
+            font-size: 12pt;
+        }
+        html {width: 100%;}
+        .green {color: #0B610B;}
+        .blue {color: #3C6EF9;}
+        table {
+            width: 80%;
+            margin: 0 auto;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+        }
+        hr {width: 100%;}
+        textarea {
+            border: 0;
+            padding: 0;
+            width: 100%;
+            font-family: "Source Code Pro", "Courier New", sans-serif;
+        }
+    </style>
+  </head>
+<body>
+  <table cellpadding="0" cellspacing="0">
+    <tr><td>(本邮件由 CI 服务自动发送，请勿回复！)</td></tr>
+    <tr><td><h2 class="blue">构建结果 - ${BUILD_STATUS}</h2></td></tr>
+    <tr>
+      <td><br />
+        <b class="green">构建信息</b><hr />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+            <li>项目名称&nbsp;：&nbsp;${PROJECT_NAME}</li>
+            <li>构建编号&nbsp;：&nbsp;第${BUILD_NUMBER}次构建</li>
+            <li>GIT&nbsp;版本&nbsp;：&nbsp;${GIT_REVISION}</li>
+            <li>触发原因&nbsp;：&nbsp;${CAUSE}</li>
+            <li>构建日志&nbsp;：&nbsp;<a href="${BUILD_URL}console">${BUILD_URL}console</a></li>
+            <li>构建&nbsp;&nbsp;Url&nbsp;：&nbsp;<a href="${BUILD_URL}">${BUILD_URL}</a></li>
+            <li>工作目录&nbsp;：&nbsp;<a href="${PROJECT_URL}ws">${PROJECT_URL}ws</a></li>
+            <li>项目&nbsp;&nbsp;Url&nbsp;：&nbsp;<a href="${PROJECT_URL}">${PROJECT_URL}</a></li>
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b class="green">自上次成功构建的修改</b><hr />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <ul>
+          <li>历史变更记录 : <a href="${PROJECT_URL}changes">${PROJECT_URL}changes</a></li>
+        </ul> ${CHANGES_SINCE_LAST_SUCCESS,reverse=true, format="Changes for Build #%n:<br />%c<br />",showPaths=true,changesFormat="<pre>[%a]<br />%m</pre>",pathFormat="&nbsp;&nbsp;&nbsp;&nbsp;%p"}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b class="green">测试结果</b><hr />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <pre>$FAILED_TESTS</pre><br />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b class="green">构建日志 (最后 100 行)</b><hr />
+      </td>
+    </tr>
+<!--    <tr>
+      <td>
+        测试日志 (if test has ran): <a href="${PROJECT_URL}ws/TestResult/archive_logs/Log-Build-${BUILD_NUMBER}.zip">Log-Build-${BUILD_NUMBER}.zip</a>
+        <br />
+      </td>
+    </tr> -->
+    <tr>
+      <td>
+        <textarea rows="30" readonly="readonly">${BUILD_LOG, maxLines=100}</textarea>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
