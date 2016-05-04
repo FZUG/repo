@@ -157,6 +157,21 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir):
         output, release, arch, srpmFile)
     return getoutput(command)
 
+def rpm_lint(repoDir=outDir, time=10):
+    '''Check rpm files.
+
+    Args:
+        repoDir: A string of repository directory.
+        time: A integer of time(minutes).
+
+    Returns:
+        Return the check result.
+    '''
+
+    command = '/bin/find {} -name "*.rpm" -and -ctime -{} | xargs ' \
+              '/bin/rpmlint -i'.format(repoDir, round(time/60/24, 4))
+    return getoutput(command)
+
 def create_repo(output=outDir):
     '''Creates metadata of rpm repository.
 
@@ -199,3 +214,6 @@ if __name__ == '__main__':
                       build_rpm(srpmFile, release=rel, arch=arch, output=outDir))
                 print('-> Create metadata for fc{} - {}:\n'.format(rel, arch),
                       create_repo(outDir))
+
+        print('-> Check RPM for fc{} - {}:\n'.format('23', 'i386'),
+              rpm_lint(os.path.join(rootDir, '23', 'i386')))
