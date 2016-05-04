@@ -7,7 +7,7 @@
 
 Name:    fcitx-googlepinyin
 Version: 0.1.6
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: Googlepinyin module for fcitx
 Group:   System Environment/Libraries
 License: GPLv3
@@ -28,6 +28,7 @@ fcitx-googlepinyin is a Googlepinyin module for fcitx.
 
 %prep
 %setup -q -n %{repo}-%{_commit}
+sed -i '/addon/ifcitx_add_inputmethod_conf_file(googlepinyin.conf)' src/CMakeLists.txt
 
 %build
 %{cmake}
@@ -42,12 +43,15 @@ make install DESTDIR=%{buildroot} INSTALL="install -p"
 %defattr(-,root,root,-)
 %{_libdir}/fcitx/*.so
 %{_datadir}/fcitx/addon/*.conf
+%{_datadir}/fcitx/inputmethod/*.conf
 %{_datadir}/fcitx/imicon/*.png
 %{_datadir}/fcitx/skin/classic/*.png
 %{_datadir}/fcitx/skin/default/*.png
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed May  4 2016 mosquito <sensor.wen@gmail.com> 0.1.6-3
+- Fix https://github.com/FZUG/repo/issues/71
 * Mon Mar 28 2016 mosquito <sensor.wen@gmail.com> 0.1.6-2
 - Rebuild for fedora 23
 * Mon Sep 15 2014 mosquito <sensor.wen@gmail.com> 0.1.6-1
