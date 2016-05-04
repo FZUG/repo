@@ -188,12 +188,12 @@ if __name__ == '__main__':
         sourceList = get_source_list(specContent)
         get_sources(sourceList)
         srpmFile = build_srpm(specFile)
-        print('Build SRPM:', srpmFile)
+        print('-> Build SRPM:', srpmFile)
 
         for rel in Releases:
             for arch in Archs:
                 outDir = os.path.join(rootDir, rel, arch)
-                print('Build fedora {} {} log:\n'.format(rel, arch),
+                print('-> Build RPM for fc{} - {}:\n'.format(rel, arch),
                       build_rpm(srpmFile, release=rel, arch=arch, output=outDir))
-                print('Create metadata for fc{} - {}'.format(rel, arch),
+                print('-> Create metadata for fc{} - {}:\n'.format(rel, arch),
                       create_repo(outDir))
