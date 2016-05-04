@@ -173,6 +173,8 @@ if __name__ == '__main__':
     rootDir = outDir
     if len(sys.argv) > 1:
         rootDir = sys.argv[1]
+    elif 'REPO_ROOT' in os.environ:
+        rootDir = os.environ['REPO_ROOT']
 
     for commit in get_commit_list():
         if commit in os.environ['GIT_PREVIOUS_COMMIT']:
