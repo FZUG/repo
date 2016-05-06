@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.14
+Version:           1.9.15
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -88,8 +88,8 @@ Source4:           https://www.modsecurity.org/tarball/2.8.0/modsecurity-2.8.0.t
 Source5:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
 Source6:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
 Source7:           https://github.com/openresty/echo-nginx-module/archive/v%{ngx_echo_version}/echo-nginx-module-%{ngx_echo_version}.tar.gz
-Source8:           ftp://xmlsoft.org/libxml2-%{libxml2_version}.tar.gz
-Source9:           http://www.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
+Source8:           ftp://xmlsoft.org/libxml2/old/libxml2-%{libxml2_version}.tar.gz
+Source9:           http://archive.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
 Source10:          nginx.service
 Source11:          nginx.logrotate
 Source12:          nginx.conf
@@ -554,6 +554,9 @@ fi
 
 
 %changelog
+* Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.15-1.modsec_2.9.0
+- update to upstream release 1.9.15
+
 * Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.14-1.modsec_2.9.0
 - update to upstream release 1.9.14
 
