@@ -1,0 +1,14 @@
+--- a/build/npm/postinstall.js
++++ b/build/npm/postinstall.js
+@@ -15,9 +15,6 @@
+ 	'javascript'
+ ];
+ 
+-extensions.forEach(extension => {
+-	cp.spawnSync(npm, ['install'], {
+-		cwd: `extensions/${ extension }`,
+-		stdio: 'inherit'
+-	});
++extensions.forEach(function (extension) {
++    cp.execSync('npm --prefix extensions/' + extension + '/ install extensions/' + extension + '/');
+ });

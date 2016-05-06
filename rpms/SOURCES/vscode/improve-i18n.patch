@@ -1,56 +1,10 @@
---- a/i18n/chs/src/vs/editor/common/config/commonEditorConfig.i18n.json
-+++ b/i18n/chs/src/vs/editor/common/config/commonEditorConfig.i18n.json
-@@ -6,8 +6,8 @@
- {
- 	"acceptSuggestionOnEnter": "控制是否应接受建议 \"Enter\" (\"Tab\" 除外)。帮助避免“插入新行”或“接受建议”之间的歧义。",
- 	"autoClosingBrackets": "控制编辑器是否应在打开括号后自动将其关闭",
--	"cursorBlinking": "控制光标闪烁动画，接受的值为“闪烁”、“可见”和“隐藏”",
--	"cursorStyle": "控制光标样式，接受的值为“块”和“行”",
-+	"cursorBlinking": "控制光标闪烁动画，接受的值为 'blink'、'visible' 和 'hidden'",
-+	"cursorStyle": "控制光标样式，接受的值为 'block' 和 'line'",
- 	"detectIndentation": "当打开文件时，将基于文件内容检测 \"editor.tabSize\" 和 \"editor.insertSpaces\"。",
- 	"editorConfigurationTitle": "编辑器配置",
- 	"folding": "控制编辑器是否启用代码折叠",
-@@ -39,5 +39,5 @@
- 	"tabSize.errorMessage": "应为 \"number\"。注意，值“auto”已由 \"editor.detectIndentation\" 设置替换。",
- 	"wordSeparators": "执行文字相关的导航或操作时将用作文字分隔符的字符",
- 	"wrappingColumn": "控制在多少个字符后编辑器会自动换到下一行。将其设置为 0 则将打开视区宽度换行 ",
--	"wrappingIndent": "控制换行的行的缩进。可以是“无”、“相同”或“缩进”。"
-+	"wrappingIndent": "控制换行时的缩进。可选项为 'none'、'same' 或 'indent'。"
- }
-\ No newline at end of file
---- a/i18n/chs/src/vs/editor/contrib/indentation/common/indentation.i18n.json
-+++ b/i18n/chs/src/vs/editor/contrib/indentation/common/indentation.i18n.json
-@@ -6,10 +6,10 @@
- {
- 	"configuredTabSize": "已配置制表符大小",
- 	"detectIndentation": "检查内容中的缩进",
--	"indentUsingSpaces": "使用空格的缩进",
--	"indentUsingTabs": "使用 \"Tab\" 的缩进",
--	"indentationToSpaces": "将缩进转换为空白",
-+	"indentUsingSpaces": "使用空格缩进",
-+	"indentUsingTabs": "使用 \"Tab\" 缩进",
-+	"indentationToSpaces": "将缩进转换为空格",
- 	"indentationToTabs": "将缩进转换为制表符",
- 	"selectTabWidth": "选择当前文件的制表符大小",
--	"toggleRenderWhitespace": "切换呈现空格"
-+	"toggleRenderWhitespace": "切换显示空格"
- }
-\ No newline at end of file
 --- a/i18n/chs/src/vs/workbench/browser/parts/editor/editorStatus.i18n.json
 +++ b/i18n/chs/src/vs/workbench/browser/parts/editor/editorStatus.i18n.json
-@@ -36,9 +36,9 @@
- 	"selectEOL": "选择行尾序列",
- 	"selectEncoding": "选择编码",
- 	"selectLanguageMode": "选择语言模式",
--	"singleSelection": "Ln {0}，Col {1}",
--	"singleSelectionRange": "Ln {0}，Col {1} (已选择{2})",
--	"spacesSize": "空间: {0}",
-+	"singleSelection": "行 {0}，列 {1}",
-+	"singleSelectionRange": "行 {0}，列 {1} (已选择{2})",
-+	"spacesSize": "空格: {0}",
+@@ -40,5 +40,5 @@
+ 	"singleSelectionRange": "行 {0}，列 {1} (已选择{2})",
+ 	"spacesSize": "空格: {0}",
  	"tabFocusModeEnabled": "按 Tab 移动焦点",
--	"tabSize": "制表符大小: {0}"
+-	"tabSize": "制表符长度: {0}"
 +	"tabSize": "制表符: {0}"
  }
 \ No newline at end of file
@@ -67,16 +21,12 @@
  	"mClose": "关闭",
 --- a/i18n/chs/src/vs/workbench/parts/git/browser/gitActions.i18n.json
 +++ b/i18n/chs/src/vs/workbench/parts/git/browser/gitActions.i18n.json
-@@ -35,9 +35,9 @@
+@@ -36,7 +36,7 @@
  	"openFile": "打开文件",
  	"publish": "发布",
  	"publishPickMessage": "选取要将分支“{0}”发布到的远程:",
 -	"pull": "拉",
--	"pullWithRebase": "拉取(变基)",
--	"push": "推送",
-+	"pull": "拉取 (Pull)",
-+	"pullWithRebase": "拉取 (Rebase)",
-+	"push": "推送 (Push)",
++	"pull": "拉取",
+ 	"pullWithRebase": "拉取(变基)",
+ 	"push": "推送",
  	"refresh": "刷新",
- 	"stageAllChanges": "全部暂存",
- 	"stageChanges": "暂存",

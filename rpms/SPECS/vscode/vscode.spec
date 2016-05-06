@@ -2,19 +2,19 @@
 %global debug_package %{nil}
 %global _hardened_build 1
 %global __provides_exclude (npm)
-%global __requires_exclude (npm)
+%global __requires_exclude (npm|0.12)
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 0.37.5
+%global electron_ver 0.37.8
 %global node_ver 0.12
 
 # commit
-%global _commit fa6d0f03813dfb9df4589c30121e9fcffa8a8ec8
+%global _commit 1f0657703be5609d70088b0385bc27db8cc03a41
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 1.0.0
+Version: 1.1.0
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -25,6 +25,7 @@ Source0: https://github.com/Microsoft/vscode/archive/%{_commit}/%{repo}-%{_short
 # https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
 Source1: about.json
 Patch0:  improve-i18n.patch
+Patch1:  fix-post-script.patch
 
 BuildRequires: npm, node-gyp, git
 BuildRequires: python, libX11-devel
@@ -40,6 +41,7 @@ Requires: electron
 %prep
 %setup -q -n %{repo}-%{_commit}
 %patch0 -p1
+%patch1 -p1
 git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
 nvm install %{node_ver}
@@ -51,11 +53,11 @@ sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
 # Do not download electron
 sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
 
-# Fix build oniguruma native module for electron 0.37.4
-sed -E -i '/(version|resolve)/s|2.0.9|2.2.0|' npm-shrinkwrap.json
-
 # Use gulp-tsb 1.10.3 for node 0.12
 sed -i '/tsb/s|"^.*"|"1.10.3"|' package.json
+
+# fsevents dont support linux
+sed -i '130,134d' npm-shrinkwrap.json
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -161,6 +163,11 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 1.1.0-1
+- Release 1.1.0 (insiders)
+- Build for electron 0.37.8
+- fsevents dont support linux
+- Fix postinstall.js script
 * Thu Apr 14 2016 mosquito <sensor.wen@gmail.com> - 1.0.0-1
 - Release 1.0.0
 - Improve i18n
