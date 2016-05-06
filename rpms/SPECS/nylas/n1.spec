@@ -7,14 +7,14 @@
 
 %global project N1
 %global repo %{project}
-%global electron_ver 0.37.5
+%global electron_ver 0.37.8
 
 # commit
-%global _commit a22631a34e424f97be5111d21ec5f35c919c7875
+%global _commit e8f137e341866818869ee688019e0b273f9c8159
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    n1
-Version: 0.4.25
+Version: 0.4.33
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
@@ -218,6 +218,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 0.4.33-1.gite8f137e
+- Release 0.4.33
+- Build for electron 0.37.8
 * Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.25-1.gita22631a
 - Release 0.4.25
 * Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 0.4.19-3.gitd41e72c
