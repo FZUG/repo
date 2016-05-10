@@ -30,7 +30,11 @@ def get_commit_list():
     '''
 
     stdout = getoutput('/bin/git log --pretty=%h')
-    return re.findall('\w{7}', stdout)
+    if 'ghprbActualCommit' in os.environ:
+        commitList = re.findall('\w{7}', stdout)[1:]
+    else:
+        commitList = re.findall('\w{7}', stdout)
+    return commitList
 
 def get_file_list(commit=os.environ['GIT_COMMIT']):
     '''Get modified files for commit.
@@ -192,7 +196,10 @@ if __name__ == '__main__':
         rootDir = os.environ['REPO_ROOT']
 
     for commit in get_commit_list():
-        if commit in os.environ['GIT_PREVIOUS_COMMIT']:
+        if ('GIT_PREVIOUS_COMMIT' in os.environ and \
+           commit in os.environ['GIT_PREVIOUS_COMMIT']) or \
+           ('ghprbActualCommit' in os.environ and \
+           commit not in os.environ['ghprbActualCommit']):
             break
 
         fileList = get_file_list(commit)
