@@ -1,8 +1,9 @@
 [google-chrome-mirrors]
 name=Google Chrome mirrors
-#baseurl=http://dl.google.com/linux/chrome/rpm/stable/$basearch
-baseurl=http://repo.fdzh.org/chrome/rpm/$basearch
-gpgkey=http://repo.fdzh.org/chrome/linux_signing_key.pub
-gpgcheck=0
+#baseurl=https://dl.google.com/linux/chrome/rpm/stable/$basearch
+#gpgkey=https://dl.google.com/linux/linux_signing_key.pub
+baseurl=https://repo.fdzh.org/chrome/rpm/$basearch
+gpgkey=https://repo.fdzh.org/chrome/linux_signing_key.pub
+gpgcheck=1
 enabled=1
 skip_if_unavailable=1
