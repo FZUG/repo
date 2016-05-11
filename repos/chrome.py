@@ -129,7 +129,7 @@ enabled=1
 skip_if_unavailable=1''']
     output(repofile[0], repofile[1], 'w')
     keyfile = os.path.join(rootdir, 'linux_signing_key.pub')
-    urllib.request.urlretrieve('http://dl.google.com/linux/linux_signing_key.pub', filename=keyfile)
+    urllib.request.urlretrieve('https://dl.google.com/linux/linux_signing_key.pub', filename=keyfile)
 
     url = 'https://dl.google.com/linux/chrome/rpm/stable/'
     pkgname = ['google-chrome-unstable', 'google-chrome-beta', 'google-chrome-stable']
@@ -164,7 +164,7 @@ def get_deb():
 deb [arch=amd64] https://repo.fdzh.org/chrome/deb/ stable main''']
     output(listfile[0], listfile[1], 'w')
 
-    url = 'http://dl.google.com/linux/chrome/deb/dists/stable/'
+    url = 'https://dl.google.com/linux/chrome/deb/dists/stable/'
     pkgname = ['google-chrome-unstable', 'google-chrome-beta', 'google-chrome-stable']
     archs = ['amd64']
     metafile = ['Release', 'Packages', 'Packages.gz', 'Packages.bz2']
