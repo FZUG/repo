@@ -1,6 +1,6 @@
 [fzug-free]
 name=FZUG fc$releasever - Free
-baseurl=http://repo.fdzh.org/FZUG/free/$releasever/$basearch/
+baseurl=https://repo.fdzh.org/FZUG/free/$releasever/$basearch/
 skip_if_unavailable=True
 metadata_expire=1d
 gpgcheck=0
@@ -8,7 +8,15 @@ enabled=1
 
 [fzug-nonfree]
 name=FZUG fc$releasever - Nonfree
-baseurl=http://repo.fdzh.org/FZUG/nonfree/$releasever/$basearch/
+baseurl=https://repo.fdzh.org/FZUG/nonfree/$releasever/$basearch/
+skip_if_unavailable=True
+metadata_expire=1d
+gpgcheck=0
+enabled=1
+
+[fzug-testing]
+name=FZUG fc$releasever - Testing
+baseurl=https://repo.fdzh.org/FZUG/testing/$releasever/$basearch/
 skip_if_unavailable=True
 metadata_expire=1d
 gpgcheck=0
@@ -16,7 +24,7 @@ enabled=1
 
 [fzug-free-source]
 name=FZUG fc$releasever - Free - Source
-baseurl=http://repo.fdzh.org/FZUG/free/$releasever/source/SRPMS/
+baseurl=https://repo.fdzh.org/FZUG/free/$releasever/source/SRPMS/
 skip_if_unavailable=True
 metadata_expire=1d
 gpgcheck=0
@@ -24,7 +32,7 @@ enabled=0
 
 [fzug-nonfree-source]
 name=FZUG fc$releasever - Nonfree - Source
-baseurl=http://repo.fdzh.org/FZUG/nonfree/$releasever/source/SRPMS/
+baseurl=https://repo.fdzh.org/FZUG/nonfree/$releasever/source/SRPMS/
 skip_if_unavailable=True
 metadata_expire=1d
 gpgcheck=0
