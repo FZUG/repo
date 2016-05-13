@@ -85,9 +85,9 @@ def get_source_list(specContent):
         Return the list contains source and patch files list.
     '''
 
-    return re.findall('[Source|Patch]\d+:\s+(.*)', specContent)
+    return re.findall('[Source|Patch]\d*:\s+(.*)', specContent)
 
-def get_sources(itemList, output=srcDir):
+def get_sources(itemList, output=srcDir, verb=None):
     '''Get source files from local and internet.
 
     Args:
@@ -98,10 +98,14 @@ def get_sources(itemList, output=srcDir):
     for item in itemList:
         if not os.path.exists(os.path.join(output, item.split('/')[-1])):
             if item.split('://')[0] in ['http', 'https', 'ftp']:
+                if verb:
+                    print('\033[36mverb:\033[0m downloading {} file.'.format(item.split('/')[-1]))
                 urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
                 #call(['wget', '-q', '-P', output, item])
             else:
                 for src in find_files(item, 'rpms'):
+                    if verb:
+                        print('\033[36mverb:\033[0m copy {} file to build directory.'.format(src))
                     shutil.copy(src, output)
 
 def find_files(pattern, path=os.getcwd()):
@@ -141,7 +145,7 @@ def build_srpm(specFile, output='build'):
         '-bs {}'.format(specFile, out=output)
     return re.search('build.*', getoutput(command)).group()
 
-def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts=''):
+def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='', verb=None):
     '''Build rpm.
 
     Args:
@@ -154,6 +158,9 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts=''):
     Returns:
         Return the command running log.
     '''
+
+    if verb:
+        opts += ' --verbose'
 
     command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion {} {}'.format(
         output, release, arch, opts, srpmFile)
@@ -219,6 +226,8 @@ def parse_args():
                         help='check common problems in rpm package')
     parser.add_argument('--clean', dest='clean', action='store_true',
                         help='clean workspace before building')
+    parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
+                        help='be verbose')
     parser.add_argument(dest='files', metavar='FILE', type=str, action='store', nargs='*')
     return parser.parse_args()
 
@@ -241,6 +250,8 @@ if __name__ == '__main__':
         mode = 'ci'
 
     if args.clean:
+        if args.verbose:
+            print('\033[36mverb:\033[0m clean workspace.')
         getoutput('/bin/git clean -f -d -x')
 
     for commit in get_commit_list():
@@ -256,6 +267,8 @@ if __name__ == '__main__':
         for filePath in fileList:
             if parse_spec(filePath):
                 specFile, specContent = parse_spec(filePath)
+                if args.verbose:
+                    print('\033[36mverb:\033[0m parser {} file.'.format(specFile))
             elif mode == 'ci':
                 print('Unmodified spec file.')
                 continue
@@ -264,19 +277,20 @@ if __name__ == '__main__':
                 sys.exit()
 
             sourceList = get_source_list(specContent)
-            get_sources(sourceList)
+            get_sources(sourceList, verb=args.verbose)
             srpmFile = build_srpm(specFile)
-            print('-> Build SRPM:', srpmFile)
+            print('\033[32minfo:\033[0m Build SRPM -', srpmFile)
 
             for rel in Releases:
                 for arch in Archs:
                     outDir = os.path.join(rootDir, rel, arch)
-                    print('-> Build RPM for fc{} - {}:\n'.format(rel, arch),
-                          build_rpm(srpmFile, release=rel, arch=arch, output=outDir, opts=args.mock))
-                    print('-> Create metadata for fc{} - {}:\n'.format(rel, arch),
+                    print('\033[32minfo:\033[0m Build RPM for fc{} - {}:\n'.format(rel, arch),
+                          build_rpm(srpmFile, release=rel, arch=arch, output=outDir,
+                                    opts=args.mock, verb=args.verbose))
+                    print('\033[32minfo:\033[0m Create metadata for fc{} - {}:\n'.format(rel, arch),
                           create_repo(outDir))
                     if args.rpmlint:
-                        print('-> Check RPM for fc{} - {}:\n'.format(rel, arch),
+                        print('\033[32minfo:\033[0m Check RPM for fc{} - {}:\n'.format(rel, arch),
                               rpm_lint(outDir))
 
         if args.file or args.commit:
