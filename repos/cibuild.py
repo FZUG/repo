@@ -11,14 +11,11 @@ import os
 import sys
 import shutil
 import fnmatch
+import argparse
 
-Archs = 'x86_64', 'i386'
-Releases = '22', '23'
-blackList = 'electron',
 srcDir = os.path.join(os.getcwd(), 'build')
 outDir = os.path.join(os.getcwd(), 'output')
 
-getoutput('/bin/git clean -f -d -x')
 if not os.path.isdir(srcDir):
     os.mkdir(srcDir)
 
@@ -36,7 +33,7 @@ def get_commit_list():
         commitList = re.findall('\w{7}', stdout)
     return commitList
 
-def get_file_list(commit=os.environ['GIT_COMMIT']):
+def get_file_list(commit):
     '''Get modified files for commit.
 
     Args:
@@ -55,26 +52,26 @@ def black_item(item):
     Args:
         item: A string of item.
     '''
+
     for black in blackList:
         if re.match('.*' + black + '.*', item):
             return False
         else:
             return True
 
-def parse_spec(fileList):
+def parse_spec(specFile):
     '''Parse the Spec file contents.
 
     Args:
-        fileList: A list of file path.
+        specFile: A string of spec file path.
 
     Returns:
         Return the list contains the Spec file name and content. If the file
         is not found, it returns false.
     '''
 
-    for specFile in fileList:
-        if os.path.exists(specFile) and str(specFile).endswith('.spec'):
-            return specFile, getoutput('/bin/rpmspec -P {}'.format(specFile))
+    if os.path.exists(specFile) and str(specFile).endswith('.spec'):
+        return specFile, getoutput('/bin/rpmspec -P {}'.format(specFile))
 
     return False
 
@@ -144,7 +141,7 @@ def build_srpm(specFile, output='build'):
         '-bs {}'.format(specFile, out=output)
     return re.search('build.*', getoutput(command)).group()
 
-def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir):
+def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts=''):
     '''Build rpm.
 
     Args:
@@ -152,13 +149,14 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir):
         release: A string of system release version.
         arch: A string of system architecture.
         output: A string of RPM file output directory.
+        opts: A string of mock options.
 
     Returns:
         Return the command running log.
     '''
 
-    command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion {}'.format(
-        output, release, arch, srpmFile)
+    command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion {} {}'.format(
+        output, release, arch, opts, srpmFile)
     return getoutput(command)
 
 def rpm_lint(repoDir=outDir, time=10):
@@ -188,12 +186,62 @@ def create_repo(output=outDir):
 
     return getoutput('/bin/createrepo_c {}'.format(output))
 
+def parse_args():
+    '''Parser for command-line options.
+
+    Returns:
+        Return the Namespace object.
+    '''
+
+    parser = argparse.ArgumentParser(description='repository ci builder.')
+    parser.add_argument('-o', '--output-dir', metavar='PATH', type=str,
+                        dest='outDir', action='store', default=outDir,
+                        help='set rpm package output directory')
+    parser.add_argument('-c', '--commit', metavar='COMMIT', type=str,
+                        dest='commit', action='store', required=False,
+                        help='build the specified commit')
+    parser.add_argument('-f', '--file', metavar='FILE', type=str,
+                        dest='file', action='append', default=[], required=False,
+                        help='build the specified Spec file')
+    parser.add_argument('-a', '--arch', metavar='ARCH', type=str,
+                        dest='archs', action='append', required=False,
+                        help='set architecture for build rpm package')
+    parser.add_argument('-r', '--release', metavar='RELEASE', type=str,
+                        dest='releases', action='append', required=False,
+                        help='set release version for build rpm package')
+    parser.add_argument('-b', '--black-list', metavar='BLACKLIST', type=str,
+                        dest='blacklist', action='append', required=False,
+                        help='set blacklist, skip these items')
+    parser.add_argument('--mock-opts', metavar='OPTs', type=str,
+                        dest='mock', action='store', default='', required=False,
+                        help='set mock command-line options')
+    parser.add_argument('--rpmlint', dest='rpmlint', action='store_true',
+                        help='check common problems in rpm package')
+    parser.add_argument('--clean', dest='clean', action='store_true',
+                        help='clean workspace before building')
+    parser.add_argument(dest='files', metavar='FILE', type=str, action='store', nargs='*')
+    return parser.parse_args()
+
 if __name__ == '__main__':
-    rootDir = outDir
-    if len(sys.argv) > 1:
-        rootDir = sys.argv[1]
-    elif 'REPO_ROOT' in os.environ:
+    args = parse_args()
+    Archs = args.archs if args.archs else ['x86_64', 'i386']
+    Releases = args.releases if args.releases else ['22', '23', '24']
+    blackList = args.blacklist if args.blacklist else ['electron']
+    args.file += args.files
+
+    if not sys.stdin.isatty():
+        args.file += sys.stdin.read().split()
+
+    rootDir = args.outDir
+    if 'REPO_ROOT' in os.environ:
         rootDir = os.environ['REPO_ROOT']
+
+    mode = 'manual'
+    if 'GIT_PREVIOUS_COMMIT' in os.environ or 'ghprbActualCommit' in os.environ:
+        mode = 'ci'
+
+    if args.clean:
+        getoutput('/bin/git clean -f -d -x')
 
     for commit in get_commit_list():
         if ('GIT_PREVIOUS_COMMIT' in os.environ and \
@@ -202,25 +250,34 @@ if __name__ == '__main__':
            commit not in os.environ['ghprbActualCommit']):
             break
 
-        fileList = get_file_list(commit)
-        if parse_spec(fileList):
-            specFile, specContent = parse_spec(fileList)
-        else:
-            print('Unmodified spec file.')
-            sys.exit()
+        commit = args.commit if args.commit else commit
+        fileList = args.file if args.file else get_file_list(commit)
 
-        sourceList = get_source_list(specContent)
-        get_sources(sourceList)
-        srpmFile = build_srpm(specFile)
-        print('-> Build SRPM:', srpmFile)
+        for filePath in fileList:
+            if parse_spec(filePath):
+                specFile, specContent = parse_spec(filePath)
+            elif mode == 'ci':
+                print('Unmodified spec file.')
+                continue
+            else:
+                print('Unmodified spec file.')
+                sys.exit()
 
-        for rel in Releases:
-            for arch in Archs:
-                outDir = os.path.join(rootDir, rel, arch)
-                print('-> Build RPM for fc{} - {}:\n'.format(rel, arch),
-                      build_rpm(srpmFile, release=rel, arch=arch, output=outDir))
-                print('-> Create metadata for fc{} - {}:\n'.format(rel, arch),
-                      create_repo(outDir))
+            sourceList = get_source_list(specContent)
+            get_sources(sourceList)
+            srpmFile = build_srpm(specFile)
+            print('-> Build SRPM:', srpmFile)
 
-        print('-> Check RPM for fc{} - {}:\n'.format('23', 'i386'),
-              rpm_lint(os.path.join(rootDir, '23', 'i386')))
+            for rel in Releases:
+                for arch in Archs:
+                    outDir = os.path.join(rootDir, rel, arch)
+                    print('-> Build RPM for fc{} - {}:\n'.format(rel, arch),
+                          build_rpm(srpmFile, release=rel, arch=arch, output=outDir, opts=args.mock))
+                    print('-> Create metadata for fc{} - {}:\n'.format(rel, arch),
+                          create_repo(outDir))
+                    if args.rpmlint:
+                        print('-> Check RPM for fc{} - {}:\n'.format(rel, arch),
+                              rpm_lint(outDir))
+
+        if args.file or args.commit:
+            break
