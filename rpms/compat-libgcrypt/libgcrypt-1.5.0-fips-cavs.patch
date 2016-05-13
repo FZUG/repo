@@ -1,0 +1,1174 @@
+diff -up libgcrypt-1.5.0/cipher/dsa.c.cavs libgcrypt-1.5.0/cipher/dsa.c
+--- libgcrypt-1.5.0/cipher/dsa.c.cavs	2011-07-21 14:56:35.000000000 +0200
++++ libgcrypt-1.5.0/cipher/dsa.c	2011-07-21 14:58:06.000000000 +0200
+@@ -479,7 +479,6 @@ generate_fips186 (DSA_secret_key *sk, un
+             initial_seed.seed = gcry_sexp_nth_data (initial_seed.sexp, 1,
+                                                     &initial_seed.seedlen);
+         }
+-      
+       if (use_fips186_2)
+         ec = _gcry_generate_fips186_2_prime (nbits, qbits, 
+                                            initial_seed.seed, 
+@@ -487,13 +486,22 @@ generate_fips186 (DSA_secret_key *sk, un
+                                            &prime_q, &prime_p,
+                                            r_counter,
+                                            r_seed, r_seedlen);
+-      else
++      else if (!domain->p || !domain->q)
+         ec = _gcry_generate_fips186_3_prime (nbits, qbits,
+                                           initial_seed.seed,
+                                           initial_seed.seedlen,
+                                           &prime_q, &prime_p,
+                                           r_counter,
+                                           r_seed, r_seedlen, NULL);
++      else
++        {
++          /* Domain parameters p and q are given; use them.  */
++          prime_p = mpi_copy (domain->p);
++          prime_q = mpi_copy (domain->q);
++          gcry_assert (mpi_get_nbits (prime_p) == nbits);
++          gcry_assert (mpi_get_nbits (prime_q) == qbits);
++          ec = 0;
++        }
+       gcry_sexp_release (initial_seed.sexp);
+       if (ec)
+         goto leave;
+@@ -784,13 +792,12 @@ dsa_generate_ext (int algo, unsigned int
+           gcry_sexp_release (l1);
+           gcry_sexp_release (domainsexp);
+ 
+-          /* Check that all domain parameters are available.  */
+-          if (!domain.p || !domain.q || !domain.g)
++          /* Check that p and q domain parameters are available.  */
++          if (!domain.p || !domain.q || (!domain.g && !use_fips186))
+             {
+               gcry_mpi_release (domain.p);
+               gcry_mpi_release (domain.q);
+               gcry_mpi_release (domain.g);
+-              gcry_sexp_release (deriveparms);
+               return GPG_ERR_MISSING_VALUE;
+             }
+ 
+diff -up libgcrypt-1.5.0/tests/cavs_driver.pl.cavs libgcrypt-1.5.0/tests/cavs_driver.pl
+--- libgcrypt-1.5.0/tests/cavs_driver.pl.cavs	2011-02-04 20:18:20.000000000 +0100
++++ libgcrypt-1.5.0/tests/cavs_driver.pl	2011-07-21 15:01:47.000000000 +0200
+@@ -1,9 +1,11 @@
+ #!/usr/bin/env perl
+ #
+-# $Id: cavs_driver.pl 1497 2009-01-22 14:01:29Z smueller $
++# $Id: cavs_driver.pl 2124 2010-12-20 07:56:30Z smueller $
+ #
+ # CAVS test driver (based on the OpenSSL driver)
+ # Written by: Stephan Müller <sm@atsec.com>
++#	      Werner Koch <wk@g10code.com> (libgcrypt interface)
++#	      Tomas Mraz <tmraz@redhat.com> (addition of DSA2)
+ # Copyright (c) atsec information security corporation
+ #
+ # Permission is hereby granted, free of charge, to any person obtaining a copy
+@@ -85,13 +87,16 @@
+ #	T[CBC|CFB??|ECB|OFB]varkey
+ #	T[CBC|CFB??|ECB|OFB]invperm
+ #	T[CBC|CFB??|ECB|OFB]vartext
++# WARNING: TDES in CFB and OFB mode problems see below
+ #
+ # ANSI X9.31 RNG
+ # 	ANSI931_AES128MCT
+ # 	ANSI931_AES128VST
+ #
+-# DSA
++# DSA2
+ # 	PQGGen
++#	PQGVer
++#	KeyPair
+ # 	SigGen
+ # 	SigVer
+ #
+@@ -101,6 +106,36 @@
+ # 	RC4PltBD
+ # 	RC4REGT
+ #
++#
++# TDES MCT for CFB and OFB:
++# -------------------------
++# The inner loop cannot be handled by this script. If you want to have tests
++# for these cipher types, implement your own inner loop and add it to
++# crypto_mct.
++#
++# the value $next_source in crypto_mct is NOT set by the standard implementation
++# of this script. It would need to be set as follows for these two (code take
++# from fipsdrv.c from libgcrypt - the value input at the end will contain the
++# the value for $next_source:
++#
++# ... inner loop ...
++# ...
++# get_current_iv (hd, last_iv, blocklen);
++# ... encrypt / decrypt (input is the data to be en/decrypted and output is the
++#                        result of operation) ...
++# if (encrypt_mode && (cipher_mode == GCRY_CIPHER_MODE_CFB))
++#   memcpy (input, last_iv, blocklen);
++# else if (cipher_mode == GCRY_CIPHER_MODE_OFB)
++#   memcpy (input, last_iv, blocklen);
++# else if (!encrypt_mode && cipher_mode == GCRY_CIPHER_MODE_CFB)
++#   {
++#      /* Reconstruct the output vector.  */
++#      int i;
++#      for (i=0; i < blocklen; i++)
++#         input[i] ^= output[i];
++#   }
++# ... inner loop ends ...
++# ==> now, the value of input is to be put into $next_source
+ 
+ use strict;
+ use warnings;
+@@ -226,6 +261,8 @@ my $hmac;
+ # Generate the P, Q, G, Seed, counter, h (value used to generate g) values
+ # for DSA
+ # $1: modulus size
++# $2: q size
++# $3: seed (might be empty string)
+ # return: string with the calculated values in hex format, where each value
+ # 	  is separated from the previous with a \n in the following order:
+ #         P\n
+@@ -236,6 +273,19 @@ my $hmac;
+ #         h
+ my $dsa_pqggen;
+ 
++# Generate the G value from P and Q
++# for DSA
++# $1: modulus size
++# $2: q size
++# $3: P in hex form
++# $4: Q in hex form
++# return: string with the calculated values in hex format, where each value
++#        is separated from the previous with a \n in the following order:
++#         P\n
++#         Q\n
++#         G\n
++my $dsa_ggen;
++
+ #
+ # Generate an DSA public key from the provided parameters:
+ # $1: Name of file to create
+@@ -255,10 +305,20 @@ my $dsa_verify;
+ 
+ # generate a new DSA key with the following properties:
+ #	PEM format
+-# $1 keyfile name
+-# return: file created, hash with keys of P, Q, G in hex format
++# $1: modulus size
++# $2: q size
++# $3 keyfile name
++# return: file created with key, string with values of P, Q, G in hex format
+ my $gen_dsakey;
+ 
++# generate a new DSA private key XY parameters in domain:
++#      PEM format
++# $1: P in hex form
++# $2: Q in hex form
++# $3: G in hex form
++# return: string with values of X, Y in hex format
++my $gen_dsakey_domain;
++
+ # Sign a message with DSA
+ # $1: data to be signed in hex form
+ # $2: Key file in PEM format with the private key
+@@ -500,17 +560,32 @@ sub libgcrypt_hmac($$$$) {
+ 	return pipe_through_program($msg, $program);
+ }
+ 
+-sub libgcrypt_dsa_pqggen($) {
++sub libgcrypt_dsa_pqggen($$$) {
++	my $mod = shift;
++	my $qsize = shift;
++	my $seed = shift;
++
++	my $program = "fipsdrv --keysize $mod --qsize $qsize dsa-pqg-gen";
++	return pipe_through_program($seed, $program);
++}
++
++sub libgcrypt_dsa_ggen($$$$) {
+ 	my $mod = shift;
++	my $qsize = shift;
++	my $p = shift;
++	my $q = shift;
++	my $domain = "(domain (p #$p#)(q #$q#))";
+ 
+-	my $program = "fipsdrv --keysize $mod dsa-pqg-gen";
++	my $program = "fipsdrv --keysize $mod --qsize $qsize --key \'$domain\' dsa-g-gen";
+ 	return pipe_through_program("", $program);
+ }
+ 
+-sub libgcrypt_gen_dsakey($) {
++sub libgcrypt_gen_dsakey($$$) {
++	my $mod = shift;
++	my $qsize = shift;
+ 	my $file = shift;
+ 
+-	my $program = "fipsdrv --keysize 1024 --key $file dsa-gen";
++	my $program = "fipsdrv --keysize $mod --qsize $qsize --key $file dsa-gen";
+ 	my $tmp;
+ 	my %ret;
+ 
+@@ -519,10 +594,21 @@ sub libgcrypt_gen_dsakey($) {
+ 	$tmp = pipe_through_program("", $program);
+ 	die "dsa key gen failed: file $file not created" if (! -f $file);
+ 
+-	@ret{'P', 'Q', 'G', 'Seed', 'c', 'H'} = split(/\n/, $tmp);
++	@ret{'P', 'Q', 'G'} = split(/\n/, $tmp);
+ 	return %ret;
+ }
+ 
++sub libgcrypt_gen_dsakey_domain($$$) {
++	my $p = shift;
++	my $q = shift;
++	my $g = shift;
++	my $domain = "(domain (p #$p#)(q #$q#)(g #$g#))";
++
++	my $program = "fipsdrv --key '$domain' dsa-gen-key";
++
++	return pipe_through_program("", $program);
++}
++
+ sub libgcrypt_dsa_genpubkey($$$$$) {
+ 	my $filename = shift;
+ 	my $p = shift;
+@@ -1139,7 +1225,7 @@ sub hmac_kat($$$$) {
+ 	$out .= "Tlen = $tlen\n";
+ 	$out .= "Key = $key\n";
+ 	$out .= "Msg = $msg\n";
+-	$out .= "Mac = " . &$hmac($key, $tlen, $msg, $hashtype{$tlen}) . "\n";
++	$out .= "Mac = " . lc(&$hmac($key, $tlen, $msg, $hashtype{$tlen})) . "\n";
+ 
+ 	return $out;
+ }
+@@ -1205,7 +1291,7 @@ sub crypto_mct($$$$$$$$) {
+                 }
+                 my ($CO, $CI);
+ 		my $cipher_imp = &$state_cipher($cipher, $enc, $bufsize, $key1, $iv);
+-		$cipher_imp = &$state_cipher_des($cipher, $enc, $bufsize, $key1, $iv) if($cipher =~ /des/);
++		$cipher_imp = &$state_cipher_des($cipher, $enc, $bufsize, $key1, $iv) if($cipher =~ /des/ && defined($state_cipher_des));
+                 my $pid = open2($CO, $CI, $cipher_imp);
+ 
+                 my $calc_data = $iv; # CT[j]
+@@ -1213,8 +1299,8 @@ sub crypto_mct($$$$$$$$) {
+                 my $old_old_calc_data; # CT[j-2]
+ 		my $next_source;
+ 
+-		# TDES inner loop implements logic within driver
+-		if ($cipher =~ /des/) {
++		# TDES inner loop implements logic within driver of libgcrypt
++		if ($cipher =~ /des/ && $opt{'I'} && $opt{'I'} eq 'libgcrypt' ) {
+ 			# Need to provide a dummy IV in case of ECB mode.
+ 			my $iv_arg = (defined($iv) && $iv ne "")
+ 					? bin2hex($iv)
+@@ -1238,6 +1324,10 @@ sub crypto_mct($$$$$$$$) {
+ 			$line = <$CO>;
+ 		} else {
+ 	                for (my $j = 0; $j < $iloop; ++$j) {
++				if ($cipher =~ /des-ede3-ofb/ ||
++				    (!$enc && $cipher =~ /des-ede3-cfb/)) {
++					die "Implementation lacks support for TDES OFB and TDES CFB in encryption mode - the problem is that we would need to extract the IV of the last round of encryption which would be the input for the next round - see comments in this script for implementation requirements"; 
++				}
+ 				$old_old_calc_data = $old_calc_data;
+                 	        $old_calc_data = $calc_data;
+ 
+@@ -1503,21 +1593,23 @@ sub rngx931($$$$) {
+ 	return $out;
+ }
+ 
+-# DSA PQGGen test
++# DSA PQGen test
+ # $1 modulus size
+-# $2 number of rounds to perform the test
++# $2 q size
++# $3 number of rounds to perform the test
+ # return: string formatted as expected by CAVS
+-sub dsa_pqggen_driver($$) {
++sub dsa_pqgen_driver($$$) {
+ 	my $mod = shift;
++	my $qsize = shift;
+ 	my $rounds = shift;
+ 
+ 	my $out = "";
+ 	for(my $i=0; $i<$rounds; $i++) {
+-		my $ret = &$dsa_pqggen($mod);
++		my $ret = &$dsa_pqggen($mod, $qsize, "");
+ 		my ($P, $Q, $G, $Seed, $c, $H) = split(/\n/, $ret);
+-		die "Return value does not contain all expected values of P, Q, G, Seed, c, H for dsa_pqggen"
+-			if (!defined($P) || !defined($Q) || !defined($G) ||
+-			    !defined($Seed) || !defined($c) || !defined($H));
++		die "Return value does not contain all expected values of P, Q, Seed, c for dsa_pqggen"
++			if (!defined($P) || !defined($Q) ||
++			    !defined($Seed) || !defined($c));
+ 
+ 		# now change the counter to decimal as CAVS wants decimal
+ 		# counter value although all other is HEX
+@@ -1525,15 +1617,166 @@ sub dsa_pqggen_driver($$) {
+ 
+ 		$out .= "P = $P\n";
+ 		$out .= "Q = $Q\n";
+-		$out .= "G = $G\n";
+-		$out .= "Seed = $Seed\n";
+-		$out .= "c = $c\n";
+-		$out .= "H = $H\n\n";
++		$out .= "domain_parameter_seed = $Seed\n";
++		$out .= "counter = $c\n\n";
+ 	}
+ 
+ 	return $out;
+ }
+ 
++# DSA GGen test
++# $1 modulus size
++# $2 q size
++# $3 p in hex form
++# $4 q in hex form
++# return: string formatted as expected by CAVS
++sub dsa_ggen_driver($$$$) {
++	my $mod = shift;
++	my $qsize = shift;
++	my $p = shift;
++	my $q = shift;
++
++	my $out = "";
++	my $ret = &$dsa_ggen($mod, $qsize, $p, $q);
++	my ($P, $Q, $G) = split(/\n/, $ret);
++	die "Return value does not contain all expected values of P, Q, G for dsa_ggen"
++		if (!defined($P) || !defined($Q) || !defined($G));
++
++	$out .= "G = $G\n\n";
++
++	return $out;
++}
++
++sub hexcomp($$) {
++	my $a = lc shift;
++	my $b = lc shift;
++
++	if (length $a < length $b) {
++		my $c = $a;
++		$a = $b;
++		$b = $a;
++	}
++
++	while (length $b < length $a) {
++		$b = "00$b";
++	}
++
++	return $a eq $b;
++}
++
++# DSA PQVer test
++# $1 modulus size
++# $2 q size
++# $3 p in hex form
++# $4 q in hex form
++# $5 seed in hex form
++# $6 c decimal counter
++# return: string formatted as expected by CAVS
++sub dsa_pqver_driver($$$$$$) {
++	my $mod = shift;
++	my $qsize = shift;
++	my $p = shift;
++	my $q = shift;
++	my $seed = shift;
++	my $c = shift;
++
++	my $out = "";
++	my $ret = &$dsa_pqggen($mod, $qsize, $seed);
++	my ($P, $Q, $G, $seed2, $c2, $h2) = split(/\n/, $ret);
++	die "Return value does not contain all expected values of P, Q, G, seed, c for dsa_pqggen"
++		if (!defined($P) || !defined($Q) || !defined($G) ||
++		    !defined($seed2) || !defined($c2));
++
++	$c2 = hex($c2);
++
++	$out .= "Seed = $seed\n";
++	$out .= "c = $c\n";
++
++	if (hexcomp($P, $p) && hexcomp($Q, $q) && hexcomp($seed, $seed2) && $c == $c2) {
++		$out .= "Result = P\n\n";
++	}
++	else {
++		$out .= "Result = F\n\n";
++	}
++	return $out;
++}
++
++# DSA PQGVer test
++# $1 modulus size
++# $2 q size
++# $3 p in hex form
++# $4 q in hex form
++# $5 g in hex form
++# $6 seed in hex form
++# $7 c decimal counter
++# $8 h in hex form
++# return: string formatted as expected by CAVS
++sub dsa_pqgver_driver($$$$$$$$) {
++	my $mod = shift;
++	my $qsize = shift;
++	my $p = shift;
++	my $q = shift;
++	my $g = shift;
++	my $seed = shift;
++	my $c = shift;
++	my $h = shift;
++
++	my $out = "";
++	my $ret = &$dsa_pqggen($mod, $qsize, $seed);
++	my ($P, $Q, $G, $seed2, $c2, $h2) = split(/\n/, $ret);
++	die "Return value does not contain all expected values of P, Q, G, seed, c, H for dsa_pqggen"
++		if (!defined($P) || !defined($Q) || !defined($G) ||
++		    !defined($seed2) || !defined($c2) || !defined($h2));
++
++	
++
++	$out .= "Seed = $seed\n";
++	$out .= "c = $c\n";
++	$out .= "H = $h\n";
++
++	$c2 = hex($c2);
++
++	if (hexcomp($P, $p) && hexcomp($Q, $q) && hexcomp($G, $g) && hexcomp($seed, $seed2) && 
++	    $c == $c2 && hex($h) == hex($h2)) {
++		$out .= "Result = P\n\n";
++	}
++	else {
++		$out .= "Result = F\n\n";
++	}
++
++	return $out;
++}
++
++# DSA Keypair test
++# $1 modulus size
++# $2 q size
++# $3 number of rounds to perform the test
++# return: string formatted as expected by CAVS
++sub dsa_keypair_driver($$$) {
++	my $mod = shift;
++	my $qsize = shift;
++	my $rounds = shift;
++
++	my $out = "";
++	my $tmpkeyfile = "dsa_siggen.tmp.$$";
++	my %pqg = &$gen_dsakey($mod, $qsize, $tmpkeyfile);
++	$out .= "P = " . $pqg{'P'} . "\n";
++	$out .= "Q = " . $pqg{'Q'} . "\n";
++	$out .= "G = " . $pqg{'G'} . "\n\n";
++	unlink($tmpkeyfile);
++
++	for(my $i=0; $i<$rounds; $i++) {
++		my $ret = &$gen_dsakey_domain($pqg{'P'}, $pqg{'Q'}, $pqg{'G'});
++		my ($X, $Y) = split(/\n/, $ret);
++		die "Return value does not contain all expected values of X, Y for gen_dsakey_domain"
++			if (!defined($X) || !defined($Y));
++
++		$out .= "X = $X\n";
++		$out .= "Y = $Y\n\n";
++	}
++
++	return $out;
++}
+ 
+ # DSA SigGen test
+ # $1: Message to be signed in hex form
+@@ -1658,12 +1901,16 @@ sub parse($$) {
+ 	my $klen = "";
+ 	my $tlen = "";
+ 	my $modulus = "";
++	my $qsize = "";
+ 	my $capital_n = 0;
++	my $num = 0;
+ 	my $capital_p = "";
+ 	my $capital_q = "";
+ 	my $capital_g = "";
+ 	my $capital_y = "";
+ 	my $capital_r = "";
++	my $capital_h = "";
++	my $c = "";
+ 	my $xp1 = "";
+ 	my $xp2 = "";
+ 	my $Xp = "";
+@@ -1700,7 +1947,7 @@ sub parse($$) {
+ 
+ 		##### Extract cipher
+ 		# XXX there may be more - to be added
+-		if ($tmpline =~ /^#.*(CBC|ECB|OFB|CFB|SHA-|SigGen|SigVer|RC4VS|ANSI X9\.31|Hash sizes tested|PQGGen|KeyGen RSA)/) {
++		if ($tmpline =~ /^#.*(CBC|ECB|OFB|CFB|SHA-|SigGen|SigVer|RC4VS|ANSI X9\.31|Hash sizes tested|PQGGen|KeyGen RSA|KeyPair|PQGVer)/) {
+ 			if ($tmpline    =~ /CBC/)   { $mode="cbc"; }
+ 			elsif ($tmpline =~ /ECB/)   { $mode="ecb"; }
+ 			elsif ($tmpline =~ /OFB/)   { $mode="ofb"; }
+@@ -1749,7 +1996,15 @@ sub parse($$) {
+ 
+ 			if ($tt == 0) {
+ 			##### Identify the test type
+-				if ($tmpline =~ /KeyGen RSA \(X9\.31\)/) {
++				if ($tmpline =~ /PQGVer/) {
++					$tt = 16;
++					die "Interface function for DSA PQGVer testing not defined for tested library"
++						if (!defined($dsa_pqggen));
++				} elsif ($tmpline =~ /KeyPair/) {
++					$tt = 14;
++					die "Interface function dsa_keygen for DSA key generation not defined for tested library"
++						if (!defined($gen_dsakey_domain));
++				} elsif ($tmpline =~ /KeyGen RSA \(X9\.31\)/) {
+ 					$tt = 13;
+ 					die "Interface function rsa_derive for RSA key generation not defined for tested library"
+ 						if (!defined($rsa_derive));
+@@ -1760,11 +2015,11 @@ sub parse($$) {
+ 				} elsif ($tmpline =~ /SigGen/ && $opt{'D'}) {
+ 					$tt = 11;
+ 					die "Interface function dsa_sign or gen_dsakey for DSA sign not defined for tested library"
+-						if (!defined($dsa_sign) || !defined($gen_rsakey));
++						if (!defined($dsa_sign) || !defined($gen_dsakey));
+ 				} elsif ($tmpline =~ /PQGGen/) {
+ 					$tt = 10;
+ 					die "Interface function for DSA PQGGen testing not defined for tested library"
+-						if (!defined($dsa_pqggen));
++						if (!defined($dsa_pqggen) || !defined($dsa_ggen));
+ 				} elsif ($tmpline =~ /Hash sizes tested/) {
+ 					$tt = 9;
+ 					die "Interface function hmac for HMAC testing not defined for tested library"
+@@ -1792,7 +2047,7 @@ sub parse($$) {
+ 				} elsif ($tmpline =~ /Monte|MCT|Carlo/) {
+ 					$tt = 2;
+ 					die "Interface function state_cipher for Stateful Cipher operation defined for tested library"
+-						if (!defined($state_cipher) || !defined($state_cipher_des));
++						if (!defined($state_cipher) && !defined($state_cipher_des));
+ 				} elsif ($cipher =~ /^sha/) {
+ 					$tt = 3;
+ 					die "Interface function hash for Hashing not defined for tested library"
+@@ -1875,18 +2130,44 @@ sub parse($$) {
+ 			die "Msg/Seed seen twice - input file crap" if ($pt ne "");
+ 			$pt=$2;
+ 		}
+-		elsif ($line =~ /^\[mod\s*=\s*(.*)\]$/) { # found in RSA requests
++		elsif ($line =~ /^\[A.2.1\s.*\]$/) { # found in DSA2 PQGGen request
++			$out .= $line . "\n"; # print it
++			if ($tt == 10) {
++				# now generate G from PQ
++				$tt = 15;
++			}
++		}
++		elsif ($line =~ /^\[A.2.2\s.*\]$/) { # found in DSA2 PQGVer request
++			$out .= $line . "\n"; # print it
++			if ($tt == 16) {
++				# now verify PQG
++				$tt = 17;
++			}
++		}
++		elsif ($line =~ /^\[mod\s*=\s*L=([0-9]*),\s*N=([0-9]*).*\]$/) { # found in DSA2 requests
+ 			$modulus = $1;
++			$qsize = $2;
+ 			$out .= $line . "\n\n"; # print it
++			# clear eventual PQG
++			$capital_p = "";
++			$capital_q = "";
++			$capital_g = "";
+ 			# generate the private key with given bit length now
+ 			# as we have the required key length in bit
+ 			if ($tt == 11) {
+ 				$dsa_keyfile = "dsa_siggen.tmp.$$";
+-				my %pqg = &$gen_dsakey($dsa_keyfile);
++				my %pqg = &$gen_dsakey($modulus, $qsize, $dsa_keyfile);
+ 				$out .= "P = " . $pqg{'P'} . "\n";
+ 				$out .= "Q = " . $pqg{'Q'} . "\n";
+-				$out .= "G = " . $pqg{'G'} . "\n";
+-			} elsif ( $tt == 5 ) {
++				$out .= "G = " . $pqg{'G'} . "\n\n";
++                        }
++                }
++		elsif ($line =~ /^\[mod\s*=\s*(.*)\]$/) { # found in RSA requests
++			$modulus = $1;
++			$out .= $line . "\n\n"; # print it
++			# generate the private key with given bit length now
++			# as we have the required key length in bit
++			if ( $tt == 5 ) {
+ 				# XXX maybe a secure temp file name is better here
+ 				# but since it is not run on a security sensitive
+ 				# system, I hope that this is fine
+@@ -1932,11 +2213,16 @@ sub parse($$) {
+ 				if ($tlen ne "");
+ 			$tlen=$1;
+ 		}
+-		elsif ($line =~ /^N\s*=\s*(.*)/) { #DSA PQGGen
++		elsif ($line =~ /^N\s*=\s*(.*)/) { #DSA KeyPair
+ 			die "N seen twice - check input file"
+ 				if ($capital_n);
+ 			$capital_n = $1;
+ 		}
++		elsif ($line =~ /^Num\s*=\s*(.*)/) { #DSA PQGGen
++			die "Num seen twice - check input file"
++				if ($num);
++			$num = $1;
++		}
+ 		elsif ($line =~ /^P\s*=\s*(.*)/) { #DSA SigVer
+ 			die "P seen twice - check input file"
+ 				if ($capital_p);
+@@ -1965,6 +2251,16 @@ sub parse($$) {
+ 				if ($capital_r);
+ 			$capital_r = $1;
+ 		}
++		elsif ($line =~ /^H\s*=\s*(.*)/) { #DSA PQGVer
++			die "H seen twice - check input file"
++				if ($capital_h);
++			$capital_h = $1;
++		}
++		elsif ($line =~ /^c\s*=\s*(.*)/) { #DSA PQGVer
++			die "c seen twice - check input file"
++				if ($c);
++			$c = $1;
++		}
+ 		elsif ($line =~ /^xp1\s*=\s*(.*)/) { #RSA key gen
+ 			die "xp1 seen twice - check input file"
+ 				if ($xp1);
+@@ -2074,11 +2370,10 @@ sub parse($$) {
+ 			}
+ 		}
+ 		elsif ($tt == 10) {
+-			if ($modulus ne "" && $capital_n > 0) {
+-				$out .= dsa_pqggen_driver($modulus, $capital_n);
+-				#$mod is not resetted
+-				$capital_n = 0;
+-			}
++			if ($modulus ne "" && $qsize ne "" && $num > 0) {
++				$out .= dsa_pqgen_driver($modulus, $qsize, $num);
++				$num = 0;
++                        }
+ 		}
+ 		elsif ($tt == 11) {
+ 			if ($pt ne "" && $dsa_keyfile ne "") {
+@@ -2141,6 +2436,74 @@ sub parse($$) {
+ 				$Xq = "";
+ 			}
+ 		}
++		elsif ($tt == 14) {
++			if ($modulus ne "" &&
++			    $qsize ne "" &&
++			    $capital_n > 0) {
++				$out .= dsa_keypair_driver($modulus,
++							   $qsize,
++							   $capital_n);
++				$capital_n = 0;
++			}
++		}
++		elsif ($tt == 15) {
++			if ($modulus ne "" &&
++			    $qsize ne "" &&
++			    $capital_p ne "" &&
++			    $capital_q ne "") {
++				$out .= dsa_ggen_driver($modulus,
++							$qsize,
++							$capital_p,
++							$capital_q);
++				$capital_p = "";
++				$capital_q = "";
++				$num--;
++			}
++		}
++		elsif ($tt == 16) {
++			if ($modulus ne "" &&
++			    $qsize ne "" &&
++			    $capital_p ne "" &&
++			    $capital_q ne "" &&
++			    $pt ne "" &&
++			    $c ne "") {
++				$out .= dsa_pqver_driver($modulus,
++							$qsize,
++							$capital_p,
++							$capital_q,
++							$pt,
++							$c);
++				$capital_p = "";
++				$capital_q = "";
++				$pt = "";
++				$c = "";
++			}
++		}
++		elsif ($tt == 17) {
++			if ($modulus ne "" &&
++			    $qsize ne "" &&
++			    $capital_p ne "" &&
++			    $capital_q ne "" &&
++			    $capital_g ne "" &&
++			    $pt ne "" &&
++			    $c ne "" &&
++			    $capital_h ne "") {
++				$out .= dsa_pqgver_driver($modulus,
++							$qsize,
++							$capital_p,
++							$capital_q,
++							$capital_g,
++							$pt,
++							$c,
++							$capital_h);
++				$capital_p = "";
++				$capital_q = "";
++				$capital_g = "";
++				$pt = "";
++				$c = "";
++				$capital_h = "";
++			}
++		}
+ 		elsif ($tt > 0) {
+ 			die "Test case $tt not defined";
+ 		}
+@@ -2199,7 +2562,9 @@ sub main() {
+ 		$state_rng =	\&libgcrypt_state_rng;
+ 		$hmac =		\&libgcrypt_hmac;
+ 		$dsa_pqggen = 	\&libgcrypt_dsa_pqggen;
++		$dsa_ggen =	\&libgcrypt_dsa_ggen;
+ 		$gen_dsakey =   \&libgcrypt_gen_dsakey;
++		$gen_dsakey_domain =	\&libgcrypt_gen_dsakey_domain;
+ 		$dsa_sign =     \&libgcrypt_dsa_sign;
+ 		$dsa_verify =   \&libgcrypt_dsa_verify;
+ 		$dsa_genpubkey = \&libgcrypt_dsa_genpubkey;
+diff -up libgcrypt-1.5.0/tests/cavs_tests.sh.cavs libgcrypt-1.5.0/tests/cavs_tests.sh
+--- libgcrypt-1.5.0/tests/cavs_tests.sh.cavs	2011-02-04 20:18:20.000000000 +0100
++++ libgcrypt-1.5.0/tests/cavs_tests.sh	2011-07-21 15:02:16.000000000 +0200
+@@ -55,7 +55,7 @@ function run_one_test () {
+     [ -d "$respdir" ] || mkdir "$respdir"
+     [ -f "$rspfile" ] &&  rm "$rspfile"
+ 
+-    if echo "$reqfile" | grep '/DSA/req/' >/dev/null 2>/dev/null; then
++    if echo "$reqfile" | grep '/DSA.\?/req/' >/dev/null 2>/dev/null; then
+         dflag="-D"
+     fi
+ 
+diff -up libgcrypt-1.5.0/tests/fipsdrv.c.cavs libgcrypt-1.5.0/tests/fipsdrv.c
+--- libgcrypt-1.5.0/tests/fipsdrv.c.cavs	2011-02-04 20:18:20.000000000 +0100
++++ libgcrypt-1.5.0/tests/fipsdrv.c	2011-07-21 15:06:44.000000000 +0200
+@@ -893,6 +893,9 @@ print_mpi_line (gcry_mpi_t a, int no_lz)
+     die ("gcry_mpi_aprint failed: %s\n", gpg_strerror (err));
+ 
+   p = buf;
++  while (*p)
++     *p++ = tolower(*p);
++  p = buf;
+   if (no_lz && p[0] == '0' && p[1] == '0' && p[2])
+     p += 2;
+ 
+@@ -1675,14 +1678,14 @@ run_rsa_verify (const void *data, size_t
+ /* Generate a DSA key of size KEYSIZE and return the complete
+    S-expression.  */
+ static gcry_sexp_t
+-dsa_gen (int keysize)
++dsa_gen (int keysize, int qsize)
+ {
+   gpg_error_t err;
+   gcry_sexp_t keyspec, key;
+ 
+   err = gcry_sexp_build (&keyspec, NULL,
+-                         "(genkey (dsa (nbits %d)(use-fips186-2)))",
+-                         keysize);
++                         "(genkey (dsa (nbits %d)(qbits %d)(use-fips186)))",
++                         keysize, qsize);
+   if (err)
+     die ("gcry_sexp_build failed for DSA key generation: %s\n",
+          gpg_strerror (err));
+@@ -1700,7 +1703,7 @@ dsa_gen (int keysize)
+ /* Generate a DSA key of size KEYSIZE and return the complete
+    S-expression.  */
+ static gcry_sexp_t
+-dsa_gen_with_seed (int keysize, const void *seed, size_t seedlen)
++dsa_gen_with_seed (int keysize, int qsize, const void *seed, size_t seedlen)
+ {
+   gpg_error_t err;
+   gcry_sexp_t keyspec, key;
+@@ -1709,10 +1712,11 @@ dsa_gen_with_seed (int keysize, const vo
+                          "(genkey"
+                          "  (dsa"
+                          "    (nbits %d)"
+-                         "    (use-fips186-2)"
++                         "    (qbits %d)"
++                         "    (use-fips186)"
+                          "    (derive-parms"
+                          "      (seed %b))))",
+-                         keysize, (int)seedlen, seed);
++                         keysize, qsize, (int)seedlen, seed);
+   if (err)
+     die ("gcry_sexp_build failed for DSA key generation: %s\n",
+          gpg_strerror (err));
+@@ -1720,6 +1724,37 @@ dsa_gen_with_seed (int keysize, const vo
+   err = gcry_pk_genkey (&key, keyspec);
+   if (err)
+     die ("gcry_pk_genkey failed for DSA: %s\n", gpg_strerror (err));
++  
++  gcry_sexp_release (keyspec);
++
++  return key;
++}
++
++/* Generate a DSA key with specified domain parameters and return the complete
++   S-expression.  */
++static gcry_sexp_t
++dsa_gen_key (const char *domain)
++{
++  gpg_error_t err;
++  gcry_sexp_t keyspec, key, domspec;
++
++  err = gcry_sexp_new (&domspec, domain, strlen(domain), 0);
++  if (err)
++    die ("gcry_sexp_build failed for domain spec: %s\n",
++         gpg_strerror (err));
++
++  err = gcry_sexp_build (&keyspec, NULL,
++                         "(genkey"
++                         "  (dsa"
++                         "    (use-fips186)"
++                         "    %S))",
++                         domspec);
++  if (err)
++    die ("gcry_sexp_build failed for DSA key generation: %s\n",
++         gpg_strerror (err));
++  err = gcry_pk_genkey (&key, keyspec);
++  if (err)
++    die ("gcry_pk_genkey failed for DSA: %s\n", gpg_strerror (err));
+ 
+   gcry_sexp_release (keyspec);
+ 
+@@ -1732,7 +1767,7 @@ dsa_gen_with_seed (int keysize, const vo
+    with one parameter per line in hex format using this order: p, q,
+    g, seed, counter, h. */
+ static void
+-print_dsa_domain_parameters (gcry_sexp_t key)
++print_dsa_domain_parameters (gcry_sexp_t key, int print_misc)
+ {
+   gcry_sexp_t l1, l2;
+   gcry_mpi_t mpi;
+@@ -1768,6 +1803,9 @@ print_dsa_domain_parameters (gcry_sexp_t
+     }
+   gcry_sexp_release (l1);
+ 
++  if (!print_misc)
++	return;
++
+   /* Extract the seed values.  */
+   l1 = gcry_sexp_find_token (key, "misc-key-info", 0);
+   if (!l1)
+@@ -1819,38 +1857,106 @@ print_dsa_domain_parameters (gcry_sexp_t
+ }
+ 
+ 
+-/* Generate DSA domain parameters for a modulus size of KEYSIZE.  The
++/* Print just the XY private key parameters.  KEY
++   is the complete key as returned by dsa_gen.  We print to stdout
++   with one parameter per line in hex format using this order: x, y. */
++static void 
++print_dsa_xy (gcry_sexp_t key)
++{
++  gcry_sexp_t l1, l2;
++  gcry_mpi_t mpi;
++  int idx;
++
++  l1 = gcry_sexp_find_token (key, "private-key", 0);
++  if (!l1)
++    die ("private key not found in genkey result\n");
++
++  l2 = gcry_sexp_find_token (l1, "dsa", 0);
++  if (!l2)
++    die ("returned private key not formed as expected\n");
++  gcry_sexp_release (l1);
++  l1 = l2;
++
++  /* Extract the parameters from the S-expression and print them to stdout.  */
++  for (idx=0; "xy"[idx]; idx++) 
++    {
++      l2 = gcry_sexp_find_token (l1, "xy"+idx, 1);
++      if (!l2)
++        die ("no %c parameter in returned public key\n", "xy"[idx]);
++      mpi = gcry_sexp_nth_mpi (l2, 1, GCRYMPI_FMT_USG);
++      if (!mpi)
++        die ("no value for %c parameter in returned private key\n","xy"[idx]);
++      gcry_sexp_release (l2);
++      if (standalone_mode)
++        printf ("%c = ", "XY"[idx]);
++      print_mpi_line (mpi, 1);
++      gcry_mpi_release (mpi);
++    }
++
++  gcry_sexp_release (l1);
++}
++
++
++/* Generate DSA pq domain parameters for a modulus size of KEYSIZE.  The
+    result is printed to stdout with one parameter per line in hex
+-   format and in this order: p, q, g, seed, counter, h.  If SEED is
++   format and in this order: p, q, seed, counter.  If SEED is
+    not NULL this seed value will be used for the generation.  */
+ static void
+-run_dsa_pqg_gen (int keysize, const void *seed, size_t seedlen)
++run_dsa_pqg_gen (int keysize, int qsize, const void *seed, size_t seedlen)
+ {
+   gcry_sexp_t key;
+ 
+   if (seed)
+-    key = dsa_gen_with_seed (keysize, seed, seedlen);
++    key = dsa_gen_with_seed (keysize, qsize, seed, seedlen);
+   else
+-    key = dsa_gen (keysize);
+-  print_dsa_domain_parameters (key);
++    key = dsa_gen (keysize, qsize);
++  print_dsa_domain_parameters (key, 1);
++  gcry_sexp_release (key);
++}
++
++
++/* Generate DSA domain parameters for a modulus size of KEYSIZE.  The
++   result is printed to stdout with one parameter per line in hex
++   format and in this order: p, q, g, seed, counter, h.  If SEED is
++   not NULL this seed value will be used for the generation.  */
++static void
++run_dsa_g_gen (int keysize, int qsize, const char *domain)
++{
++  gcry_sexp_t key;
++
++  key = dsa_gen_key (domain);
++  print_dsa_domain_parameters (key, 0);
++  gcry_sexp_release (key);
++}
++
++/* Generate a DSA key with specified domain parameters
++   and print the XY values. */
++static void
++run_dsa_gen_key (const char *domain)
++{
++  gcry_sexp_t key;
++
++  key = dsa_gen_key (domain);
++  print_dsa_xy (key);
++
+   gcry_sexp_release (key);
+ }
+ 
+ 
+ /* Generate a DSA key of size of KEYSIZE and write the private key to
+    FILENAME.  Also write the parameters to stdout in the same way as
+-   run_dsa_pqg_gen.  */
++   run_dsa_g_gen.  */
+ static void
+-run_dsa_gen (int keysize, const char *filename)
++run_dsa_gen (int keysize, int qsize, const char *filename)
+ {
+   gcry_sexp_t key, private_key;
+   FILE *fp;
+ 
+-  key = dsa_gen (keysize);
++  key = dsa_gen (keysize, qsize);
+   private_key = gcry_sexp_find_token (key, "private-key", 0);
+   if (!private_key)
+     die ("private key not found in genkey result\n");
+-  print_dsa_domain_parameters (key);
++  print_dsa_domain_parameters (key, 1);
+ 
+   fp = fopen (filename, "wb");
+   if (!fp)
+@@ -1863,6 +1969,53 @@ run_dsa_gen (int keysize, const char *fi
+ }
+ 
+ 
++static int
++dsa_hash_from_key(gcry_sexp_t s_key)
++{
++  gcry_sexp_t l1, l2;
++  gcry_mpi_t q;
++  unsigned int qbits;
++
++  l1 = gcry_sexp_find_token (s_key, "public-key", 0);
++  if (!l1)
++    {
++      l1 = gcry_sexp_find_token (s_key, "private-key", 0);
++      if (!l1)
++        die ("neither private nor public key found in the loaded key\n");
++    }
++
++  l2 = gcry_sexp_find_token (l1, "dsa", 0);
++  if (!l2)
++    die ("public key not formed as expected - no dsa\n");
++  gcry_sexp_release (l1);
++  l1 = l2;
++
++  l2 = gcry_sexp_find_token (l1, "q", 0);
++  if (!l2)
++    die ("public key not formed as expected - no q\n");
++  gcry_sexp_release (l1);
++  l1 = l2;
++
++  q = gcry_sexp_nth_mpi (l1, 1, GCRYMPI_FMT_USG);
++  if (!q)
++    die ("public key not formed as expected - no mpi in q\n");
++  qbits = gcry_mpi_get_nbits(q);
++  gcry_sexp_release(l1);
++  gcry_mpi_release(q);
++  switch(qbits)
++    {
++    case 160:
++	return GCRY_MD_SHA1;
++    case 224:
++	return GCRY_MD_SHA224;
++    case 256:
++        return GCRY_MD_SHA256;
++    default:
++        die("bad number bits (%d) of q in key\n", qbits);
++    }
++  return GCRY_MD_NONE;
++}
++
+ 
+ /* Sign DATA of length DATALEN using the key taken from the S-expression
+    encoded KEYFILE. */
+@@ -1872,11 +2025,16 @@ run_dsa_sign (const void *data, size_t d
+ {
+   gpg_error_t err;
+   gcry_sexp_t s_data, s_key, s_sig, s_tmp, s_tmp2;
+-  char hash[20];
++  char hash[128];
+   gcry_mpi_t tmpmpi;
++  int algo;
++
++  s_key = read_sexp_from_file (keyfile);
++  algo = dsa_hash_from_key(s_key);
+ 
+-  gcry_md_hash_buffer (GCRY_MD_SHA1, hash, data, datalen);
+-  err = gcry_mpi_scan (&tmpmpi, GCRYMPI_FMT_USG, hash, 20, NULL);
++  gcry_md_hash_buffer (algo, hash, data, datalen);
++  err = gcry_mpi_scan (&tmpmpi, GCRYMPI_FMT_USG, hash,
++                       gcry_md_get_algo_dlen(algo), NULL);
+   if (!err)
+     {
+       err = gcry_sexp_build (&s_data, NULL,
+@@ -1887,8 +2045,6 @@ run_dsa_sign (const void *data, size_t d
+     die ("gcry_sexp_build failed for DSA data input: %s\n",
+          gpg_strerror (err));
+ 
+-  s_key = read_sexp_from_file (keyfile);
+-
+   err = gcry_pk_sign (&s_sig, s_data, s_key);
+   if (err)
+     {
+@@ -1964,13 +2120,18 @@ run_dsa_verify (const void *data, size_t
+ {
+   gpg_error_t err;
+   gcry_sexp_t s_data, s_key, s_sig;
+-  char hash[20];
++  char hash[128];
+   gcry_mpi_t tmpmpi;
++  int algo;
++
++  s_key = read_sexp_from_file (keyfile);
++  algo = dsa_hash_from_key(s_key);
+ 
+-  gcry_md_hash_buffer (GCRY_MD_SHA1, hash, data, datalen);
++  gcry_md_hash_buffer (algo, hash, data, datalen);
+   /* Note that we can't simply use %b with HASH to build the
+      S-expression, because that might yield a negative value.  */
+-  err = gcry_mpi_scan (&tmpmpi, GCRYMPI_FMT_USG, hash, 20, NULL);
++  err = gcry_mpi_scan (&tmpmpi, GCRYMPI_FMT_USG, hash,
++                       gcry_md_get_algo_dlen(algo), NULL);
+   if (!err)
+     {
+       err = gcry_sexp_build (&s_data, NULL,
+@@ -1981,7 +2142,6 @@ run_dsa_verify (const void *data, size_t
+     die ("gcry_sexp_build failed for DSA data input: %s\n",
+          gpg_strerror (err));
+ 
+-  s_key = read_sexp_from_file (keyfile);
+   s_sig = read_sexp_from_file (sigfile);
+ 
+   err = gcry_pk_verify (s_sig, s_data, s_key);
+@@ -2014,7 +2174,7 @@ usage (int show_help)
+      "Run a crypto operation using hex encoded input and output.\n"
+      "MODE:\n"
+      "  encrypt, decrypt, digest, random, hmac-sha,\n"
+-     "  rsa-{derive,gen,sign,verify}, dsa-{pqg-gen,gen,sign,verify}\n"
++     "  rsa-{derive,gen,sign,verify}, dsa-{pq-gen,g-gen,gen,sign,verify}\n"
+      "OPTIONS:\n"
+      "  --verbose        Print additional information\n"
+      "  --binary         Input and output is in binary form\n"
+@@ -2024,6 +2184,7 @@ usage (int show_help)
+      "  --dt DT          Use the hex encoded DT for the RNG\n"
+      "  --algo NAME      Use algorithm NAME\n"
+      "  --keysize N      Use a keysize of N bits\n"
++     "  --qize N         Use a DSA q parameter size of N bits\n"
+      "  --signature NAME Take signature from file NAME\n"
+      "  --chunk N        Read in chunks of N bytes (implies --binary)\n"
+      "  --pkcs1          Use PKCS#1 encoding\n"
+@@ -2050,6 +2211,7 @@ main (int argc, char **argv)
+   const char *dt_string = NULL;
+   const char *algo_string = NULL;
+   const char *keysize_string = NULL;
++  const char *qsize_string = NULL;
+   const char *signature_string = NULL;
+   FILE *input;
+   void *data;
+@@ -2143,6 +2305,14 @@ main (int argc, char **argv)
+           keysize_string = *argv;
+           argc--; argv++;
+         }
++      else if (!strcmp (*argv, "--qsize"))
++        {
++          argc--; argv++;
++          if (!argc)
++            usage (0);
++          qsize_string = *argv;
++          argc--; argv++;
++        }
+       else if (!strcmp (*argv, "--signature"))
+         {
+           argc--; argv++;
+@@ -2463,23 +2633,49 @@ main (int argc, char **argv)
+     }
+   else if (!strcmp (mode_string, "dsa-pqg-gen"))
+     {
+-      int keysize;
++      int keysize, qsize;
+ 
+       keysize = keysize_string? atoi (keysize_string) : 0;
+       if (keysize < 1024 || keysize > 3072)
+         die ("invalid keysize specified; needs to be 1024 .. 3072\n");
+-      run_dsa_pqg_gen (keysize, datalen? data:NULL, datalen);
++      qsize = qsize_string? atoi (qsize_string) : 0;
++      if (qsize < 160 || qsize > 256)
++        die ("invalid qsize specified; needs to be 160 .. 256\n");
++      run_dsa_pqg_gen (keysize, qsize, datalen? data:NULL, datalen);
++    }
++  else if (!strcmp (mode_string, "dsa-g-gen"))
++    {
++      int keysize, qsize;
++
++      keysize = keysize_string? atoi (keysize_string) : 0;
++      if (keysize < 1024 || keysize > 3072)
++        die ("invalid keysize specified; needs to be 1024 .. 3072\n");
++      qsize = qsize_string? atoi (qsize_string) : 0;
++      if (qsize < 160 || qsize > 256)
++        die ("invalid qsize specified; needs to be 160 .. 256\n");
++      if (!key_string)
++        die ("option --key containing pq domain parameters is required in this mode\n");
++      run_dsa_g_gen (keysize, qsize, key_string);
++    }
++  else if (!strcmp (mode_string, "dsa-gen-key"))
++    {
++      if (!key_string)
++        die ("option --key containing pqg domain parameters is required in this mode\n");
++      run_dsa_gen_key (key_string);
+     }
+   else if (!strcmp (mode_string, "dsa-gen"))
+     {
+-      int keysize;
++      int keysize, qsize;
+ 
+       keysize = keysize_string? atoi (keysize_string) : 0;
+       if (keysize < 1024 || keysize > 3072)
+         die ("invalid keysize specified; needs to be 1024 .. 3072\n");
++      qsize = qsize_string? atoi (qsize_string) : 0;
++      if (qsize < 160 || qsize > 256)
++        die ("invalid qsize specified; needs to be 160 .. 256\n");
+       if (!key_string)
+         die ("option --key is required in this mode\n");
+-      run_dsa_gen (keysize, key_string);
++      run_dsa_gen (keysize, qsize, key_string);
+     }
+   else if (!strcmp (mode_string, "dsa-sign"))
+     {

@@ -1,0 +1,12 @@
+diff -up libgcrypt-1.5.3/tests/benchmark.c.eccfix libgcrypt-1.5.3/tests/benchmark.c
+--- libgcrypt-1.5.3/tests/benchmark.c.eccfix	2013-10-20 23:45:32.157297611 +0100
++++ libgcrypt-1.5.3/tests/benchmark.c	2013-10-20 23:45:42.683275072 +0100
+@@ -962,7 +962,7 @@ ecc_bench (int iterations, int print_hea
+ {
+ #if USE_ECC
+   gpg_error_t err;
+-  int p_sizes[] = { 192, 224, 256, 384, 521 };
++  int p_sizes[] = { 256, 384 };
+   int testno;
+ 
+   if (print_header)
