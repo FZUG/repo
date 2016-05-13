@@ -4,8 +4,9 @@
 # Email: sensor.wen@gmail.commit
 # Description: CI build for repo
 
-from subprocess import getoutput, call
+from subprocess import getoutput, getstatusoutput, call
 from urllib.request import urlretrieve
+import urllib.error
 import re
 import os
 import sys
@@ -93,6 +94,7 @@ def get_sources(itemList, output=srcDir, verb=None):
     Args:
         itemList: A list of source files.
         output: A string of temp directory.
+        verb: A bool of verbose.
     '''
 
     for item in itemList:
@@ -100,8 +102,11 @@ def get_sources(itemList, output=srcDir, verb=None):
             if item.split('://')[0] in ['http', 'https', 'ftp']:
                 if verb:
                     print('\033[36mverb:\033[0m downloading {} file.'.format(item.split('/')[-1]))
-                urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
-                #call(['wget', '-q', '-P', output, item])
+                try:
+                    urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
+                    #call(['wget', '-q', '-P', output, item])
+                except urllib.error.HTTPError as e:
+                    print('\033[31merro:\033[0m downloading error. {}'.format(e))
             else:
                 for src in find_files(item, 'rpms'):
                     if verb:
@@ -154,6 +159,7 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='', ver
         arch: A string of system architecture.
         output: A string of RPM file output directory.
         opts: A string of mock options.
+        verb: A bool of verbose.
 
     Returns:
         Return the command running log.
@@ -164,7 +170,7 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='', ver
 
     command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion {} {}'.format(
         output, release, arch, opts, srpmFile)
-    return getoutput(command)
+    return getstatusoutput(command)
 
 def rpm_lint(repoDir=outDir, time=10):
     '''Check rpm files.
@@ -193,6 +199,21 @@ def create_repo(output=outDir):
 
     return getoutput('/bin/createrepo_c {}'.format(output))
 
+def result(filename, content):
+    '''Log build result to file.
+
+    Args:
+        filename: A string of filename.
+        content: A string of content.
+    '''
+
+    result = 'success' if content[0] == 0 else 'fail'
+    _, pkgname, release, arch = content
+
+    with open(filename, mode='a+') as f:
+        f.write('{} {} for fc{}-{}\n'.format(pkgname, result, release, arch))
+        print('\033[32minfo:\033[0m Write build result to {} file.'.format(filename))
+
 def parse_args():
     '''Parser for command-line options.
 
@@ -203,7 +224,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='repository ci builder.')
     parser.add_argument('-o', '--output-dir', metavar='PATH', type=str,
                         dest='outDir', action='store', default=outDir,
-                        help='set rpm package output directory')
+                        help='set rpm package output directory (default: output)')
     parser.add_argument('-c', '--commit', metavar='COMMIT', type=str,
                         dest='commit', action='store', required=False,
                         help='build the specified commit')
@@ -212,10 +233,10 @@ def parse_args():
                         help='build the specified Spec file')
     parser.add_argument('-a', '--arch', metavar='ARCH', type=str,
                         dest='archs', action='append', required=False,
-                        help='set architecture for build rpm package')
+                        help='set architecture for build rpm package (default: x86_64, i386)')
     parser.add_argument('-r', '--release', metavar='RELEASE', type=str,
                         dest='releases', action='append', required=False,
-                        help='set release version for build rpm package')
+                        help='set release version for build rpm package (default: 22, 23, 24)')
     parser.add_argument('-b', '--black-list', metavar='BLACKLIST', type=str,
                         dest='blacklist', action='append', required=False,
                         help='set blacklist, skip these items')
@@ -226,6 +247,9 @@ def parse_args():
                         help='check common problems in rpm package')
     parser.add_argument('--clean', dest='clean', action='store_true',
                         help='clean workspace before building')
+    parser.add_argument('--result', metavar='PATH', type=str,
+                        dest='result', action='store', required=False, default='result.log',
+                        help='log bulid result to file (default: result.log)')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
                         help='be verbose')
     parser.add_argument(dest='files', metavar='FILE', type=str, action='store', nargs='*')
@@ -284,14 +308,16 @@ if __name__ == '__main__':
             for rel in Releases:
                 for arch in Archs:
                     outDir = os.path.join(rootDir, rel, arch)
-                    print('\033[32minfo:\033[0m Build RPM for fc{} - {}:\n'.format(rel, arch),
-                          build_rpm(srpmFile, release=rel, arch=arch, output=outDir,
-                                    opts=args.mock, verb=args.verbose))
+                    print('\033[32minfo:\033[0m Build RPM for fc{} - {}:\n'.format(rel, arch))
+                    value, log = build_rpm(srpmFile, release=rel, arch=arch, output=outDir,
+                                           opts=args.mock, verb=args.verbose)
+                    print(log)
                     print('\033[32minfo:\033[0m Create metadata for fc{} - {}:\n'.format(rel, arch),
                           create_repo(outDir))
                     if args.rpmlint:
                         print('\033[32minfo:\033[0m Check RPM for fc{} - {}:\n'.format(rel, arch),
                               rpm_lint(outDir))
+                    result(args.result, [value, specFile, rel, arch])
 
         if args.file or args.commit:
             break
