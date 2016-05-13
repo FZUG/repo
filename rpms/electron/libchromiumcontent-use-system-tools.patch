@@ -25,14 +25,3 @@
            run_gyp(target_arch))
  
  
---- a/script/lib/util.py
-+++ b/script/lib/util.py
-@@ -6,7 +6,7 @@ import sys
- def get_output_dir(target_arch, component):
-   # Build in "out_ffmpeg" for Chromium branding of ffmpeg.
-   if component == 'ffmpeg':
--    return 'out_ffmpeg'
-+    return 'out'
- 
-   # Build in "out_component" for component build.
-   output_dir = 'out'
