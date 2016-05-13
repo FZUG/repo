@@ -1,0 +1,32 @@
+diff -up libgcrypt-1.5.3/cipher/kdf.c.pbkdf-speedup libgcrypt-1.5.3/cipher/kdf.c
+--- libgcrypt-1.5.3/cipher/kdf.c.pbkdf-speedup	2014-01-21 15:49:22.676638703 +0100
++++ libgcrypt-1.5.3/cipher/kdf.c	2014-01-21 15:52:40.115047218 +0100
+@@ -172,19 +172,21 @@ pkdf2 (const void *passphrase, size_t pa
+       return ec;
+     }
+ 
++  ec = gpg_err_code (gcry_md_setkey (md, passphrase, passphraselen));
++  if (ec)
++    {
++      gcry_md_close (md);
++      gcry_free (sbuf);
++      return ec;
++    }
++
+   /* Step 3 and 4. */
+   memcpy (sbuf, salt, saltlen);
+   for (lidx = 1; lidx <= l; lidx++)
+     {
+       for (iter = 0; iter < iterations; iter++)
+         {
+-          ec = gpg_err_code (gcry_md_setkey (md, passphrase, passphraselen));
+-          if (ec)
+-            {
+-              gcry_md_close (md);
+-              gcry_free (sbuf);
+-              return ec;
+-            }
++          gcry_md_reset (md);
+           if (!iter) /* Compute U_1:  */
+             {
+               sbuf[saltlen]     = (lidx >> 24);
