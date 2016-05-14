@@ -1,0 +1,73 @@
+diff -up libgcrypt-1.5.0/cipher/elgamal.c.leak libgcrypt-1.5.0/cipher/elgamal.c
+--- libgcrypt-1.5.0/cipher/elgamal.c.leak	2011-02-04 20:09:38.000000000 +0100
++++ libgcrypt-1.5.0/cipher/elgamal.c	2012-12-03 14:51:10.743067964 +0100
+@@ -641,7 +641,10 @@ elg_generate_ext (int algo, unsigned int
+     }
+ 
+   if (xvalue)
+-    ec = generate_using_x (&sk, nbits, xvalue, retfactors);
++    {
++      ec = generate_using_x (&sk, nbits, xvalue, retfactors);
++      gcry_mpi_release(xvalue);
++    }
+   else
+     {
+       generate (&sk, nbits, retfactors);
+diff -up libgcrypt-1.5.0/cipher/primegen.c.leak libgcrypt-1.5.0/cipher/primegen.c
+--- libgcrypt-1.5.0/cipher/primegen.c.leak	2012-04-05 15:37:52.000000000 +0200
++++ libgcrypt-1.5.0/cipher/primegen.c	2012-12-03 14:44:14.610010867 +0100
+@@ -1198,10 +1198,7 @@ gcry_prime_group_generator (gcry_mpi_t *
+                             gcry_mpi_t prime, gcry_mpi_t *factors,
+                             gcry_mpi_t start_g)
+ {
+-  gcry_mpi_t tmp = gcry_mpi_new (0);
+-  gcry_mpi_t b = gcry_mpi_new (0);
+-  gcry_mpi_t pmin1 = gcry_mpi_new (0);
+-  gcry_mpi_t g = start_g? gcry_mpi_copy (start_g) : gcry_mpi_set_ui (NULL, 3);
++  gcry_mpi_t tmp, b, pmin1, g;
+   int first = 1;
+   int i, n;
+ 
+@@ -1214,6 +1211,11 @@ gcry_prime_group_generator (gcry_mpi_t *
+   if (n < 2)
+     return gpg_error (GPG_ERR_INV_ARG);
+ 
++  tmp = gcry_mpi_new (0);
++  b = gcry_mpi_new (0);
++  pmin1 = gcry_mpi_new (0);
++  g = start_g? gcry_mpi_copy (start_g) : gcry_mpi_set_ui (NULL, 3);
++
+   /* Extra sanity check - usually disabled. */
+ /*   mpi_set (tmp, factors[0]); */
+ /*   for(i = 1; i < n; i++) */
+diff -up libgcrypt-1.5.0/cipher/pubkey.c.leak libgcrypt-1.5.0/cipher/pubkey.c
+--- libgcrypt-1.5.0/cipher/pubkey.c.leak	2011-06-13 12:23:50.000000000 +0200
++++ libgcrypt-1.5.0/cipher/pubkey.c	2012-12-03 15:23:42.377183489 +0100
+@@ -2853,6 +2853,8 @@ gcry_pk_encrypt (gcry_sexp_t *r_ciph, gc
+ 
+   REGISTER_DEFAULT_PUBKEYS;
+ 
++  init_encoding_ctx (&ctx, PUBKEY_OP_ENCRYPT, gcry_pk_get_nbits (s_pkey));
++
+   /* Get the key. */
+   rc = sexp_to_key (s_pkey, 0, NULL, &pkey, &module);
+   if (rc)
+@@ -2873,7 +2875,6 @@ gcry_pk_encrypt (gcry_sexp_t *r_ciph, gc
+   algo_elems = pubkey->elements_enc;
+ 
+   /* Get the stuff we want to encrypt. */
+-  init_encoding_ctx (&ctx, PUBKEY_OP_ENCRYPT, gcry_pk_get_nbits (s_pkey));
+   rc = sexp_data_to_mpi (s_data, &data, &ctx);
+   if (rc)
+     goto leave;
+diff -up libgcrypt-1.5.0/src/hmac256.c.leak libgcrypt-1.5.0/src/hmac256.c
+--- libgcrypt-1.5.0/src/hmac256.c.leak	2011-02-04 20:17:33.000000000 +0100
++++ libgcrypt-1.5.0/src/hmac256.c	2012-12-03 15:37:36.504955809 +0100
+@@ -435,7 +435,6 @@ _gcry_hmac256_finalize (hmac256_context_
+       tmphd = _gcry_hmac256_new (NULL, 0);
+       if (!tmphd)
+         {
+-          free (hd);
+           return NULL;
+         }
+       _gcry_hmac256_update (tmphd, hd->opad, 64);

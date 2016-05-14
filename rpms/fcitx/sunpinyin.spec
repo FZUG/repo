@@ -17,7 +17,7 @@ Group:		System Environment/Libraries
 License:	LGPLv2 or CDDL
 URL:		https://github.com/sunpinyin/sunpinyin
 Source0:	https://github.com/sunpinyin/sunpinyin/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-Source1:	http://open-gram.googlecode.com/files/lm_sc.3gm.arpa-20140820.tar.bz2
+Source1:	https://sourceforge.net/projects/open-gram/files/lm_sc.3gm.arpa-20140820.tar.bz2
 Source2:	http://open-gram.googlecode.com/files/dict.utf8-20131214.tar.bz2
 
 BuildRequires:	sqlite-devel

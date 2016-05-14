@@ -18,7 +18,7 @@ Summary: An open source code editor for the web
 Group:   Development/Tools
 License: MIT
 URL:     http://brackets.io
-Source0: adobe.brackets.extract.0.8.0-1749-release.zip
+Source0: http://rpm-ostree.cloud.fedoraproject.org/repo/pkgs/mosquito/brackets/brackets/adobe.brackets.extract.0.8.0-1749-release.zip/200eb47ad53f74e57caa13a6ae16ef5a/adobe.brackets.extract.0.8.0-1749-release.zip
 Source1: GettingStarted-zhcn.html
 
 Requires: gtk2, alsa-lib, GConf2
