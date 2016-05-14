@@ -1,0 +1,20 @@
+--- gsview-4.7/src/gvcinit.c.letterpaper	2005-03-01 03:51:38.000000000 -0600
++++ gsview-4.7/src/gvcinit.c	2005-06-23 10:41:42.000000000 -0500
+@@ -319,13 +319,13 @@
+     option.button_show = TRUE;
+     option.fit_page = FALSE;	/* Changed after 2.1 */
+     option.safer = TRUE;
+-    option.media = IDM_A4;
+-    strcpy(option.medianame, "A4");
++    option.media = IDM_LETTER;
++    strcpy(option.medianame, "Letter");
+     option.media_rotate = FALSE;
+     option.user_width_warn = 5669;	/* 2 metres */
+     option.user_height_warn = 5669;
+-    option.user_width = 595;		/* A4 width 210mm */
+-    option.user_height = 842;		/* A4 height 297mm */
++    option.user_width = 612;		/* Letter width 8.5in */
++    option.user_height = 792;		/* Letter height 11in */
+     option.epsf_clip = FALSE;
+     option.epsf_warn = FALSE;
+     option.ignore_dsc = FALSE;

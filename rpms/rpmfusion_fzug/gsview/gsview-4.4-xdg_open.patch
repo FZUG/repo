@@ -1,0 +1,26 @@
+--- gsview-4.4/srcunx/gvxreg.c.htmlview	2001-10-05 03:48:14.000000000 -0500
++++ gsview-4.4/srcunx/gvxreg.c	2003-04-28 11:28:15.000000000 -0500
+@@ -76,7 +76,7 @@
+ {
+     if (debug & DEBUG_GENERAL)
+ 	gs_addmess("online_reg:\n");
+-    exec_program("netscape", "http://www.ghostgum.com.au/");
++    exec_program("xdg-open", "http://www.ghostgum.com.au/");
+ }
+ 
+ void modal_reg(GtkWidget *w, gpointer data)
+--- gsview-4.4/srcunx/gvxhelp.txt.htmlview	2003-03-14 15:45:52.000000000 -0600
++++ gsview-4.4/srcunx/gvxhelp.txt	2003-04-28 11:29:54.000000000 -0500
+@@ -18,11 +18,7 @@
+   TAG="#$2"
+ fi 
+ 
+-if mozilla -remote openFile\(file://$1$TAG\) ; then
+-    exit 0
+-else
+-    mozilla file://$1$TAG
+-fi 
++xdg-open file://$1\$TAG
+ exit 0
+ 
+ 

@@ -1,0 +1,13 @@
+--- gsview-4.7/src/cdll.c.dllversion	2002-02-09 21:46:38.000000000 -0600
++++ gsview-4.7/src/cdll.c	2005-06-23 09:05:39.000000000 -0500
+@@ -106,6 +106,10 @@
+     }
+     dll->revision_number = rv.revision;
+ 
++    /* Hack because FC5's ghostscript-8.15 reports 81500 instead of 815 -- Rex */
++    if ( dll->revision_number > (GS_REVISION_MIN*100) )	
++	dll->revision_number = (long)(dll->revision_number / 100);
++
+     if ( (dll->revision_number < GS_REVISION_MIN) || 
+ 	(dll->revision_number > GS_REVISION_MAX) ) {
+ 	gs_addmessf("\nWrong version of DLL found.\n\
