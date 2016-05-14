@@ -1,0 +1,30 @@
+diff -up libgcrypt-1.5.2/cipher/Makefile.am.aliasing libgcrypt-1.5.2/cipher/Makefile.am
+--- libgcrypt-1.5.2/cipher/Makefile.am.aliasing	2013-04-18 16:49:13.000000000 +0200
++++ libgcrypt-1.5.2/cipher/Makefile.am	2013-04-25 21:48:57.867465215 +0200
+@@ -81,3 +81,9 @@ tiger.o: $(srcdir)/tiger.c
+ 
+ tiger.lo: $(srcdir)/tiger.c
+ 	`echo $(LTCOMPILE) -c $(srcdir)/tiger.c | $(o_flag_munging) `
++
++rijndael.o: $(srcdir)/rijndael.c
++	`echo $(COMPILE) -fno-strict-aliasing -c $(srcdir)/rijndael.c `
++
++rijndael.lo: $(srcdir)/rijndael.c
++	`echo $(LTCOMPILE) -fno-strict-aliasing -c $(srcdir)/rijndael.c `
+diff -up libgcrypt-1.5.2/cipher/Makefile.in.aliasing libgcrypt-1.5.2/cipher/Makefile.in
+--- libgcrypt-1.5.2/cipher/Makefile.in.aliasing	2013-04-18 17:06:03.000000000 +0200
++++ libgcrypt-1.5.2/cipher/Makefile.in	2013-04-25 21:48:59.164493610 +0200
+@@ -638,6 +638,12 @@ tiger.o: $(srcdir)/tiger.c
+ tiger.lo: $(srcdir)/tiger.c
+ 	`echo $(LTCOMPILE) -c $(srcdir)/tiger.c | $(o_flag_munging) `
+ 
++rijndael.o: $(srcdir)/rijndael.c
++	`echo $(COMPILE) -fno-strict-aliasing -c $(srcdir)/rijndael.c `
++
++rijndael.lo: $(srcdir)/rijndael.c
++	`echo $(LTCOMPILE) -fno-strict-aliasing -c $(srcdir)/rijndael.c `
++
+ # Tell versions [3.59,3.63) of GNU make to not export all variables.
+ # Otherwise a system limit (for SysV at least) may be exceeded.
+ .NOEXPORT:
+diff -up libgcrypt-1.5.2/cipher/rijndael.c.aliasing libgcrypt-1.5.2/cipher/rijndael.c

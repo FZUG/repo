@@ -1,0 +1,82 @@
+diff -up libgcrypt-1.5.1/random/rndlinux.c.use-poll libgcrypt-1.5.1/random/rndlinux.c
+--- libgcrypt-1.5.1/random/rndlinux.c.use-poll	2013-03-20 15:33:26.504867356 +0100
++++ libgcrypt-1.5.1/random/rndlinux.c	2013-03-20 15:37:24.999944048 +0100
+@@ -32,6 +32,7 @@
+ #include <string.h>
+ #include <unistd.h>
+ #include <fcntl.h>
++#include <poll.h>
+ #include "types.h"
+ #include "g10lib.h"
+ #include "rand-internal.h"
+@@ -142,49 +143,37 @@ _gcry_rndlinux_gather_random (void (*add
+     }
+ 
+   /* Enter the read loop.  */
+-  delay = 0;  /* Start with 0 seconds so that we do no block on the
++  delay = 100;  /* Start with 0 seconds so that we do no block on the
+                  first iteration and in turn call the progress function
+                  before blocking.  To give the OS a better chance to
+                  return with something we will actually use 100ms. */
+   while (length)
+     {
+-      fd_set rfds;
+-      struct timeval tv;
+       int rc;
++      struct pollfd pfd;
+ 
+-      /* If the system has no limit on the number of file descriptors
+-         and we encounter an fd which is larger than the fd_set size,
+-         we don't use the select at all.  The select code is only used
+-         to emit progress messages.  A better solution would be to
+-         fall back to poll() if available.  */
+-#ifdef FD_SETSIZE
+-      if (fd < FD_SETSIZE)
+-#endif
++      pfd.fd = fd;
++      pfd.events = POLLIN;
++
++      if ( !(rc=poll(&pfd, 1, delay)) )
+         {
+-          FD_ZERO(&rfds);
+-          FD_SET(fd, &rfds);
+-          tv.tv_sec = delay;
+-          tv.tv_usec = delay? 0 : 100000;
+-          if ( !(rc=select(fd+1, &rfds, NULL, NULL, &tv)) )
+-            {
+-              if (!any_need_entropy || last_so_far != (want - length) )
+-                {
+-                  last_so_far = want - length;
+-                  _gcry_random_progress ("need_entropy", 'X',
+-                                         (int)last_so_far, (int)want);
+-                  any_need_entropy = 1;
+-                }
+-              delay = 3; /* Use 3 seconds henceforth.  */
+-              continue;
+-            }
+-          else if( rc == -1 )
++          if (!any_need_entropy || last_so_far != (want - length) )
+             {
+-              log_error ("select() error: %s\n", strerror(errno));
+-              if (!delay)
+-                delay = 1; /* Use 1 second if we encounter an error before
++              last_so_far = want - length;
++              _gcry_random_progress ("need_entropy", 'X',
++                                     (int)last_so_far, (int)want);
++              any_need_entropy = 1;
++	    }
++          delay = 3000; /* Use 3 seconds henceforth.  */
++	  continue;
++	}
++      else if( rc == -1 )
++        {
++          log_error ("poll() error: %s\n", strerror(errno));
++          if (!delay)
++            delay = 1000; /* Use 1 second if we encounter an error before
+                           we have ever blocked.  */
+-              continue;
+-            }
++          continue;
+         }
+ 
+       do

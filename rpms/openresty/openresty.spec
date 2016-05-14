@@ -96,8 +96,8 @@ Source4:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.t
 Source5:           https://www.modsecurity.org/tarball/2.8.0/modsecurity-2.8.0.tar.gz
 Source6:           https://github.com/SpiderLabs/owasp-modsecurity-crs/archive/%{modsec_crs_commit}/owasp-modsecurity-crs-%{modsec_crs_shortcommit}.tar.gz
 Source7:           https://github.com/aperezdc/ngx-fancyindex/archive/v%{fancy_version}/ngx-fancyindex-%{fancy_version}.tar.gz
-Source8:           ftp://xmlsoft.org/libxml2-%{libxml2_version}.tar.gz
-Source9:           http://www.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
+Source8:           ftp://xmlsoft.org/libxml2/old/libxml2-%{libxml2_version}.tar.gz
+Source9:           https://archive.apache.org/dist/httpd/httpd-%{httpd_version}.tar.gz
 Source10:          openresty.service
 Source11:          openresty.logrotate
 Source12:          openresty.conf
