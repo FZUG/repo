@@ -106,15 +106,6 @@
 [submodule "rpms/rpmfusion/libopenshot-audio"]
 	path = rpms/rpmfusion/libopenshot-audio
 	url = https://github.com/rpmfusion/libopenshot-audio
-[submodule "rpms/rpmfusion/oxine"]
-	path = rpms/rpmfusion/oxine
-	url = https://github.com/rpmfusion/oxine
-[submodule "rpms/rpmfusion/minitube"]
-	path = rpms/rpmfusion/minitube
-	url = https://github.com/rpmfusion/minitube
-[submodule "rpms/rpmfusion/gnome-shell-extension-weather"]
-	path = rpms/rpmfusion/gnome-shell-extension-weather
-	url = https://github.com/rpmfusion/gnome-shell-extension-weather
 [submodule "rpms/rpmfusion/gmtk"]
 	path = rpms/rpmfusion/gmtk
 	url = https://github.com/rpmfusion/gmtk
@@ -196,18 +187,6 @@
 [submodule "rpms/rpmfusion/k9copy"]
 	path = rpms/rpmfusion/k9copy
 	url = https://github.com/rpmfusion/k9copy
-[submodule "rpms/rpmfusion/mame-data-extras"]
-	path = rpms/rpmfusion/mame-data-extras
-	url = https://github.com/rpmfusion/mame-data-extras
-[submodule "rpms/rpmfusion/nailer"]
-	path = rpms/rpmfusion/nailer
-	url = https://github.com/rpmfusion/nailer
-[submodule "rpms/rpmfusion/gnome-mplayer"]
-	path = rpms/rpmfusion/gnome-mplayer
-	url = https://github.com/rpmfusion/gnome-mplayer
-[submodule "rpms/rpmfusion/gecko-mediaplayer"]
-	path = rpms/rpmfusion/gecko-mediaplayer
-	url = https://github.com/rpmfusion/gecko-mediaplayer
 [submodule "rpms/rpmfusion/openmw"]
 	path = rpms/rpmfusion/openmw
 	url = https://github.com/rpmfusion/openmw
@@ -343,33 +322,6 @@
 [submodule "rpms/rpmfusion/xrick"]
 	path = rpms/rpmfusion/xrick
 	url = https://github.com/rpmfusion/xrick
-[submodule "rpms/rpmfusion/xpsb-glx"]
-	path = rpms/rpmfusion/xpsb-glx
-	url = https://github.com/rpmfusion/xpsb-glx
-[submodule "rpms/rpmfusion/xorg-x11-drv-psb"]
-	path = rpms/rpmfusion/xorg-x11-drv-psb
-	url = https://github.com/rpmfusion/xorg-x11-drv-psb
-[submodule "rpms/rpmfusion/xorg-x11-drv-nvidia-newest"]
-	path = rpms/rpmfusion/xorg-x11-drv-nvidia-newest
-	url = https://github.com/rpmfusion/xorg-x11-drv-nvidia-newest
-[submodule "rpms/rpmfusion/xorg-x11-drv-nvidia-beta"]
-	path = rpms/rpmfusion/xorg-x11-drv-nvidia-beta
-	url = https://github.com/rpmfusion/xorg-x11-drv-nvidia-beta
-[submodule "rpms/rpmfusion/xorg-x11-drv-nvidia-96xx"]
-	path = rpms/rpmfusion/xorg-x11-drv-nvidia-96xx
-	url = https://github.com/rpmfusion/xorg-x11-drv-nvidia-96xx
-[submodule "rpms/rpmfusion/xorg-x11-drv-nvidia-173xx"]
-	path = rpms/rpmfusion/xorg-x11-drv-nvidia-173xx
-	url = https://github.com/rpmfusion/xorg-x11-drv-nvidia-173xx
-[submodule "rpms/rpmfusion/xorg-x11-drv-fglrx"]
-	path = rpms/rpmfusion/xorg-x11-drv-fglrx
-	url = https://github.com/rpmfusion/xorg-x11-drv-fglrx
-[submodule "rpms/rpmfusion/xorg-x11-drv-catalyst-legacy"]
-	path = rpms/rpmfusion/xorg-x11-drv-catalyst-legacy
-	url = https://github.com/rpmfusion/xorg-x11-drv-catalyst-legacy
-[submodule "rpms/rpmfusion/xorg-x11-drv-catalyst"]
-	path = rpms/rpmfusion/xorg-x11-drv-catalyst
-	url = https://github.com/rpmfusion/xorg-x11-drv-catalyst
 [submodule "rpms/rpmfusion/xmms2-nonfree"]
 	path = rpms/rpmfusion/xmms2-nonfree
 	url = https://github.com/rpmfusion/xmms2-nonfree
@@ -409,33 +361,6 @@
 [submodule "rpms/rpmfusion/snes9x"]
 	path = rpms/rpmfusion/snes9x
 	url = https://github.com/rpmfusion/snes9x
-[submodule "rpms/rpmfusion/smesh"]
-	path = rpms/rpmfusion/smesh
-	url = https://github.com/rpmfusion/smesh
-[submodule "rpms/rpmfusion/sidplay-libs"]
-	path = rpms/rpmfusion/sidplay-libs
-	url = https://github.com/rpmfusion/sidplay-libs
-[submodule "rpms/rpmfusion/sidplay"]
-	path = rpms/rpmfusion/sidplay
-	url = https://github.com/rpmfusion/sidplay
-[submodule "rpms/rpmfusion/sdlmess"]
-	path = rpms/rpmfusion/sdlmess
-	url = https://github.com/rpmfusion/sdlmess
-[submodule "rpms/rpmfusion/sdlmame-data-samples"]
-	path = rpms/rpmfusion/sdlmame-data-samples
-	url = https://github.com/rpmfusion/sdlmame-data-samples
-[submodule "rpms/rpmfusion/sdlmame-data-roms"]
-	path = rpms/rpmfusion/sdlmame-data-roms
-	url = https://github.com/rpmfusion/sdlmame-data-roms
-[submodule "rpms/rpmfusion/sdlmame-data"]
-	path = rpms/rpmfusion/sdlmame-data
-	url = https://github.com/rpmfusion/sdlmame-data
-[submodule "rpms/rpmfusion/sdlmame-data-artwork"]
-	path = rpms/rpmfusion/sdlmame-data-artwork
-	url = https://github.com/rpmfusion/sdlmame-data-artwork
-[submodule "rpms/rpmfusion/sdlmame"]
-	path = rpms/rpmfusion/sdlmame
-	url = https://github.com/rpmfusion/sdlmame
 [submodule "rpms/rpmfusion/rpmfusion-nonfree-remix-kickstarts"]
 	path = rpms/rpmfusion/rpmfusion-nonfree-remix-kickstarts
 	url = https://github.com/rpmfusion/rpmfusion-nonfree-remix-kickstarts
@@ -445,12 +370,6 @@
 [submodule "rpms/rpmfusion/roadfighter"]
 	path = rpms/rpmfusion/roadfighter
 	url = https://github.com/rpmfusion/roadfighter
-[submodule "rpms/rpmfusion/realcrypt"]
-	path = rpms/rpmfusion/realcrypt
-	url = https://github.com/rpmfusion/realcrypt
-[submodule "rpms/rpmfusion/raine"]
-	path = rpms/rpmfusion/raine
-	url = https://github.com/rpmfusion/raine
 [submodule "rpms/rpmfusion/r5u87x-firmware"]
 	path = rpms/rpmfusion/r5u87x-firmware
 	url = https://github.com/rpmfusion/r5u87x-firmware
@@ -460,12 +379,6 @@
 [submodule "rpms/rpmfusion/pushover"]
 	path = rpms/rpmfusion/pushover
 	url = https://github.com/rpmfusion/pushover
-[submodule "rpms/rpmfusion/psb-kmod"]
-	path = rpms/rpmfusion/psb-kmod
-	url = https://github.com/rpmfusion//psb-kmod
-[submodule "rpms/rpmfusion/psb-firmware"]
-	path = rpms/rpmfusion/psb-firmware
-	url = https://github.com/rpmfusion/psb-firmware
 [submodule "rpms/rpmfusion/proas"]
 	path = rpms/rpmfusion/proas
 	url = https://github.com/rpmfusion/proas
@@ -490,42 +403,18 @@
 [submodule "rpms/rpmfusion/pdflib-lite"]
 	path = rpms/rpmfusion/pdflib-lite
 	url = https://github.com/rpmfusion/pdflib-lite
-[submodule "rpms/rpmfusion/paintdotnet"]
-	path = rpms/rpmfusion/paintdotnet
-	url = https://github.com/rpmfusion/paintdotnet
 [submodule "rpms/rpmfusion/openni-nite"]
 	path = rpms/rpmfusion/openni-nite
 	url = https://github.com/rpmfusion/openni-nite
-[submodule "rpms/rpmfusion/openmotif"]
-	path = rpms/rpmfusion/openmotif
-	url = https://github.com/rpmfusion/openmotif
 [submodule "rpms/rpmfusion/OpenEXR_Viewers-nonfree"]
 	path = rpms/rpmfusion/OpenEXR_Viewers-nonfree
 	url = https://github.com/rpmfusion/OpenEXR_Viewers-nonfree
-[submodule "rpms/rpmfusion/ogre-cg"]
-	path = rpms/rpmfusion/ogre-cg
-	url = https://github.com/rpmfusion/ogre-cg
-[submodule "rpms/rpmfusion/OCE"]
-	path = rpms/rpmfusion/OCE
-	url = https://github.com/rpmfusion/OCE
 [submodule "rpms/rpmfusion/nvidia-xconfig"]
 	path = rpms/rpmfusion/nvidia-xconfig
 	url = https://github.com/rpmfusion/nvidia-xconfig
 [submodule "rpms/rpmfusion/nvidia-settings"]
 	path = rpms/rpmfusion/nvidia-settings
 	url = https://github.com/rpmfusion/nvidia-settings
-[submodule "rpms/rpmfusion/nvidia-newest-kmod"]
-	path = rpms/rpmfusion/nvidia-newest-kmod
-	url = https://github.com/rpmfusion/nvidia-newest-kmod
-[submodule "rpms/rpmfusion/nvidia-beta-kmod"]
-	path = rpms/rpmfusion/nvidia-beta-kmod
-	url = https://github.com/rpmfusion/nvidia-beta-kmod
-[submodule "rpms/rpmfusion/nvidia-96xx-kmod"]
-	path = rpms/rpmfusion/nvidia-96xx-kmod
-	url = https://github.com/rpmfusion/nvidia-96xx-kmod
-[submodule "rpms/rpmfusion/nvidia-173xx-kmod"]
-	path = rpms/rpmfusion/nvidia-173xx-kmod
-	url = https://github.com/rpmfusion/nvidia-173xx-kmod
 [submodule "rpms/rpmfusion/netfabb-basic"]
 	path = rpms/rpmfusion/netfabb-basic
 	url = https://github.com/rpmfusion/netfabb-basic
@@ -541,18 +430,9 @@
 [submodule "rpms/rpmfusion/mod_h264_streaming"]
 	path = rpms/rpmfusion/mod_h264_streaming
 	url = https://github.com/rpmfusion/mod_h264_streaming
-[submodule "rpms/rpmfusion/mess"]
-	path = rpms/rpmfusion/mess
-	url = https://github.com/rpmfusion/mess
 [submodule "rpms/rpmfusion/meka"]
 	path = rpms/rpmfusion/meka
 	url = https://github.com/rpmfusion/meka
-[submodule "rpms/rpmfusion/madwifi-kmod"]
-	path = rpms/rpmfusion/madwifi-kmod
-	url = https://github.com/rpmfusion/madwifi-kmod
-[submodule "rpms/rpmfusion/madwifi"]
-	path = rpms/rpmfusion/madwifi
-	url = https://github.com/rpmfusion/madwifi
 [submodule "rpms/rpmfusion/mac"]
 	path = rpms/rpmfusion/mac
 	url = https://github.com/rpmfusion/mac
@@ -562,15 +442,9 @@
 [submodule "rpms/rpmfusion/lpf-skype"]
 	path = rpms/rpmfusion/lpf-skype
 	url = https://github.com/rpmfusion/lpf-skype
-[submodule "rpms/rpmfusion/livna-config-display"]
-	path = rpms/rpmfusion/livna-config-display
-	url = https://github.com/rpmfusion/livna-config-display
 [submodule "rpms/rpmfusion/libspotify"]
 	path = rpms/rpmfusion/libspotify
 	url = https://github.com/rpmfusion/libspotify
-[submodule "rpms/rpmfusion/libdrm-poulsbo"]
-	path = rpms/rpmfusion/libdrm-poulsbo
-	url = https://github.com/rpmfusion/libdrm-poulsbo
 [submodule "rpms/rpmfusion/libcapsimage"]
 	path = rpms/rpmfusion/libcapsimage
 	url = https://github.com/rpmfusion/libcapsimage
@@ -610,24 +484,12 @@
 [submodule "rpms/rpmfusion/Frodo"]
 	path = rpms/rpmfusion/Frodo
 	url = https://github.com/rpmfusion/Frodo
-[submodule "rpms/rpmfusion/freecad"]
-	path = rpms/rpmfusion/freecad
-	url = https://github.com/rpmfusion/freecad
-[submodule "rpms/rpmfusion/fglrx-kmod"]
-	path = rpms/rpmfusion/fglrx-kmod
-	url = https://github.com/rpmfusion/fglrx-kmod
 [submodule "rpms/rpmfusion/faac"]
 	path = rpms/rpmfusion/faac
 	url = https://github.com/rpmfusion/faac
 [submodule "rpms/rpmfusion/e-uae"]
 	path = rpms/rpmfusion/e-uae
 	url = https://github.com/rpmfusion/e-uae
-[submodule "rpms/rpmfusion/edgar"]
-	path = rpms/rpmfusion/edgar
-	url = https://github.com/rpmfusion/edgar
-[submodule "rpms/rpmfusion/ec2-api-tools"]
-	path = rpms/rpmfusion/ec2-api-tools
-	url = https://github.com/rpmfusion/ec2-api-tools
 [submodule "rpms/rpmfusion/doc"]
 	path = rpms/rpmfusion/doc
 	url = https://github.com/rpmfusion/doc
@@ -646,18 +508,9 @@
 [submodule "rpms/rpmfusion/Cg"]
 	path = rpms/rpmfusion/Cg
 	url = https://github.com/rpmfusion/Cg
-[submodule "rpms/rpmfusion/catalyst-legacy-kmod"]
-	path = rpms/rpmfusion/catalyst-legacy-kmod
-	url = https://github.com/rpmfusion/catalyst-legacy-kmod
-[submodule "rpms/rpmfusion/catalyst-kmod"]
-	path = rpms/rpmfusion/catalyst-kmod
-	url = https://github.com/rpmfusion/catalyst-kmod
 [submodule "rpms/rpmfusion/broadcom-wl"]
 	path = rpms/rpmfusion/broadcom-wl
 	url = https://github.com/rpmfusion/broadcom-wl
-[submodule "rpms/rpmfusion/audacious-plugins-nonfree"]
-	path = rpms/rpmfusion/audacious-plugins-nonfree
-	url = https://github.com/rpmfusion/audacious-plugins-nonfree
 [submodule "rpms/rpmfusion/amrwb"]
 	path = rpms/rpmfusion/amrwb
 	url = https://github.com/rpmfusion/amrwb
@@ -676,9 +529,6 @@
 [submodule "rpms/rpmfusion/yabause"]
 	path = rpms/rpmfusion/yabause
 	url = https://github.com/rpmfusion/yabause
-[submodule "rpms/rpmfusion/y4mscaler"]
-	path = rpms/rpmfusion/y4mscaler
-	url = https://github.com/rpmfusion/y4mscaler
 [submodule "rpms/rpmfusion/xvst"]
 	path = rpms/rpmfusion/xvst
 	url = https://github.com/rpmfusion/xvst
@@ -688,9 +538,6 @@
 [submodule "rpms/rpmfusion/xroar"]
 	path = rpms/rpmfusion/xroar
 	url = https://github.com/rpmfusion/xroar
-[submodule "rpms/rpmfusion/xmms-wma"]
-	path = rpms/rpmfusion/xmms-wma
-	url = https://github.com/rpmfusion/xmms-wma
 [submodule "rpms/rpmfusion/xmms-mplayer"]
 	path = rpms/rpmfusion/xmms-mplayer
 	url = https://github.com/rpmfusion/xmms-mplayer
@@ -700,30 +547,6 @@
 [submodule "rpms/rpmfusion/xmms2-freeworld"]
 	path = rpms/rpmfusion/xmms2-freeworld
 	url = https://github.com/rpmfusion/xmms2-freeworld
-[submodule "rpms/rpmfusion/xine-ui"]
-	path = rpms/rpmfusion/xine-ui
-	url = https://github.com/rpmfusion/xine-ui
-[submodule "rpms/rpmfusion/xine-plugin"]
-	path = rpms/rpmfusion/xine-plugin
-	url = https://github.com/rpmfusion/xine-plugin
-[submodule "rpms/rpmfusion/xine-lib-extras-freeworld"]
-	path = rpms/rpmfusion/xine-lib-extras-freeworld
-	url = https://github.com/rpmfusion/xine-lib-extras-freeworld
-[submodule "rpms/rpmfusion/xine-lib"]
-	path = rpms/rpmfusion/xine-lib
-	url = https://github.com/rpmfusion/xine-lib
-[submodule "rpms/rpmfusion/xine"]
-	path = rpms/rpmfusion/xine
-	url = https://github.com/rpmfusion/xine
-[submodule "rpms/rpmfusion/xdtv"]
-	path = rpms/rpmfusion/xdtv
-	url = https://github.com/rpmfusion/xdtv
-[submodule "rpms/rpmfusion/xbmc-pvr-addons"]
-	path = rpms/rpmfusion/xbmc-pvr-addons
-	url = https://github.com/rpmfusion/xbmc-pvr-addons
-[submodule "rpms/rpmfusion/xbmc"]
-	path = rpms/rpmfusion/xbmc
-	url = https://github.com/rpmfusion/xbmc
 [submodule "rpms/rpmfusion/xbill"]
 	path = rpms/rpmfusion/xbill
 	url = https://github.com/rpmfusion/xbill
@@ -733,12 +556,6 @@
 [submodule "rpms/rpmfusion/wormsofprey"]
 	path = rpms/rpmfusion/wormsofprey
 	url = https://github.com/rpmfusion/wormsofprey
-[submodule "rpms/rpmfusion/west-chamber-kmod"]
-	path = rpms/rpmfusion/west-chamber-kmod
-	url = https://github.com/rpmfusion/west-chamber-kmod
-[submodule "rpms/rpmfusion/west-chamber"]
-	path = rpms/rpmfusion/west-chamber
-	url = https://github.com/rpmfusion/west-chamber
 [submodule "rpms/rpmfusion/vokoscreen"]
 	path = rpms/rpmfusion/vokoscreen
 	url = https://github.com/rpmfusion/vokoscreen
@@ -748,18 +565,12 @@
 [submodule "rpms/rpmfusion/vlmc"]
 	path = rpms/rpmfusion/vlmc
 	url = https://github.com/rpmfusion/vlmc
-[submodule "rpms/rpmfusion/vdr-xineliboutput"]
-	path = rpms/rpmfusion/vdr-xineliboutput
-	url = https://github.com/rpmfusion/vdr-xineliboutput
 [submodule "rpms/rpmfusion/vdrsync"]
 	path = rpms/rpmfusion/vdrsync
 	url = https://github.com/rpmfusion/vdrsync
 [submodule "rpms/rpmfusion/vdr-softhddevice"]
 	path = rpms/rpmfusion/vdr-softhddevice
 	url = https://github.com/rpmfusion/vdr-softhddevice
-[submodule "rpms/rpmfusion/vdr-remote"]
-	path = rpms/rpmfusion/vdr-remote
-	url = https://github.com/rpmfusion/vdr-remote
 [submodule "rpms/rpmfusion/vdr-muggle"]
 	path = rpms/rpmfusion/vdr-muggle
 	url = https://github.com/rpmfusion/vdr-muggle
@@ -772,24 +583,15 @@
 [submodule "rpms/rpmfusion/vdr-dxr3"]
 	path = rpms/rpmfusion/vdr-dxr3
 	url = https://github.com/rpmfusion/vdr-dxr3
-[submodule "rpms/rpmfusion/vdpau-video-freeworld"]
-	path = rpms/rpmfusion/vdpau-video-freeworld
-	url = https://github.com/rpmfusion/vdpau-video-freeworld
 [submodule "rpms/rpmfusion/vcdimager"]
 	path = rpms/rpmfusion/vcdimager
 	url = https://github.com/rpmfusion/vcdimager
-[submodule "rpms/rpmfusion/vboxgtk"]
-	path = rpms/rpmfusion/vboxgtk
-	url = https://github.com/rpmfusion/vboxgtk
 [submodule "rpms/rpmfusion/vbam"]
 	path = rpms/rpmfusion/vbam
 	url = https://github.com/rpmfusion/vbam
 [submodule "rpms/rpmfusion/vagalume"]
 	path = rpms/rpmfusion/vagalume
 	url = https://github.com/rpmfusion/vagalume
-[submodule "rpms/rpmfusion/ushare-freeworld"]
-	path = rpms/rpmfusion/ushare-freeworld
-	url = https://github.com/rpmfusion/ushare-freeworld
 [submodule "rpms/rpmfusion/ultrastardx"]
 	path = rpms/rpmfusion/ultrastardx
 	url = https://github.com/rpmfusion/ultrastardx
@@ -805,21 +607,9 @@
 [submodule "rpms/rpmfusion/tivodecode"]
 	path = rpms/rpmfusion/tivodecode
 	url = https://github.com/rpmfusion/tivodecode
-[submodule "rpms/rpmfusion/thunderbird-enigmail"]
-	path = rpms/rpmfusion/thunderbird-enigmail
-	url = https://github.com/rpmfusion/thunderbird-enigmail
-[submodule "rpms/rpmfusion/thoggen"]
-	path = rpms/rpmfusion/thoggen
-	url = https://github.com/rpmfusion/thoggen
 [submodule "rpms/rpmfusion/terminatorX"]
 	path = rpms/rpmfusion/terminatorX
 	url = https://github.com/rpmfusion/terminatorX
-[submodule "rpms/rpmfusion/sysprof-kmod"]
-	path = rpms/rpmfusion/sysprof-kmod
-	url = https://github.com/rpmfusion/sysprof-kmod
-[submodule "rpms/rpmfusion/sysprof"]
-	path = rpms/rpmfusion/sysprof
-	url = https://github.com/rpmfusion/sysprof
 [submodule "rpms/rpmfusion/swftools"]
 	path = rpms/rpmfusion/swftools
 	url = https://github.com/rpmfusion/swftools
@@ -829,9 +619,6 @@
 [submodule "rpms/rpmfusion/streamripper"]
 	path = rpms/rpmfusion/streamripper
 	url = https://github.com/rpmfusion/streamripper
-[submodule "rpms/rpmfusion/streamdvd"]
-	path = rpms/rpmfusion/streamdvd
-	url = https://github.com/rpmfusion/streamdvd
 [submodule "rpms/rpmfusion/staging-kmod"]
 	path = rpms/rpmfusion/staging-kmod
 	url = https://github.com/rpmfusion/staging-kmod
@@ -841,45 +628,18 @@
 [submodule "rpms/rpmfusion/sonic-visualiser-freeworld"]
 	path = rpms/rpmfusion/sonic-visualiser-freeworld
 	url = https://github.com/rpmfusion/sonic-visualiser-freeworld
-[submodule "rpms/rpmfusion/snowballz"]
-	path = rpms/rpmfusion/snowballz
-	url = https://github.com/rpmfusion/snowballz
-[submodule "rpms/rpmfusion/smpeg"]
-	path = rpms/rpmfusion/smpeg
-	url = https://github.com/rpmfusion/smpeg
 [submodule "rpms/rpmfusion/smc-music"]
 	path = rpms/rpmfusion/smc-music
 	url = https://github.com/rpmfusion/smc-music
 [submodule "rpms/rpmfusion/smc"]
 	path = rpms/rpmfusion/smc
 	url = https://github.com/rpmfusion/smc
-[submodule "rpms/rpmfusion/sinthgunt"]
-	path = rpms/rpmfusion/sinthgunt
-	url = https://github.com/rpmfusion/sinthgunt
 [submodule "rpms/rpmfusion/SheepShaver"]
 	path = rpms/rpmfusion/SheepShaver
 	url = https://github.com/rpmfusion/SheepShaver
 [submodule "rpms/rpmfusion/scottfree"]
 	path = rpms/rpmfusion/scottfree
 	url = https://github.com/rpmfusion/scottfree
-[submodule "rpms/rpmfusion/rt3070-kmod"]
-	path = rpms/rpmfusion/rt3070-kmod
-	url = https://github.com/rpmfusion/rt3070-kmod
-[submodule "rpms/rpmfusion/rt3070"]
-	path = rpms/rpmfusion/rt3070
-	url = https://github.com/rpmfusion/rt3070
-[submodule "rpms/rpmfusion/rt2870-kmod"]
-	path = rpms/rpmfusion/rt2870-kmod
-	url = https://github.com/rpmfusion/rt2870-kmod
-[submodule "rpms/rpmfusion/rt2870"]
-	path = rpms/rpmfusion/rt2870
-	url = https://github.com/rpmfusion/rt2870
-[submodule "rpms/rpmfusion/rt2860-kmod"]
-	path = rpms/rpmfusion/rt2860-kmod
-	url = https://github.com/rpmfusion/rt2860-kmod
-[submodule "rpms/rpmfusion/rt2860"]
-	path = rpms/rpmfusion/rt2860
-	url = https://github.com/rpmfusion/rt2860
 [submodule "rpms/rpmfusion/rpmfusion-packager"]
 	path = rpms/rpmfusion/rpmfusion-packager
 	url = https://github.com/rpmfusion/rpmfusion-packager
@@ -889,36 +649,15 @@
 [submodule "rpms/rpmfusion/rpmfusion-free-remix-kickstarts"]
 	path = rpms/rpmfusion/rpmfusion-free-remix-kickstarts
 	url = https://github.com/rpmfusion/rpmfusion-free-remix-kickstarts
-[submodule "rpms/rpmfusion/rpmfusion-free-package-config-smart"]
-	path = rpms/rpmfusion/rpmfusion-free-package-config-smart
-	url = https://github.com/rpmfusion/rpmfusion-free-package-config-smart
-[submodule "rpms/rpmfusion/qtractor-freeworld"]
-	path = rpms/rpmfusion/qtractor-freeworld
-	url = https://github.com/rpmfusion/qtractor-freeworld
-[submodule "rpms/rpmfusion/qtractor"]
-	path = rpms/rpmfusion/qtractor
-	url = https://github.com/rpmfusion/qtractor
-[submodule "rpms/rpmfusion/qc-usb-kmod"]
-	path = rpms/rpmfusion/qc-usb-kmod
-	url = https://github.com/rpmfusion/qc-usb-kmod
-[submodule "rpms/rpmfusion/qc-usb"]
-	path = rpms/rpmfusion/qc-usb
-	url = https://github.com/rpmfusion/qc-usb
 [submodule "rpms/rpmfusion/python-vlc"]
 	path = rpms/rpmfusion/python-vlc
 	url = https://github.com/rpmfusion/python-vlc
-[submodule "rpms/rpmfusion/pyglet"]
-	path = rpms/rpmfusion/pyglet
-	url = https://github.com/rpmfusion/pyglet
 [submodule "rpms/rpmfusion/pxsup2dast"]
 	path = rpms/rpmfusion/pxsup2dast
 	url = https://github.com/rpmfusion/pxsup2dast
 [submodule "rpms/rpmfusion/ProjectX"]
 	path = rpms/rpmfusion/ProjectX
 	url = https://github.com/rpmfusion/ProjectX
-[submodule "rpms/rpmfusion/pragha"]
-	path = rpms/rpmfusion/pragha
-	url = https://github.com/rpmfusion/pragha
 [submodule "rpms/rpmfusion/picard-freeworld"]
 	path = rpms/rpmfusion/picard-freeworld
 	url = https://github.com/rpmfusion/picard-freeworld
@@ -934,27 +673,9 @@
 [submodule "rpms/rpmfusion/osmose"]
 	path = rpms/rpmfusion/osmose
 	url = https://github.com/rpmfusion/osmose
-[submodule "rpms/rpmfusion/open-vm-tools-kmod"]
-	path = rpms/rpmfusion/open-vm-tools-kmod
-	url = https://github.com/rpmfusion/open-vm-tools-kmod
-[submodule "rpms/rpmfusion/open-vm-tools"]
-	path = rpms/rpmfusion/open-vm-tools
-	url = https://github.com/rpmfusion/open-vm-tools
 [submodule "rpms/rpmfusion/opencore-amr"]
 	path = rpms/rpmfusion/opencore-amr
 	url = https://github.com/rpmfusion/opencore-amr
-[submodule "rpms/rpmfusion/openafs-kmod"]
-	path = rpms/rpmfusion/openafs-kmod
-	url = https://github.com/rpmfusion/openafs-kmod
-[submodule "rpms/rpmfusion/openafs"]
-	path = rpms/rpmfusion/openafs
-	url = https://github.com/rpmfusion/openafs
-[submodule "rpms/rpmfusion/omnibook-kmod"]
-	path = rpms/rpmfusion/omnibook-kmod
-	url = https://github.com/rpmfusion/omnibook-kmod
-[submodule "rpms/rpmfusion/omnibook"]
-	path = rpms/rpmfusion/omnibook
-	url = https://github.com/rpmfusion/omnibook
 [submodule "rpms/rpmfusion/ogmrip"]
 	path = rpms/rpmfusion/ogmrip
 	url = https://github.com/rpmfusion/ogmrip
@@ -970,15 +691,9 @@
 [submodule "rpms/rpmfusion/ndiswrapper"]
 	path = rpms/rpmfusion/ndiswrapper
 	url = https://github.com/rpmfusion/ndiswrapper
-[submodule "rpms/rpmfusion/mythtv-themes"]
-	path = rpms/rpmfusion/mythtv-themes
-	url = https://github.com/rpmfusion/mythtv-themes
 [submodule "rpms/rpmfusion/mpgtx"]
 	path = rpms/rpmfusion/mpgtx
 	url = https://github.com/rpmfusion/mpgtx
-[submodule "rpms/rpmfusion/mpg321"]
-	path = rpms/rpmfusion/mpg321
-	url = https://github.com/rpmfusion/mpg321
 [submodule "rpms/rpmfusion/mp3gain"]
 	path = rpms/rpmfusion/mp3gain
 	url = https://github.com/rpmfusion/mp3gain
@@ -1030,12 +745,6 @@
 [submodule "rpms/rpmfusion/libvdpau-va-gl"]
 	path = rpms/rpmfusion/libvdpau-va-gl
 	url = https://github.com/rpmfusion/libvdpau-va-gl
-[submodule "rpms/rpmfusion/libva-vdpau-driver"]
-	path = rpms/rpmfusion/libva-vdpau-driver
-	url = https://github.com/rpmfusion/libva-vdpau-driver
-[submodule "rpms/rpmfusion/libva-freeworld"]
-	path = rpms/rpmfusion/libva-freeworld
-	url = https://github.com/rpmfusion/libva-freeworld
 [submodule "rpms/rpmfusion/libtunepimp-extras-freeworld"]
 	path = rpms/rpmfusion/libtunepimp-extras-freeworld
 	url = https://github.com/rpmfusion/libtunepimp-extras-freeworld
@@ -1063,9 +772,6 @@
 [submodule "rpms/rpmfusion/libdvbpsi"]
 	path = rpms/rpmfusion/libdvbpsi
 	url = https://github.com/rpmfusion/libdvbpsi
-[submodule "rpms/rpmfusion/libdlna"]
-	path = rpms/rpmfusion/libdlna
-	url = https://github.com/rpmfusion/libdlna
 [submodule "rpms/rpmfusion/libdca"]
 	path = rpms/rpmfusion/libdca
 	url = https://github.com/rpmfusion/libdca
@@ -1075,21 +781,12 @@
 [submodule "rpms/rpmfusion/libaacs"]
 	path = rpms/rpmfusion/libaacs
 	url = https://github.com/rpmfusion/libaacs
-[submodule "rpms/rpmfusion/lastfm"]
-	path = rpms/rpmfusion/lastfm
-	url = https://github.com/rpmfusion/lastfm
 [submodule "rpms/rpmfusion/lame"]
 	path = rpms/rpmfusion/lame
 	url = https://github.com/rpmfusion/lame
 [submodule "rpms/rpmfusion/kwave"]
 	path = rpms/rpmfusion/kwave
 	url = https://github.com/rpmfusion/kwave
-[submodule "rpms/rpmfusion/kqemu-kmod"]
-	path = rpms/rpmfusion/kqemu-kmod
-	url = https://github.com/rpmfusion/kqemu-kmod
-[submodule "rpms/rpmfusion/kqemu"]
-	path = rpms/rpmfusion/kqemu
-	url = https://github.com/rpmfusion/kqemu
 [submodule "rpms/rpmfusion/kplayer"]
 	path = rpms/rpmfusion/kplayer
 	url = https://github.com/rpmfusion/kplayer
@@ -1102,33 +799,15 @@
 [submodule "rpms/rpmfusion/kmediafactory"]
 	path = rpms/rpmfusion/kmediafactory
 	url = https://github.com/rpmfusion/kmediafactory
-[submodule "rpms/rpmfusion/kino"]
-	path = rpms/rpmfusion/kino
-	url = https://github.com/rpmfusion/kino
-[submodule "rpms/rpmfusion/kffmpegthumbnailer"]
-	path = rpms/rpmfusion/kffmpegthumbnailer
-	url = https://github.com/rpmfusion/kffmpegthumbnailer
-[submodule "rpms/rpmfusion/kdemultimedia-extras-freeworld"]
-	path = rpms/rpmfusion/kdemultimedia-extras-freeworld
-	url = https://github.com/rpmfusion/kdemultimedia-extras-freeworld
 [submodule "rpms/rpmfusion/kaffeine"]
 	path = rpms/rpmfusion/kaffeine
 	url = https://github.com/rpmfusion/kaffeine
-[submodule "rpms/rpmfusion/jbigkit"]
-	path = rpms/rpmfusion/jbigkit
-	url = https://github.com/rpmfusion/jbigkit
-[submodule "rpms/rpmfusion/iscsitarget-kmod"]
-	path = rpms/rpmfusion/iscsitarget-kmod
-	url = https://github.com/rpmfusion/iscsitarget-kmod
 [submodule "rpms/rpmfusion/iscsitarget"]
 	path = rpms/rpmfusion/iscsitarget
 	url = https://github.com/rpmfusion/iscsitarget
 [submodule "rpms/rpmfusion/imagination"]
 	path = rpms/rpmfusion/imagination
 	url = https://github.com/rpmfusion/imagination
-[submodule "rpms/rpmfusion/gxine"]
-	path = rpms/rpmfusion/gxine
-	url = https://github.com/rpmfusion/gxine
 [submodule "rpms/rpmfusion/guvcview"]
 	path = rpms/rpmfusion/guvcview
 	url = https://github.com/rpmfusion/guvcview
@@ -1144,21 +823,12 @@
 [submodule "rpms/rpmfusion/gstreamer-ffmpeg"]
 	path = rpms/rpmfusion/gstreamer-ffmpeg
 	url = https://github.com/rpmfusion/gstreamer-ffmpeg
-[submodule "rpms/rpmfusion/gspca-kmod"]
-	path = rpms/rpmfusion/gspca-kmod
-	url = https://github.com/rpmfusion/gspca-kmod
-[submodule "rpms/rpmfusion/gspca"]
-	path = rpms/rpmfusion/gspca
-	url = https://github.com/rpmfusion/gspca
 [submodule "rpms/rpmfusion/gnuboy"]
 	path = rpms/rpmfusion/gnuboy
 	url = https://github.com/rpmfusion/gnuboy
 [submodule "rpms/rpmfusion/gmediafinder"]
 	path = rpms/rpmfusion/gmediafinder
 	url = https://github.com/rpmfusion/gmediafinder
-[submodule "rpms/rpmfusion/gfceu"]
-	path = rpms/rpmfusion/gfceu
-	url = https://github.com/rpmfusion/gfceu
 [submodule "rpms/rpmfusion/get_iplayer"]
 	path = rpms/rpmfusion/get_iplayer
 	url = https://github.com/rpmfusion/get_iplayer
@@ -1177,42 +847,21 @@
 [submodule "rpms/rpmfusion/foo2zjs"]
 	path = rpms/rpmfusion/foo2zjs
 	url = https://github.com/rpmfusion/foo2zjs
-[submodule "rpms/rpmfusion/flvtool2"]
-	path = rpms/rpmfusion/flvtool2
-	url = https://github.com/rpmfusion/flvtool2
 [submodule "rpms/rpmfusion/ffmpegthumbs"]
 	path = rpms/rpmfusion/ffmpegthumbs
 	url = https://github.com/rpmfusion/ffmpegthumbs
-[submodule "rpms/rpmfusion/ffmpegthumbnailer"]
-	path = rpms/rpmfusion/ffmpegthumbnailer
-	url = https://github.com/rpmfusion/ffmpegthumbnailer
 [submodule "rpms/rpmfusion/ffmpeg-compat"]
 	path = rpms/rpmfusion/ffmpeg-compat
 	url = https://github.com/rpmfusion/ffmpeg-compat
-[submodule "rpms/rpmfusion/ffmpeg2theora"]
-	path = rpms/rpmfusion/ffmpeg2theora
-	url = https://github.com/rpmfusion/ffmpeg2theora
-[submodule "rpms/rpmfusion/ffmpeg2dirac"]
-	path = rpms/rpmfusion/ffmpeg2dirac
-	url = https://github.com/rpmfusion/ffmpeg2dirac
 [submodule "rpms/rpmfusion/fceux"]
 	path = rpms/rpmfusion/fceux
 	url = https://github.com/rpmfusion/fceux
-[submodule "rpms/rpmfusion/fceultra"]
-	path = rpms/rpmfusion/fceultra
-	url = https://github.com/rpmfusion/fceultra
 [submodule "rpms/rpmfusion/fakenes"]
 	path = rpms/rpmfusion/fakenes
 	url = https://github.com/rpmfusion/fakenes
 [submodule "rpms/rpmfusion/faad2"]
 	path = rpms/rpmfusion/faad2
 	url = https://github.com/rpmfusion/faad2
-[submodule "rpms/rpmfusion/em8300-kmod"]
-	path = rpms/rpmfusion/em8300-kmod
-	url = https://github.com/rpmfusion/em8300-kmod
-[submodule "rpms/rpmfusion/elisa-plugins-ugly"]
-	path = rpms/rpmfusion/elisa-plugins-ugly
-	url = https://github.com/rpmfusion/elisa-plugins-ugly
 [submodule "rpms/rpmfusion/DVDRipOMatic"]
 	path = rpms/rpmfusion/DVDRipOMatic
 	url = https://github.com/rpmfusion/DVDRipOMatic
@@ -1234,72 +883,21 @@
 [submodule "rpms/rpmfusion/desmume"]
 	path = rpms/rpmfusion/desmume
 	url = https://github.com/rpmfusion/desmume
-[submodule "rpms/rpmfusion/compat-zope"]
-	path = rpms/rpmfusion/compat-zope
-	url = https://github.com/rpmfusion/compat-zope
-[submodule "rpms/rpmfusion/compat-python24-setuptools"]
-	path = rpms/rpmfusion/compat-python24-setuptools
-	url = https://github.com/rpmfusion/compat-python24-setuptools
-[submodule "rpms/rpmfusion/compat-python24-lxml"]
-	path = rpms/rpmfusion/compat-python24-lxml
-	url = https://github.com/rpmfusion/compat-python24-lxml
-[submodule "rpms/rpmfusion/compat-python24-libxml2"]
-	path = rpms/rpmfusion/compat-python24-libxml2
-	url = https://github.com/rpmfusion/compat-python24-libxml2
-[submodule "rpms/rpmfusion/compat-python24-imaging"]
-	path = rpms/rpmfusion/compat-python24-imaging
-	url = https://github.com/rpmfusion/compat-python24-imaging
-[submodule "rpms/rpmfusion/compat-python24-feedparser"]
-	path = rpms/rpmfusion/compat-python24-feedparser
-	url = https://github.com/rpmfusion/compat-python24-feedparser
-[submodule "rpms/rpmfusion/compat-python24-elementtree"]
-	path = rpms/rpmfusion/compat-python24-elementtree
-	url = https://github.com/rpmfusion/compat-python24-elementtree
-[submodule "rpms/rpmfusion/compat-python24"]
-	path = rpms/rpmfusion/compat-python24
-	url = https://github.com/rpmfusion/compat-python24
-[submodule "rpms/rpmfusion/compat-plone"]
-	path = rpms/rpmfusion/compat-plone
-	url = https://github.com/rpmfusion/compat-plone
-[submodule "rpms/rpmfusion/cairo-dock-freeworld"]
-	path = rpms/rpmfusion/cairo-dock-freeworld
-	url = https://github.com/rpmfusion/cairo-dock-freeworld
-[submodule "rpms/rpmfusion/cairo-dock"]
-	path = rpms/rpmfusion/cairo-dock
-	url = https://github.com/rpmfusion/cairo-dock
 [submodule "rpms/rpmfusion/bubbros"]
 	path = rpms/rpmfusion/bubbros
 	url = https://github.com/rpmfusion/bubbros
 [submodule "rpms/rpmfusion/bsnes"]
 	path = rpms/rpmfusion/bsnes
 	url = https://github.com/rpmfusion/bsnes
-[submodule "rpms/rpmfusion/blcr-kmod"]
-	path = rpms/rpmfusion/blcr-kmod
-	url = https://github.com/rpmfusion/blcr-kmod
-[submodule "rpms/rpmfusion/blcr"]
-	path = rpms/rpmfusion/blcr
-	url = https://github.com/rpmfusion/blcr
 [submodule "rpms/rpmfusion/bino"]
 	path = rpms/rpmfusion/bino
 	url = https://github.com/rpmfusion/bino
-[submodule "rpms/rpmfusion/avbin"]
-	path = rpms/rpmfusion/avbin
-	url = https://github.com/rpmfusion/avbin
-[submodule "rpms/rpmfusion/autopano-sift-C"]
-	path = rpms/rpmfusion/autopano-sift-C
-	url = https://github.com/rpmfusion/autopano-sift-C
 [submodule "rpms/rpmfusion/audacious-plugins-freeworld"]
 	path = rpms/rpmfusion/audacious-plugins-freeworld
 	url = https://github.com/rpmfusion/audacious-plugins-freeworld
 [submodule "rpms/rpmfusion/aqualung"]
 	path = rpms/rpmfusion/aqualung
 	url = https://github.com/rpmfusion/aqualung
-[submodule "rpms/rpmfusion/amarok-extras-freeworld"]
-	path = rpms/rpmfusion/amarok-extras-freeworld
-	url = https://github.com/rpmfusion/amarok-extras-freeworld
-[submodule "rpms/rpmfusion/akode-extras"]
-	path = rpms/rpmfusion/akode-extras
-	url = https://github.com/rpmfusion/akode-extras
 [submodule "rpms/rpmfusion/acoustid-fingerprinter"]
 	path = rpms/rpmfusion/acoustid-fingerprinter
 	url = https://github.com/rpmfusion/acoustid-fingerprinter
