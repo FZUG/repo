@@ -1,0 +1,11 @@
+--- a/source/test/CMakeLists.txt
++++ b/source/test/CMakeLists.txt
+@@ -23,7 +23,7 @@ add_executable(TestBench ${YASM_SRC}
+     mbdstharness.cpp mbdstharness.h
+     ipfilterharness.cpp ipfilterharness.h
+     intrapredharness.cpp intrapredharness.h)
+-target_link_libraries(TestBench x265-static ${PLATFORM_LIBS})
++target_link_libraries(TestBench x265-shared ${PLATFORM_LIBS})
+ if(LINKER_OPTIONS)
+     if(EXTRA_LIB)
+         list(APPEND LINKER_OPTIONS "-L..")
