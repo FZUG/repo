@@ -280,6 +280,7 @@ if __name__ == '__main__':
             print('\033[36mverb:\033[0m clean workspace.')
         getoutput('/bin/git clean -f -d -x')
 
+    results = []
     if os.path.exists(args.result):
         with open(args.result) as f:
             results = re.findall('rpms/.*.spec', f.read())
@@ -295,7 +296,7 @@ if __name__ == '__main__':
         fileList = args.file if args.file else get_file_list(commit)
 
         for filePath in fileList:
-            if filePath in results:
+            if mode == 'manual' and filePath in results:
                 print('\033[36mverb:\033[0m skip {} file.'.format(filePath))
                 continue
 
@@ -328,7 +329,8 @@ if __name__ == '__main__':
                     if args.rpmlint:
                         print('\033[32minfo:\033[0m Check RPM for fc{} - {}:\n'.format(rel, arch),
                               rpm_lint(outDir))
-                    result(args.result, [value, specFile, rel, arch])
+                    if mode == 'manual':
+                        result(args.result, [value, specFile, rel, arch])
 
         if args.file or args.commit:
             break
