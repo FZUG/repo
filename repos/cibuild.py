@@ -105,7 +105,7 @@ def get_sources(itemList, output=srcDir, verb=None):
                 try:
                     urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
                     #call(['wget', '-q', '-P', output, item])
-                except urllib.error.HTTPError as e:
+                except Exception as e:
                     print('\033[31merro:\033[0m downloading error. {}'.format(e))
             else:
                 for src in find_files(item, 'rpms'):
@@ -278,6 +278,10 @@ if __name__ == '__main__':
             print('\033[36mverb:\033[0m clean workspace.')
         getoutput('/bin/git clean -f -d -x')
 
+    if os.path.exists(args.result):
+        with open(args.result) as f:
+            results = re.findall('rpms/.*.spec', f.read())
+
     for commit in get_commit_list():
         if ('GIT_PREVIOUS_COMMIT' in os.environ and \
            commit in os.environ['GIT_PREVIOUS_COMMIT']) or \
@@ -289,6 +293,10 @@ if __name__ == '__main__':
         fileList = args.file if args.file else get_file_list(commit)
 
         for filePath in fileList:
+            if filePath in results:
+                print('\033[36mverb:\033[0m skip {} file.'.format(filePath))
+                continue
+
             if parse_spec(filePath):
                 specFile, specContent = parse_spec(filePath)
                 if args.verbose:
