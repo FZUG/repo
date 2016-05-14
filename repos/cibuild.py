@@ -101,7 +101,7 @@ def get_sources(itemList, output=srcDir, verb=None):
         if not os.path.exists(os.path.join(output, item.split('/')[-1])):
             if item.split('://')[0] in ['http', 'https', 'ftp']:
                 if verb:
-                    print('\033[36mverb:\033[0m downloading {} file.'.format(item.split('/')[-1]))
+                    print('\033[36mverb:\033[0m downloading {} file.'.format(item))
                 try:
                     urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
                     #call(['wget', '-q', '-P', output, item])
@@ -197,7 +197,7 @@ def create_repo(output=outDir):
         Return the command running log.
     '''
 
-    return getoutput('/bin/createrepo_c {}'.format(output))
+    return getoutput('/bin/createrepo_c -d -x *.src.rpm {}'.format(output))
 
 def result(filename, content):
     '''Log build result to file.
@@ -240,9 +240,11 @@ def parse_args():
     parser.add_argument('-b', '--black-list', metavar='BLACKLIST', type=str,
                         dest='blacklist', action='append', required=False,
                         help='set blacklist, skip these items')
-    parser.add_argument('--mock-opts', metavar='OPTs', type=str,
+    parser.add_argument('--mock-opts', metavar='OPTIONS', type=str,
                         dest='mock', action='store', default='', required=False,
                         help='set mock command-line options')
+    parser.add_argument('--createrepo', dest='createrepo', action='store_true',
+                        help='run createrepo to create repository')
     parser.add_argument('--rpmlint', dest='rpmlint', action='store_true',
                         help='check common problems in rpm package')
     parser.add_argument('--clean', dest='clean', action='store_true',
@@ -320,8 +322,9 @@ if __name__ == '__main__':
                     value, log = build_rpm(srpmFile, release=rel, arch=arch, output=outDir,
                                            opts=args.mock, verb=args.verbose)
                     print(log)
-                    print('\033[32minfo:\033[0m Create metadata for fc{} - {}:\n'.format(rel, arch),
-                          create_repo(outDir))
+                    if args.createrepo:
+                        print('\033[32minfo:\033[0m Create metadata for fc{} - {}:\n'.format(rel, arch),
+                              create_repo(outDir))
                     if args.rpmlint:
                         print('\033[32minfo:\033[0m Check RPM for fc{} - {}:\n'.format(rel, arch),
                               rpm_lint(outDir))
