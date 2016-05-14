@@ -52,7 +52,7 @@ BuildRequires: golang-googlecode-uuid-devel
 BuildRequires: golang-github-gorilla-websocket-devel
 BuildRequires: golang-gopkg-check-devel
 %endif
-%{systemd_requires}
+%{?systemd_requires}
 
 %description
 Lantern is a free desktop application that delivers fast,

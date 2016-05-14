@@ -32,6 +32,7 @@ Requires: libffi-devel
 Requires: pyOpenSSL
 Requires: pygtk2
 Requires: python-appindicator
+%{?systemd_requires}
 
 %description
 A stable, easy to use and fast proxy based on GAE.

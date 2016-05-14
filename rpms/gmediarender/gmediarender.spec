@@ -25,6 +25,7 @@ Requires: gstreamer1-plugins-bad-free
 Requires: gstreamer1-plugins-base
 Requires: gstreamer1-plugins-good
 Requires(pre): shadow-utils
+%{?systemd_requires}
 
 %description
 GMediaRender is a resource efficient UPnP/DLNA renderer.
