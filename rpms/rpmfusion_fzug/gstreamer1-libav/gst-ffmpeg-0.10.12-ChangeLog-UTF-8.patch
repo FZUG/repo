@@ -1,0 +1,9 @@
+diff -U0 gst-ffmpeg-0.10.12/ChangeLog~ gst-ffmpeg-0.10.12/ChangeLog
+--- gst-ffmpeg-0.10.12/ChangeLog~	2011-07-20 12:09:57.000000000 +0200
++++ gst-ffmpeg-0.10.12/ChangeLog	2011-09-04 10:20:50.064262797 +0200
+@@ -4277 +4277 @@
+-2007-11-08 14:44:36 +0000  Ole André Vadla Ravnås <ole.andre.ravnas@tandberg.com>
++2007-11-08 14:44:36 +0000  Ole AndrÃ© Vadla RavnÃ¥s <ole.andre.ravnas@tandberg.com>
+@@ -4281 +4281 @@
+-	  Patch by: Ole André Vadla Ravnås <ole dot andre dot ravnas at tandberg dot com>
++	  Patch by: Ole AndrÃ© Vadla RavnÃ¥s <ole dot andre dot ravnas at tandberg dot com>
