@@ -1,0 +1,20 @@
+--- gsview-4.8/src/gvcver.h.libgs	2006-02-24 05:24:42.000000000 -0600
++++ gsview-4.8/src/gvcver.h	2006-05-07 20:43:57.000000000 -0500
+@@ -57,7 +57,7 @@
+ /* Ghostscript */
+ #define GS_PRODUCT  "AFPL Ghostscript"
+ #define GS_REVISION_MIN   704
+-#define GS_REVISION	  704
++#define GS_REVISION	  @@GS_REVISION@@ 
+ #define GS_REVISION_MAX   999
+ 
+ #ifdef _Windows
+@@ -76,7 +76,7 @@
+ #if X11
+ #define INIFILE "gsview.ini"
+ #define GS_EXENAME  "gs"
+-#define GS_DLLNAME  "libgs.so"
++#define GS_DLLNAME  "libgs.so.@@SOMAJOR@@"
+ #else
+ #define GS_EXENAME  "gsos2.exe"
+ #define GS_DLLNAME  "gsdll2.dll"

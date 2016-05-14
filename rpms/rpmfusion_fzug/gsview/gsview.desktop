@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GSview
+GenericName=PS/PDF Viewer
+Comment=EPS,PDF,PS Viewer
+Exec=gsview
+Icon=gsview
+Terminal=false
+Type=Application
+MimeType=image/x-eps;application/postscript;application/pdf;
+Categories=GTK;Graphics;Viewer;Publishing;
+StartupWMClass=gsview
