@@ -2,7 +2,7 @@
 %global _tmppath /var/tmp
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global appfile %{name}_%{version}-2_i386.deb
-%global appurl  http://packages.deepin.com/deepin/pool/non-free/d/deepin%{name}/%{appfile}
+%global appurl  https://repo.fdzh.org/FZUG/nonfree/23/source/SRPMS/%{appfile}
 %global sha1sum c51fb6d5cbb02513319ee478f7b6f0403839b83f
 
 # Usage: DownloadPkg appfile appurl
@@ -10,7 +10,7 @@
 Download() {\
     SHA=$(test -f %1 && sha1sum %1 ||:)\
     if [[ ! -f %1 || "${SHA/ */}" != "%sha1sum" ]]; then\
-        axel -o %1 -a %2; Download\
+        wget -O %1 %2; Download\
     fi\
 }\
 Download\
@@ -18,15 +18,15 @@ Download\
 
 Name:    wine-qqintl
 Version: 0.1.3
-Release: 2.net
+Release: 3.net
 Summary: Tencent QQ International Edition
 Summary(zh_CN): 腾讯 QQ 国际版
 Group:   Applications/Communications
 License: Proprietary
 URL:     http://www.qq.com
 
-BuildRequires: axel dpkg tar
-Requires: axel dpkg tar
+BuildRequires: wget dpkg tar
+Requires: wget dpkg tar
 %ifarch %{ix86}
 Requires: wine-core alsa-lib gtk2 lcms2 libpng12
 Requires: libSM ncurses-libs cpus-libs pulseaudio-libs
@@ -121,6 +121,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/qqintl.png
 
 %changelog
+* Sun May 15 2016 mosquito <sensor.wen@gmail.com> - 0.1.3-3
+- Fix package url
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.1.3-2
 - Change tmp directory
 * Mon Dec 21 2015 mosquito <sensor.wen@gmail.com> - 0.1.3-1
