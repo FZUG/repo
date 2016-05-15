@@ -6,7 +6,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 311e18ff369078e192a83f27834b45bdb288168a
+%global _commit c07c63dcdedb7e8ced9a81dfb864505d5db5afa3
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # provides and requires filter
@@ -16,8 +16,8 @@
 %global __requires_exclude (mono|icu)
 
 Name:		ue4
-Version:	4.9.0
-Release:	2.git%{_shortcommit}%{?dist}
+Version:	4.11.2
+Release:	1.git%{_shortcommit}%{?dist}
 Summary:	UnrealEngine 4 are integrated tools for game develop
 License:	Custom
 URL:		https://www.unrealengine.com
@@ -178,6 +178,8 @@ update-desktop-database -q ||:
 /opt/%{name}/Engine/Documentation
 
 %changelog
+* Sun May 15 2016 mosquito <sensor.wen@gmail.com> - 4.11.2-1.gitc07c63d
+- Update to 4.11.2-1.gitc07c63d
 * Wed Sep  2 2015 mosquito <sensor.wen@gmail.com> - 4.9.0-2.git311e18f
 - Use auto-generate dependencies
 * Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 4.9.0-1.git311e18f
