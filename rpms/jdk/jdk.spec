@@ -8,16 +8,16 @@
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 
 %global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "i586")
-%global appfile jdk-8u72-linux-%{arch}.tar.gz
+%global appfile jdk-8u92-linux-%{arch}.tar.gz
 # http://www.oracle.com/technetwork/java/javase/downloads
-%global appurl  http://download.oracle.com/otn-pub/java/jdk/8u72-b15/%{appfile}
-# https://www.oracle.com/webfolder/s/digest/8u72checksum.html
+%global appurl  http://download.oracle.com/otn-pub/java/jdk/8u92-b14/%{appfile}
+# https://www.oracle.com/webfolder/s/digest/8u92checksum.html
 %global sha256  %(test %arch = x64 &&
-   echo "46e7f96271043009995f39f04a9e711cdc0cc5b6a5b67910451678a3d250ec98" ||
-   echo "58456a9e6cf75f52069a405067f69a78870c24628abd751ae1a99d5d2ab57908")
+   echo "79a3f25e9b466cb9e969d1772ea38550de320c88e9119bf8aa11ce8547c39987" ||
+   echo "7203592329877735bb6259844a3a30640edc61920d132f952c40ab2e2014b224")
 
 %global getopts --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" -O
-%global jdkdir  jdk1.8.0_72
+%global jdkdir  jdk1.8.0_92
 %global jdkhome %{_jvmdir}/%{jdkdir}
 %global jdkbindir %{_jvmdir}/%{jdkdir}/bin
 %global jredir  %{jdkdir}/jre
@@ -101,7 +101,7 @@ alternatives --remove javac %{jdkbindir}/javac
 }
 
 Name:    oracle-jdk8
-Version: 1.8.0.72
+Version: 1.8.0.92
 Release: 1.net
 Summary: Java Platform Standard Edition Development Kit
 Summary(zh_CN): Oracle Java SE 开发套件
@@ -110,6 +110,8 @@ License: http://java.com/license
 URL:     http://www.oracle.com/technetwork/java/javase
 
 BuildRequires: wget tar
+BuildRequires: javapackages-tools
+Requires: javapackages-tools
 Requires: wget tar
 Requires: chkconfig %{req_vers}
 Provides: jdk = %{version}-%{release}
@@ -226,6 +228,8 @@ fi
 %ghost %{jdkhome}
 
 %changelog
+* Sun May 15 2016 mosquito <sensor.wen@gmail.com> - 1.8.0.92-1
+- Release 1.8.0.92
 * Fri Feb  5 2016 mosquito <sensor.wen@gmail.com> - 1.8.0.72-1
 - Release 1.8.0.72
 * Tue Jan 19 2016 mosquito <sensor.wen@gmail.com> - 1.8.0.66-3
