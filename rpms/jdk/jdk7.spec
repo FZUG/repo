@@ -101,7 +101,7 @@ alternatives --remove javac %{jdkbindir}/javac
 
 Name:    oracle-jdk7
 Version: 1.7.0.80
-Release: 2.net
+Release: 3.net
 Summary: Java Platform Standard Edition Development Kit
 Summary(zh_CN): Oracle Java SE 开发套件
 Group:   Development/Tools
@@ -109,6 +109,8 @@ License: http://java.com/license
 URL:     http://www.oracle.com/technetwork/java/javase
 
 BuildRequires: wget tar
+BuildRequires: javapackages-tools
+Requires: javapackages-tools
 Requires: wget tar
 Requires: chkconfig %{req_vers}
 Provides: jdk = %{version}-%{release}
@@ -224,6 +226,8 @@ fi
 %ghost %{jdkhome}
 
 %changelog
+* Sun May 15 2016 mosquito <sensor.wen@gmail.com> - 1.7.0.80-3
+- Add javapackages-tools Req
 * Tue Jan 19 2016 mosquito <sensor.wen@gmail.com> - 1.7.0.80-2
 - Fix https://github.com/FZUG/repo/issues/58
 * Tue Jan 19 2016 mosquito <sensor.wen@gmail.com> - 1.7.0.80-1
