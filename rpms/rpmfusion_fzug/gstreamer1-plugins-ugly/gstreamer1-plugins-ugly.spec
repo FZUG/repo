@@ -6,8 +6,8 @@ License:        LGPLv2+
 Group:          Applications/Multimedia
 URL:            http://gstreamer.freedesktop.org/
 Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-%{version}.tar.xz
-BuildRequires:  gstreamer1-devel >= 1.6.0
-BuildRequires:  gstreamer1-plugins-base-devel >= 1.6.0
+BuildRequires:  gstreamer1-devel >= 1.8.0
+BuildRequires:  gstreamer1-plugins-base-devel >= 1.8.0
 BuildRequires:  gettext-devel gtk-doc
 BuildRequires:  a52dec-devel >= 0.7.3
 BuildRequires:  libdvdread-devel >= 0.9.0
@@ -20,6 +20,7 @@ BuildRequires:  libcdio-devel >= 0.82
 BuildRequires:  twolame-devel
 BuildRequires:  x264-devel >= 0.0.0-0.28
 BuildRequires:  opencore-amr-devel
+BuildRequires:  libmpg123-devel
 
 %description
 GStreamer is a streaming media framework, based on graphs of elements which
@@ -51,9 +52,9 @@ be shipped in gstreamer-plugins-good because:
 
 %prep
 %setup -q -n gst-plugins-ugly-%{version}
-# hack to allow building against 1.6.0 as 1.6.3 is not yet in the buildroot
-sed -i 's/GST_REQ=1.6.3/GST_REQ=1.6.0/' configure
-sed -i 's/GSTPB_REQ=1.6.3/GSTPB_REQ=1.6.0/' configure
+# hack to allow building against 1.8.0 as 1.8.1 is not yet in the buildroot
+sed -i 's/GST_REQ=1.8.1/GST_REQ=1.8.0/' configure
+sed -i 's/GSTPB_REQ=1.8.1/GSTPB_REQ=1.8.0/' configure
 
 
 %build
@@ -72,7 +73,8 @@ rm $RPM_BUILD_ROOT%{_libdir}/gstreamer-1.0/*.la
 
 
 %files -f gst-plugins-ugly-1.0.lang
-%doc AUTHORS COPYING README REQUIREMENTS
+%doc AUTHORS README REQUIREMENTS
+%license COPYING
 %{_datadir}/gstreamer-1.0
 # Plugins without external dependencies
 %{_libdir}/gstreamer-1.0/libgstasf.so
