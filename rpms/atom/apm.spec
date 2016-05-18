@@ -18,7 +18,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.10.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -107,6 +107,9 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Wed May 18 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-2.git87b4bcb
+- Fix #105 by rebuild apm
+  https://github.com/FZUG/repo/issues/105
 * Mon May  2 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-1.git87b4bcb
 - Release 1.10.0
 * Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.9.3-2.git38ff5b5
