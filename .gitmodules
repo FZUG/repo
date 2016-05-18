@@ -922,3 +922,27 @@
 [submodule "rpms/rpmfusion/rpmfusion-nonfree-release"]
 	path = rpms/rpmfusion/rpmfusion-nonfree-release
 	url = https://github.com/rpmfusion/rpmfusion-nonfree-release
+[submodule "rpms/rpmfusion/gxine"]
+	path = rpms/rpmfusion/gxine
+	url = https://github.com/rpmfusion/gxine
+[submodule "rpms/rpmfusion/vdr-xineliboutput"]
+	path = rpms/rpmfusion/vdr-xineliboutput
+	url = https://github.com/rpmfusion/vdr-xineliboutput
+[submodule "rpms/rpmfusion/xine-lib"]
+	path = rpms/rpmfusion/xine-lib
+	url = https://github.com/rpmfusion/xine-lib
+[submodule "rpms/rpmfusion/xine-plugin"]
+	path = rpms/rpmfusion/xine-plugin
+	url = https://github.com/rpmfusion/xine-plugin
+[submodule "rpms/rpmfusion/xine-ui"]
+	path = rpms/rpmfusion/xine-ui
+	url = https://github.com/rpmfusion/xine-ui
+[submodule "rpms/rpmfusion/kffmpegthumbnailer"]
+	path = rpms/rpmfusion/kffmpegthumbnailer
+	url = https://github.com/rpmfusion/kffmpegthumbnailer
+[submodule "rpms/rpmfusion/ffmpegthumbnailer"]
+	path = rpms/rpmfusion/ffmpegthumbnailer
+	url = https://github.com/rpmfusion/ffmpegthumbnailer
+[submodule "rpms/rpmfusion/cairo-dock-freeworld"]
+	path = rpms/rpmfusion/cairo-dock-freeworld
+	url = https://github.com/rpmfusion/cairo-dock-freeworld
