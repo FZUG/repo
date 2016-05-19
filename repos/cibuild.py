@@ -17,9 +17,6 @@ import argparse
 srcDir = os.path.join(os.getcwd(), 'build')
 outDir = os.path.join(os.getcwd(), 'output')
 
-if not os.path.isdir(srcDir):
-    os.mkdir(srcDir)
-
 def get_commit_list():
     '''Get all of commit.
 
@@ -279,6 +276,9 @@ if __name__ == '__main__':
         if args.verbose:
             print('\033[36mverb:\033[0m clean workspace.')
         getoutput('/bin/git clean -f -d -x')
+
+    if not os.path.isdir(srcDir):
+        os.mkdir(srcDir)
 
     results = []
     if os.path.exists(args.result):
