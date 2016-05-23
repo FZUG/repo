@@ -2,7 +2,7 @@
 # RPM spec: http://pkgs.fedoraproject.org/cgit/rpms/?q=nodejs
 # https://fedoraproject.org/wiki/Packaging:Node.js
 %{?nodejs_find_provides_and_requires}
-%global _cpln %(test $(rpm -E%?fedora) -gt 23 && echo "ln -s" || echo "cp -p")
+%global _cpln %(test $(rpm -E%?fedora) -gt 24 && echo "ln -s" || echo "cp -p")
 %global debug_package %{nil}
 %global _hardened_build 1
 %global __provides_exclude_from %{nodejs_sitelib}/.*/node_modules
@@ -11,6 +11,7 @@
 
 %global project apm
 %global repo %{project}
+%global node_ver v4
 
 # commit
 %global _commit 87b4bcb678682ff9e64f8aa1e11dd8d51c1ab2c5
@@ -18,7 +19,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.10.0
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -64,11 +65,20 @@ sed -i '/download-node/d' package.json
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
+
+# Update node
+%if 0%{?fedora} < 24 || 0%{?rhel}
+git clone https://github.com/creationix/nvm.git .nvm
+source .nvm/nvm.sh
+nvm install %{node_ver}
+nvm use %{node_ver}
+%endif
+
 npm install --loglevel info
 npm install --loglevel info -g --prefix build/usr
 
 # Copy system node binary
-%{_cpln} %{_bindir}/node build%{nodejs_sitelib}/atom-package-manager/bin
+%{_cpln} "`which node`" build%{nodejs_sitelib}/atom-package-manager/bin
 
 %install
 cp -pr build/. %{buildroot}
@@ -107,6 +117,10 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Mon May 23 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-3.git87b4bcb
+- Use node 4.x to build native modules
+- Fix #106 by update node 4.x
+  https://github.com/FZUG/repo/issues/106
 * Wed May 18 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-2.git87b4bcb
 - Fix #105 by rebuild apm
   https://github.com/FZUG/repo/issues/105
