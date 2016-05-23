@@ -1,14 +1,14 @@
 Name:           gstreamer1-libav
 Version:        1.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GStreamer 1.0 libav-based plug-ins
 Group:          Applications/Multimedia
 License:        LGPLv2+
 URL:            http://gstreamer.freedesktop.org/
 Source0:        http://gstreamer.freedesktop.org/src/gst-libav/gst-libav-%{version}.tar.xz
 Patch0:         gst-ffmpeg-0.10.12-ChangeLog-UTF-8.patch
-BuildRequires:  gstreamer1-devel >= 1.6.0
-BuildRequires:  gstreamer1-plugins-base-devel >= 1.6.0
+BuildRequires:  gstreamer1-devel >= 1.8.0
+BuildRequires:  gstreamer1-plugins-base-devel >= 1.8.0
 BuildRequires:  orc-devel bzip2-devel zlib-devel ffmpeg-devel
 %ifarch %{ix86} x86_64
 BuildRequires:  yasm
@@ -42,9 +42,9 @@ plug-in.
 %prep
 %setup -q -n gst-libav-%{version}
 %patch0 -p1
-# hack to allow building against 1.6.0 as 1.6.3 is not yet in the buildroot
-sed -i 's/GST_REQ=1.6.3/GST_REQ=1.6.0/' configure
-sed -i 's/GST_PBREQ=1.6.3/GST_PBREQ=1.6.0/' configure
+# hack to allow building against 1.8.0 as 1.8.1 is not yet in the buildroot
+sed -i 's/GST_REQ=1.8.1/GST_REQ=1.8.0/' configure
+sed -i 's/GST_PBREQ=1.8.1/GST_PBREQ=1.8.0/' configure
 
 
 %build
@@ -71,6 +71,9 @@ rm $RPM_BUILD_ROOT%{_libdir}/gstreamer-1.0/libgst*.la
 
 
 %changelog
+* Fri May 20 2016 mosquito <sensor.wen@gmail.com> - 1.8.1-2
+- Rebuild for ffmpeg-3.0
+
 * Sat May 14 2016 mosquito <sensor.wen@gmail.com> - 1.8.1-1
 - Update to 1.8.1
 
