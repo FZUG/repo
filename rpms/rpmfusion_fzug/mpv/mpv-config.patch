@@ -1,0 +1,12 @@
+--- a/etc/mpv.conf
++++ b/etc/mpv.conf
+@@ -8,7 +8,7 @@
+ # no builtin or example mpv.conf with all the defaults.
+ #
+ #
+-# Configuration files are read system-wide from /usr/local/etc/mpv.conf
++# Configuration files are read system-wide from /etc/mpv/mpv.conf
+ # and per-user from ~/.config/mpv/mpv.conf, where per-user settings override
+ # system-wide settings, all of which are overridden by the command line.
+ #
+
