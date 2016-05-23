@@ -1,0 +1,16 @@
+diff -up xine-lib-1.1.16.2/misc/xine-config.in.multilib xine-lib-1.1.16.2/misc/xine-config.in
+--- xine-lib-1.1.16.2/misc/xine-config.in.multilib	2008-06-25 08:04:09.000000000 -0500
++++ xine-lib-1.1.16.2/misc/xine-config.in	2009-02-20 07:34:27.000000000 -0600
+@@ -6,12 +6,6 @@ unset prefix
+ unset exec_prefix
+ unset args
+ 
+-PKG_CONFIG_PATH="`cat <<'EOF'
+-@XINE_PKGCONFIG_DIR@
+-EOF
+-`${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
+-export PKG_CONFIG_PATH
+-
+ usage()
+ {
+ 	cat <<EOF
