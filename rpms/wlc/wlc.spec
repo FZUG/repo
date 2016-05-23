@@ -1,11 +1,11 @@
 Name:           wlc
-Version:        0.0.2
+Version:        0.0.3
 Release:        1%{?dist}
 Summary:        Wayland compositor library
 Group:          User Interface/X
 License:        MIT
 URL:            https://github.com/Cloudef/wlc
-Source0:        https://github.com/Cloudef/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Cloudef/%{name}/archive/v%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(pixman-1)
@@ -71,5 +71,8 @@ ctest -V %{?_smp_mflags}
 %{_libdir}/pkgconfig/wlc.pc
 
 %changelog
-* Thu May 09 2016 nrechn <neil@gyz.io> - 0.0.2-1
+* Mon May 23 2016 nrechn <neil@gyz.io> - 0.0.3-1
+- Update to 0.0.3
+
+* Mon May 09 2016 nrechn <neil@gyz.io> - 0.0.2-1
 - Initial packaging
