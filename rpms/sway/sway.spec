@@ -1,11 +1,11 @@
 Name:           sway
-Version:        0.6
+Version:        0.7
 Release:        1%{?dist}
 Summary:        i3-compatible window manager for Wayland
 Group:          User Interface/X
 License:        MIT
 URL:            https://github.com/SirCmpwn/sway/
-Source0:        https://github.com/SirCmpwn/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/SirCmpwn/%{name}/archive/%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(wlc)
@@ -35,6 +35,7 @@ i3-compatible configuration.
 %cmake \
        -DCMAKE_INSTALL_SYSCONFDIR=/etc \
        -DBUILD_SHARED_LIBS:BOOL=OFF \
+       -Dzsh-completions=YES \
        .
 make %{?_smp_mflags}
 
@@ -60,6 +61,9 @@ make install DESTDIR=%{buildroot}
 /usr/share/wayland-sessions/sway.desktop
 
 %changelog
-* Thu May 09 2016 nrechn <neil@gyz.io> - 0.6-1
+* Mon May 23 2016 nrechn <neil@gyz.io> - 0.7-1
+- Upddate to 0.7
+
+* Mon May 09 2016 nrechn <neil@gyz.io> - 0.6-1
 - Initial packaging
 
