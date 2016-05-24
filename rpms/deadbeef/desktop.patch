@@ -1,0 +1,75 @@
+--- a/deadbeef.desktop.in
++++ b/deadbeef.desktop.in
+@@ -18,60 +18,60 @@
+ 
+ X-Ayatana-Desktop-Shortcuts=Play;Pause;Stop;Next;Prev
+ 
+-Keywords=Sound;Music;Audio;Player;Musicplayer;MP3
+-Keywords[zh_TW]=Sound;Music;Audio;Player;Musicplayer;MP3;音樂;音樂播放器;播放器;音訊
++Keywords=Sound;Music;Audio;Player;Musicplayer;MP3;
++Keywords[zh_TW]=Sound;Music;Audio;Player;Musicplayer;MP3;音樂;音樂播放器;播放器;音訊;
+ 
+-[Play Shortcut Group]
++[X-Play Shortcut Group]
+ Name=Play
+ Name[zh_TW]=播放
+ Exec=deadbeef --play
+ TargetEnvironment=Unity
+ 
+-[Pause Shortcut Group]
++[X-Pause Shortcut Group]
+ Name=Pause
+ Name[zh_TW]=暫停
+ Exec=deadbeef --pause
+ TargetEnvironment=Unity
+ 
+-[Stop Shortcut Group]
++[X-Stop Shortcut Group]
+ Name=Stop
+ Name[zh_TW]=停止
+ Exec=deadbeef --stop
+ TargetEnvironment=Unity
+ 
+-[Next Shortcut Group]
++[X-Next Shortcut Group]
+ Name=Next
+ Name[zh_TW]=下一首
+ Exec=deadbeef --next
+ TargetEnvironment=Unity
+ 
+-[Prev Shortcut Group]
++[X-Prev Shortcut Group]
+ Name=Prev
+ Name[zh_TW]=上一首
+ Exec=deadbeef --prev
+ TargetEnvironment=Unity
+ 
+-[Desktop Action Play]
++[X-Desktop Action Play]
+ Name=Play
+ Name[zh_TW]=播放
+ Exec=deadbeef --play
+ 
+-[Desktop Action Pause]
++[X-Desktop Action Pause]
+ Name=Pause
+ Name[zh_TW]=暫停
+ Exec=deadbeef --pause
+ 
+-[Desktop Action Stop]
++[X-Desktop Action Stop]
+ Name=Stop
+ Name[zh_TW]=停止
+ Exec=deadbeef --stop
+ 
+-[Desktop Action Next]
++[X-Desktop Action Next]
+ Name=Next
+ Name[zh_TW]=下一首
+ Exec=deadbeef --next
+ 
+-[Desktop Action Previous]
++[X-Desktop Action Previous]
+ Name=Prev
+ Name[zh_TW]=上一首
+ Exec=deadbeef --prev
