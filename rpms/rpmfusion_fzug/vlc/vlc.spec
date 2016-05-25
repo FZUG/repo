@@ -1,346 +1,487 @@
-#global vlc_rc			-pre20151006
-%global _with_bootstrap		1
-%global _with_workaround_circle_deps 1
-%if 0%{?!_without_freeworld:1}
-%global _with_a52dec 1
-%global _with_faad2 1
-%global _with_ffmpeg 1
-%global _with_libdca 1
-%global _with_libdvbpsi	1
-%global _with_libmad 1
-%global _with_libmpeg2 1
-%global _with_twolame 1
-%global _with_x264 1
-%global _with_x265 1
-%global _with_xvidcore 1
-%global _with_live555 1
-%global _with_vaapi 1
-%endif
-%global _with_bluray    1
-%global _with_opencv    1
-%global _with_fluidsynth 1
-%if 0%{?fedora} <= 23
-%global _with_freerdp 1
-%global _with_projectm  1
-%endif
+# https://wiki.videolan.org/Category:Building
+%global _commit 45bc33349134f308a1a9a5cc01995adc113ea96f
+%global _scommit %(c=%{_commit}; echo ${c:0:7})
+
+%bcond_without bootstrap
+%bcond_without workaround_circle_deps
+%bcond_without vaapi
+%bcond_without vdpau
+%bcond_without bluray
+%bcond_without opencv
+%bcond_without fluidsynth
+%bcond_without qt5
+%bcond_with    qt4
+%bcond_without wayland
 %if 0%{?fedora}
-%global _with_schroedinger 1
+%bcond_without freerdp
+%bcond_without projectm
+%bcond_without schroedinger
 %endif
 %ifarch x86_64 i686
-%global _with_crystalhd 1
+%bcond_without crystalhd
 %endif
 
-
-Summary:	The cross-platform open-source multimedia framework, player and server
-Name:		vlc
-Version:	2.2.3
-Release:	2%{?dist}
-License:	GPLv2+
-Group:		Applications/Multimedia
-URL:		http://www.videolan.org
-Source0:	http://download.videolan.org/pub/videolan/vlc/%{version}/vlc-%{version}%{?vlc_rc}.tar.xz
-
-BuildRequires:	desktop-file-utils
-
-%{?_with_bootstrap:
-BuildRequires:	gettext-devel
-BuildRequires:	libtool
-}
-
-%{?_with_a52dec:BuildRequires: a52dec-devel}
-BuildRequires:	aalib-devel
-BuildRequires:	alsa-lib-devel
-BuildRequires:	avahi-devel
-BuildRequires:	cdparanoia-devel
-BuildRequires:	pkgconfig(dbus-1)
-%{?_with_faad2:BuildRequires: faad2-devel}
-%{?_with_ffmpeg:BuildRequires: ffmpeg-devel >= 0.4.9-0}
-BuildRequires:	flac-devel
-%{?_with_fluidsynth:BuildRequires: fluidsynth-devel}
-%{?_with_freerdp:BuildRequires: freerdp-devel}
-BuildRequires:	fribidi-devel
-%{?_with_gnomevfs:BuildRequires: gnome-vfs2-devel}
-BuildRequires:	gnutls-devel >= 1.0.17
-BuildRequires:	gsm-devel
-BuildRequires:	jack-audio-connection-kit-devel
-BuildRequires:	kde-filesystem
-BuildRequires:	game-music-emu-devel
-BuildRequires:	libavc1394-devel
-BuildRequires:	libass-devel >= 0.9.7
-%{?_with_bluray:BuildRequires: libbluray-devel >= 0.2.1}
-BuildRequires:	libcaca-devel
-BuildRequires:	libcddb-devel
-BuildRequires:	libcdio-devel >= 0.77-3
-BuildRequires:	pkgconfig(libchromaprint)
-%{?_with_crystalhd:BuildRequires: libcrystalhd-devel}
-BuildRequires:	libdc1394-devel >= 2.1.0
-%{?_with_libdca:BuildRequires: libdca-devel}
-BuildRequires:	libdv-devel
-%{?_with_libdvbpsi:BuildRequires: libdvbpsi-devel}
-BuildRequires:	libdvdnav-devel
-BuildRequires:	libebml-devel
-BuildRequires:	libgcrypt-devel
-BuildRequires:	libid3tag-devel
-BuildRequires:	libkate-devel
-%{?_with_libmad:BuildRequires: libmad-devel}
-BuildRequires:	libmatroska-devel >= 0.7.6
-BuildRequires:	libmodplug-devel
-BuildRequires:	libmp4v2-devel
-BuildRequires:	libmpcdec-devel
-BuildRequires:	libmtp-devel >= 1.0.0
-%{?_with_projectm:BuildRequires: libprojectM-qt-devel}
-BuildRequires:	libproxy-devel
-BuildRequires:	librsvg2-devel >= 2.9.0
-BuildRequires:	libssh2-devel
-BuildRequires:	libsysfs-devel
-BuildRequires:	libshout-devel
-BuildRequires:	libsmbclient-devel
-BuildRequires:	libtar-devel
-BuildRequires:	libtheora-devel
-BuildRequires:	libtiger-devel
-BuildRequires:	libtiff-devel
-BuildRequires:	pkgconfig(libudev)
-BuildRequires:	pkgconfig(libvncclient)
-BuildRequires:	libupnp-devel
-BuildRequires:	libv4l-devel
-%{?_with_vaapi:BuildRequires: libva-devel}
-BuildRequires:  pkgconfig(vdpau)
-BuildRequires:	pkgconfig(vorbis)
-BuildRequires:	pkgconfig(libxml-2.0)
-BuildRequires:	lirc-devel
-%{?_with_live555:BuildRequires: live555-devel >= 0-0.33}
-BuildRequires:  kernel-headers
-BuildRequires:	pkgconfig(gl)
-BuildRequires:	pkgconfig(glu)
-%if 0%{?fedora} < 24
-BuildRequires:	libmusicbrainz-devel
+# Those are dependencies which are NOT provided in Fedora, mostly for legal reasons.
+%if 0%{?!_without_freeworld:1}
+%bcond_without a52dec
+%bcond_without faad2
+%bcond_without fdkaac
+%bcond_without ffmpeg
+%bcond_without libdca
+%bcond_without libdvbpsi
+%bcond_without libmad
+%bcond_without libmpeg2
+%bcond_without live555
+%bcond_without twolame
+%bcond_without x264
+%bcond_without x265
+%bcond_without xvidcore
 %endif
-BuildRequires:	libsamplerate-devel
-BuildRequires:	libshout-devel
-BuildRequires:	lua-devel
-BuildRequires:	minizip-devel
-%{?_with_libmpeg2:BuildRequires: mpeg2dec-devel >= 0.3.2}
-BuildRequires:	ncurses-devel
-%{?_with_opencv:BuildRequires: pkgconfig(opencv)}
-BuildRequires:	openslp-devel
-Buildrequires:	opus-devel
-BuildRequires:	pcre-devel
-BuildRequires:	pkgconfig(libpulse) >= 0.9.8
-BuildRequires:	qt4-devel >= 4.5.2
-%{?_with_schroedinger:BuildRequires: schroedinger-devel >= 1.0.10}
-BuildRequires:	sqlite-devel
-BuildRequires:	SDL_image-devel
-%{?_with_sidplay:BuildRequires: pkgconfig(libsidplay2)}
-BuildRequires:	speex-devel >= 1.1.5
-BuildRequires:	taglib-devel
-%{?_with_twolame:BuildRequires:	twolame-devel}
-%{?_with_vcdimager:BuildRequires: vcdimager-devel >= 0.7.21}
-%{?_with_x264:BuildRequires: x264-devel >= 0-0.8.20061028}
-%{?_with_x265:BuildRequires: x265-devel}
-%{?_with_xvidcore:BuildRequires: xvidcore-devel}
-BuildRequires:	zlib-devel
-BuildRequires:	zvbi-devel
 
-# X-libs
-BuildRequires:	libXt-devel
-BuildRequires:	libXv-devel
-BuildRequires:	libXxf86vm-devel
-BuildRequires:	libX11-devel
-BuildRequires:	libXext-devel
-BuildRequires:	libXpm-devel
+Summary:       The cross-platform open-source multimedia framework, player and server
+Name:          vlc
+Version:       3.0.0
+Release:       1.git%{_scommit}%{?dist}
+License:       GPLv2+ and LGPLv2.1+
+Group:         Applications/Multimedia
+URL:           http://www.videolan.org
+Source0:       https://github.com/videolan/vlc/archive/%{_commit}/%{name}-%{_scommit}.tar.gz
+
+# Base tools
+BuildRequires: libtool
+BuildRequires: gettext-devel
+BuildRequires: pkgconfig(dbus-1)
+BuildRequires: pkgconfig(lua) >= 5.1
+BuildRequires: pkgconfig(zlib)
+%if %{with qt5}
+BuildRequires: pkgconfig(Qt5Core) >= 5.2.0
+BuildRequires: pkgconfig(Qt5Gui)
+BuildRequires: pkgconfig(Qt5Widgets)
+BuildRequires: pkgconfig(Qt5X11Extras)
+%endif
+%if %{with qt4}
+BuildRequires: pkgconfig(QtCore) >= 4.8.0
+BuildRequires: pkgconfig(QtGui) >= 4.8.0
+%endif
+BuildRequires: desktop-file-utils
+BuildRequires: fdupes
+# Images
+BuildRequires: libpng-devel
+BuildRequires: libjpeg-turbo-devel
+BuildRequires: pkgconfig(SDL_image) >= 1.2.10
+BuildRequires: libtiff-devel
+# Access
+BuildRequires: libshout-devel
+BuildRequires: pkgconfig(libarchive) >= 3.1.0
+%if %{with live555}
+BuildRequires: live555-devel >= 2015.01.27
+%endif
+BuildRequires: pkgconfig(libavc1394) >= 0.5.3
+BuildRequires: pkgconfig(libdc1394-2) >= 2.1.0
+BuildRequires: pkgconfig(libraw1394) >= 2.0.1
+BuildRequires: pkgconfig(dvdread) > 4.9.0
+BuildRequires: pkgconfig(dvdnav) > 4.9.0
+%if %{with bluray}
+BuildRequires: pkgconfig(libbluray) >= 0.5.0
+%endif
+%if %{with opencv}
+BuildRequires: pkgconfig(opencv) > 2.0
+%endif
+BuildRequires: pkgconfig(smbclient)
+BuildRequires: pkgconfig(libssh2)
+BuildRequires: libnfs-devel
+BuildRequires: pkgconfig(libv4l2)
+BuildRequires: pkgconfig(libvcdinfo)
+BuildRequires: vcdimager-devel >= 0.7.21
+BuildRequires: pkgconfig(libcddb) >= 0.9.5
+BuildRequires: pkgconfig(libcdio) >= 0.78.2
+BuildRequires: pkgconfig(libvncclient) >= 0.9.9
+%if %{with freerdp}
+BuildRequires: pkgconfig(freerdp) >= 1.0.1
+%endif
+# Demuxers and Muxers
+BuildRequires: pkgconfig(libsidplayfp)
+%if %{with libdvbpsi}
+BuildRequires: libdvbpsi-devel >= 1.2.0
+%endif
+BuildRequires: pkgconfig(ogg) >= 1.0
+BuildRequires: pkgconfig(shout) >= 2.1
+BuildRequires: libmkv-devel
+BuildRequires: pkgconfig(libmodplug) >= 0.8.4
+BuildRequires: libebml-devel
+BuildRequires: libmatroska-devel
+BuildRequires: pkgconfig(libgme)
+BuildRequires: libmp4v2-devel
+# Codecs
+BuildRequires: pkgconfig(vorbis) >= 1.1
+BuildRequires: pkgconfig(vorbisenc) >= 1.1
+BuildRequires: pkgconfig(theoradec) >= 1.0
+BuildRequires: pkgconfig(theoraenc)
+BuildRequires: pkgconfig(speex)
+BuildRequires: pkgconfig(flac)
+%if %{with x264}
+BuildRequires: x264-devel >= 0.86
+%endif
+%if %{with x265}
+BuildRequires: pkgconfig(x265)
+%endif
+%if %{with a52dec}
+BuildRequires: a52dec-devel
+%endif
+%if %{with libmpeg2}
+BuildRequires: pkgconfig(libmpeg2)
+%endif
+%if %{with vaapi}
+BuildRequires: pkgconfig(libva)
+%endif
+%if %{with workaround_circle_deps}
+BuildRequires: phonon-backend-gstreamer
+%endif
+BuildRequires: gstreamer1-plugins-base-devel
+%if %{with faad2}
+BuildRequires: faad2-devel
+%endif
+BuildRequires: faac-devel
+BuildRequires: lame-devel
+%if %{with ffmpeg}
+BuildRequires: pkgconfig(libavcodec)
+BuildRequires: pkgconfig(libavformat)
+BuildRequires: pkgconfig(libavutil)
+BuildRequires: pkgconfig(libswscale)
+BuildRequires: pkgconfig(libpostproc)
+%endif
+BuildRequires: pkgconfig(mad)
+%if %{with schroedinger}
+BuildRequires: pkgconfig(schroedinger-1.0) >= 1.0.10
+%endif
+%if %{with libdca}
+BuildRequires: pkgconfig(libdca) >= 0.0.5
+%endif
+%if %{with twolame}
+BuildRequires: pkgconfig(twolame)
+%endif
+BuildRequires: libmpcdec-devel
+BuildRequires: pkgconfig(libass) >= 0.9.8
+BuildRequires: gsm-devel
+%if %{with fluidsynth}
+BuildRequires: pkgconfig(fluidsynth) >= 1.1.2
+%endif
+BuildRequires: pkgconfig(zvbi-0.2) >= 0.2.28
+BuildRequires: pkgconfig(opus) >= 1.0.3
+%if %{with xvidcore}
+BuildRequires: xvidcore-devel
+%endif
+BuildRequires: libvpx-devel
+%if %{with fdkaac}
+BuildRequires: fdk-aac-devel
+%endif
+BuildRequires: libmpg123-devel
+BuildRequires: pkgconfig(kate) >= 0.3.0
+BuildRequires: libtiger-devel
+%if %{with crystalhd}
+BuildRequires: libcrystalhd-devel
+%endif
+BuildRequires: pkgconfig(dirac)
+# Video plugins, X-libs
+BuildRequires: libXt-devel
+BuildRequires: libXv-devel
+BuildRequires: libXxf86vm-devel
+BuildRequires: libX11-devel
+BuildRequires: libXext-devel
+BuildRequires: libXpm-devel
 %{!?_without_xcb:
-BuildRequires:  libxcb-devel
-BuildRequires:  xcb-util-devel
-BuildRequires:  pkgconfig(xcb-keysyms)
+BuildRequires: libxcb-devel
+BuildRequires: xcb-util-devel
+BuildRequires: pkgconfig(xcb-keysyms) >= 0.3.4
 }
-BuildRequires:	xorg-x11-proto-devel
+BuildRequires: xorg-x11-proto-devel
+%if %{with wayland}
+BuildRequires: pkgconfig(wayland-scanner)
+BuildRequires: pkgconfig(wayland-egl)
+%endif
+BuildRequires: pkgconfig(gtk+-2.0)
+%if %{with vdpau}
+BuildRequires: pkgconfig(vdpau) >= 0.6
+%endif
+BuildRequires: pkgconfig(sdl) >= 1.2.10
+BuildRequires: pkgconfig(freetype2)
+BuildRequires: pkgconfig(fribidi)
+BuildRequires: harfbuzz-devel
+BuildRequires: pkgconfig(librsvg-2.0) >= 2.9.0
+BuildRequires: aalib-devel
+BuildRequires: pkgconfig(caca) >= 0.99.beta14
+# Audio plugins
+BuildRequires: pkgconfig(libpulse) >= 1.0
+BuildRequires: pkgconfig(alsa) >= 1.0.24
+BuildRequires: pkgconfig(jack) >= 1.9.7
+BuildRequires: pkgconfig(samplerate)
+BuildRequires: pkgconfig(libchromaprint) >= 0.6.0
+# Others
+BuildRequires: libtar-devel
+BuildRequires: pkgconfig(ncursesw)
+BuildRequires: lirc-devel
+%if %{with projectm}
+BuildRequires: pkgconfig(libprojectM)
+%endif
+BuildRequires: pkgconfig(avahi-client) >= 0.6
+BuildRequires: pkgconfig(libudev) >= 142
+BuildRequires: pkgconfig(libmtp) >= 1.0.0
+BuildRequires: pkgconfig(libupnp)
+BuildRequires: pkgconfig(libxml-2.0) >= 2.5
+BuildRequires: libgcrypt-devel
+BuildRequires: pkgconfig(gnutls) >= 3.2.8
+BuildRequires: pkgconfig(taglib) >= 1.9
+BuildRequires: libgpg-error-devel
+BuildRequires: pkgconfig(libnotify)
+BuildRequires: kde-filesystem
 
+BuildRequires: cdparanoia-devel
+BuildRequires: game-music-emu-devel
+BuildRequires: libdv-devel
+BuildRequires: minizip-devel
+%{?_with_gnomevfs:BuildRequires: gnome-vfs2-devel}
+%if 0%{?fedora} < 24
+BuildRequires: libmusicbrainz-devel
+%endif
+BuildRequires: pkgconfig(gl)
+BuildRequires: pkgconfig(glu)
+BuildRequires: pkgconfig(libidn)
+BuildRequires: pkgconfig(libpcre)
+BuildRequires: pkgconfig(slang)
+BuildRequires: gdk-pixbuf2-devel
+BuildRequires: xosd-devel
 
-%{?_with_workaround_circle_deps:BuildRequires: phonon-backend-gstreamer}
-
-
-Provides: %{name}-xorg%{_isa} = %{version}-%{release}
-Requires: vlc-core%{_isa} = %{version}-%{release}
+Provides: %{name}-xorg%{?_isa} = %{version}-%{release}
+Requires: %{name}-core%{?_isa} = %{version}-%{release}
 Requires: kde-filesystem
-
 Requires: dejavu-sans-fonts
 Requires: dejavu-sans-mono-fonts
 Requires: dejavu-serif-fonts
-Requires: qt4%{?_isa} >= %{_qt4_version}
-
-#For xdg-sreensaver
+# For xdg-sreensaver
 Requires: xdg-utils
-
-
 
 %description
 VLC media player is a highly portable multimedia player and multimedia framework
 capable of reading most audio and video formats as well as DVDs, Audio CDs VCDs,
 and various streaming protocols.
-It can also be used as a media converter or a server to stream in uni-cast or 
+
+It can also be used as a media converter or a server to stream in uni-cast or
 multi-cast in IPv4 or IPv6 on networks.
 
-
 %package devel
-Summary:	Development files for %{name}
-Group:		Development/Libraries
-Requires:	%{name}-core%{_isa} = %{version}-%{release}
+Summary:       Development files for %{name}
+Group:         Development/Libraries
+Requires:      %{name}-core%{?_isa} = %{version}-%{release}
 
 %description devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %package core
-Summary:	VLC media player core
-Group:		Applications/Multimedia
-Provides:	vlc-nox = %{version}-%{release}
-Obsoletes:	vlc-nox < 1.1.5-2
+Summary:       VLC media player core
+Group:         Applications/Multimedia
+Provides:      %{name}-nox = %{version}-%{release}
+Obsoletes:     %{name}-nox < 1.1.5-2
 %{?live555_version:Requires: live555%{?_isa} = %{live555_version}}
 
 %description core
 VLC media player core components
 
 %package extras
-Summary:	VLC media player with extras modules
-Group:		Applications/Multimedia
-Requires:	vlc-core%{_isa} = %{version}-%{release}
-
+Summary:       VLC media player with extras modules
+Group:         Applications/Multimedia
+Requires:      %{name}-core%{?_isa} = %{version}-%{release}
 
 %description extras
 VLC media player extras modules.
 
 %package plugin-jack
-Summary:	JACK audio plugin for VLC
-Group:		Applications/Multimedia
-Requires:	vlc-core%{_isa} = %{version}-%{release}
+Summary:       JACK audio plugin for VLC
+Group:         Applications/Multimedia
+Requires:      %{name}-core%{?_isa} = %{version}-%{release}
 
 %description plugin-jack
 JACK audio plugin for the VLC media player.
 
-
 %prep
-%setup -q -n %{name}-%{version}%{?vlc_rc}
-%{?_with_bootstrap:
+%setup -q -n %{name}-%{_commit}
+%if %{with bootstrap}
 rm aclocal.m4 m4/lib*.m4 m4/lt*.m4 || :
 ./bootstrap
-}
+echo '%{version}-git.%{_scommit}' > src/revision.txt
+%endif
 
-
+# fix builddate info
+# Remove build time references so build-compare can do its work
+BUILDTIME=$(LC_ALL=C date -u '+%%H:%%M')
+BUILDDATE=$(LC_ALL=C date -u '+%%b %%e %%Y')
+sed -e "s/__TIME__/\"$BUILDTIME\"/" -i modules/gui/qt/dialogs/help.cpp src/config/help.c
+sed -e "s/__DATE__/\"$BUILDDATE\"/" -i modules/gui/qt/dialogs/help.cpp src/config/help.c
 
 %build
-
-
 %configure \
-	--disable-dependency-tracking		\
-	--disable-optimizations			\
-%if 0%{?fedora} >= 22
-%ifarch i686
-	--disable-mmx --disable-sse		\
+    --disable-dependency-tracking                   \
+    --enable-optimizations                          \
+    --enable-fast-install                           \
+%if 0%{?fedora} >= 22 && %{?_arch} == i686
+    --disable-mmx --disable-sse                     \
 %endif
+    --disable-silent-rules                          \
+    --with-pic                                      \
+    --disable-rpath                                 \
+    --with-binary-version=%{version}                \
+    --with-kde-solid=%{_kde4_appsdir}/solid/actions \
+    --enable-httpd                                  \
+%if ! %{with live555}
+    --disable-live555                               \
 %endif
-	--disable-silent-rules			\
-	--with-pic				\
-	--disable-rpath				\
-	--with-binary-version=%{version}	\
-	--with-kde-solid=%{_kde4_appsdir}/solid/actions \
-	--enable-lua				\
-%{?_with_live555:--enable-live555} 		\
-%{?_with_opencv:--enable-opencv} \
-	--enable-sftp				\
-%{?_with_gnomevfs:--enable-gnomevfs}		\
-%{?_with_vcdimager:--enable-vcdx}		\
-	--enable-omxil				\
-	--enable-omxil-vout			\
+    --enable-dvdread                                \
+    --enable-dvdnav                                 \
+%if ! %{with bluray}
+    --disable-bluray                                \
+%endif
+%if ! %{with opencv}
+    --disable-opencv                                \
+%endif
+    --enable-smbclient                              \
+    --enable-sftp                                   \
+    --disable-dsm                                   \
+    --enable-v4l2                                   \
+    --enable-vcd                                    \
+    --enable-vcdx                                   \
+    --enable-libcddb                                \
+    --enable-vnc                                    \
+%if ! %{with freerdp}
+    --disable-freerdp                               \
+%endif
+    --enable-realrtsp                               \
+%if ! %{with dvbpsi}
+    --disable-dvbpsi                                \
+%endif
+    --enable-ogg                                    \
+    --enable-shout                                  \
+    --enable-mkv                                    \
+    --enable-mod                                    \
+    --enable-omxil                                  \
+    --enable-omxil-vout                             \
 %{?_with_rpi:
-	--enable-rpi-omxil			\
-	--enable-mmal-codec			\
-	--enable-mmal-vout			\
-} \
-%{!?_with_a52dec:--disable-a52}			\
-%{!?_with_ffmpeg:--disable-avcodec --disable-avformat \
-	--disable-swscale --disable-postproc} \
-%{?_with_faad2:--enable-faad} \
-%{!?_with_libmad:--disable-mad} \
-%{?_with_twolame:--enable-twolame} \
-%{?!_without_freeworld: --enable-realrtsp} \
-	--enable-flac				\
-	--enable-tremor				\
-	--enable-speex				\
-	--enable-theora				\
-	--enable-libass				\
-	--enable-shout				\
-%{!?_without_xcb:--enable-xcb --enable-xvideo} 	\
-%{?_without_xcb:--disable-xcb --disable-xvideo} \
-	--enable-svg				\
-	--enable-aa				\
-	--enable-caca				\
-	--enable-jack				\
-	--enable-pulse				\
-	--enable-ncurses			\
-	--enable-lirc
-
-
-%if 0
-# remove rpath from libtool
-sed -i.rpath 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
-sed -i.rpath 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+    --enable-rpi-omxil                              \
+    --enable-mmal-codec                             \
+    --enable-mmal-vout                              \
+}                                                   \
+%if ! %{with libmad}
+    --disable-mad                                   \
 %endif
-
-%if 0
-# clean unused-direct-shlib-dependencies
-sed -i -e 's! -shared ! -Wl,--as-needed\0!g' libtool
+%if ! %{with ffmpeg}
+    --disable-avcodec --disable-avformat            \
+    --disable-swscale --disable-postproc            \
 %endif
-
-
+%if ! %{with vaapi}
+    --disable-libva                                 \
+%endif
+%if ! %{with faad2}
+    --disable-faad                                  \
+%endif
+    --enable-vpx                                    \
+%if ! %{with twolame}
+    --disable-twolame                               \
+%endif
+%if %{with fdkaac}
+    --enable-fdkaac                                 \
+%endif
+%if ! %{with a52dec}
+    --disable-a52                                   \
+%endif
+%if ! %{with libdca}
+    --disable-dca                                   \
+%endif
+    --enable-flac                                   \
+%if ! %{with libmpeg2}
+    --disable-libmpeg2                              \
+%endif
+    --enable-vorbis                                 \
+    --enable-tremor                                 \
+    --enable-speex                                  \
+    --enable-theora                                 \
+%if ! %{with x264}
+    --disable-x264                                  \
+%endif
+%if ! %{with x265}
+    --disable-x265                                  \
+%endif
+    --enable-libass                                 \
+    --enable-kate                                   \
+    --disable-gles2                                 \
+    %{!?_without_xcb:--enable-xcb --enable-xvideo}  \
+    %{?_without_xcb:--disable-xcb --disable-xvideo} \
+%if ! %{with vdpau}
+    --disable-vdpau                                 \
+%endif
+%if ! %{with wayland}
+    --disable-wayland                               \
+%endif
+    --enable-freetype                               \
+    --enable-fribidi                                \
+    --enable-svg                                    \
+    --enable-svgdec                                 \
+    --enable-aa                                     \
+    --enable-caca                                   \
+    --enable-pulse                                  \
+    --enable-alsa                                   \
+    --disable-oss                                   \
+    --enable-jack                                   \
+%if ! %{with qt4}
+    --disable-skins2                                \
+%endif
+    --enable-ncurses                                \
+    --enable-lirc
 
 make %{?_smp_mflags}
 
-
 %install
-make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p" CPPROG="cp -p"
-find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
-find $RPM_BUILD_ROOT -name '*.a' -exec rm -f {} ';'
+make install DESTDIR=%{buildroot} INSTALL="install -p" CPPROG="cp -p"
+find %{buildroot} -type f -name "*.la" -delete -print
 
-desktop-file-install --vendor ""			\
-	--dir $RPM_BUILD_ROOT%{_datadir}/applications	\
-	--delete-original				\
-	--mode 644					\
-	$RPM_BUILD_ROOT%{_datadir}/applications/vlc.desktop
+desktop-file-install --vendor "" \
+	--dir %{buildroot}%{_datadir}/applications \
+	--delete-original \
+	--mode 644 \
+	%{buildroot}%{_datadir}/applications/vlc.desktop
 
-# Remove installed fonts for skins2
-rm -f $RPM_BUILD_ROOT%{_datadir}/vlc/skins2/fonts/*.ttf
-ln -sf ../../../fonts/dejavu/DejaVuSans.ttf \
-  $RPM_BUILD_ROOT%{_datadir}/vlc/skins2/fonts/FreeSans.ttf
-ln -sf ../../../fonts/dejavu/DejaVuSans-Bold.ttf  \
-  $RPM_BUILD_ROOT%{_datadir}/vlc/skins2/fonts/FreeSansBold.ttf
+mkdir -p %{buildroot}/%{_datadir}/pixmaps
+ln -s %{_datadir}/icons/hicolor/48x48/apps/vlc.png %{buildroot}/%{_datadir}/pixmaps/vlc.png
 
-#Fix unowned directories
-rm -rf $RPM_BUILD_ROOT%{_docdir}/vlc
+# add missing manfiles
+for i in ?vlc; do
+    pushd %{buildroot}/%{_mandir}/man1
+    ln -s vlc.1 $i.1
+    popd
+done
 
-#Ghost the plugins cache
-touch $RPM_BUILD_ROOT%{_libdir}/vlc/plugins.dat
-
-
+%fdupes %{buildroot}%{_datadir}/%{name}
 %find_lang %{name}
 
-
 %post
-%{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null
-touch --no-create %{_datadir}/icons/hicolor
-if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-  %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor
-fi 
-%{_bindir}/update-desktop-database %{_datadir}/applications &>/dev/null || :
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+%{_bindir}/update-desktop-database &>/dev/null || :
+%{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+    %{_bindir}/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || :
+fi
+%{_bindir}/update-desktop-database &>/dev/null || :
+%{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
+
+%posttrans
+%{_bindir}/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor || :
 
 %post core -p /sbin/ldconfig
 
-%postun
-%{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null
-%{_bindir}/update-desktop-database %{_datadir}/applications &>/dev/null
-touch --no-create %{_datadir}/icons/hicolor
-if [ -x %{_bindir}/gtk-update-icon-cache ]; then
-  %{_bindir}/gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor
+%preun core
+if [ $1 -eq 0 ]; then
+    rm -f %{_libdir}/vlc/plugins*.dat
 fi || :
 
 %postun core -p /sbin/ldconfig
@@ -349,85 +490,80 @@ fi || :
 %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
 
 %post extras
-if [ $1 == 1 ] ; then
-  %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
-fi
-
-%post plugin-jack
-if [ $1 == 1 ] ; then
-  %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
+if [ $1 -eq 1 ]; then
+    %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
 fi
 
 %postun extras
-if [ $1 == 0 ] ; then
-  %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
+if [ $1 -eq 0 ]; then
+    %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
+fi
+
+%post plugin-jack
+if [ $1 -eq 1 ]; then
+    %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
 fi
 
 %postun plugin-jack
-if [ $1 == 0 ] ; then
-  %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
+if [ $1 -eq 0 ]; then
+    %{_libdir}/vlc/vlc-cache-gen -f %{_libdir}/vlc &>/dev/null || :
 fi
 
-%preun core
-if [ $1 == 0 ] ; then
-  rm -f %{_libdir}/vlc/plugins*.dat
-fi || :
-
-
 %files
-%doc AUTHORS COPYING ChangeLog NEWS README THANKS
-%{_datadir}/applications/*%{name}.desktop
-%{_datadir}/kde4/apps/solid/actions/vlc-*.desktop
-%{_datadir}/icons/hicolor/*/apps/vlc*.png
-%{_datadir}/icons/hicolor/*/apps/vlc*.xpm
-%{_datadir}/vlc/skins2/
+%defattr(-,root,root,-)
+%doc AUTHORS NEWS README THANKS
+%license COPYING COPYING.LIB
 %{_bindir}/qvlc
+%if %{with qt4}
 %{_bindir}/svlc
-%{_libdir}/vlc/plugins/gui/libqt4_plugin.so
-%{?_with_gnomevfs:
-%{_libdir}/vlc/plugins/access/libaccess_gnomevfs_plugin.so
-}
+%{_datadir}/vlc/skins2/
+%{_libdir}/vlc/plugins/gui/libqt_plugin.so
+%{_libdir}/vlc/plugins/gui/libskins2_plugin.so
+%endif
+%{_libdir}/vlc/plugins/audio_output/libpulse_plugin.so
 %{_libdir}/vlc/plugins/video_output/libaa_plugin.so
 %{_libdir}/vlc/plugins/video_output/libcaca_plugin.so
 %{!?_without_xcb:
 %{_libdir}/vlc/plugins/access/libxcb_screen_plugin.so
 %{_libdir}/vlc/plugins/video_output/libxcb_glx_plugin.so
-%{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so
 %{_libdir}/vlc/plugins/video_output/libxcb_window_plugin.so
+%{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so
 %{_libdir}/vlc/plugins/video_output/libxcb_xv_plugin.so
-#{_libdir}/vlc/plugins/video_filter/libpanoramix_plugin.so
 }
-%{_libdir}/vlc/plugins/gui/libskins2_plugin.so
-%{?_with_projectm:
+%if %{with projectm}
 %{_libdir}/vlc/plugins/visualization/libprojectm_plugin.so
-}
-%{_libdir}/vlc/plugins/audio_output/libpulse_plugin.so
+%endif
+%{_datadir}/applications/*%{name}.desktop
+%{_datadir}/kde4/apps/solid/actions/vlc-*.desktop
+%{_datadir}/icons/hicolor/*/apps/vlc*.png
+%{_datadir}/icons/hicolor/*/apps/vlc*.xpm
+%{_datadir}/pixmaps/vlc.png
 
 %files core -f %{name}.lang
+%defattr(-,root,root,-)
+%doc %{_datadir}/doc/%{name}
 %{_bindir}/vlc
 %{_bindir}/cvlc
 %{_bindir}/nvlc
 %{_bindir}/rvlc
 %{_bindir}/vlc-wrapper
-%exclude %{_datadir}/vlc/skins2
-%{_datadir}/vlc/
-%{_libdir}/*.so.*
-%exclude %{_libdir}/vlc/plugins/gui/libqt4_plugin.so
-%{?_with_gnomevfs:
-%exclude %{_libdir}/vlc/plugins/access/libaccess_gnomevfs_plugin.so
-}
+%if %{with qt4}
+%exclude %{_datadir}/vlc/skins2/
+%exclude %{_libdir}/vlc/plugins/gui/libqt_plugin.so
+%exclude %{_libdir}/vlc/plugins/gui/libskins2_plugin.so
+%endif
 %exclude %{_libdir}/vlc/plugins/access/libaccess_jack_plugin.so
 %{?_with_vcdimager:
 %exclude %{_libdir}/vlc/plugins/access/libvcd_plugin.so
 %exclude %{_libdir}/vlc/plugins/access/libvcdx_plugin.so
 %exclude %{_libdir}/vlc/plugins/codec/libsvcdsub_plugin.so
 }
-%{?_with_crystalhd:
+%if %{with crystalhd}
 %exclude %{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
-}
-%{?_with_fluidsynth:
+%endif
+%if %{with fluidsynth}
 %exclude %{_libdir}/vlc/plugins/codec/libfluidsynth_plugin.so
-}
+%endif
 %{!?_without_xcb:
 %exclude %{_libdir}/vlc/plugins/access/libxcb_screen_plugin.so
 %if 0%{?fedora} < 17
@@ -439,53 +575,62 @@ fi || :
 %exclude %{_libdir}/vlc/plugins/video_output/libxcb_x11_plugin.so
 %exclude %{_libdir}/vlc/plugins/video_output/libxcb_window_plugin.so
 %exclude %{_libdir}/vlc/plugins/video_output/libxcb_xv_plugin.so
-#{_libdir}/vlc/plugins/video_filter/libpanoramix_plugin.so
 }
-%exclude %{_libdir}/vlc/plugins/gui/libskins2_plugin.so
-%{?_with_opencv:
+%if %{with opencv}
 %exclude %{_libdir}/vlc/plugins/video_filter/libopencv_example_plugin.so
 %exclude %{_libdir}/vlc/plugins/video_filter/libopencv_wrapper_plugin.so
-}
-%{?_with_projectm:
+%endif
+%if %{with projectm}
 %exclude %{_libdir}/vlc/plugins/visualization/libprojectm_plugin.so
-}
+%endif
 %exclude %{_libdir}/vlc/plugins/audio_output/libjack_plugin.so
 %exclude %{_libdir}/vlc/plugins/audio_output/libpulse_plugin.so
 %ghost %{_libdir}/vlc/plugins.dat
 %{_libdir}/vlc/
-%{_mandir}/man1/vlc*.1*
+%{_libdir}/*.so.*
+%{_datadir}/vlc/
+%{_mandir}/man1/*vlc*.1*
 
 %files plugin-jack
+%defattr(-,root,root,-)
 %{_libdir}/vlc/plugins/access/libaccess_jack_plugin.so
 %{_libdir}/vlc/plugins/audio_output/libjack_plugin.so
-%{?_with_fluidsynth:
+%if %{with fluidsynth}
 %{_libdir}/vlc/plugins/codec/libfluidsynth_plugin.so
-}
+%endif
 
 %files extras
-%{?_with_opencv:
+%defattr(-,root,root,-)
+%if %{with opencv}
 %{_libdir}/vlc/plugins/video_filter/libopencv_example_plugin.so
 %{_libdir}/vlc/plugins/video_filter/libopencv_wrapper_plugin.so
-}
+%endif
 %{?_with_vcdimager:
 %{_libdir}/vlc/plugins/access/libvcd_plugin.so
 %{_libdir}/vlc/plugins/access/libvcdx_plugin.so
 %{_libdir}/vlc/plugins/codec/libsvcdsub_plugin.so
 }
-%{?_with_crystalhd:
+%if %{with crystalhd}
 %{_libdir}/vlc/plugins/codec/libcrystalhd_plugin.so
-}
+%endif
 
 %files devel
+%defattr(-,root,root,-)
 %dir %{_includedir}/vlc
 %{_includedir}/vlc/*
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/vlc-plugin.pc
+%{_libdir}/libvlccore.so
+%{_libdir}/libvlc.so
 %{_libdir}/pkgconfig/libvlc.pc
-
-
+%{_libdir}/pkgconfig/vlc-plugin.pc
+%{_libdir}/vlc/libcompat.a
+%if %{with vdpau}
+%{_libdir}/vlc/libvlc_vdpau.so
+%endif
 
 %changelog
+* Wed May 25 2016 mosquito <sensor.wen@gmail.com> - 3.0.0-1.git45bc333
+- Update to 3.0.0-git45bc333
+
 * Wed May 11 2016 Adrian Reber <adrian@lisas.de> - 2.2.3-2
 - Disable freedrp and projectm on Fedora >= 24; fails compilation
 
@@ -994,7 +1139,7 @@ Security update:
   http://bugzilla.livna.org/show_bug.cgi?id=2003
 - Fix VLC: HTTP access: cannot seek AVI
   http://bugzilla.livna.org/show_bug.cgi?id=2014
-  
+
 * Sun May 18 2008 kwizart < kwizart at gmail.com > - 0.8.6g-2
 - Bump for official release
 
@@ -1026,7 +1171,7 @@ Various bugfixes:
 - Bugfixes patches for post f version
 - Add vlvc 0.8 plugin support
 - Add textrel fix from gentoo patch
-- Improve libxul patch 
+- Improve libxul patch
 
 * Mon Apr  7 2008 kwizart < kwizart at gmail.com > - 0.8.6f-2
 - Fix for wxGTK28 compatibility.
@@ -1073,7 +1218,7 @@ Security updates:
 * Sat Jan 19 2008 kwizart < kwizart at gmail.com > - 0.8.6d-4
 - Patches from Jens Petersen <juhpetersen at gmail.com>
 - Add wxGTK28 wip patch
-- Conditionalize directfb and dirac 
+- Conditionalize directfb and dirac
 - Change the default font to DejaVuSerif.ttf (dejavu-fonts)
 - Add BR missing libmpeg4v2
 
@@ -1096,7 +1241,7 @@ Security updates:
 - Split to core/nox package for server use.
 
 * Tue Nov  6 2007 kwizart < kwizart at gmail.com > - 0.8.6c-9
-- Raise ESD audio_output to be tried by default 
+- Raise ESD audio_output to be tried by default
   (used by pulseaudio-esound-compat )
 
 * Tue Nov  6 2007 kwizart < kwizart at gmail.com > - 0.8.6c-8
@@ -1113,7 +1258,7 @@ Security updates:
 * Sun Sep 23 2007 kwizart < kwizart at gmail.com > - 0.8.6c-5
 - Prepare svn version
 - Drop the python switch default
-- Add BR directfb-devel 
+- Add BR directfb-devel
 - Improve timestamp
 - Allow faad2 to be 2.5 (license change is known GPL compatible).
 
@@ -1216,7 +1361,7 @@ Security updates:
 * Sat Apr 21 2007 kwizart < kwizart at gmail.com > - 0.8.6b-1
 - Update to Final 8.6b
 - Enable Dirac codec
-- Fix mozilla-vlc libXt.so loading 
+- Fix mozilla-vlc libXt.so loading
   (removing mozilla-sdk since using firefox sdk >= 1.5)
 - Fix SeLinux context for dmo plugin. Was:
   https://bugzilla.livna.org/show_bug.cgi?id=1404
@@ -1259,7 +1404,7 @@ Security updates:
 - Fix .py? presence and perm (644)
 - Remove .la after make install
 - Add --disable-pth (broken for release and svn)
-  
+
 * Sat Mar 24 2007 kwizart < kwizart at gmail.com > - 0.8.6a-4.5
 - Test dirac (disabled mozilla )
 - Test Updated static live555 to 2007.02.22
@@ -1269,12 +1414,12 @@ Security updates:
 - WIP changes - ld.conf is unusefull...
 
 * Wed Mar 21 2007 kwizart < kwizart at gmail.com > - 0.8.6a-4.3
-- Revert back to the static vlc version 
+- Revert back to the static vlc version
  ( will explore this with ld.conf later )
 
 * Wed Mar 21 2007 kwizart < kwizart at gmail.com > - 0.8.6a-4.2
 - Fix .desktop file
-- Disable broken libtool 
+- Disable broken libtool
 - Quick fixes for svn/cache prepare
 - Patch format_c
 - Fix rpmlint error with python-vlc
@@ -1353,7 +1498,7 @@ Security updates:
 * Wed Jan  3 2007 kwizart < kwizart at gmail.com > - 0.8.6-2
  with help from Rathan
 - Enabled --enable-shout
-- Enabled --enable-quicktime (x86 only !) 
+- Enabled --enable-quicktime (x86 only !)
 - Enabled --enable-loader (x86 only !)
 - Enabled --with-wine-sdk-path (x86 only !)
 - Enabled --enable-corba
@@ -1396,7 +1541,7 @@ Security updates:
 - BuildReq:libtool
 
 * Sun Sep 24 2006 Dams <anvil[AT]livna.org> - 0.8.5-4
-- Fixed the mozilla plugin damn build 
+- Fixed the mozilla plugin damn build
 
 * Sat Sep  9 2006 Dams <anvil[AT]livna.org> - 0.8.5-3
 - sysfsutils-devel -> libsysfs-devel
@@ -1419,7 +1564,7 @@ Security updates:
 - Specfile cleanups.
 
 * Fri Mar 24 2006 Thorsten Leemhuis <fedora[AT]leemhuis.info> 0.8.4-9.a
-- rebuild 
+- rebuild
 
 * Tue Mar 21 2006 Andreas Bierfert <andreas.bierfert[AT]lowlatency.de>
 0.8.4-8.a
@@ -1505,7 +1650,7 @@ Security updates:
 
 * Wed Jun 30 2004 Dams <anvil[AT]livna.org> 0:0.7.2-0.lvn.3
 - speex now conditional and default disabled since vlc requires
-  development version. 
+  development version.
 
 * Wed Jun 30 2004 Dams <anvil[AT]livna.org> 0:0.7.2-0.lvn.2
 - Optional Fribidi and libtheora support (default disabled)
@@ -1530,7 +1675,7 @@ Security updates:
 - Conditional ffmpeg build option (default enabled)
 
 * Fri Sep  5 2003 Dams <anvil[AT]livna.org> 0:0.6.2-0.fdr.6
-- pth support now default disabled 
+- pth support now default disabled
 
 * Fri Sep  5 2003 Dams <anvil[AT]livna.org> 0:0.6.2-0.fdr.5
 - slp support can now be not-build with '--without slp'
@@ -1542,7 +1687,7 @@ Security updates:
 - Removed useless explicit 'Requires:' in subpackages declarations
 
 * Tue Sep  2 2003 Dams <anvil[AT]livna.org> 0:0.6.2-0.fdr.3
-- Added builddep for libpng-devel and openslp-devel 
+- Added builddep for libpng-devel and openslp-devel
 - Added gnome (default:enabled) and ncurses (default:disabled)
   subpackages
 - Removed macros (mkdir/install/perl)
@@ -1559,10 +1704,10 @@ Security updates:
 - Hopefully fixed 'if' conditions for optional buildrequires
 
 * Tue Jul  8 2003 Dams <anvil[AT]livna.org> 0:0.6.0-0.fdr.3
-- Providing vlc 
+- Providing vlc
 
 * Tue Jul  8 2003 Dams <anvil[AT]livna.org> 0:0.6.0-0.fdr.2
 - Moved desktop entry from devel to main package (stupid me)
 
-* Mon Apr 28 2003 Dams <anvil[AT]livna.org> 
+* Mon Apr 28 2003 Dams <anvil[AT]livna.org>
 - Initial build.
