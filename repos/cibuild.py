@@ -59,9 +59,10 @@ def black_item(item):
 
     for black in blackList:
         if re.match('.*' + black + '.*', item):
+            print('\033[32minfo:\033[0m Filter {} file.'.format(item))
             return False
-        else:
-            return True
+
+    return True
 
 def parse_spec(specFile):
     '''Parse the Spec file contents.
