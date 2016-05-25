@@ -29,6 +29,12 @@ def get_commit_list():
         commitList = re.findall('\w{7}', stdout)[1:]
     else:
         commitList = re.findall('\w{7}', stdout)
+
+    if 'GIT_PREVIOUS_COMMIT' in os.environ:
+        prevCommit = os.environ['GIT_PREVIOUS_COMMIT'][0:7]
+        commitList = commitList[0:commitList.index(prevCommit)]
+        commitList.reverse()
+
     return commitList
 
 def get_file_list(commit):
@@ -286,12 +292,6 @@ if __name__ == '__main__':
             results = re.findall('rpms/.*.spec', f.read())
 
     for commit in get_commit_list():
-        if ('GIT_PREVIOUS_COMMIT' in os.environ and \
-           commit in os.environ['GIT_PREVIOUS_COMMIT']) or \
-           ('ghprbActualCommit' in os.environ and \
-           commit not in os.environ['ghprbActualCommit']):
-            break
-
         commit = args.commit if args.commit else commit
         fileList = args.file if args.file else get_file_list(commit)
 
