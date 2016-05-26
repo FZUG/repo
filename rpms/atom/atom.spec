@@ -20,7 +20,7 @@
 
 Name:    atom
 Version: 1.7.3
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -163,7 +163,7 @@ done
 
 # find all *.js files and generate node.file-list
 pushd atom-build/Atom/resources/app
-for ext in js json node types less png svg; do
+for ext in js jsm json coffee map node types less png svg aff dic; do
     find node_modules -regextype posix-extended \
       -iname \*.${ext} \
     ! -name '.*' \
@@ -205,6 +205,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.7.3-2.git1b3da6b
+- Fix spell-check dont work
+  https://github.com/FZUG/repo/issues/110
 * Fri Apr 29 2016 mosquito <sensor.wen@gmail.com> - 1.7.3-1.git1b3da6b
 - Release 1.7.3
 - Build for electron 0.37.7
