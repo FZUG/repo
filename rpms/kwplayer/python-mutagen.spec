@@ -8,8 +8,8 @@
 %endif
 
 Name:           python-%{realname}
-Version:        1.31
-Release:        2%{?dist}
+Version:        1.32
+Release:        1%{?dist}
 Summary:        Mutagen is a Python module to handle audio metadata
 Summary(zh_CN): 一个处理音频元数据的Python模块
 
@@ -76,7 +76,7 @@ popd
 # Without this the testsuite fails with
 # RuntimeError: This test suite needs a unicode locale encoding. Try setting LANG=C.UTF-8
 # Hopefully all builders have this locale installed/configured
-export LANG=en_US.utf-8
+export LANG=C.UTF-8
 %{__python} setup.py test
 
 %if 0%{?with_python3}
@@ -107,6 +107,9 @@ pushd %{py3dir}
 %endif # with_python3
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.32-1
+- Update to 1.32
+
 * Thu Feb 11 2016 mosquito <sensor.wen@gmail.com> - 1.31-2
 - Move the scripts to the python3 package
 
