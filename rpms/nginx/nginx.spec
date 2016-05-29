@@ -15,12 +15,12 @@
 %global  with_http2          1
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.10.2
-%global  ndk_version         0.3.0rc1
+%global  ngx_lua_version     0.10.5
+%global  ndk_version         0.3.0
 %global  with_ngx_lua        1
 
 # ngx_echo module
-%global  ngx_echo_version    0.59rc1
+%global  ngx_echo_version    0.59
 %global  with_ngx_echo       1
 
 # ModSecurity module
@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.9.15
+Version:           1.11.0
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -80,7 +80,7 @@ Group:             System Environment/Daemons
 License:           BSD
 URL:               http://nginx.org
 
-Source0:           http://nginx.org/download/nginx-%{version}.tar.gz
+Source0:           http://nginx.org/download/%{name}-%{version}.tar.gz
 Source1:           https://github.com/openresty/lua-nginx-module/archive/v%{ngx_lua_version}/lua-nginx-module-%{ngx_lua_version}.tar.gz
 Source2:           https://github.com/simpl/ngx_devel_kit/archive/v%{ndk_version}/ngx_devel_kit-%{ndk_version}.tar.gz
 Source3:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
@@ -554,6 +554,12 @@ fi
 
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.0-1.modsec_2.9.0
+- update to upstream release 1.11.0
+- update ngx_lua 0.10.5
+- update ngx_devel_kit 0.3.0
+- update ngx_echo 0.59
+
 * Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.15-1.modsec_2.9.0
 - update to upstream release 1.9.15
 
