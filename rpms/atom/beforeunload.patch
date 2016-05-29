@@ -1,0 +1,14 @@
+--- a/src/window-event-handler.coffee
++++ b/src/window-event-handler.coffee
+@@ -145,9 +145,8 @@
+     @atomEnvironment.storeWindowDimensions()
+     if confirmed
+       @atomEnvironment.unloadEditorWindow()
+-    else
+-      @applicationDelegate.didCancelWindowUnload()
+-
++      return
++    @applicationDelegate.didCancelWindowUnload()
+     confirmed
+ 
+   handleWindowUnload: =>

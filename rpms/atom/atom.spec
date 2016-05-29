@@ -12,15 +12,16 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 0.37.7
+%global electron_ver 1.2.0
+%global node_ver 0.12
 
 # commit
-%global _commit 1b3da6b4b7ce479494f7d9444192c34ad9f3fda3
+%global _commit 6bed3e5991d3991eeb61444d35839bac01a88f7b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.7.3
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.7.4
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -32,9 +33,13 @@ Patch0:  fix-atom-sh.patch
 Patch1:  fix-license-path.patch
 Patch2:  use-system-apm.patch
 Patch3:  use-system-electron.patch
+# Fix for Electron 1.2.0
+Patch4:  beforeunload.patch
+Patch5:  run-as-node.patch
 
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
-BuildRequires: npm, wget
+BuildRequires: libtool
+BuildRequires: npm, wget, git
 BuildRequires: node-gyp
 BuildRequires: nodejs-packaging
 BuildRequires: nodejs-atom-package-manager
@@ -56,6 +61,8 @@ sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
+%patch5 -p1
 
 # apm with system (updated) nodejs cannot 'require' modules inside asar
 sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
@@ -63,13 +70,18 @@ sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 
-# Update nodegit 0.12.2 for electron 0.37.5
-sed -i '/nodegit/s|12.0|12.2|' package.json
-
 %build
 # Hardened package
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
+
+# Update node for fedora 23
+%if 0%{?fedora} < 24
+git clone https://github.com/creationix/nvm.git .nvm
+source .nvm/nvm.sh
+nvm install %{node_ver}
+nvm use %{node_ver}
+%endif
 
 # Build package
 node-gyp -v; node -v; npm -v; apm -v
@@ -114,25 +126,27 @@ _packagesToDedupe=(
 )
 
 # Fix nodegit build error for node 0.10
-#npm install nodegit --ignore-scripts --verbose && pushd node_modules/nodegit && \
-#npm install; cp vendor/libssh2/win32/libssh2_config.h vendor/libssh2/include && \
-#node-gyp configure rebuild --target="%{electron_ver}" --target_platform=linux \
-#  --arch="%{arch}" --dist-url="$npm_config_disturl" && popd
-nodeVer=`node -v`
-File="nodegit-v0.12.2-electron-v0.37-linux-%{arch}.tar.gz"
-URL="https://nodegit.s3.amazonaws.com/nodegit/nodegit/$File"
-if [ "${nodeVer:1:4}" == '0.10' ]; then
-    npm install nodegit --verbose
-    wget "$URL"; tar xf "$File"; rm -f "$File"
-    mkdir node_modules/nodegit/build
-    mv Release node_modules/nodegit/build
-fi
+#https://github.com/tensor5/arch-atom/commit/afc1d1b19ba8040e3b2c1274b9f7fea426c692cd
+npm install nodegit --ignore-scripts --verbose
+pushd node_modules/nodegit
+  npm install --ignore-scripts
+  cp vendor/libssh2/win32/libssh2_config.h vendor/libssh2/include
+  pushd vendor/libssh2
+    autoreconf -ivf
+    ./configure
+  popd
+  node-gyp configure rebuild --target="%{electron_ver}" --target_platform="linux" \
+  --runtime="electron" --arch="%{arch}" --dist-url="$npm_config_disturl"
+  echo 'Removing NodeGit devDependencies...'
+  npm prune --production
+popd
 
-# Installing packages
+# Installing atom dependencies
 #apm clean
 apm install --verbose
 apm dedupe ${_packagesToDedupe[@]}
-# Installing build modules
+
+# Installing build tools
 pushd build
 npm install --loglevel info
 popd
@@ -205,6 +219,12 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-1.git6bed3e5
+- Release 1.7.4
+- Build for electron 1.2.0
+- Build nodegit 0.12.2 from source code
+- Add BReq libtool and git
+- Update node 0.12 for fedora 23
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.7.3-2.git1b3da6b
 - Fix spell-check dont work
   https://github.com/FZUG/repo/issues/110

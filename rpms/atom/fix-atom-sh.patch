@@ -21,7 +21,7 @@
  while getopts ":wtfvh-:" opt; do
    case "$opt" in
      -)
-@@ -52,66 +37,21 @@
+@@ -52,66 +37,22 @@
    export ELECTRON_ENABLE_LOGGING=1
  fi
  
@@ -31,7 +31,8 @@
 -  else
 -    ATOM_APP_NAME="Atom.app"
 -  fi
--
++ATOM_PATH="/usr/<lib>/electron/electron --app=/usr/<lib>/atom"
+ 
 -  if [ -z "${ATOM_PATH}" ]; then
 -    # If ATOM_PATH isnt set, check /Applications and then ~/Applications for Atom.app
 -    if [ -x "/Applications/$ATOM_APP_NAME" ]; then
@@ -49,7 +50,9 @@
 -      fi
 -    fi
 -  fi
--
++ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
++mkdir -p "$ATOM_HOME"
+ 
 -  if [ $EXPECT_OUTPUT ]; then
 -    "$ATOM_PATH/$ATOM_APP_NAME/Contents/MacOS/Atom" --executed-from="$(pwd)" --pid=$$ "$@"
 -    exit $?
@@ -72,10 +75,7 @@
 -  : ${TMPDIR:=/tmp}
 -
 -  [ -x "$ATOM_PATH" ] || ATOM_PATH="$TMPDIR/atom-build/Atom/atom"
-+ATOM_PATH="/usr/<lib>/electron/electron --app=/usr/<lib>/atom"
-+ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
-+mkdir -p "$ATOM_HOME"
- 
+-
 -  if [ $EXPECT_OUTPUT ]; then
 -    "$ATOM_PATH" --executed-from="$(pwd)" --pid=$$ "$@"
 +if [ $EXPECT_OUTPUT ]; then
