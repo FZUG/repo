@@ -3,7 +3,7 @@
 %global debug_package %{nil}
 
 Name:       sandbox
-Version:    2.10
+Version:    2.11
 Release:    1%{?dist}
 Summary:    Gentoo sandbox tool to run programs in a "sandboxed" environment
 Group:      Applications/System
@@ -85,6 +85,8 @@ fi
 %{_datadir}/%{name}/%{name}.bashrc
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 2.11-1
+- Release 2.11
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 2.10-1
 - Release 2.10
 * Mon Oct 26 2015 mosquito <sensor.wen@gmail.com> - 2.9-1
