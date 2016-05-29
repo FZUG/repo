@@ -2,7 +2,7 @@
 %global debug_package %{nil}
 
 Name:    qt-installer-framework
-Version: 2.0.1
+Version: 2.0.3
 Release: 1%{?dist}
 Summary: The Qt Installer Framework used for the Qt SDK installer
 Summary(zh_CN): Qt 安装框架, 用于创建 Qt 安装包
@@ -53,5 +53,7 @@ cp -a lib/*.so* %{buildroot}%{_libdir}
 %{_libdir}/libinstaller.so*
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 2.0.3-1
+- Release 2.0.3
 * Wed Dec 23 2015 mosquito <sensor.wen@gmail.com> - 2.0.1-1
 - Initial build
