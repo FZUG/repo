@@ -8,7 +8,7 @@
 
 Name:    musicbox
 Version: 0.2.2.2
-Release: 1.git%{_shortcommit}%{?dist}
+Release:  2.git%{_shortcommit}%{?dist}
 Summary: A sexy command line interface musicbox
 Summary(zh_CN): 命令行版的网易云音乐
 
