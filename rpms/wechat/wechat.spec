@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 275edcefeb84616a9118930c04b177bd8fc429ea
+%global _commit 5058348258b3a83f26daa417b282763f5cd8800e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    wechat
-Version: 1.2.0
+Version: 1.3.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: An Electron application for WeChat
 
@@ -79,6 +79,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-1.git5058348
+- Release 1.3.0
 * Fri Apr 22 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1.git275edce
 - Release 1.2.0
 * Mon Mar 21 2016 mosquito <sensor.wen@gmail.com> - 1.1.1-1.git6704050
