@@ -6,15 +6,15 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 0.37.8
+%global electron_ver 1.2.0
 %global node_ver 0.12
 
 # commit
-%global _commit 1f0657703be5609d70088b0385bc27db8cc03a41
+%global _commit 2833eb9d664db9c5a77bdf5fb19d7d7fefd4653c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 1.1.0
+Version: 1.2.0
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -72,7 +72,7 @@ npm dedupe
 # Data files
 mkdir --parents %{buildroot}%{_libdir}/%{name}
 cp -a ../VSCode-linux-*/. %{buildroot}%{_libdir}/%{name}
-rm -rf %{buildroot}%{_libdir}/%{name}/node_modules
+rm -rf %{buildroot}%{_libdir}/%{name}/{node_modules,bin}
 
 # Bin file
 mkdir --parents %{buildroot}%{_bindir}
@@ -86,7 +86,7 @@ NAME="%{name}"
 VSCODE_PATH="%{_libdir}/\$NAME"
 ELECTRON="%{_bindir}/electron"
 CLI="\$VSCODE_PATH/out/cli.js"
-ATOM_SHELL_INTERNAL_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" "\$VSCODE_PATH" "\$@"
+ELECTRON_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" "\$VSCODE_PATH" "\$@"
 exit \$?
 EOT
 
@@ -163,6 +163,10 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Thu May 30 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
+- Release 1.2.0
+- Build for electron 1.2.0
+- Use ELECTRON_RUN_AS_NODE environment variable
 * Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 1.1.0-1
 - Release 1.1.0 (insiders)
 - Build for electron 0.37.8

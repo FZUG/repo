@@ -19,14 +19,3 @@
  	"mAbout": "关于 {0}",
  	"mBringToFront": "全部置于顶层",
  	"mClose": "关闭",
---- a/i18n/chs/src/vs/workbench/parts/git/browser/gitActions.i18n.json
-+++ b/i18n/chs/src/vs/workbench/parts/git/browser/gitActions.i18n.json
-@@ -36,7 +36,7 @@
- 	"openFile": "打开文件",
- 	"publish": "发布",
- 	"publishPickMessage": "选取要将分支“{0}”发布到的远程:",
--	"pull": "拉",
-+	"pull": "拉取",
- 	"pullWithRebase": "拉取(变基)",
- 	"push": "推送",
- 	"refresh": "刷新",
