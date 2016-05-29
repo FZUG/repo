@@ -1,13 +1,44 @@
 --- a/bin/apm
 +++ b/bin/apm
-@@ -25,4 +25,9 @@
-
- binDir=`pwd -P`
- builtin cd "$initialCwd"
+@@ -1,28 +1,6 @@
+ #!/bin/bash
+-
+ set -e
+ 
+-initialCwd=`pwd -P`
+-
+-apmPath=$0
+-builtin cd "`dirname "$apmPath"`"
+-binDir=`basename "$apmPath"`
+-
+-# Detect node binary name
+-osName=`uname -s`
+-if [ "${osName:0:10}" == 'MINGW32_NT' ]; then
+-  nodeBin="node.exe"
+-else
+-  nodeBin="node"
+-fi
+-
+-while [ -L "$binDir" ]
+-do
+-  binDir=`readlink "$binDir"`
+-  builtin cd "`dirname "$binDir"`"
+-  binDir=`basename "$binDir"`
+-done
+-
+-binDir=`pwd -P`
+-builtin cd "$initialCwd"
 -"$binDir/$nodeBin" --harmony_collections "$binDir/../lib/cli.js" "$@"
-+nodeVer=`$binDir/node -v`
-+if [[ -x "$binDir/$nodeBin" && "${nodeVer:1:4}" == '0.10' ]]; then
-+    "$binDir/$nodeBin" --harmony_collections "$binDir/../lib/cli.js" "$@"
-+else
-+    "$binDir/$nodeBin" "$binDir/../lib/cli.js" "$@"
-+fi
++apmPath=`readlink -f "$0"`
++binDir=`dirname "$apmPath"`
++"$binDir/node" "$binDir/../lib/cli.js" "$@"
+--- a/package.json
++++ b/package.json
+@@ -16,7 +16,6 @@
+   },
+   "scripts": {
+     "prepublish": "grunt prepublish",
+-    "install": "node ./script/download-node.js",
+     "test": "grunt test"
+   },
+   "dependencies": {

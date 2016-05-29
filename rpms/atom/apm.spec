@@ -59,9 +59,6 @@ sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
 # Fix system arch of dedupe
 sed -i "/ia32/s|ia32'|' + process.arch|" src/dedupe.coffee
 
-# Do not download node 0.10
-sed -i '/download-node/d' package.json
-
 %build
 export CFLAGS="%{optflags}"
 export CXXFLAGS="%{optflags}"
