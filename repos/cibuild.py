@@ -25,16 +25,19 @@ def get_commit_list():
     '''
 
     stdout = getoutput('/bin/git log --pretty=%h')
+    commit = getoutput('/bin/git rev-parse --short master~')
+
+    if 'GIT_PREVIOUS_COMMIT' in os.environ:
+        commit = os.environ['GIT_PREVIOUS_COMMIT'][0:7]
+
     if 'ghprbActualCommit' in os.environ:
+        commit = getoutput('/bin/git ls-remote https://github.com/FZUG/repo master')[0:7]
         commitList = re.findall('\w{7}', stdout)[1:]
     else:
         commitList = re.findall('\w{7}', stdout)
 
-    if 'GIT_PREVIOUS_COMMIT' in os.environ:
-        prevCommit = os.environ['GIT_PREVIOUS_COMMIT'][0:7]
-        commitList = commitList[0:commitList.index(prevCommit)]
-        commitList.reverse()
-
+    commitList = commitList[0:commitList.index(commit)]
+    commitList.reverse()
     return commitList
 
 def get_file_list(commit):
