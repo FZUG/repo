@@ -7,14 +7,15 @@
 
 %global project N1
 %global repo %{project}
-%global electron_ver 0.37.8
+%global electron_ver 1.2.0
+%global node_ver 0.12
 
 # commit
-%global _commit e8f137e341866818869ee688019e0b273f9c8159
+%global _commit 85cf7267b1d029590b047b36853beb34d2ef69af
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    n1
-Version: 0.4.33
+Version: 0.4.40
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
@@ -53,6 +54,14 @@ sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
+
+# Update node for fedora 23
+%if 0%{?fedora} < 24
+git clone https://github.com/creationix/nvm.git .nvm
+source .nvm/nvm.sh
+nvm install %{node_ver}
+nvm use %{node_ver}
+%endif
 
 # Build package
 node-gyp -v; node -v; npm -v; apm -v
@@ -122,7 +131,7 @@ npm install https://github.com/bengotow/node-sqlite3/archive/bengotow/fts5.tar.g
   --ignore-scripts --loglevel error && pushd node_modules/sqlite3 && \
 node-gyp configure rebuild --target="%{electron_ver}" --target_platform=linux \
   --arch="%{arch}" --dist-url="$npm_config_disturl" --module_name=node_sqlite3 \
-  --module_path="../lib/binding/electron-v0.37-linux-%{arch}" && popd
+  --module_path="../lib/binding/electron-v1.2-linux-%{arch}" && popd
 
 # 7. Packaging files
 script/grunt --build-dir='n1-build'
@@ -218,6 +227,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 0.4.40-1.git85cf726
+- Release 0.4.40
+- Build for electron 1.2.0
+- Update node 0.12 for fedora 23
 * Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 0.4.33-1.gite8f137e
 - Release 0.4.33
 - Build for electron 0.37.8
