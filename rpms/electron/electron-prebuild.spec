@@ -9,11 +9,11 @@
 %global repo %{project}
 
 # commit
-%global _commit c04d43ca132bea2bbd048c2bf3d347b920089438
+%global _commit c1272743b922d8f2f2990977a863c5776c4c36cf
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.37.7
+Version: 1.2.0
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -64,6 +64,8 @@ cp -r node-v%{version}/* %{buildroot}%{_libdir}/%{name}/node
 %{_libdir}/%{name}/
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1.gitc127274
+- Release 1.2.0
 * Mon Apr 25 2016 mosquito <sensor.wen@gmail.com> - 0.37.7-1.gitc04d43c
 - Release 0.37.7
 - Add node headers
