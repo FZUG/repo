@@ -19,20 +19,19 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.10.0
-Release: 4.git%{_shortcommit}%{?dist}
+Release: 5.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
 License: MIT
 URL:     https://github.com/atom/apm/
 Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source1: apm.js
 
-Patch0:  use-system-nodejs.patch
-Patch1:  get-electron-version.patch
-Patch2:  use-system-npm.patch
+Patch0:  use-system-npm.patch
 # Fix for callbacks that run process.exit() before JSON output completes
-Patch3:  truncated-json-output.patch
-Patch4:  use-local-node-devel.patch
+Patch1:  truncated-json-output.patch
+Patch2:  use-local-node-devel.patch
 
 BuildRequires: npm, git
 BuildRequires: nodejs-packaging
@@ -47,15 +46,20 @@ Discover and install Atom packages powered by https://atom.io
 
 %prep
 %setup -q -n %repo-%{_commit}
-sed -i 's|<lib>|%{_lib}|' %{P:1} %{P:4}
+sed -i 's|<lib>|%{_lib}|' %{S:1} %{P:2}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
-%patch4 -p1
 
 # Fix system arch of dedupe
 sed -i "/ia32/s|ia32'|' + process.arch|" src/dedupe.coffee
+
+# Use custom launcher
+rm src/cli.coffee
+install -m755 %{S:1} bin/apm
+
+# Do not download node 0.10
+sed -i '/download-node/d' package.json
 
 %build
 export CFLAGS="%{optflags}"
@@ -112,6 +116,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri May 27 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-5.git87b4bcb
+- Use custom launcher. Thanks @tensor5
 * Fri May 27 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-4.git87b4bcb
 - Use environment variables to set electron version and resource path
 - Use better patch (truncated-json-output.patch). Thanks @tensor5
