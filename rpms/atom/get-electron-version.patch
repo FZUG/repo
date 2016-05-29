@@ -1,19 +1,15 @@
---- a/src/command.coffee
-+++ b/src/command.coffee
-@@ -1,4 +1,5 @@
- child_process = require 'child_process'
-+fs = require './fs'
- path = require 'path'
- _ = require 'underscore-plus'
- semver = require 'npm/node_modules/semver'
-@@ -90,6 +91,10 @@
-         version = @normalizeVersion(version)
-         @installedAtomVersion = version if semver.valid(version)
+--- a/bin/apm
++++ b/bin/apm
+@@ -1,6 +1,12 @@
+ #!/bin/bash
+ set -e
  
-+      if electronVersion is undefined
-+        try
-+          electronVersion = fs.readFileSync('/usr/<lib>/electron/version', 'utf8').slice(1)
++if [ -z ${ATOM_ELECTRON_VERSION} ]; then
++  ELECTRON_VERSION=$(< /usr/<lib>/electron/version)
++  export ATOM_ELECTRON_VERSION=${ELECTRON_VERSION#v}
++fi
++export ATOM_RESOURCE_PATH=${ATOM_RESOURCE_PATH:-/usr/<lib>/atom}
 +
-       # TODO Remove ATOM_NODE_VERSION env var support after a couple releases
-       @electronVersion = process.env.ATOM_ELECTRON_VERSION ? process.env.ATOM_NODE_VERSION ? electronVersion ? '0.22.0'
- 
+ apmPath=`readlink -f "$0"`
+ binDir=`dirname "$apmPath"`
+ "$binDir/node" "$binDir/../lib/cli.js" "$@"

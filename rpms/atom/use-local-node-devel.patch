@@ -1,6 +1,12 @@
 --- a/src/command.coffee
 +++ b/src/command.coffee
-@@ -98,6 +98,11 @@
+@@ -1,4 +1,5 @@
+ child_process = require 'child_process'
++fs = require './fs'
+ path = require 'path'
+ _ = require 'underscore-plus'
+ semver = require 'semver'
+@@ -93,6 +94,11 @@
        # TODO Remove ATOM_NODE_VERSION env var support after a couple releases
        @electronVersion = process.env.ATOM_ELECTRON_VERSION ? process.env.ATOM_NODE_VERSION ? electronVersion ? '0.22.0'
  

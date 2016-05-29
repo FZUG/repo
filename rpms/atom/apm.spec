@@ -19,7 +19,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.10.0
-Release: 3.git%{_shortcommit}%{?dist}
+Release: 4.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -53,9 +53,6 @@ sed -i 's|<lib>|%{_lib}|' %{P:1} %{P:4}
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
-
-# Fix location of Atom app
-sed -i 's|share/atom/resources/app.asar|%{_lib}/atom|g' src/apm.coffee
 
 # Fix system arch of dedupe
 sed -i "/ia32/s|ia32'|' + process.arch|" src/dedupe.coffee
@@ -115,6 +112,10 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri May 27 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-4.git87b4bcb
+- Use environment variables to set electron version and resource path
+- Use better patch (truncated-json-output.patch). Thanks @tensor5
+- Refactor patch for using system Node.js
 * Mon May 23 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-3.git87b4bcb
 - Use node 4.x to build native modules
 - Fix #106 by update node 4.x

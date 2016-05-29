@@ -1,6 +1,6 @@
 --- a/package.json
 +++ b/package.json
-@@ -31,7 +31,6 @@
+@@ -30,7 +30,6 @@
      "keytar": "^3.0",
      "mv": "2.0.0",
      "ncp": "~0.5.1",
@@ -43,8 +43,8 @@
      try
 --- a/src/command.coffee
 +++ b/src/command.coffee
-@@ -2,7 +2,7 @@
- fs = require './fs'
+@@ -1,7 +1,7 @@
+ child_process = require 'child_process'
  path = require 'path'
  _ = require 'underscore-plus'
 -semver = require 'npm/node_modules/semver'
