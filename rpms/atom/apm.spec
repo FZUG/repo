@@ -30,7 +30,8 @@ Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.
 Patch0:  use-system-nodejs.patch
 Patch1:  get-electron-version.patch
 Patch2:  use-system-npm.patch
-Patch3:  fetch-local-pkgs.patch
+# Fix for callbacks that run process.exit() before JSON output completes
+Patch3:  truncated-json-output.patch
 Patch4:  use-local-node-devel.patch
 
 BuildRequires: npm, git
