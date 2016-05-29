@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit ba70fd1f077fc67ec148bd7281da0e61d172c0d9
+%global _commit 4540be9a4d9509d522d3fd33922aef7dbce8eaea
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    shadowsocks-qt5
-Version: 2.6.1
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 2.7.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A cross-platform shadowsocks GUI client
 Summary(zh_CN): 跨平台 shadowsocks GUI 客户端
 
@@ -68,6 +68,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 2.7.0-1.git4540be9
+- Update to 2.7.0-1.git4540be9
 * Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 2.6.1-2.gitba70fd1
 - Rebuild for Qt 5.6.0
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 2.6.1-1.gitba70fd1
