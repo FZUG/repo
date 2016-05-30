@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.7.4
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -69,6 +69,9 @@ sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
+
+# Use settings-view@0.237.0 for Electron 1.2.0
+sed -i '/setting/s|0.*"|0.237.0"|' package.json
 
 %build
 # Hardened package
@@ -219,6 +222,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Mon May 30 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-2.git6bed3e5
+- Fix settings-view dont work
+  https://github.com/FZUG/repo/issues/114
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-1.git6bed3e5
 - Release 1.7.4
 - Build for electron 1.2.0
