@@ -217,9 +217,15 @@ def result(filename, content):
     result = 'success' if content[0] == 0 else 'fail'
     _, pkgname, release, arch = content
 
-    with open(filename, mode='a+') as f:
-        f.write('{} {} for fc{}-{}\n'.format(pkgname, result, release, arch))
-        echo('green', 'info:', ' Write build result to {} file.'.format(filename))
+    if filename == '-':
+        pkgname = re.match('.*/(.*).fc*', pkgname)
+        return pkgname.group(1).ljust(35), \
+               'fc{}-{}'.format(release, arch).ljust(13), \
+               result
+    else:
+        with open(filename, mode='a+') as f:
+            f.write('{} fc{}-{} {}\n'.format(pkgname, release, arch, result))
+            echo('green', 'info:', ' Write build result to {} file.'.format(filename))
 
 def parse_args():
     '''Parser for command-line options.
@@ -316,6 +322,7 @@ if __name__ == '__main__':
         with open(args.result) as f:
             results = re.findall('rpms/.*.spec', f.read())
 
+    resultList = []
     for commit in get_commit_list():
         commit = args.commit if args.commit else commit
         fileList = args.file if args.file else get_file_list(commit)
@@ -356,6 +363,11 @@ if __name__ == '__main__':
                              rpm_lint(outDir))
                     if mode == 'manual':
                         result(args.result, [value, specFile, rel, arch])
+                    resultList.append(result('-', [value, srpmFile, rel, arch]))
 
         if args.file or args.commit:
             break
+
+    echo('cyan', '\n** Build result **')
+    for i in resultList:
+        echo(''.join(i))
