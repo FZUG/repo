@@ -62,7 +62,7 @@ def black_item(item):
 
     for black in blackList:
         if re.match('.*' + black + '.*', item):
-            print('\033[32minfo:\033[0m Filter {} file.'.format(item))
+            echo('green', 'info:', ' Filter {} file.'.format(item))
             return False
 
     return True
@@ -108,16 +108,16 @@ def get_sources(itemList, output=srcDir, verb=None):
         if not os.path.exists(os.path.join(output, item.split('/')[-1])):
             if item.split('://')[0] in ['http', 'https', 'ftp']:
                 if verb:
-                    print('\033[36mverb:\033[0m downloading {} file.'.format(item))
+                    echo('cyan', 'verb:', ' downloading {} file.'.format(item))
                 try:
                     urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
                     #call(['wget', '-q', '-P', output, item])
                 except Exception as e:
-                    print('\033[31merro:\033[0m downloading error. {}'.format(e))
+                    echo('red', 'erro:', ' downloading error. {}'.format(e))
             else:
                 for src in find_files(item, 'rpms'):
                     if verb:
-                        print('\033[36mverb:\033[0m copy {} file to build directory.'.format(src))
+                        echo('cyan', 'verb:', ' copy {} file to build directory.'.format(src))
                     shutil.copy(src, output)
 
 def find_files(pattern, path=os.getcwd()):
@@ -219,7 +219,7 @@ def result(filename, content):
 
     with open(filename, mode='a+') as f:
         f.write('{} {} for fc{}-{}\n'.format(pkgname, result, release, arch))
-        print('\033[32minfo:\033[0m Write build result to {} file.'.format(filename))
+        echo('green', 'info:', ' Write build result to {} file.'.format(filename))
 
 def parse_args():
     '''Parser for command-line options.
@@ -264,6 +264,27 @@ def parse_args():
     parser.add_argument(dest='files', metavar='FILE', type=str, action='store', nargs='*')
     return parser.parse_args()
 
+def echo(color=None, *args):
+    '''Output log with color.'''
+
+    if args:
+        msg1, msg2 = args[0], ' '.join(args[1:])
+    else:
+        msg1, msg2 = color, ''
+
+    if color == 'red':
+        print('\033[31m{}\033[0m{}'.format(msg1, msg2))
+    elif color == 'green':
+        print('\033[32m{}\033[0m{}'.format(msg1, msg2))
+    elif color == 'yellow':
+        print('\033[33m{}\033[0m{}'.format(msg1, msg2))
+    elif color == 'blue':
+        print('\033[34m{}\033[0m{}'.format(msg1, msg2))
+    elif color == 'cyan':
+        print('\033[36m{}\033[0m{}'.format(msg1, msg2))
+    else:
+        print('{}'.format(msg1))
+
 if __name__ == '__main__':
     args = parse_args()
     Archs = args.archs if args.archs else ['x86_64', 'i386']
@@ -284,7 +305,7 @@ if __name__ == '__main__':
 
     if args.clean:
         if args.verbose:
-            print('\033[36mverb:\033[0m clean workspace.')
+            echo('cyan', 'verb:', ' clean workspace.')
         getoutput('/bin/git clean -f -d -x')
 
     if not os.path.isdir(srcDir):
@@ -301,38 +322,38 @@ if __name__ == '__main__':
 
         for filePath in fileList:
             if mode == 'manual' and filePath in results:
-                print('\033[36mverb:\033[0m skip {} file.'.format(filePath))
+                echo('cyan', 'verb:', ' skip {} file.'.format(filePath))
                 continue
 
             if parse_spec(filePath):
                 specFile, specContent = parse_spec(filePath)
                 if args.verbose:
-                    print('\033[36mverb:\033[0m parser {} file.'.format(specFile))
+                    echo('cyan', 'verb:', ' parser {} file.'.format(specFile))
             elif mode == 'ci':
-                print('Unmodified spec file.')
+                echo('Unmodified spec file.')
                 continue
             else:
-                print('Unmodified spec file.')
+                echo('Unmodified spec file.')
                 sys.exit()
 
             sourceList = get_source_list(specContent)
             get_sources(sourceList, verb=args.verbose)
             srpmFile = build_srpm(specFile)
-            print('\033[32minfo:\033[0m Build SRPM -', srpmFile)
+            echo('green', 'info:', ' Build SRPM -', srpmFile)
 
             for rel in Releases:
                 for arch in Archs:
                     outDir = os.path.join(rootDir, rel, arch)
-                    print('\033[32minfo:\033[0m Build RPM for fc{} - {}:\n'.format(rel, arch))
+                    echo('green', 'info:', ' Build RPM for fc{} - {}:\n'.format(rel, arch))
                     value, log = build_rpm(srpmFile, release=rel, arch=arch, output=outDir,
                                            opts=args.mock, verb=args.verbose)
-                    print(log)
+                    echo(log)
                     if args.createrepo:
-                        print('\033[32minfo:\033[0m Create metadata for fc{} - {}:\n'.format(rel, arch),
-                              create_repo(outDir))
+                        echo('green', 'info:', ' Create metadata for fc{} - {}:\n'.format(rel, arch),
+                             create_repo(outDir))
                     if args.rpmlint:
-                        print('\033[32minfo:\033[0m Check RPM for fc{} - {}:\n'.format(rel, arch),
-                              rpm_lint(outDir))
+                        echo('green', 'info:', ' Check RPM for fc{} - {}:\n'.format(rel, arch),
+                             rpm_lint(outDir))
                     if mode == 'manual':
                         result(args.result, [value, specFile, rel, arch])
 
