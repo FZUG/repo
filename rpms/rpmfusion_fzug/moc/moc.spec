@@ -3,7 +3,7 @@
 Name:           moc
 Epoch:          1
 Version:        2.6
-Release:        0.2.alpha2%{?dist}
+Release:        0.3.alpha2%{?dist}
 Summary:        Music on Console - Console audio player for Linux/UNIX
 Group:          Applications/Multimedia
 License:        GPLv2+
@@ -13,33 +13,35 @@ Source0:        http://ftp.daper.net/pub/soft/%{name}/unstable/%{name}-%{version
 # Fix rpmlint E: incorrect-fsf-address
 Patch0:         trivial-update-FSF-address.patch
 
-BuildRequires:  alsa-lib-devel
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(ao)
 BuildRequires:  faad2-devel
-BuildRequires:  ffmpeg-devel
 BuildRequires:  file-devel
-BuildRequires:  flac-devel
-BuildRequires:  jack-audio-connection-kit-devel
-BuildRequires:  libao-devel
-BuildRequires:  libcurl-devel
+BuildRequires:  pkgconfig(flac)
+BuildRequires:  pkgconfig(jack)
+BuildRequires:  pkgconfig(id3tag)
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libavutil)
+BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  libdb-devel
-BuildRequires:  libid3tag-devel
-BuildRequires:  libmad-devel
-BuildRequires:  libmodplug-devel
 BuildRequires:  libmpcdec-devel
-BuildRequires:  libogg-devel
-BuildRequires:  librcc-devel
-BuildRequires:  libsamplerate-devel
-BuildRequires:  libsndfile-devel
-BuildRequires:  libtimidity-devel
+BuildRequires:  pkgconfig(libmodplug)
+BuildRequires:  pkgconfig(librcc)
+BuildRequires:  pkgconfig(libtimidity)
+BuildRequires:  pkgconfig(mad)
+BuildRequires:  pkgconfig(ncurses)
+BuildRequires:  pkgconfig(ogg)
 BuildRequires:  libtool
 BuildRequires:  libtool-ltdl-devel
-BuildRequires:  libvorbis-devel
-BuildRequires:  ncurses-devel
-BuildRequires:  popt-devel
-BuildRequires:  speex-devel
-BuildRequires:  taglib-devel
-BuildRequires:  wavpack-devel
-BuildRequires:  zlib-devel
+BuildRequires:  pkgconfig(popt)
+BuildRequires:  pkgconfig(samplerate)
+BuildRequires:  pkgconfig(sndfile)
+BuildRequires:  pkgconfig(speex)
+BuildRequires:  pkgconfig(taglib)
+BuildRequires:  pkgconfig(vorbis)
+BuildRequires:  pkgconfig(wavpack)
+BuildRequires:  pkgconfig(zlib)
 
 %description
 MOC (music on console) is a console audio player for LINUX/UNIX designed to be
@@ -52,26 +54,27 @@ files in this directory beginning from the chosen file.
 
 %build
 %configure \
-       --prefix=/usr \
-       --without-rcc \
-       --with-oss \
-       --with-alsa \
-       --with-jack \
+       --disable-rpath \
+       --disable-cache \
+       --disable-debug \
+       --with-pic \
        --with-aac \
+       --with-alsa \
+       --with-curl  \
+       --with-ffmpeg \
+       --with-flac \
+       --with-jack \
+       --with-modplug \
        --with-mp3 \
        --with-musepack \
-       --with-vorbis \
-       --with-flac \
-       --with-wavpack \
-       --with-sndfile \
-       --with-modplug \
-       --with-ffmpeg \
-       --with-speex \
+       --with-ncurses \
+       --with-oss \
+       --with-rcc \
        --with-samplerate \
-       --with-curl  \
-       --disable-cache \
-       --disable-debug
-
+       --with-sndfile \
+       --with-speex \
+       --with-vorbis \
+       --with-wavpack
 
 %make_build V=1
 
@@ -90,6 +93,10 @@ files in this directory beginning from the chosen file.
 %{_mandir}/man1/%{name}p.1.*
 
 %changelog
+* Mon May 30 2016 mosquito <sensor.wen@gmail.com> - 1:2.6-0.3.alpha2
+- Use pkgconfig for BReq
+- Add --with-pic, --with-ncurses, --with-rcc flags
+
 * Fri May 27 2016 nrechn <neil@gyz.io> - 1:2.6-0.2.alpha2
 - Fix filename display issue
 - rebuild for FZUG
