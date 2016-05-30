@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 # Author: mosquito
-# Email: sensor.wen@gmail.commit
+# Email: sensor.wen@gmail.com
 # Description: CI build for repo
 
 from subprocess import getoutput, getstatusoutput, call
@@ -157,7 +157,8 @@ def build_srpm(specFile, output='build'):
         '-bs {}'.format(specFile, out=output)
     return re.search('build.*', getoutput(command)).group()
 
-def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='', verb=None):
+def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='',
+              verb=None, quiet=None):
     '''Build rpm.
 
     Args:
@@ -167,6 +168,7 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='', ver
         output: A string of RPM file output directory.
         opts: A string of mock options.
         verb: A bool of verbose.
+        quiet: A bool of quiet.
 
     Returns:
         Return the command running log.
@@ -174,37 +176,49 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='', ver
 
     if verb:
         opts += ' --verbose'
+    elif quiet:
+        opts += ' --quiet'
 
     command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion {} {}'.format(
         output, release, arch, opts, srpmFile)
     return getstatusoutput(command)
 
-def rpm_lint(repoDir=outDir, time=10):
+def rpm_lint(repoDir=outDir, time=10, verb=None):
     '''Check rpm files.
 
     Args:
         repoDir: A string of repository directory.
         time: A integer of time(minutes).
+        verb: A bool of verbose.
 
     Returns:
         Return the check result.
     '''
 
+    opts = '--info' if verb else ''
     command = '/bin/find {} -name "*.rpm" -and -ctime -{} | xargs ' \
-              '/bin/rpmlint -i'.format(repoDir, round(time/60/24, 4))
+              '/bin/rpmlint {}'.format(repoDir, round(time/60/24, 4), opts)
     return getoutput(command)
 
-def create_repo(output=outDir):
+def create_repo(output=outDir, verb=None, quiet=None):
     '''Creates metadata of rpm repository.
 
     Args:
         output: A string of RPM metadata output directory.
+        verb: A bool of verbose.
+        quiet: A bool of quiet.
 
     Returns:
         Return the command running log.
     '''
 
-    return getoutput('/bin/createrepo_c -d -x *.src.rpm {}'.format(output))
+    opts = ''
+    if verb:
+        opts += ' --verbose'
+    elif quiet:
+        opts += ' --quiet'
+
+    return getoutput('/bin/createrepo_c {} -d -x *.src.rpm {}'.format(opts, output))
 
 def result(filename, content):
     '''Log build result to file.
@@ -267,6 +281,8 @@ def parse_args():
                         help='log bulid result to file (default: result.log)')
     parser.add_argument('-v', '--verbose', dest='verbose', action='store_true',
                         help='be verbose')
+    parser.add_argument('-q', '--quiet', dest='quiet', action='store_true',
+                        help='be quiet')
     parser.add_argument(dest='files', metavar='FILE', type=str, action='store', nargs='*')
     return parser.parse_args()
 
@@ -315,6 +331,7 @@ if __name__ == '__main__':
     mode = 'manual'
     if 'GIT_PREVIOUS_COMMIT' in os.environ or 'ghprbActualCommit' in os.environ:
         mode = 'ci'
+    echo('green', 'info:', ' Running as {} mode.'.format(mode))
 
     if args.clean:
         if args.verbose:
@@ -326,6 +343,8 @@ if __name__ == '__main__':
 
     results = []
     if os.path.exists(args.result):
+        if args.verbose:
+            echo('cyan', 'verb:', ' load build result from {} file.'.format(args.result))
         with open(args.result) as f:
             results = re.findall('rpms/.*.spec', f.read())
 
@@ -336,7 +355,8 @@ if __name__ == '__main__':
 
         for filePath in fileList:
             if mode == 'manual' and filePath in results:
-                echo('cyan', 'verb:', ' skip {} file.'.format(filePath))
+                if args.verbose:
+                    echo('cyan', 'verb:', ' skip {} file.'.format(filePath))
                 continue
 
             if parse_spec(filePath):
@@ -344,10 +364,10 @@ if __name__ == '__main__':
                 if args.verbose:
                     echo('cyan', 'verb:', ' parser {} file.'.format(specFile))
             elif mode == 'ci':
-                echo('Unmodified spec file.')
+                echo('green', 'info:', 'Unmodified spec file in commit.')
                 continue
             else:
-                echo('Unmodified spec file.')
+                echo('green', 'info:', 'Unmodified spec file in commit.')
                 sys.exit()
 
             sourceList = get_source_list(specContent)
@@ -358,16 +378,16 @@ if __name__ == '__main__':
             for rel in Releases:
                 for arch in Archs:
                     outDir = os.path.join(rootDir, rel, arch)
-                    echo('green', 'info:', ' Build RPM for fc{} - {}:\n'.format(rel, arch))
+                    echo('green', 'info:', ' Build RPM for fc{} - {}:'.format(rel, arch))
                     value, log = build_rpm(srpmFile, release=rel, arch=arch, output=outDir,
-                                           opts=args.mock, verb=args.verbose)
+                                           opts=args.mock, verb=args.verbose, quiet=args.quiet)
                     echo(log)
                     if args.createrepo:
                         echo('green', 'info:', ' Create metadata for fc{} - {}:\n'.format(rel, arch),
-                             create_repo(outDir))
+                             create_repo(outDir, verb=args.verbose, quiet=args.quiet))
                     if args.rpmlint:
                         echo('green', 'info:', ' Check RPM for fc{} - {}:\n'.format(rel, arch),
-                             rpm_lint(outDir))
+                             rpm_lint(outDir, verb=args.verbose))
                     if mode == 'manual':
                         result(args.result, [value, specFile, rel, arch])
                     resultList.append(result('-', [value, srpmFile, rel, arch]))
