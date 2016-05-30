@@ -271,7 +271,12 @@ def parse_args():
     return parser.parse_args()
 
 def echo(color=None, *args):
-    '''Output log with color.'''
+    '''Output log with color.
+
+    Args:
+        color: A string of color.
+        *args: A tuple that include multi content parameters.
+    '''
 
     if args:
         msg1, msg2 = args[0], ' '.join(args[1:])
@@ -288,6 +293,8 @@ def echo(color=None, *args):
         print('\033[34m{}\033[0m{}'.format(msg1, msg2))
     elif color == 'cyan':
         print('\033[36m{}\033[0m{}'.format(msg1, msg2))
+    elif color and args:
+        print('{} {} {}'.format(color, msg1, msg2))
     else:
         print('{}'.format(msg1))
 
