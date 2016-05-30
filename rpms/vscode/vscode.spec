@@ -15,7 +15,7 @@
 
 Name:    vscode
 Version: 1.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -58,6 +58,15 @@ sed -i '/tsb/s|"^.*"|"1.10.3"|' package.json
 
 # fsevents dont support linux
 sed -i '130,134d' npm-shrinkwrap.json
+
+# Use ELECTRON_RUN_AS_NODE for Electron 1.2.0
+sed -i '/RUN_AS_NODE/s|ATOM_SHELL_INTERNAL|ELECTRON|g' \
+    scripts/code-cli.sh \
+    resources/linux/bin/code.sh \
+    src/vs/code/node/cli.ts \
+    src/vs/base/node/stdFork{.ts,Start.js} \
+    src/vs/workbench/parts/git/electron-browser/electronGitService.ts \
+    extensions/typescript/src/utils/electron{,ForkStart}.ts
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -163,7 +172,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
-* Thu May 30 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
+* Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-2
+- Use ELECTRON_RUN_AS_NODE for Electron 1.2.0
+* Mon May 30 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
 - Release 1.2.0
 - Build for electron 1.2.0
 - Use ELECTRON_RUN_AS_NODE environment variable
