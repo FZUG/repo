@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.7.4
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -70,8 +70,8 @@ sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 
-# Use settings-view@0.237.0 for Electron 1.2.0
-sed -i '/setting/s|0.*"|0.237.0"|' package.json
+# Use settings-view@0.238.0 for Electron 1.2.0
+sed -i '/setting/s|0.*"|0.238.0"|' package.json
 
 %build
 # Hardened package
@@ -153,11 +153,14 @@ apm dedupe ${_packagesToDedupe[@]}
 pushd build
 npm install --loglevel info
 popd
-script/grunt --build-dir='atom-build' --channel=stable
+script/grunt --channel=stable
+
+# Fix height error on install page
+find out -name 'settings-view.less' | xargs sed -i '/height.*100%/s|^|//|'
 
 %install
 install -d %{buildroot}%{_libdir}/%{name}
-cp -r atom-build/Atom/resources/app/* %{buildroot}%{_libdir}/%{name}
+cp -r out/Atom/resources/app/* %{buildroot}%{_libdir}/%{name}
 rm -rf %{buildroot}%{_libdir}/%{name}/node_modules
 
 install -d %{buildroot}%{_datadir}/applications
@@ -169,17 +172,17 @@ sed -e \
     resources/linux/atom.desktop.in > \
     %{buildroot}%{_datadir}/applications/%{name}.desktop
 
-install -Dm0755 atom-build/Atom/resources/new-app/atom.sh \
+install -Dm0755 out/Atom/resources/new-app/atom.sh \
     %{buildroot}%{_bindir}/%{name}
 
 # copy over icons in sizes that most desktop environments like
 for i in 1024 512 256 128 64 48 32 24 16; do
-    install -D -m 0644 atom-build/icons/${i}.png \
+    install -D -m 0644 out/icons/${i}.png \
       %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps/%{name}.png
 done
 
 # find all *.js files and generate node.file-list
-pushd atom-build/Atom/resources/app
+pushd out/Atom/resources/app
 for ext in js jsm json coffee map node types less png svg aff dic; do
     find node_modules -regextype posix-extended \
       -iname \*.${ext} \
@@ -222,6 +225,11 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-3.git6bed3e5
+- Remove --build-dir option
+- Update to settings-view@0.238.0
+- Fix height error on install page
+  https://github.com/FZUG/repo/issues/116
 * Mon May 30 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-2.git6bed3e5
 - Fix settings-view dont work
   https://github.com/FZUG/repo/issues/114
