@@ -4,7 +4,7 @@
 
 Name:    netease-cloud-music
 Version: 0.9.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Netease Cloud Music, converted from .deb package
 
 Group:   Applications/Multimedia
@@ -20,7 +20,7 @@ Source5: http://archive.ubuntu.com/ubuntu/pool/universe/libc/libcue/libcue1_1.4.
 BuildRequires: dpkg
 BuildRequires: desktop-file-utils
 Requires: desktop-file-utils
-Requires: gstreamer-plugins-ugly
+Requires: gstreamer1-plugins-ugly
 
 %description
 Netease Cloud Music, converted from .deb package
@@ -87,5 +87,7 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
-* Wed May 25 2016 mosquito <sensor.wen@gmail.com> - 0.9.0-2
+* Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 0.9.0-2
+- Add Req gstreamer1-plugins-ugly
+* Wed May 25 2016 mosquito <sensor.wen@gmail.com> - 0.9.0-1
 - Initial build
