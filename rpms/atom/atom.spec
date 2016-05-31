@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.7.4
-Release: 3.git%{_shortcommit}%{?dist}
+Release: 4.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -78,8 +78,8 @@ sed -i '/setting/s|0.*"|0.238.0"|' package.json
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
 
-# Update node for fedora 23
-%if 0%{?fedora} < 24
+# Update node for fc23 and el7
+%if 0%{?fedora} < 24 || 0%{?rhel}
 git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
 nvm install %{node_ver}
@@ -138,7 +138,8 @@ pushd node_modules/nodegit
     autoreconf -ivf
     ./configure
   popd
-  node-gyp configure rebuild --target="%{electron_ver}" --target_platform="linux" \
+  node_gyp="node_modules/.bin/node-gyp"
+  $node_gyp configure rebuild --target="%{electron_ver}" --target_platform="linux" \
   --runtime="electron" --arch="%{arch}" --dist-url="$npm_config_disturl"
   echo 'Removing NodeGit devDependencies...'
   npm prune --production
@@ -225,6 +226,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-4.git6bed3e5
+- Use node-gyp@3.0.3 for el7, system node-gyp doesn't support
+  the if-else conditions syntax
+  See https://github.com/JCMais/node-libcurl/issues/56
 * Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-3.git6bed3e5
 - Remove --build-dir option
 - Update to settings-view@0.238.0
