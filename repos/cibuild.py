@@ -10,6 +10,7 @@ import urllib.error
 import re
 import os
 import sys
+import rpm
 import shutil
 import fnmatch
 import argparse
@@ -78,22 +79,52 @@ def parse_spec(specFile):
         is not found, it returns false.
     '''
 
-    if os.path.exists(specFile) and str(specFile).endswith('.spec'):
-        return specFile, getoutput('/bin/rpmspec -P {}'.format(specFile))
+    if os.path.exists(specFile) and specFile.endswith('.spec'):
+        rpm_info = {}
+        spec = rpm.spec(specFile)
+        hdr = spec.sourceHeader
 
-    return False
+        content = getoutput('/bin/rpmspec -P {}'.format(specFile))
+        content = content[:content.index('%prep')]
+        items = lambda t, c: re.findall('%s:\s+(.*)'%t, c)
+        split_str = lambda l: [re.split('[\s,=|>=|<=]+', i) for i in l]
+        flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
+        remove_ver = lambda l: [i for i in l if not re.match('^[0-9]', i)]
+        check = lambda v: v.decode() if v else v
 
-def get_source_list(specContent):
-    '''Get source and patch files list.
-
-    Args:
-        specContent: A string of Spec file content.
-
-    Returns:
-        Return the list contains source and patch files list.
-    '''
-
-    return re.findall('[Source|Patch]\d*:\s+(.*)', specContent)
+        rpm_info = {
+            "name": check(hdr[rpm.RPMTAG_NAME]),
+            "epoch": hdr[rpm.RPMTAG_EPOCHNUM],
+            "version": check(hdr[rpm.RPMTAG_VERSION]),
+            "release": check(hdr[rpm.RPMTAG_RELEASE]),
+            "vendor": check(hdr[rpm.RPMTAG_VENDOR]),
+            "summary": check(hdr[rpm.RPMTAG_SUMMARY]),
+            "packager": check(hdr[rpm.RPMTAG_PACKAGER]),
+            "group": check(hdr[rpm.RPMTAG_GROUP]),
+            "license": check(hdr[rpm.RPMTAG_LICENSE]),
+            "url": check(hdr[rpm.RPMTAG_URL]),
+            "description": check(hdr[rpm.RPMTAG_DESCRIPTION]),
+            "sources": spec.sources,
+            "patchs": [check(i) for i in hdr[rpm.RPMTAG_PATCH]],
+            "build_archs": [check(i) for i in hdr[rpm.RPMTAG_BUILDARCHS]],
+            "exclusive_archs": [check(i) for i in hdr[rpm.RPMTAG_EXCLUSIVEARCH]],
+            #"build_requires": [i.DNEVR()[2:] for i in rpm.ds(hdr, 'requires')],
+            "build_requires": [check(i) for i in hdr[rpm.RPMTAG_REQUIRES]],
+            "requires": remove_ver(flat(split_str(items('Requires', content)))),
+            "recommends": remove_ver(flat(split_str(items('Recommends', content)))),
+            "supplements": [check(i) for i in hdr[rpm.RPMTAG_SUPPLEMENTS]],
+            "suggests": [check(i) for i in hdr[rpm.RPMTAG_SUGGESTS]],
+            "enhances": [check(i) for i in hdr[rpm.RPMTAG_ENHANCES]],
+            "provides": remove_ver(flat(split_str(items('Provides', content)))),
+            "obsoletes": remove_ver(flat(split_str(items('Obsoletes', content)))),
+            "conflicts": remove_ver(flat(split_str(items('Conflicts', content)))),
+            "prep": spec.prep,
+            "build": spec.build,
+            "install": spec.install,
+            "check": spec.check,
+            "clean": spec.clean
+        }
+    return specFile, rpm_info
 
 def get_sources(itemList, output=srcDir, verb=None):
     '''Get source files from local and internet.
@@ -105,17 +136,18 @@ def get_sources(itemList, output=srcDir, verb=None):
     '''
 
     for item in itemList:
-        if not os.path.exists(os.path.join(output, item.split('/')[-1])):
-            if item.split('://')[0] in ['http', 'https', 'ftp']:
+        if not os.path.exists(os.path.join(output, item[0].split('/')[-1])):
+            if item[0].split('://')[0] in ['http', 'https', 'ftp']:
                 if verb:
-                    echo('cyan', 'verb:', ' downloading {} file.'.format(item))
+                    echo('cyan', 'verb:', ' downloading {} file.'.format(item[0]))
                 try:
-                    urlretrieve(item, '{}/{}'.format(output, item.split('/')[-1]))
-                    #call(['wget', '-q', '-P', output, item])
+                    urlretrieve(item[0], '{}/{}'.format(output, item[0].split('/')[-1]))
+                    #call(['wget', '-q', '-P', output, item[0]])
                 except Exception as e:
                     echo('red', 'erro:', ' downloading error. {}'.format(e))
+                    sys.exit(1)
             else:
-                for src in find_files(item, 'rpms'):
+                for src in find_files(item[0], 'rpms'):
                     if verb:
                         echo('cyan', 'verb:', ' copy {} file to build directory.'.format(src))
                     shutil.copy(src, output)
@@ -360,7 +392,7 @@ if __name__ == '__main__':
                 continue
 
             if parse_spec(filePath):
-                specFile, specContent = parse_spec(filePath)
+                specFile, specDict = parse_spec(filePath)
                 if args.verbose:
                     echo('cyan', 'verb:', ' parser {} file.'.format(specFile))
             elif mode == 'ci':
@@ -370,8 +402,7 @@ if __name__ == '__main__':
                 echo('green', 'info:', 'Unmodified spec file in commit.')
                 sys.exit()
 
-            sourceList = get_source_list(specContent)
-            get_sources(sourceList, verb=args.verbose)
+            get_sources(specDict['sources'], verb=args.verbose)
             srpmFile = build_srpm(specFile)
             echo('green', 'info:', ' Build SRPM -', srpmFile)
 
