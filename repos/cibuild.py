@@ -11,6 +11,7 @@ import re
 import os
 import sys
 import rpm
+import dnf
 import shutil
 import fnmatch
 import argparse
@@ -67,6 +68,41 @@ def black_item(item):
             return False
 
     return True
+
+def query_package(query):
+    base = dnf.Base()
+    base.read_all_repos()
+    base.fill_sack(load_available_repos=True)
+    return list(base.provides(query))
+
+def parse_requires(reqlist):
+    pkgs = []
+    libdir = getoutput('rpm -E %_libdir')
+    node_root = getoutput('rpm -E %nodejs_sitelib')
+
+    for i in reqlist:
+        filepath = ''
+        if re.match('.*\((.*)\)', i):
+            item = re.match('.*\((.*)\)', i).group(1)
+
+        # pkgconfig(name)
+        if i.startswith('pkgconfig('):
+            filepath = '{}/pkgconfig/{}.pc'.format(libdir, item)
+        # perl(name::name)
+        elif i.startswith('perl('):
+            filepath = getoutput('perldoc -lm {}'.format(item))
+        # npm(name)
+        elif i.startswith('npm('):
+            filepath = '{}/{}/package.json'.format(node_root, item)
+        # mvn(name), build-classpath, find-jar
+
+        pkglist = query_package(filepath)
+        if len(pkglist):
+            pkgs.append(pkglist[0].name)
+        else:
+            pkgs.append(i)
+
+    return pkgs
 
 def parse_spec(specFile):
     '''Parse the Spec file contents.
