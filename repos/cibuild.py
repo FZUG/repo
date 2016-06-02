@@ -26,7 +26,7 @@ def get_commit_list():
     '''
 
     stdout = getoutput('/bin/git log --pretty=%h')
-    commit = getoutput('/bin/git rev-parse --short master~')
+    commit = getoutput('/bin/git rev-parse --short HEAD~')
 
     if 'GIT_PREVIOUS_COMMIT' in os.environ:
         commit = os.environ['GIT_PREVIOUS_COMMIT'][0:7]
@@ -79,43 +79,57 @@ def parse_spec(specFile):
         is not found, it returns false.
     '''
 
+    items = lambda t, c: re.findall('%s:\s+(.*)'%t, c)
+    split_str = lambda l: [re.split('[\s,=|>=|<=]+', i) for i in l]
+    flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
+    remove_ver = lambda l: [i for i in l if not re.match('^[0-9]', i)]
+    decode = lambda v: v.decode() if v else v
+
     if os.path.exists(specFile) and specFile.endswith('.spec'):
         rpm_info = {}
+        subpkgs = []
         spec = rpm.spec(specFile)
         hdr = spec.sourceHeader
 
         content = getoutput('/bin/rpmspec -P {}'.format(specFile))
-        content = content[:content.index('%prep')]
-        items = lambda t, c: re.findall('%s:\s+(.*)'%t, c)
-        split_str = lambda l: [re.split('[\s,=|>=|<=]+', i) for i in l]
-        flat = lambda L: sum(map(flat, L), []) if isinstance(L, list) else [L]
-        remove_ver = lambda l: [i for i in l if not re.match('^[0-9]', i)]
-        check = lambda v: v.decode() if v else v
+        content = content[:content.index('%changelog')]
+
+        # subpackages
+        name = decode(hdr[rpm.RPMTAG_NAME])
+        subpkgs.append(name)
+        if re.search('%package', content):
+            for i in re.findall('%package\s*(.+)', content):
+                if i.startswith('-n'):
+                    subpkgs.append(re.match('-n\s*(.*)', i).group(1))
+                else:
+                    subpkgs.append('{}-{}'.format(name, i))
+
+        provpkgs = remove_ver(flat(split_str(items('Provides', content)))) + subpkgs
 
         rpm_info = {
-            "name": check(hdr[rpm.RPMTAG_NAME]),
+            "name": decode(hdr[rpm.RPMTAG_NAME]),
             "epoch": hdr[rpm.RPMTAG_EPOCHNUM],
-            "version": check(hdr[rpm.RPMTAG_VERSION]),
-            "release": check(hdr[rpm.RPMTAG_RELEASE]),
-            "vendor": check(hdr[rpm.RPMTAG_VENDOR]),
-            "summary": check(hdr[rpm.RPMTAG_SUMMARY]),
-            "packager": check(hdr[rpm.RPMTAG_PACKAGER]),
-            "group": check(hdr[rpm.RPMTAG_GROUP]),
-            "license": check(hdr[rpm.RPMTAG_LICENSE]),
-            "url": check(hdr[rpm.RPMTAG_URL]),
-            "description": check(hdr[rpm.RPMTAG_DESCRIPTION]),
+            "version": decode(hdr[rpm.RPMTAG_VERSION]),
+            "release": decode(hdr[rpm.RPMTAG_RELEASE]),
+            "vendor": decode(hdr[rpm.RPMTAG_VENDOR]),
+            "summary": decode(hdr[rpm.RPMTAG_SUMMARY]),
+            "packager": decode(hdr[rpm.RPMTAG_PACKAGER]),
+            "group": decode(hdr[rpm.RPMTAG_GROUP]),
+            "license": decode(hdr[rpm.RPMTAG_LICENSE]),
+            "url": decode(hdr[rpm.RPMTAG_URL]),
+            "description": decode(hdr[rpm.RPMTAG_DESCRIPTION]),
             "sources": spec.sources,
-            "patchs": [check(i) for i in hdr[rpm.RPMTAG_PATCH]],
-            "build_archs": [check(i) for i in hdr[rpm.RPMTAG_BUILDARCHS]],
-            "exclusive_archs": [check(i) for i in hdr[rpm.RPMTAG_EXCLUSIVEARCH]],
+            "patchs": [decode(i) for i in hdr[rpm.RPMTAG_PATCH]],
+            "build_archs": [decode(i) for i in hdr[rpm.RPMTAG_BUILDARCHS]],
+            "exclusive_archs": [decode(i) for i in hdr[rpm.RPMTAG_EXCLUSIVEARCH]],
             #"build_requires": [i.DNEVR()[2:] for i in rpm.ds(hdr, 'requires')],
-            "build_requires": [check(i) for i in hdr[rpm.RPMTAG_REQUIRES]],
+            "build_requires": [decode(i) for i in hdr[rpm.RPMTAG_REQUIRES]],
             "requires": remove_ver(flat(split_str(items('Requires', content)))),
             "recommends": remove_ver(flat(split_str(items('Recommends', content)))),
-            "supplements": [check(i) for i in hdr[rpm.RPMTAG_SUPPLEMENTS]],
-            "suggests": [check(i) for i in hdr[rpm.RPMTAG_SUGGESTS]],
-            "enhances": [check(i) for i in hdr[rpm.RPMTAG_ENHANCES]],
-            "provides": remove_ver(flat(split_str(items('Provides', content)))),
+            "supplements": [decode(i) for i in hdr[rpm.RPMTAG_SUPPLEMENTS]],
+            "suggests": [decode(i) for i in hdr[rpm.RPMTAG_SUGGESTS]],
+            "enhances": [decode(i) for i in hdr[rpm.RPMTAG_ENHANCES]],
+            "provides": sorted(list(set(provpkgs))),
             "obsoletes": remove_ver(flat(split_str(items('Obsoletes', content)))),
             "conflicts": remove_ver(flat(split_str(items('Conflicts', content)))),
             "prep": spec.prep,
@@ -124,7 +138,9 @@ def parse_spec(specFile):
             "check": spec.check,
             "clean": spec.clean
         }
-    return specFile, rpm_info
+
+        return specFile, rpm_info
+    return False
 
 def get_sources(itemList, output=srcDir, verb=None):
     '''Get source files from local and internet.
