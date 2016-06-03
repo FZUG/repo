@@ -400,8 +400,9 @@ def resolve_depends(pkglist, depdict, verb=None):
         Return the list contains the srpm path.
     '''
 
-    tasks = deque([])
     score = 0
+    tasks = deque([])
+    specs = deque([])
     for pkg in pkglist:
         for dep in depdict[pkg][0]:
             for pkg2 in pkglist:
@@ -414,13 +415,15 @@ def resolve_depends(pkglist, depdict, verb=None):
 
         if score >= 0:
             tasks.append(depdict[pkg][2])
+            specs.append(depdict[pkg][3])
         else:
             tasks.appendleft(depdict[pkg][2])
+            specs.appendleft(depdict[pkg][3])
 
-    echo('green', 'info:', 'Resolve dependencies.')
+    echo('green', 'info:', ' Resolve dependencies.')
     if verb:
         echo('cyan', 'verb:', ' build task {}.'.format(tasks))
-    return tasks
+    return tasks, specs
 
 if __name__ == '__main__':
     args = parse_args()
@@ -457,7 +460,7 @@ if __name__ == '__main__':
             results = re.findall('rpms/.*.spec', f.read())
 
     deps = {}
-    resultList = pkgs = []
+    resultList, pkgs = [], []
     for commit in get_commit_list():
         commit = args.commit if args.commit else commit
         fileList = args.file if args.file else get_file_list(commit)
@@ -485,12 +488,12 @@ if __name__ == '__main__':
 
             # queue
             pkgs.append(specDict['name'])
-            deps.update({specDict['name']: [specDict['build_requires'], specDict['provides'], srpmFile],})
+            deps.update({specDict['name']: [specDict['build_requires'], specDict['provides'], srpmFile, specFile],})
 
         if args.file or args.commit:
             break
 
-    tasks = resolve_depends(pkgs, deps, verb=args.verbose)
+    tasks, specs = resolve_depends(pkgs, deps, verb=args.verbose)
     for task in tasks:
         for rel in Releases:
             for arch in Archs:
@@ -506,8 +509,8 @@ if __name__ == '__main__':
                     echo('green', 'info:', ' Check RPM {} for fc{} - {}:\n'.format(task, rel, arch),
                          rpm_lint(outDir, verb=args.verbose))
                 if mode == 'manual':
-                    result(args.result, [value, specFile, rel, arch])
-                resultList.append(result('-', [value, srpmFile, rel, arch]))
+                    result(args.result, [value, specs[tasks.index(task)], rel, arch])
+                resultList.append(result('-', [value, task, rel, arch]))
 
     echo('cyan', '\n** Build result **')
     for i in resultList:
