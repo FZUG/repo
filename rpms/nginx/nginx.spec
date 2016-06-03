@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.11.0
+Version:           1.11.1
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -554,6 +554,9 @@ fi
 
 
 %changelog
+* Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.1-1.modsec_2.9.0
+- update to upstream release 1.11.1
+
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.0-1.modsec_2.9.0
 - update to upstream release 1.11.0
 - update ngx_lua 0.10.5
