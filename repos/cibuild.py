@@ -70,39 +70,20 @@ def black_item(item):
     return True
 
 def query_package(query):
+    '''Query package name from remote repository.
+
+    Args:
+        query: A string of query.
+
+    Returns:
+        Return the list contains the RPM metadata. If the RPM is not found,
+        it returns empty list.
+    '''
+
     base = dnf.Base()
     base.read_all_repos()
     base.fill_sack(load_available_repos=True)
     return list(base.provides(query))
-
-def parse_requires(reqlist):
-    pkgs = []
-    libdir = getoutput('rpm -E %_libdir')
-    node_root = getoutput('rpm -E %nodejs_sitelib')
-
-    for i in reqlist:
-        filepath = ''
-        if re.match('.*\((.*)\)', i):
-            item = re.match('.*\((.*)\)', i).group(1)
-
-        # pkgconfig(name)
-        if i.startswith('pkgconfig('):
-            filepath = '{}/pkgconfig/{}.pc'.format(libdir, item)
-        # perl(name::name)
-        elif i.startswith('perl('):
-            filepath = getoutput('perldoc -lm {}'.format(item))
-        # npm(name)
-        elif i.startswith('npm('):
-            filepath = '{}/{}/package.json'.format(node_root, item)
-        # mvn(name), build-classpath, find-jar
-
-        pkglist = query_package(filepath)
-        if len(pkglist):
-            pkgs.append(pkglist[0].name)
-        else:
-            pkgs.append(i)
-
-    return pkgs
 
 def parse_spec(specFile):
     '''Parse the Spec file contents.
@@ -123,10 +104,11 @@ def parse_spec(specFile):
 
     if os.path.exists(specFile) and specFile.endswith('.spec'):
         rpm_info = {}
-        subpkgs = []
+        subpkgs, reqpkgs = [], []
         spec = rpm.spec(specFile)
         hdr = spec.sourceHeader
 
+        reqlist = [decode(i) for i in hdr[rpm.RPMTAG_REQUIRES]]
         content = getoutput('/bin/rpmspec -P {}'.format(specFile))
         content = content[:content.index('%changelog')]
 
@@ -141,6 +123,13 @@ def parse_spec(specFile):
                     subpkgs.append('{}-{}'.format(name, i))
 
         provpkgs = remove_ver(flat(split_str(items('Provides', content)))) + subpkgs
+
+        # parse buildrequires
+        for i in reqlist:
+            if re.match('.*\((.*)\)', i):
+                reqpkgs.append(query_package(i)[0].name)
+            else:
+                reqpkgs.append(i)
 
         rpm_info = {
             "name": decode(hdr[rpm.RPMTAG_NAME]),
@@ -159,8 +148,8 @@ def parse_spec(specFile):
             "build_archs": [decode(i) for i in hdr[rpm.RPMTAG_BUILDARCHS]],
             "exclusive_archs": [decode(i) for i in hdr[rpm.RPMTAG_EXCLUSIVEARCH]],
             #"build_requires": [i.DNEVR()[2:] for i in rpm.ds(hdr, 'requires')],
-            "build_requires": [decode(i) for i in hdr[rpm.RPMTAG_REQUIRES]],
-            "requires": remove_ver(flat(split_str(items('Requires', content)))),
+            "build_requires": sorted(list(set(reqpkgs))),
+            "requires": remove_ver(flat(split_str(items('\nRequires', content)))),
             "recommends": remove_ver(flat(split_str(items('Recommends', content)))),
             "supplements": [decode(i) for i in hdr[rpm.RPMTAG_SUPPLEMENTS]],
             "suggests": [decode(i) for i in hdr[rpm.RPMTAG_SUGGESTS]],
