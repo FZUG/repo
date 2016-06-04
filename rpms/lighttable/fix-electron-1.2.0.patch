@@ -1,0 +1,205 @@
+--- a/deploy/core/main.js
++++ b/deploy/core/main.js
+@@ -1,8 +1,9 @@
+ "use strict";
+ 
+-var app = require('app'),  // Module to control application life.
+-    BrowserWindow = require('browser-window'),  // Module to create native browser window.
+-    ipc = require("electron").ipcMain,
++var electron = require('electron'),  // Module to control application life.
++    app = electron.app,
++    BrowserWindow = electron.BrowserWindow,  // Module to create native browser window.
++    ipc = electron.ipcMain,
+     optimist = require('optimist');
+ 
+ // Keep a global reference of the window object, if you don't, the window will
+--- a/deploy/core/node_modules/lighttable/browserInjection.js
++++ b/deploy/core/node_modules/lighttable/browserInjection.js
+@@ -1,6 +1,6 @@
+ (function(window) {
+ 
+-  var ipc = require("ipc");
++  var ipc = require("electron").ipcRenderer;
+ 
+   function toArray(arrayLike) {
+     var final = [];
+--- a/deploy/core/node_modules/socket.io/lib/manager.js
++++ b/deploy/core/node_modules/socket.io/lib/manager.js
+@@ -21,7 +21,7 @@
+   , MemoryStore = require('./stores/memory')
+   , SocketNamespace = require('./namespace')
+   , Static = require('./static')
+-  , EventEmitter = process.EventEmitter;
++  , EventEmitter = require('events');
+ 
+ /**
+  * Export the constructor.
+--- a/deploy/core/node_modules/socket.io/lib/namespace.js
++++ b/deploy/core/node_modules/socket.io/lib/namespace.js
+@@ -3,7 +3,7 @@
+  */
+ 
+ var Socket = require('./socket')
+-  , EventEmitter = process.EventEmitter
++  , EventEmitter = require('events')
+   , parser = require('./parser')
+   , util = require('./util');
+ 
+--- a/deploy/core/node_modules/socket.io/lib/socket.js
++++ b/deploy/core/node_modules/socket.io/lib/socket.js
+@@ -11,7 +11,7 @@
+ 
+ var parser = require('./parser')
+   , util = require('./util')
+-  , EventEmitter = process.EventEmitter
++  , EventEmitter = require('events')
+ 
+ /**
+  * Export the constructor.
+--- a/deploy/core/node_modules/socket.io/lib/store.js
++++ b/deploy/core/node_modules/socket.io/lib/store.js
+@@ -15,7 +15,7 @@
+  * Module dependencies.
+  */
+ 
+-var EventEmitter = process.EventEmitter;
++var EventEmitter = require('events');
+ 
+ /**
+  * Store interface
+--- a/deploy/core/node_modules/socket.io/lib/transports/websocket/default.js
++++ b/deploy/core/node_modules/socket.io/lib/transports/websocket/default.js
+@@ -9,7 +9,7 @@
+  */
+ 
+ var Transport = require('../../transport')
+-  , EventEmitter = process.EventEmitter
++  , EventEmitter = require('events')
+   , crypto = require('crypto')
+   , parser = require('../../parser');
+ 
+--- a/deploy/core/node_modules/socket.io/lib/transports/websocket/hybi-07-12.js
++++ b/deploy/core/node_modules/socket.io/lib/transports/websocket/hybi-07-12.js
+@@ -10,7 +10,7 @@
+  */
+ 
+ var Transport = require('../../transport')
+-  , EventEmitter = process.EventEmitter
++  , EventEmitter = require('events')
+   , crypto = require('crypto')
+   , url = require('url')
+   , parser = require('../../parser')
+--- a/deploy/core/node_modules/socket.io/lib/transports/websocket/hybi-16.js
++++ b/deploy/core/node_modules/socket.io/lib/transports/websocket/hybi-16.js
+@@ -9,7 +9,7 @@
+  */
+ 
+ var Transport = require('../../transport')
+-  , EventEmitter = process.EventEmitter
++  , EventEmitter = require('events')
+   , crypto = require('crypto')
+   , url = require('url')
+   , parser = require('../../parser')
+--- a/src/lt/objs/app.cljs
++++ b/src/lt/objs/app.cljs
+@@ -11,9 +11,9 @@
+             [lt.util.ipc :as ipc])
+   (:require-macros [lt.macros :refer [behavior]]))
+ 
+-(def remote (js/require "remote"))
++(def remote (. (js/require "electron") -remote))
+ (def win (.getCurrentWindow remote))
+-(def frame (js/require "web-frame"))
++(def frame (. (js/require "electron") -webFrame))
+ (def closing true)
+ (def default-zoom 1)
+ 
+--- a/src/lt/objs/browser.cljs
++++ b/src/lt/objs/browser.cljs
+@@ -238,7 +238,7 @@
+                         (.addEventListener frame "contextmenu" (fn [e]
+                                                                  (object/raise this :menu! e)))
+                         (.addEventListener frame "did-finish-load" (fn []
+-                                                                     (let [loc (.getUrl frame)]
++                                                                     (let [loc (.getURL frame)]
+                                                                        (devtools/clear-scripts! (:devtools-client @this))
+                                                                        (dom/val bar loc)
+                                                                        (object/raise this :navigate loc))
+--- a/src/lt/objs/cli.cljs
++++ b/src/lt/objs/cli.cljs
+@@ -11,7 +11,7 @@
+             [lt.objs.opener :as opener])
+   (:require-macros [lt.macros :refer [behavior]]))
+ 
+-(def remote (js/require "remote"))
++(def remote (. (js/require "electron") -remote))
+ 
+ (defn open-paths [path-line-pairs add?]
+   (doseq [[path line] path-line-pairs
+--- a/src/lt/objs/dialogs.cljs
++++ b/src/lt/objs/dialogs.cljs
+@@ -5,8 +5,8 @@
+             [lt.objs.app :as app])
+   (:require-macros [lt.macros :refer [behavior defui]]))
+ 
+-(def remote (js/require "remote"))
+-(def dialog (.require remote "dialog"))
++(def remote (. (js/require "electron") -remote))
++(def dialog (.. remote -dialog))
+ 
+ (defn dir [obj event]
+   (let [files (.showOpenDialog dialog app/win #js {:properties #js ["openDirectory" "multiSelections"]})]
+--- a/src/lt/objs/files.cljs
++++ b/src/lt/objs/files.cljs
+@@ -12,7 +12,7 @@
+ (def ^:private fs (js/require "fs"))
+ (def ^:private fpath (js/require "path"))
+ (def ^:private wrench (load/node-module "wrench"))
+-(def ^:private shell (js/require "shell"))
++(def ^:private shell (. (js/require "electron") -shell))
+ (def ^:private os (js/require "os"))
+ (def ^:private data-path (platform/get-data-path))
+ 
+--- a/src/lt/objs/menu.cljs
++++ b/src/lt/objs/menu.cljs
+@@ -9,9 +9,9 @@
+             [clojure.string :as string])
+   (:require-macros [lt.macros :refer [behavior]]))
+ 
+-(def remote (js/require "remote"))
+-(def Menu (.require remote "menu"))
+-(def MenuItem (.require remote "menu-item"))
++(def remote (. (js/require "electron") -remote))
++(def Menu (.. remote -Menu))
++(def MenuItem (.. remote -MenuItem))
+ 
+ (declare submenu)
+ 
+--- a/src/lt/objs/platform.cljs
++++ b/src/lt/objs/platform.cljs
+@@ -7,11 +7,11 @@
+ (def electron true)
+ 
+ (def fs (js/require "fs"))
+-(def clipboard (js/require "clipboard"))
+-(def shell (js/require "shell"))
++(def clipboard (. (js/require "electron") -clipboard))
++(def shell (. (js/require "electron") -shell))
+ 
+ (defn get-data-path []
+-  (.getDataPath (.require (js/require "remote") "app")))
++  (.getAppPath (.. (js/require "electron") -remote -app)))
+ 
+ (defn normalize [plat]
+   (condp = plat
+--- a/src/lt/util/ipc.cljs
++++ b/src/lt/util/ipc.cljs
+@@ -1,7 +1,7 @@
+ (ns lt.util.ipc
+   "Util functions for the ipc renderer - https://github.com/atom/electron/blob/master/docs/api/ipc-renderer.md")
+ 
+-(def ipc (js/require "ipc"))
++(def ipc (. (js/require "electron") -ipcRenderer))
+ 
+ (defn send
+   "Delegates to ipc.send which asynchronously sends args to the browser process's channel."

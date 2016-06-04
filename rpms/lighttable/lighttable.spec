@@ -10,7 +10,7 @@
 
 Name:    lighttable
 Version: 0.8.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: LightTable - An open source code editor
 
 Group:   Development/Tools
@@ -18,6 +18,7 @@ License: MIT
 URL:     https://github.com/LightTable/LightTable
 Source0: https://github.com/LightTable/LightTable/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Patch0:  fix-lt-exception.patch
+Patch1:  fix-electron-1.2.0.patch
 
 BuildArch: noarch
 BuildRequires: npm, git
@@ -34,6 +35,7 @@ anything a Chromium browser can.
 %prep
 %setup -q -n %{repo}-%{_commit}
 %patch0 -p1
+%patch1 -p1
 
 %build
 # Build the core cljs
@@ -47,13 +49,16 @@ sed -i '/b.hasOwnProperty/s@))@))||true@' \
 
 # Fetch plugins
 PLUGINS=(
-    'Clojure,0.3.2'
+    'Clojure,0.3.3'
     'CSS,0.0.6'
+    'Emmet,0.0.2'
     'HTML,0.1.0'
     'Javascript,0.2.0'
     'Paredit,0.0.4'
     'Python,0.0.7'
     'Rainbow,0.0.8'
+    'Vim,0.2.1'
+    'Whitespace,0.0.1'
 )
 
 # Plugins cache
@@ -147,11 +152,15 @@ fi
 %doc README.md
 %license LICENSE.md
 %attr(755,-,-) %{_bindir}/%{name}
-%{_datadir}/%{name}/
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
+%defattr(-,root,root,757)
+%{_datadir}/%{name}/
 
 %changelog
+* Sat Jun  4 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-3
+- Fixes running error for electron 1.2.0
+- Update some plugins
 * Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-2
 - Fixes Invalid match arg /\./ for electron 0.37.x
 * Mon Mar 28 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-1
