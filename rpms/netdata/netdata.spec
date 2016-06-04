@@ -7,13 +7,14 @@
 
 Name:    netdata
 Version: 1.2.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Real-time performance monitoring, done right
 License: GPLv3+
 Group:   Applications/System
 URL:     http://github.com/firehol/netdata/
 Source0: http://github.com/firehol/netdata/releases/download/v%{version}/%{name}-%{version}.tar.xz
 
+BuildRequires: libtool
 BuildRequires: pkgconfig(uuid)
 BuildRequires: pkgconfig(zlib)
 %if %{with nfacct}
@@ -41,6 +42,7 @@ happened, on your systems and applications.
 %setup -q
 
 %build
+autoreconf -ivf
 %configure \
     --with-zlib \
     --with-math \
@@ -91,5 +93,7 @@ getent passwd %{name} > /dev/null || useradd -r -g %{name} \
 %{_datadir}/%{name}/web
 
 %changelog
+* Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-2
+- Add autoreconf
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
 - Initial build
