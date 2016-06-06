@@ -306,8 +306,9 @@ def result(filename, content):
     _, pkgname, release, arch = content
 
     if filename == '-':
-        pkgname = re.match('.*/(.*).fc*', pkgname)
-        return pkgname.group(1).ljust(35), \
+        _pkgname = re.match('.*/(.*-[0-9]{1,2}).*', pkgname).group(1)
+        pkgname = _pkgname + '.net' if re.match('.*\.net', pkgname) else _pkgname
+        return pkgname.ljust(35), \
                'fc{}-{}'.format(release, arch).ljust(13), \
                result
     else:
@@ -486,9 +487,14 @@ if __name__ == '__main__':
             srpmFile = build_srpm(specFile)
             echo('green', 'info:', ' Build SRPM -', srpmFile)
 
+            if re.match('.*\.net', srpmFile):
+                key = specDict['name'] + '.net'
+            else:
+                key = specDict['name']
+
             # queue
-            pkgs.append(specDict['name'])
-            deps.update({specDict['name']: [specDict['build_requires'], specDict['provides'], srpmFile, specFile],})
+            pkgs.append(key)
+            deps.update({key: [specDict['build_requires'], specDict['provides'], srpmFile, specFile],})
 
         if args.file or args.commit:
             break
