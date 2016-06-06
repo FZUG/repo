@@ -81,10 +81,12 @@ def query_package(query):
         it returns empty list.
     '''
 
-    base = dnf.Base()
-    base.read_all_repos()
-    base.fill_sack(load_available_repos=True)
-    return list(base.provides(query))
+    if 'repos' not in globals().keys():
+        global repos
+        repos = dnf.Base()
+        repos.read_all_repos()
+        repos.fill_sack(load_available_repos=True)
+    return list(repos.provides(query))
 
 def parse_spec(specFile):
     '''Parse the Spec file contents.
