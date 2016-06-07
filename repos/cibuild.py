@@ -6,7 +6,7 @@
 
 from subprocess import getoutput, getstatusoutput, call
 from urllib.request import urlretrieve
-from collections import deque
+from operator import itemgetter
 import urllib.error
 import re
 import os
@@ -403,25 +403,25 @@ def resolve_depends(pkglist, depdict, verb=None):
         Return the list contains the srpm path.
     '''
 
-    score = 0
-    tasks = deque([])
-    specs = deque([])
+    _tasks, _specs = [], []
+    tasks, specs = [], []
     for pkg in pkglist:
+        score = 0
         for dep in depdict[pkg][0]:
             for pkg2 in pkglist:
                 if pkg == pkg2:
                     continue
-                if pkg in depdict[pkg2][1]:
+                if dep in depdict[pkg2][1]:
                     score += 1
-                else:
-                    score -= 1
+        _tasks.append({'pkg': depdict[pkg][2], 'score': score})
+        _specs.append({'spec': depdict[pkg][3], 'score': score})
 
-        if score >= 0:
-            tasks.append(depdict[pkg][2])
-            specs.append(depdict[pkg][3])
-        else:
-            tasks.appendleft(depdict[pkg][2])
-            specs.appendleft(depdict[pkg][3])
+    tasks_by_score = sorted(_tasks, key=itemgetter('score'))
+    specs_by_score = sorted(_specs, key=itemgetter('score'))
+    for i in tasks_by_score:
+        tasks.append(i['pkg'])
+    for i in specs_by_score:
+        specs.append(i['spec'])
 
     echo('green', 'info:', ' Resolve dependencies.')
     if verb:
