@@ -13,6 +13,7 @@ import os
 import sys
 import rpm
 import dnf
+import json
 import shutil
 import fnmatch
 import argparse
@@ -82,13 +83,14 @@ def query_package(query):
     '''
 
     if 'repos' not in globals().keys():
+        echo('green', 'info:', ' Initial metadata for repository.')
         global repos
         repos = dnf.Base()
         repos.read_all_repos()
         repos.fill_sack(load_available_repos=True)
     return list(repos.provides(query))
 
-def parse_spec(specFile):
+def parse_spec(specFile, cacheFile='.repocache.json'):
     '''Parse the Spec file contents.
 
     Args:
@@ -98,6 +100,14 @@ def parse_spec(specFile):
         Return the list contains the Spec file name and content. If the file
         is not found, it returns false.
     '''
+
+    if os.path.exists(cacheFile):
+        if 'repocache' not in globals().keys():
+            echo('green', 'info:', ' Load cache from {} file.'.format(cacheFile))
+            with open(cacheFile, 'r') as f:
+                global repocache
+                repocache = json.loads(f.read())
+        return specFile, repocache[specFile]
 
     items = lambda t, c: re.findall('%s:\s+(.*)'%t, c)
     split_str = lambda l: [re.split('[\s,=|>=|<=]+', i) for i in l]
@@ -159,12 +169,7 @@ def parse_spec(specFile):
             "enhances": [decode(i) for i in hdr[rpm.RPMTAG_ENHANCES]],
             "provides": sorted(list(set(provpkgs))),
             "obsoletes": remove_ver(flat(split_str(items('Obsoletes', content)))),
-            "conflicts": remove_ver(flat(split_str(items('Conflicts', content)))),
-            "prep": spec.prep,
-            "build": spec.build,
-            "install": spec.install,
-            "check": spec.check,
-            "clean": spec.clean
+            "conflicts": remove_ver(flat(split_str(items('Conflicts', content))))
         }
 
         return specFile, rpm_info
@@ -353,6 +358,8 @@ def parse_args():
                         help='check common problems in rpm package')
     parser.add_argument('--clean', dest='clean', action='store_true',
                         help='clean workspace before building')
+    parser.add_argument('--cache', dest='cache', action='store_true',
+                        help='create metadata cache')
     parser.add_argument('--result', metavar='PATH', type=str,
                         dest='result', action='store', required=False, default='result.log',
                         help='log bulid result to file (default: result.log)')
@@ -428,12 +435,39 @@ def resolve_depends(pkglist, depdict, verb=None):
         echo('cyan', 'verb:', ' build task {}.'.format(tasks))
     return tasks, specs
 
+def repo_cache(output=None, verb=None):
+    '''Create repository cache.
+
+    Args:
+        output: A string of output filename.
+        verb: A bool of verbose.
+    '''
+
+    cacheDict = {}
+    for i in find_files('*.spec', 'rpms'):
+        if verb:
+            echo('cyan', 'verb:', ' cached {} file.'.format(i))
+        specFile, specDict = parse_spec(i)
+        cacheDict.update({specFile: specDict})
+
+    with open(output, 'w') as f:
+        json.dump(cacheDict, f)
+
 if __name__ == '__main__':
     args = parse_args()
     Archs = args.archs if args.archs else ['x86_64', 'i386']
     Releases = args.releases if args.releases else ['22', '23', '24']
     blackList = args.blacklist if args.blacklist else ['electron']
     args.file += args.files
+
+    if args.cache:
+        cacheFile = '.repocache.json'
+        if os.path.exists(cacheFile):
+            echo('green', 'info:', ' The repo cache exists.')
+        else:
+            echo('green', 'info:', ' Create repo cache.')
+            repo_cache(cacheFile, args.verbose)
+        sys.exit()
 
     if not sys.stdin.isatty():
         args.file += sys.stdin.read().split()
