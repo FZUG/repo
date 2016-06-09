@@ -12,16 +12,16 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 1.2.0
+%global electron_ver 1.2.2
 %global node_ver 0.12
 
 # commit
-%global _commit 6bed3e5991d3991eeb61444d35839bac01a88f7b
+%global _commit f89b273752854a1894f340a337a34bf2c6d27fc4
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.7.4
-Release: 4.git%{_shortcommit}%{?dist}
+Version: 1.8.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -36,6 +36,8 @@ Patch3:  use-system-electron.patch
 # Fix for Electron 1.2.0
 Patch4:  beforeunload.patch
 Patch5:  run-as-node.patch
+# https://github.com/tensor5/arch-atom/issues/14
+Patch6:  tree-view.patch
 
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
 BuildRequires: libtool
@@ -159,6 +161,10 @@ script/grunt --channel=stable
 # Fix height error on install page
 find out -name 'settings-view.less' | xargs sed -i '/height.*100%/s|^|//|'
 
+# Fix for Node 6
+pushd node_modules/tree-view
+patch -Np1 -i %{P:6}
+
 %install
 install -d %{buildroot}%{_libdir}/%{name}
 cp -r out/Atom/resources/app/* %{buildroot}%{_libdir}/%{name}
@@ -226,6 +232,11 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Jun  9 2016 mosquito <sensor.wen@gmail.com> - 1.8.0-1.gitf89b273
+- Release 1.8.0
+- Build for electron 1.2.2
+- Fix tree-view does not work
+  https://github.com/FZUG/repo/issues/120
 * Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.7.4-4.git6bed3e5
 - Use node-gyp@3.0.3 for el7, system node-gyp doesn't support
   the if-else conditions syntax

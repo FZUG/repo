@@ -1,7 +1,7 @@
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -293,7 +293,7 @@
-   ciTasks.push('publish-build') unless process.env.CI
+@@ -300,7 +300,7 @@
+ 
    grunt.registerTask('ci', ciTasks)
  
 -  defaultTasks = ['download-electron', 'download-electron-chromedriver', 'build', 'set-version', 'generate-asar']
