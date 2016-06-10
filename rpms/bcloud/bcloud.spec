@@ -15,7 +15,7 @@
 
 Name:    bcloud
 Version: 3.8.2
-Release: 3.git%{_shortcommit}%{?dist}
+Release: 4.git%{_shortcommit}%{?dist}
 Summary: Baidu Pan client for Linux Desktop users
 Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
@@ -23,6 +23,7 @@ Summary(zh_CN): 百度网盘 Linux 桌面客户端
 License: GPLv3
 URL:     https://github.com/LiuLang/bcloud
 Source0: https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Patch0:	00_fix_network_error.patch
 
 BuildArch: noarch
 BuildRequires: python3-devel
@@ -50,6 +51,10 @@ Baidu Pan client for Linux Desktop users.
 # not bind cellphone
 # https://github.com/LiuLang/bcloud/pull/177
 sed -i '/err.*18/s|=.*18|in (18, 400032)|' bcloud/auth.py
+# fix network error, https://github.com/LiuLang/bcloud/issues/244
+# patch comes from https://github.com/licamla/bcloud/commit/e8cce73e94fa247f9206f26dc9c73dd3c1120893
+%patch0 -p1
+
 
 %build
 %{__python3} setup.py build
@@ -87,6 +92,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Fri Jun 10 2016 Zamir SUN <sztsian@gmail.com> - 3.8.2-4.git4b54e0f
+- Add patch to fix network error before upstream merge
+
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 3.8.2-3.git4b54e0f
 - Add requires libgnome-keyring, python3-pykde4
 

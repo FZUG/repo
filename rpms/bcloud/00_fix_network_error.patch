@@ -1,0 +1,25 @@
+diff --git a/bcloud/auth.py b/bcloud/auth.py
+index 602d5d4..b519f4d 100644
+--- a/bcloud/auth.py
++++ b/bcloud/auth.py
+@@ -289,6 +289,7 @@ def get_bdstoken(cookie):
+     '''
+     url = const.PAN_REFERER
+     req = net.urlopen(url, headers={'Cookie': cookie.header_output()})
++    cookie.load_list(req.headers.get_all('Set-Cookie'))
+     if req:
+         return parse_bdstoken(req.data.decode())
+     else:
+diff --git a/bcloud/pcs.py b/bcloud/pcs.py
+index bbe41f3..47734a7 100644
+--- a/bcloud/pcs.py
++++ b/bcloud/pcs.py
+@@ -542,7 +542,7 @@ def list_dir(cookie, tokens, path, page=1, num=100):
+     ])
+     req = net.urlopen(url, headers={
+         'Content-type': const.CONTENT_FORM_UTF8,
+-        'Cookie': cookie.sub_output('BAIDUID', 'BDUSS', 'PANWEB', 'cflag'),
++        'Cookie': cookie.sub_output('BAIDUID', 'BDUSS', 'PANWEB', 'cflag', 'SCRC', 'STOKEN'),
+     })
+     if req:
+         content = req.data
