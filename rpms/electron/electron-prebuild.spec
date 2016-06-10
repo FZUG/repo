@@ -9,11 +9,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 97dd71d79e67a4a5769f65cfa44def05ba16127d
+%global _commit b2bea57eff03efe7b7fd267fd814058aa48abbf8
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 1.2.1
+Version: 1.2.2
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -64,6 +64,8 @@ cp -r node-v%{version}/* %{buildroot}%{_libdir}/%{name}/node
 %{_libdir}/%{name}/
 
 %changelog
+* Fri Jun 10 2016 mosquito <sensor.wen@gmail.com> - 1.2.2-1.gitb2bea57
+- Release 1.2.2
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1.2.1-1.git97dd71d
 - Release 1.2.1
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1.gitc127274
