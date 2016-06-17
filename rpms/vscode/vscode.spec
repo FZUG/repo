@@ -6,16 +6,16 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 1.2.0
+%global electron_ver 1.2.3
 %global node_ver 0.12
 
 # commit
-%global _commit 2833eb9d664db9c5a77bdf5fb19d7d7fefd4653c
+%global _commit fe7f407b95b7f78405846188259504b34ef72761
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 1.2.0
-Release: 2%{?dist}
+Version: 1.2.1
+Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -27,10 +27,11 @@ Source1: about.json
 Patch0:  improve-i18n.patch
 Patch1:  fix-post-script.patch
 
-BuildRequires: npm, node-gyp, git
+BuildRequires: /usr/bin/npm
+BuildRequires: node-gyp, git
 BuildRequires: python, libX11-devel
 BuildRequires: desktop-file-utils
-Requires: electron
+Requires: electron = %{electron_ver}
 
 %description
  VS Code is a new type of tool that combines the simplicity of a code editor
@@ -93,7 +94,7 @@ cat <<EOT >> %{buildroot}%{_bindir}/%{name}
 
 NAME="%{name}"
 VSCODE_PATH="%{_libdir}/\$NAME"
-ELECTRON="%{_bindir}/electron"
+ELECTRON="%{_bindir}/electron-%{electron_ver}"
 CLI="\$VSCODE_PATH/out/cli.js"
 ELECTRON_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" "\$VSCODE_PATH" "\$@"
 exit \$?
@@ -172,6 +173,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.2.1-1
+- Release 1.2.1
+- Build for electron 1.2.3
 * Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-2
 - Use ELECTRON_RUN_AS_NODE for Electron 1.2.0
 * Mon May 30 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
