@@ -11,11 +11,11 @@
 %global _dnfconf %{_sysconfdir}/dnf/dnf.conf
 
 # commit
-%global _commit edb73fb7346d5abc31cbff4d991f2cf89b86b62f
+%global _commit 553341db87fc095b25aaea180ebf90966c96611b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 0.37.8
+Version: 1.2.3
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -62,7 +62,7 @@ cp -r node-v%{version}/* %{buildroot}%{electrondir}/node
 
 %post
 if [ $1 -ge 1 ]; then
-PRIORITY=100
+PRIORITY=90
 /bin/grep -q "%{name}" %{_dnfconf} || sed -i '$ainstallonlypkgs=%{name}' %{_dnfconf}
 /sbin/alternatives --install %{_bindir}/%{name} %{name} %{electrondir}/%{name} $PRIORITY
 fi
@@ -78,6 +78,9 @@ fi
 %{_libdir}/%{name}/
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-1.git553341d
+- Release 1.2.3
+- Set priority 90
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.37.8-1.gitedb73fb
 - Revert to 0.37.8
 - Use multiversion config
