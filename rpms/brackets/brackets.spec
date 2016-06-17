@@ -1,17 +1,19 @@
 # https://github.com/jgillich/brackets-rpm
 %global debug_package %{nil}
 %global _hardened_build 1
+%global __provides_exclude (npm)
+%global __requires_exclude (npm|0.12)
 %global project brackets
 %global repo %{project}
 
 # commit
-%global _commit0 3df0ac6fa18b1ccfc34f6d234da2aa8c43643a93
+%global _commit0 b0a363b71822e16936f5cac4ddc93066e620853f
 %global _scommit0 %(c=%{_commit0}; echo ${c:0:7})
-%global _commit1 84acfeeefdfd99fd3567875fb8240aba9811e764
+%global _commit1 2656b613d270c5be012276968a150359e8c35eef
 %global _scommit1 %(c=%{_commit1}; echo ${c:0:7})
 
 Name:    brackets
-Version: 1.6
+Version: 1.7
 Release: 1%{?dist}
 Summary: An open source code editor for the web
 
@@ -21,19 +23,26 @@ URL:     http://brackets.io
 Source0: http://rpm-ostree.cloud.fedoraproject.org/repo/pkgs/mosquito/brackets/brackets/adobe.brackets.extract.0.8.0-1749-release.zip/200eb47ad53f74e57caa13a6ae16ef5a/adobe.brackets.extract.0.8.0-1749-release.zip
 Source1: GettingStarted-zhcn.html
 
-Requires: gtk2, alsa-lib, GConf2
-BuildRequires: %{requires}, gtk2-devel, npm, nspr, gyp, desktop-file-utils, git
+BuildRequires: alsa-lib, GConf2
+BuildRequires: gtk2-devel, git
+BuildRequires: /usr/bin/npm, node-gyp
+BuildRequires: desktop-file-utils
+Requires: desktop-file-utils
+# enable Live Preview
+Recommends: google-chrome
+# enable LiveDevelopment Inspector
+Recommends: ruby
 Obsoletes: %{name} <= 1.5.0
 
 # libcef.so require libgcrypt.so.11, libudev.so.0
 # https://github.com/adobe/brackets/issues/10255
 # http://red.fedorapeople.org/SRPMS/compat-libgcrypt-1.5.3-4.fc21.src.rpm
 %if 0%{?fedora} >= 21
-Requires: compat-libgcrypt
 BuildRequires: compat-libgcrypt
+Requires: compat-libgcrypt
 %else
-Requires: libgcrypt
 BuildRequires: libgcrypt
+Requires: libgcrypt
 %endif
 
 %description
@@ -64,14 +73,15 @@ npm install && npm install grunt-cli
 ./node_modules/.bin/grunt setup full-build
 
 %install
-mkdir --parents %{buildroot}%{_datadir}/%{name}
+mkdir --parents %{buildroot}%{_libdir}/%{name} %{buildroot}%{_datadir}
 pushd %{_builddir}/%{name}-shell
-cp -a installer/linux/debian/package-root/opt/%{name}/. %{buildroot}%{_datadir}/%{name}
+cp -a installer/linux/debian/package-root/opt/%{name}/. %{buildroot}%{_libdir}/%{name}
 cp -a installer/linux/debian/package-root/usr/share/icons %{buildroot}%{_datadir}/
 popd
 
 mkdir --parents %{buildroot}%{_bindir}
-ln -sfv %{_datadir}/%{name}/%{name} %{buildroot}%{_bindir}/
+ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}/
+ln -sfv %{_libdir}/%{name}/Brackets %{buildroot}%{_bindir}/%{name}-bin
 
 mkdir --parents %{buildroot}%{_datadir}/applications
 cat <<EOT >> %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -86,20 +96,20 @@ Keywords=Text;Editor;Write;Web;Development;
 EOT
 
 desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
-rm -rf %{buildroot}%{_datadir}/%{name}/*.desktop
+rm -rf %{buildroot}%{_libdir}/%{name}/*.desktop
 
-ln -sfv %{_libdir}/libudev.so.1 %{buildroot}%{_datadir}/%{name}/lib/libudev.so.0
+ln -sfv %{_libdir}/libudev.so.1 %{buildroot}%{_libdir}/%{name}/lib/libudev.so.0
 
 # strip symbol information
-strip %{buildroot}%{_datadir}/%{name}/{Brackets{,-node},lib/libcef.so}
+strip %{buildroot}%{_libdir}/%{name}/{Brackets{,-node},lib/libcef.so}
 
 # extensions
-mkdir --parents %{buildroot}%{_datadir}/%{name}/auto-install-extensions
-install -m 0644 %{S:0} %{buildroot}%{_datadir}/%{name}/auto-install-extensions/
+mkdir --parents %{buildroot}%{_libdir}/%{name}/auto-install-extensions
+install -m 0644 %{S:0} %{buildroot}%{_libdir}/%{name}/auto-install-extensions/
 
 # Getting Started zh_cn
-cp -a %{buildroot}%{_datadir}/%{name}/samples/zh-{tw,cn}
-install -m 0644 %{S:1} %{buildroot}%{_datadir}/%{name}/samples/zh-cn/Get*/index.html
+cp -a %{buildroot}%{_libdir}/%{name}/samples/zh-{tw,cn}
+install -m 0644 %{S:1} %{buildroot}%{_libdir}/%{name}/samples/zh-cn/Get*/index.html
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -119,17 +129,18 @@ fi
 %defattr(-,root,root,-)
 %doc %{name}/README.md
 %license %{name}/LICENSE
-%{_bindir}/%{name}
-%dir %{_datadir}/%{name}/
-%{_datadir}/%{name}/*
+%{_bindir}/%{name}*
+%dir %{_libdir}/%{name}/
+%{_libdir}/%{name}/*
 %{_datadir}/icons/*
 %{_datadir}/applications/%{name}.desktop
-%attr(755,root,root) %{_datadir}/%{name}/%{name}
-%attr(755,root,root) %{_datadir}/%{name}/Brackets
-%attr(755,root,root) %{_datadir}/%{name}/Brackets-node
-%attr(755,root,root) %{_datadir}/%{name}/lib/libcef.so
+%attr(755,root,root) %{_libdir}/%{name}/%{name}
+%attr(755,root,root) %{_libdir}/%{name}/Brackets
+%attr(755,root,root) %{_libdir}/%{name}/Brackets-node
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.7-1
+- Release 1.7
 * Mon Jan 25 2016 mosquito <sensor.wen@gmail.com> - 1.6-1
 - Release 1.6
 * Sun Nov 22 2015 mosquito <sensor.wen@gmail.com> - 1.5-1
