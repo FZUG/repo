@@ -7,13 +7,15 @@
 %global __requires_exclude (libnode|ffmpeg)
 %global project electron
 %global repo %{project}
+%global electrondir %{_libdir}/%{name}/%{version}
+%global _dnfconf %{_sysconfdir}/dnf/dnf.conf
 
 # commit
-%global _commit b2bea57eff03efe7b7fd267fd814058aa48abbf8
+%global _commit edb73fb7346d5abc31cbff4d991f2cf89b86b62f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 1.2.2
+Version: 0.37.8
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
@@ -48,22 +50,37 @@ pushd %{name}_build
 # Install electron
 Files="content_shell.pak electron icudtl.dat libffmpeg.so libnode.so locales \
        natives_blob.bin resources snapshot_blob.bin version"
-install -d %{buildroot}%{_libdir}/%{name}
-cp -a $Files %{buildroot}%{_libdir}/%{name}
+install -d %{buildroot}%{electrondir}
+cp -a $Files %{buildroot}%{electrondir}
 
 install -d %{buildroot}%{_bindir}
-ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}
+ln -sfv %{electrondir}/%{name} %{buildroot}%{_bindir}/%{name}-%{version}
 
 # Install node headers
-install -d %{buildroot}%{_libdir}/%{name}/node
-cp -r node-v%{version}/* %{buildroot}%{_libdir}/%{name}/node
+install -d %{buildroot}%{electrondir}/node
+cp -r node-v%{version}/* %{buildroot}%{electrondir}/node
+
+%post
+if [ $1 -ge 1 ]; then
+PRIORITY=100
+/bin/grep -q "%{name}" %{_dnfconf} || sed -i '$ainstallonlypkgs=%{name}' %{_dnfconf}
+/sbin/alternatives --install %{_bindir}/%{name} %{name} %{electrondir}/%{name} $PRIORITY
+fi
+
+%postun
+if [ $1 -eq 0 ]; then
+/sbin/alternatives --remove %{name} %{electrondir}/%{name}
+fi
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/%{name}
+%{_bindir}/%{name}-%{version}
 %{_libdir}/%{name}/
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.37.8-1.gitedb73fb
+- Revert to 0.37.8
+- Use multiversion config
 * Fri Jun 10 2016 mosquito <sensor.wen@gmail.com> - 1.2.2-1.gitb2bea57
 - Release 1.2.2
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1.2.1-1.git97dd71d
