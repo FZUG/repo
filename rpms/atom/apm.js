@@ -5,8 +5,8 @@ process.env.ATOM_RESOURCE_PATH = process.env.ATOM_RESOURCE_PATH ||
 
 try {
     process.env.ATOM_ELECTRON_VERSION = process.env.ATOM_ELECTRON_VERSION ||
-        require('fs')
-    .readFileSync('/usr/<lib>/electron/version', 'utf8').trim().slice(1);
+        require('child_process')
+    .execSync('/bin/electron -v').toString().trim().slice(1);
 } catch (e) {
     process.env.ATOM_ELECTRON_VERSION = undefined;
 }

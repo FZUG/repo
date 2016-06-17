@@ -19,7 +19,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.10.0
-Release: 5.git%{_shortcommit}%{?dist}
+Release: 6.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -33,7 +33,7 @@ Patch0:  use-system-npm.patch
 Patch1:  truncated-json-output.patch
 Patch2:  use-local-node-devel.patch
 
-BuildRequires: npm, git
+BuildRequires: /usr/bin/npm, git
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
 Requires: /usr/bin/npm, git, python2
@@ -116,6 +116,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-6.git87b4bcb
+- Fix launcher
 * Fri May 27 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-5.git87b4bcb
 - Use custom launcher. Thanks @tensor5
 * Fri May 27 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-4.git87b4bcb
