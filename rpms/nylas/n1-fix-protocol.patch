@@ -1,0 +1,18 @@
+--- a/src/browser/nylas-protocol-handler.es6
++++ b/src/browser/nylas-protocol-handler.es6
+@@ -1,4 +1,4 @@
+-import {app, protocol} from 'electron';
++import {app, BrowserWindow} from 'electron';
+ import fs from 'fs';
+ import path from 'path';
+ 
+@@ -30,7 +30,8 @@
+ 
+   // Creates the 'Nylas' custom protocol handler.
+   registerNylasProtocol() {
+-    protocol.registerFileProtocol('nylas', (request, callback) => {
++    let win = new BrowserWindow();
++    win.webContents.session.protocol.registerFileProtocol('nylas', (request, callback) => {
+       const relativePath = path.normalize(request.url.substr(7));
+ 
+       let filePath = null;

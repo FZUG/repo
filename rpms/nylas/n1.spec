@@ -7,15 +7,15 @@
 
 %global project N1
 %global repo %{project}
-%global electron_ver 1.2.0
+%global electron_ver 1.2.3
 %global node_ver 0.12
 
 # commit
-%global _commit 85cf7267b1d029590b047b36853beb34d2ef69af
+%global _commit 76372654dc9f3d363636541ddefadbe08e63b918
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    n1
-Version: 0.4.40
+Version: 0.4.45
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
@@ -26,14 +26,16 @@ Source0: https://github.com/nylas/N1/archive/%{_commit}/%{repo}-%{_shortcommit}.
 Patch0:  n1-use-system-apm.patch
 # https://github.com/nylas/N1/issues/107, https://github.com/atom/electron/issues/4778
 Patch1:  n1-fix-renderer-path.patch
+# fix protocol for Electron 1.2.3
+Patch2:  n1-fix-protocol.patch
 
-BuildRequires: npm
 BuildRequires: node-gyp
+BuildRequires: /usr/bin/npm
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
 BuildRequires: nodejs-atom-package-manager
 Requires: nodejs-atom-package-manager
-Requires: electron
+Requires: electron = %{electron_ver}
 
 %description
 N1 is an open-source mail client built on the modern web with Electron,
@@ -47,6 +49,7 @@ Visit https://nylas.com/N1/ to learn more.
 %setup -q -n %repo-%{_commit}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # apm with system (updated) nodejs cannot 'require' modules inside asar
 sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
@@ -152,7 +155,7 @@ sed -e \
 install -d %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/%{name} <<EOF
 #!/bin/bash
-ELECTRON="%{_bindir}/electron"
+ELECTRON="%{_bindir}/electron-%{electron_ver}"
 NYLAS_PATH="%{_libdir}/nylas"
 NYLAS_HOME="\${NYLAS_HOME:-\$HOME/.nylas}"
 mkdir -p "\$NYLAS_HOME"
@@ -227,6 +230,10 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.45-1.git7637265
+- Release 0.4.45
+- Build for electron 1.2.3
+- Fix protocol for Electron 1.2.3
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 0.4.40-1.git85cf726
 - Release 0.4.40
 - Build for electron 1.2.0
