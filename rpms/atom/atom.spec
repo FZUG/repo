@@ -12,7 +12,7 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 1.2.2
+%global electron_ver 0.37.8
 %global node_ver 0.12
 
 # commit
@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.8.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -33,20 +33,16 @@ Patch0:  fix-atom-sh.patch
 Patch1:  fix-license-path.patch
 Patch2:  use-system-apm.patch
 Patch3:  use-system-electron.patch
-# Fix for Electron 1.2.0
-Patch4:  beforeunload.patch
-Patch5:  run-as-node.patch
-# https://github.com/tensor5/arch-atom/issues/14
-Patch6:  tree-view.patch
 
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
+BuildRequires: git
 BuildRequires: libtool
-BuildRequires: npm, wget, git
+BuildRequires: /usr/bin/npm
 BuildRequires: node-gyp
 BuildRequires: nodejs-packaging
 BuildRequires: nodejs-atom-package-manager
 Requires: nodejs-atom-package-manager
-Requires: electron
+Requires: electron = %{electron_ver}
 Requires: desktop-file-utils
 
 %description
@@ -59,21 +55,17 @@ Visit https://atom.io to learn more.
 %prep
 %setup -q -n %repo-%{_commit}
 sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
+sed -i 's|<version>|%{electron_ver}|' %{P:0}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
-%patch5 -p1
 
 # apm with system (updated) nodejs cannot 'require' modules inside asar
 sed -e "s|, 'generate-asar'||" -i build/Gruntfile.coffee
 
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
-
-# Use settings-view@0.238.0 for Electron 1.2.0
-sed -i '/setting/s|0.*"|0.238.0"|' package.json
 
 %build
 # Hardened package
@@ -158,13 +150,6 @@ npm install --loglevel info
 popd
 script/grunt --channel=stable
 
-# Fix height error on install page
-find out -name 'settings-view.less' | xargs sed -i '/height.*100%/s|^|//|'
-
-# Fix for Node 6
-pushd node_modules/tree-view
-patch -Np1 -i %{P:6}
-
 %install
 install -d %{buildroot}%{_libdir}/%{name}
 cp -r out/Atom/resources/app/* %{buildroot}%{_libdir}/%{name}
@@ -232,6 +217,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.8.0-2.gitf89b273
+- Build for electron 0.37.8
 * Thu Jun  9 2016 mosquito <sensor.wen@gmail.com> - 1.8.0-1.gitf89b273
 - Release 1.8.0
 - Build for electron 1.2.2

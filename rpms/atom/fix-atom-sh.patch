@@ -31,7 +31,7 @@
 -  else
 -    ATOM_APP_NAME="Atom.app"
 -  fi
-+ATOM_PATH="/usr/<lib>/electron/electron --app=/usr/<lib>/atom"
++ATOM_PATH="/usr/bin/electron-<version> --app=/usr/<lib>/atom"
  
 -  if [ -z "${ATOM_PATH}" ]; then
 -    # If ATOM_PATH isnt set, check /Applications and then ~/Applications for Atom.app
