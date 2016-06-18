@@ -28,10 +28,12 @@ BuildRequires: gtk2-devel, git
 BuildRequires: /usr/bin/npm, node-gyp
 BuildRequires: desktop-file-utils
 Requires: desktop-file-utils
+%if 0%{?fedora}
 # enable Live Preview
 Recommends: google-chrome
 # enable LiveDevelopment Inspector
 Recommends: ruby
+%endif
 Obsoletes: %{name} <= 1.5.0
 
 # libcef.so require libgcrypt.so.11, libudev.so.0
