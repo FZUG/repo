@@ -16,7 +16,7 @@
 
 Name:    n1
 Version: 0.4.45
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
 Group:   Applications/System
@@ -230,6 +230,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 0.4.45-2.git7637265
+- Fix double windows
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.45-1.git7637265
 - Release 0.4.45
 - Build for electron 1.2.3

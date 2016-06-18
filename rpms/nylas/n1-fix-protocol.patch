@@ -11,7 +11,7 @@
    // Creates the 'Nylas' custom protocol handler.
    registerNylasProtocol() {
 -    protocol.registerFileProtocol('nylas', (request, callback) => {
-+    let win = new BrowserWindow();
++    let win = new BrowserWindow({show: false});
 +    win.webContents.session.protocol.registerFileProtocol('nylas', (request, callback) => {
        const relativePath = path.normalize(request.url.substr(7));
  
