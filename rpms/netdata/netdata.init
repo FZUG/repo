@@ -1,0 +1,71 @@
+#!/bin/bash
+#
+# netdata	This shell script takes care of starting and stopping netdata.
+#
+# chkconfig: 345 99 01
+# description: netdata is a Real-time performance monitoring
+# probe: false
+# processname: netdata
+# pidfile: /var/run/netdata.pid
+### BEGIN INIT INFO
+# Provides: netdata
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start: 3 4 5
+# Short-Description: netdata.
+# Description: netdata is a highly optimized Linux daemon providing real-time
+# performance monitoring for Linux systems, Applications, SNMP devices, over
+# the web!
+#It tries to visualize the truth of now, in its greatest detail, so that you
+#can get insights of what is happening now and what just happened, on your
+#systems and applications.
+### END INIT INFO
+
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+[ -f /usr/sbin/netdata ] || exit 0
+
+# See how we were called.
+case "$1" in
+	start)
+		if [ -n "`/sbin/pidof netdata`" ]; then
+			echo -n "netdata: already running"
+			RETVAL=$?
+			echo
+			exit $RETVAL
+		fi
+		echo -n "Starting netdata: "
+		/usr/sbin/netdata ${OPTIONS}
+		RETVAL=$?
+		[ $RETVAL -eq 0 ] && success || failure
+		echo
+		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/netdata
+		;;
+	stop)
+		echo -n "Stopping netdata: "
+		killproc netdata
+		RETVAL=$?
+		echo
+		[ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/netdata
+		;;
+	status)
+		status netdata
+		RETVAL=$?
+		;;
+	restart|reload)
+		$0 stop
+		$0 start
+		RETVAL=$?
+		;;
+	*)
+		echo "Usage: netdata {start|stop|status|restart}"
+		exit 1
+		;;
+esac
+
+exit $RETVAL

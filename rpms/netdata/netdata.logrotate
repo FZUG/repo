@@ -1,0 +1,13 @@
+/var/log/netdata/*log {
+    create 0640 netdata netdata
+    daily
+    rotate 14
+    missingok
+    notifempty
+    delaycompress
+    compress
+    sharedscripts
+    postrotate
+    /sbin/service netdata restart >/dev/null
+    endscript
+}

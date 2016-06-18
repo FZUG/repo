@@ -1,0 +1,1 @@
+f /var/run/netdata.pid 0644 netdata netdata -

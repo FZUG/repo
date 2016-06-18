@@ -1,18 +1,22 @@
 %global debug_package %{nil}
 # Conditional build
 %bcond_without nfacct
-%if 0%{?fedora} || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %bcond_without systemd
 %endif
 
 Name:    netdata
 Version: 1.2.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Real-time performance monitoring, done right
 License: GPLv3+
 Group:   Applications/System
 URL:     http://github.com/firehol/netdata/
 Source0: http://github.com/firehol/netdata/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source1: %{name}.conf
+Source2: %{name}.tmpfiles
+Source3: %{name}.logrotate
+Source4: %{name}.init
 
 BuildRequires: libtool
 BuildRequires: pkgconfig(uuid)
@@ -26,6 +30,10 @@ BuildRequires: systemd
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
+%else
+Requires(post): chkconfig
+Requires(preun): chkconfig, initscripts
+Requires(postun): initscripts
 %endif
 
 %description
@@ -51,28 +59,52 @@ autoreconf -ivf
 %{make_build}
 
 %install
-%{__make} install DESTDIR=%{buildroot}
-install -m 644 -p system/%{name}.conf %{buildroot}%{_sysconfdir}/%{name}/
-find %{buildroot} -name .keep | xargs rm
+%{make_install}
+find %{buildroot} -name .keep -delete
 
+# Unit file
 %if %{with systemd}
-install -Dm 644 -p system/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
+install -Dp -m0644 system/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
+install -Dp -m0644 %{SOURCE2} %{buildroot}%{_tmpfilesdir}/%{name}.conf
+%else
+# Init script
+install -Dp -m0755 %{SOURCE4} %{buildroot}%{_initrddir}/%{name}
 %endif
+install -Dp -m0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install %{SOURCE1} %{buildroot}%{_sysconfdir}/%{name}/
+%{__mkdir_p} %{buildroot}%{_localstatedir}/lib/%{name}
 
 %pre
 getent group %{name} > /dev/null || groupadd -r %{name}
 getent passwd %{name} > /dev/null || useradd -r -g %{name} \
-    -c %{name} -s /sbin/nologin -d %{_datadir}/%{name} %{name}
+    -c "NetData User" -s /sbin/nologin -d %{_localstatedir}/lib/%{name} %{name}
 
-%if %{with systemd}
 %post
+%if %{with systemd}
 %systemd_post %{name}.service
+%else
+if [ $1 -eq 1 ]; then
+    /sbin/chkconfig --add %{name}
+fi
+%endif
 
 %preun
+%if %{with systemd}
 %systemd_preun %{name}.service
+%else
+if [ $1 -eq 0 ]; then
+    /sbin/service %{name} stop &>/dev/null ||:
+    /sbin/chkconfig --del %{name}
+fi
+%endif
 
 %postun
+%if %{with systemd}
 %systemd_postun_with_restart %{name}.service
+%else
+if [ $1 -eq 1 ]; then
+    /sbin/service %{name} restart &>/dev/null ||:
+fi
 %endif
 
 %files
@@ -80,19 +112,25 @@ getent passwd %{name} > /dev/null || useradd -r -g %{name} \
 %doc README.md
 %license COPYING
 %{_sbindir}/%{name}
-%dir %{_datadir}/%{name}
 %{_libexecdir}/%{name}
-%{?with_systemd:%{_unitdir}/%{name}.service}
-%dir %{_sysconfdir}/%{name}
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/*.conf
+%dir %{_datadir}/%{name}
+%attr(-,root,%{name}) %{_datadir}/%{name}/web
+%if %{with systemd}
+%{_unitdir}/%{name}.service
+%{_tmpfilesdir}/%{name}.conf
+%else
+%attr(0755,root,root) %{_initrddir}/%{name}
+%endif
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %attr(-,%{name},%{name}) %dir %{_localstatedir}/cache/%{name}
 %attr(-,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
-
-# override defattr for web files
-%defattr(644,root,%{name},755)
-%{_datadir}/%{name}/web
+%attr(-,%{name},%{name}) %{_localstatedir}/lib/%{name}
 
 %changelog
+* Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-3
+- Add init script, logrotate and tmpfiles config
+- Create missing dir: /var/lib/netdata
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-2
 - Add autoreconf
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
