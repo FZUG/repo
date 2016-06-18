@@ -1,13 +1,15 @@
 %global debug_package %{nil}
 # Conditional build
+%if 0%{?fedora}
 %bcond_without nfacct
+%endif
 %if 0%{?fedora} >= 17 || 0%{?rhel} >= 7
 %bcond_without systemd
 %endif
 
 Name:    netdata
 Version: 1.2.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Real-time performance monitoring, done right
 License: GPLv3+
 Group:   Applications/System
@@ -128,6 +130,8 @@ fi
 %attr(-,%{name},%{name}) %{_localstatedir}/lib/%{name}
 
 %changelog
+* Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-4
+- Fix build error for rhel
 * Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-3
 - Add init script, logrotate and tmpfiles config
 - Create missing dir: /var/lib/netdata
