@@ -9,6 +9,7 @@
 %global repo %{project}
 %global electrondir %{_libdir}/%{name}/%{version}
 %global _dnfconf %{_sysconfdir}/dnf/dnf.conf
+%global _yumconf %{_sysconfdir}/yum.conf
 
 # commit
 %global _commit 553341db87fc095b25aaea180ebf90966c96611b
@@ -16,7 +17,7 @@
 
 Name:    electron
 Version: 1.2.3
-Release: 1.prebuilt%{?dist}
+Release: 2.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 
 Group:   Applications/Editors
@@ -25,6 +26,8 @@ URL:     https://github.com/electron/electron
 #Source0: https://github.com/electron/electron/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
 
 BuildRequires: wget
+Requires(post): chkconfig
+Requires(postun): chkconfig
 
 %description
 The Electron framework lets you write cross-platform desktop applications
@@ -63,7 +66,14 @@ cp -r node-v%{version}/* %{buildroot}%{electrondir}/node
 %post
 if [ $1 -ge 1 ]; then
 PRIORITY=90
-/bin/grep -q "%{name}" %{_dnfconf} || sed -i '$ainstallonlypkgs=%{name}' %{_dnfconf}
+if [ -f %{_yumconf} ]; then
+    /bin/grep -q '%{name}' %{_yumconf} || \
+    /bin/sed -i '$ainstallonlypkgs=%{name}' %{_yumconf}
+fi
+if [ -f %{_dnfconf} ]; then
+    /bin/grep -q '%{name}' %{_dnfconf} || \
+    /bin/sed -i '$ainstallonlypkgs=%{name}' %{_dnfconf}
+fi
 /sbin/alternatives --install %{_bindir}/%{name} %{name} %{electrondir}/%{name} $PRIORITY
 fi
 
@@ -78,6 +88,8 @@ fi
 %{_libdir}/%{name}/
 
 %changelog
+* Sun Jun 19 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-2.git553341d
+- Rewrite post script for rhel7
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-1.git553341d
 - Release 1.2.3
 - Set priority 90
