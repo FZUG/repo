@@ -160,6 +160,17 @@
  (def ^:private os (js/require "os"))
  (def ^:private data-path (platform/get-data-path))
  
+@@ -75,7 +75,9 @@
+            )))
+ 
+ (defn basename
+-  ([path] (.basename fpath path))
++  ([path]
++    (if-not (empty? path)
++      (.basename fpath path)))
+   ([path ext] (.basename fpath path ext)))
+ 
+ (defn get-roots []
 --- a/src/lt/objs/menu.cljs
 +++ b/src/lt/objs/menu.cljs
 @@ -9,9 +9,9 @@

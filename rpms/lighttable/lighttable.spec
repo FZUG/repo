@@ -10,7 +10,7 @@
 
 Name:    lighttable
 Version: 0.8.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: LightTable - An open source code editor
 
 Group:   Development/Tools
@@ -21,7 +21,7 @@ Patch0:  fix-lt-exception.patch
 Patch1:  fix-electron-1.2.0.patch
 
 BuildArch: noarch
-BuildRequires: npm, git
+BuildRequires: /usr/bin/npm, git
 BuildRequires: leiningen
 BuildRequires: desktop-file-utils
 Requires: electron
@@ -158,6 +158,8 @@ fi
 %{_datadir}/%{name}/
 
 %changelog
+* Mon Jun 20 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-4
+- Fixes path must be a string for electron 1.2.3
 * Sat Jun  4 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-3
 - Fixes running error for electron 1.2.0
 - Update some plugins
