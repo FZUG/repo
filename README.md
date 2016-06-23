@@ -1,6 +1,7 @@
 # FZUG Repository | Fedora 中文社区软件源
 
 [![Build Status](https://repo.fdzh.org/jenkins/buildStatus/icon?job=rpm_build)](https://repo.fdzh.org/jenkins/job/rpm_build/)
+[![Gitter](https://badges.gitter.im/FZUG.svg)](https://gitter.im/FZUG?utm_source=badge)
 
 - [Website 网站](http://repo.fdzh.org/)
 - [Wiki 维基](https://github.com/FZUG/repo/wiki)
