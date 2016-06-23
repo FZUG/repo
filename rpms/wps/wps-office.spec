@@ -11,7 +11,7 @@
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x86_64" || echo "x86")
 %global appfile %{name}_%{version}~a20p2_%{arch}.tar.xz
-%global appurl  http://kdl.cc.ksosoft.com/wps-community/download/a20/%{appfile}
+%global appurl  https://repo.fdzh.org/FZUG/nonfree/23/source/SRPMS/%{appfile}
 %global sha1sum %(test %arch = x86_64 &&
            echo "23db41f471aae1bde2ba196f0b0ed93eaa7fc97c" ||
            echo "6cf08f24b6c22c36cddf88598073b4fa4256e828")
@@ -32,7 +32,7 @@ test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
 
 Name:           wps-office
 Version:        10.1.0.5503
-Release:        1.a20p2.net
+Release:        2.a20p2.net
 Summary:        WPS Office Suite
 Summary(zh_CN): 金山 WPS Office 办公套件
 Group:          Applications/Editors
@@ -166,6 +166,8 @@ fi
 %ghost /opt/kingsoft
 
 %changelog
+* Thu Jun 24 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-2
+- Fix download url
 * Fri Feb  5 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-1
 - Release 10.1.0.5503
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5460-1
