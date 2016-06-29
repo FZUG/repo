@@ -7,15 +7,15 @@
 %global __requires_exclude (libnode|ffmpeg)
 %global project electron
 %global repo %{project}
-%global electrondir %{_libdir}/%{name}/%{version}
+%global electrondir %{_libdir}/%{repo}/%{version}
 
 # commit
 %global _commit 553341db87fc095b25aaea180ebf90966c96611b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:    electron
-Version: 1.2.3
-Release: 3.prebuilt%{?dist}
+Name:    electron-legacy
+Version: 0.37.8
+Release: 2.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 Group:   Applications/Editors
 License: MIT
@@ -25,7 +25,9 @@ URL:     https://github.com/electron/electron
 BuildRequires: wget
 Requires(post): chkconfig
 Requires(postun): chkconfig
-Obsoletes: %{name} < %{version}-%{release}
+Provides:  %{repo} = %{version}-%{release}
+Provides:  %{repo}%{?_isa} = %{version}-%{release}
+Obsoletes: %{repo} < %{version}-%{release}
 
 %description
 The Electron framework lets you write cross-platform desktop applications
@@ -37,8 +39,8 @@ Visit http://electron.atom.io/ to learn more.
 mkdir %{name}_build
 pushd %{name}_build
 
-wget %{url}/releases/download/v%{version}/%{name}-v%{version}-linux-%{arch}.zip
-unzip %{name}-v%{version}-linux-%{arch}.zip
+wget %{url}/releases/download/v%{version}/%{repo}-v%{version}-linux-%{arch}.zip
+unzip %{repo}-v%{version}-linux-%{arch}.zip
 
 wget https://atom.io/download/atom-shell/v%{version}/node-v%{version}.tar.gz
 tar xf node-v%{version}.tar.gz
@@ -55,7 +57,7 @@ install -d %{buildroot}%{electrondir}
 cp -a $Files %{buildroot}%{electrondir}
 
 install -d %{buildroot}%{_bindir}
-ln -sfv %{electrondir}/%{name} %{buildroot}%{_bindir}/%{name}-%{version}
+ln -sfv %{electrondir}/%{repo} %{buildroot}%{_bindir}/%{repo}-%{version}
 
 # Install node headers
 install -d %{buildroot}%{electrondir}/node
@@ -63,23 +65,23 @@ cp -r node-v%{version}/* %{buildroot}%{electrondir}/node
 
 %post
 if [ $1 -ge 1 ]; then
-PRIORITY=90
-/sbin/alternatives --install %{_bindir}/%{name} %{name} %{electrondir}/%{name} $PRIORITY
+PRIORITY=100
+/sbin/alternatives --install %{_bindir}/%{repo} %{repo} %{electrondir}/%{repo} $PRIORITY
 fi
 
 %postun
 if [ $1 -eq 0 ]; then
-/sbin/alternatives --remove %{name} %{electrondir}/%{name}
+/sbin/alternatives --remove %{repo} %{electrondir}/%{repo}
 fi
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/%{name}-%{version}
-%{_libdir}/%{name}/%{version}/
+%{_bindir}/%{repo}-%{version}
+%{_libdir}/%{repo}/%{version}/
 
 %changelog
-* Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-3.git553341d
-- Dont edit the global config file in postscript
+* Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 0.37.8-2.gitedb73fb
+- Rename to electron-legacy
 * Sun Jun 19 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-2.git553341d
 - Rewrite post script for rhel7
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-1.git553341d
