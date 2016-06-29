@@ -10,11 +10,12 @@
 %global _tmppath /var/tmp
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x86_64" || echo "x86")
-%global appfile %{name}_%{version}~a20p2_%{arch}.tar.xz
-%global appurl  https://repo.fdzh.org/FZUG/nonfree/23/source/SRPMS/%{appfile}
+%global appfile %{name}_%{version}~a21_%{arch}.tar.xz
+%global appurl1 http://kdl.cc.ksosoft.com/wps-community/download/a21/%{appfile}
+%global appurl2 https://repo.fdzh.org/FZUG/nonfree/23/source/SRPMS/%{appfile}
 %global sha1sum %(test %arch = x86_64 &&
-           echo "23db41f471aae1bde2ba196f0b0ed93eaa7fc97c" ||
-           echo "6cf08f24b6c22c36cddf88598073b4fa4256e828")
+           echo "7e9b17572ed5cea50af24f01457f726fc558a515" ||
+           echo "3e417203613c178d881be2ad7db21edb72d3f524")
 %global msfonts http://linux.linuxidc.com/2014年资料/4月/20日/Ubuntu 14.04 安装 WPS/symbol-fonts_1.2_all.deb
 %global getopts -t 5 --http-user=www.linuxidc.com --http-password=www.linuxidc.com
 
@@ -22,17 +23,17 @@
 %global DownloadPkg() \
 Download() {\
     SHA=$(test -f %1 && sha1sum %1 ||:)\
-    if [[ ! -f %1 || "${SHA/ */}" != "%sha1sum" ]]; then\
-        axel -o %1 -a %2; Download\
+    CODE=$(curl -sI %2|awk -F"( |\\r)" '{print$2;exit}')\
+    if [[ (! -f %1 || "${SHA/ */}" != "%sha1sum") && "$CODE" == "200" ]]; then\
+        axel -o %1 -a %2 || wget --unlink -O %1 %2 || Download\
     fi\
 }\
-Download\
-test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
+Download
 %{nil}
 
 Name:           wps-office
-Version:        10.1.0.5503
-Release:        2.a20p2.net
+Version:        10.1.0.5672
+Release:        1.a21.net
 Summary:        WPS Office Suite
 Summary(zh_CN): 金山 WPS Office 办公套件
 Group:          Applications/Editors
@@ -69,14 +70,17 @@ Requires:       /usr/bin/update-mime-database
  - http://community.wps.cn
 
 %prep
-%DownloadPkg %{appfile} %{appurl}
+%DownloadPkg %{appfile} %{appurl1}
+%DownloadPkg %{appfile} %{appurl2}
+test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
 
 # symbol-fonts
 dpkg-deb -X symbol-fonts_1.2_all.deb .
 
 # Extract archive
+AppFile=%{appfile}
 tar -xvf %{appfile}
-mv %{name}_%{version}~a20p2_%{arch} %{name}
+mv ${AppFile%.tar.xz} %{name}
 
 %build
 
@@ -109,15 +113,18 @@ done
 if [ $1 -ge 1 ]; then
 # Download wps
 cd %{_tmppath}
-%DownloadPkg %{appfile} %{appurl}
+%DownloadPkg %{appfile} %{appurl1}
+%DownloadPkg %{appfile} %{appurl2}
+test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
 
 # symbol-fonts
 dpkg-deb -x symbol-fonts_1.2_all.deb . ||:
 
 # Extract archive
+AppFile=%{appfile}
 mkdir %{tmproot} &>/dev/null ||:
 tar -xf %{appfile}
-mv %{name}_%{version}~a20p2_%{arch} %{name}
+mv ${AppFile%.tar.xz} %{name}
 cd %{name}
 
 # Main
@@ -166,7 +173,10 @@ fi
 %ghost /opt/kingsoft
 
 %changelog
-* Thu Jun 24 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-2
+* Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5672-1
+- Release 10.1.0.5672
+- Check download url
+* Thu Jun 23 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-2
 - Fix download url
 * Fri Feb  5 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-1
 - Release 10.1.0.5503
