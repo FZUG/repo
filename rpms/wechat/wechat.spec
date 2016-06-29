@@ -1,6 +1,8 @@
 %global debug_package %{nil}
 %global project electronic-wechat
 %global repo %{project}
+%global __provides_exclude (npm)
+%global __requires_exclude (npm|0.12)
 
 # commit
 %global _commit 5058348258b3a83f26daa417b282763f5cd8800e
@@ -8,7 +10,7 @@
 
 Name:    wechat
 Version: 1.3.0
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: An Electron application for WeChat
 
 Group:   Applications/Internet
@@ -16,7 +18,6 @@ License: MIT
 URL:     https://github.com/geeeeeeeeek/wechat-electron/
 Source0: https://github.com/geeeeeeeeek/wechat-electron/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildArch: noarch
 BuildRequires: /usr/bin/npm
 Requires: electron
 
@@ -35,11 +36,11 @@ npm install pinyin
 install -d %{buildroot}%{_bindir}
 cat > %{buildroot}%{_bindir}/%{name} << EOF
 #!/bin/sh
-%{_bindir}/electron %{_datadir}/%{name}/src/main.js \$*
+%{_bindir}/electron %{_libdir}/%{name}/src/main.js \$*
 EOF
 
 find {src,assets,node_modules} -type f -exec \
-    install -Dm644 '{}' '%{buildroot}%{_datadir}/%{name}/{}' \;
+    install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/{}' \;
 
 install -Dm644 assets/icon.png \
     %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
@@ -76,11 +77,14 @@ fi
 %doc README.md README_zh.md CHANGELOG.md CONTRIBUTING.md
 %license LICENSE.md
 %attr(755,-,-) %{_bindir}/%{name}
-%{_datadir}/%{name}/
+%{_libdir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-3.git5058348
+- Change datadir to libdir for binary file
+- Remove some npm dependences
 * Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-2.git5058348
 - Fix hold splash window
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-1.git5058348
