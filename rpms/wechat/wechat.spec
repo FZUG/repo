@@ -8,7 +8,7 @@
 
 Name:    wechat
 Version: 1.3.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: An Electron application for WeChat
 
 Group:   Applications/Internet
@@ -17,6 +17,7 @@ URL:     https://github.com/geeeeeeeeek/wechat-electron/
 Source0: https://github.com/geeeeeeeeek/wechat-electron/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildArch: noarch
+BuildRequires: /usr/bin/npm
 Requires: electron
 
 %description
@@ -28,6 +29,7 @@ release and not an official WeChat release.
 %setup -q -n %repo-%{_commit}
 
 %build
+npm install pinyin
 
 %install
 install -d %{buildroot}%{_bindir}
@@ -36,7 +38,7 @@ cat > %{buildroot}%{_bindir}/%{name} << EOF
 %{_bindir}/electron %{_datadir}/%{name}/src/main.js \$*
 EOF
 
-find {src,assets} -type f -exec \
+find {src,assets,node_modules} -type f -exec \
     install -Dm644 '{}' '%{buildroot}%{_datadir}/%{name}/{}' \;
 
 install -Dm644 assets/icon.png \
@@ -71,7 +73,7 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc README.md
+%doc README.md README_zh.md CHANGELOG.md CONTRIBUTING.md
 %license LICENSE.md
 %attr(755,-,-) %{_bindir}/%{name}
 %{_datadir}/%{name}/
@@ -79,6 +81,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-2.git5058348
+- Fix hold splash window
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-1.git5058348
 - Release 1.3.0
 * Fri Apr 22 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1.git275edce
