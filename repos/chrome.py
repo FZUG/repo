@@ -217,6 +217,8 @@ def get_pkg():
                 item = json.loads(json_data)
                 dirname = 'exe' if i == 'win' else 'dmg'
                 pkg_out = os.path.join(rootdir, dirname, item.get('name'))
+                if k == 'x64' and pkg_out.find('win64') == -1:
+                    pkg_out = pkg_out.replace('.exe', '_win64.exe')
                 if os.path.exists(pkg_out):
                     continue
                 print('Downloading', item.get('name'))
