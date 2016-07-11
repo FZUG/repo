@@ -3,14 +3,14 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit c8f88a02de761fb49b83feaac5692f19e333fe31
+%global _commit ba14c2ae9448bda7b252d8cdea0fb6f45ec84270
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    qtav
-Version: 1.10.0
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.11.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
@@ -209,7 +209,7 @@ rm -rf %{buildroot}%{_qt5_headerdir}/*.h
 
 # link execution files
 install -d %{buildroot}%{_bindir}
-ln -sfv %{_qt5_bindir}/player %{buildroot}%{_bindir}
+ln -sfv %{_qt5_bindir}/Player %{buildroot}%{_bindir}
 ln -sfv %{_qt5_bindir}/QMLPlayer %{buildroot}%{_bindir}
 install -Dm644 src/QtAV.svg %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/QtAV.svg
 
@@ -287,16 +287,18 @@ fi
 %defattr(-,root,root,-)
 %doc README.md Changelog
 %license gpl-3.0.txt
-%{_qt5_bindir}/player
+%{_qt5_bindir}/Player
 %{_qt5_bindir}/QMLPlayer
-%{_bindir}/player
+%{_bindir}/Player
 %{_bindir}/QMLPlayer
-%{_datadir}/applications/player.desktop
+%{_datadir}/applications/Player.desktop
 %{_datadir}/applications/QMLPlayer.desktop
 %{_datadir}/icons/hicolor/*/apps/QtAV.svg
 
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1.11.0-1.gitba14c2a
+- Update version to 1.11.0-1.gitba14c2a
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-2.gitc8f88a0
 - Update version to 1.10.0-2.gitc8f88a0
 * Sun Mar  6 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-1.git1f53443
