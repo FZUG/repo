@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 704fc3e5d8b0b2bbdb55a1d595ea9c74cdef1b88
+%global _commit 2f5c7213a505e49db132374adbb1a3a884fdcded
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    moonplayer
-Version: 0.62
+Version: 0.63
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Video player that can play online videos
 Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播放器
@@ -15,7 +15,7 @@ Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播�
 Group:   Applications/Multimedia
 License: GPLv3
 URL:     https://github.com/coslyk/moonplayer
-Source0: https://github.com/coslyk/moonplayer/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # https://code.google.com/p/moonplayer/wiki/PluginTutorial
 # http://forum.ubuntu.org.cn/viewtopic.php?f=74&t=456351
 Source1: plugin_56.py
@@ -79,6 +79,9 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 0.63-1.git2f5c721
+- Update version to 0.63-1.git2f5c721
+
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.62-1.git704fc3e
 - Update version to 0.62-1.git704fc3e
 
