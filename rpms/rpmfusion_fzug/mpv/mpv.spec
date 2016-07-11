@@ -1,6 +1,6 @@
 Name:           mpv
-Version:        0.17.0
-Release:        2%{?dist}
+Version:        0.18.1
+Release:        1%{?dist}
 Summary:        Movie player playing most video formats and DVDs
 License:        GPLv2+
 URL:            http://%{name}.io/
@@ -98,7 +98,6 @@ waf configure \
     --confdir="%{_sysconfdir}/%{name}" \
     --disable-build-date \
     --enable-libmpv-shared \
-    --enable-gpl3 \
     --enable-sdl2 \
     --enable-encoding
 
@@ -148,6 +147,9 @@ gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/pkgconfig/mpv.pc
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 0.18.1-1
+- update to 0.18.1
+
 * Mon May 02 2016 Adrian Reber <adrian@lisas.de> - 0.17.0-2
 - added BR perl(Encode) to build on F24
 
