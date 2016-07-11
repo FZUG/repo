@@ -4,11 +4,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 4ad3aae253d46536f5349c234f44947489a9dcd7
+%global _commit e4c49667feaecedaff74af672419445bc022daa1
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    libqtelegram-ae
-Version: 6.1
+Version: 10.0.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Telegram protocol access library
 Summary(zh_CN): Telegram 协议库
@@ -16,7 +16,7 @@ Summary(zh_CN): Telegram 协议库
 License: GPLv3
 Group:   Development/Libraries
 Url:     https://github.com/Aseman-Land/libqtelegram-aseman-edition
-Source0: https://github.com/Aseman-Land/libqtelegram-aseman-edition/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: pkgconfig(openssl)
 BuildRequires: pkgconfig(Qt5Core)
@@ -49,11 +49,12 @@ exposes an easy to use API for applications to interact to.
 %build
 mkdir dist && pushd dist
 %{qmake_qt5} -r PREFIX=%{_prefix} \
+    CONFIG+=typeobjects \
     OPENSSL_LIB_DIR=%{_libdir}/openssl \
     OPENSSL_INCLUDE_PATH=%{_includedir}/openssl \
     INSTALL_LIBS_PREFIX=%{_libdir} \
     INSTALL_HEADERS_PREFIX=%{_includedir} ..
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot} -C dist
@@ -76,6 +77,8 @@ make %{?_smp_mflags}
 %{_libdir}/%{name}.so
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 10.0.0-1.gite4c4966
+- Update to 10.0.0-1.gite4c4966
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 6.1-1.git4ad3aae
 - Update to 6.1-1.git4ad3aae
 * Wed Dec  9 2015 mosquito <sensor.wen@gmail.com> - 6.0-1.git569d31b

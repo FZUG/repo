@@ -1,25 +1,26 @@
-%global __strip_shared %(test $(rpm -E%?fedora) -eq 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
+%global __strip_shared %(test $(rpm -E%?fedora) -ge 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
 %global debug_package %{nil}
 %global project Cutegram
 %global repo %{project}
+%global with_binary 0
 
 # commit
-%global _commit 1dbe2792fb5a1760339379907f906e236c09db84
+%global _commit d6329cb7bb2d45d06af5c7ac30a433844fa7a49d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    cutegram
-Version: 2.7.1
+Version: 2.9.5
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Cutegram telegram client
 Summary(zh_CN): Cutegram telegram 客户端
 
 License: GPLv3
 Group:   Applications/Internet
-Url:     http://aseman.co/cutegram
-Source0: https://github.com/Aseman-Land/Cutegram/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Url:     https://github.com/Aseman-Land/Cutegram
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: libqtelegram-ae-devel >= 6.0
-BuildRequires: libtelegramqml-devel >= 0.9.0
+#BuildRequires: libtelegramqml-devel >= 0.9.0
 BuildRequires: pkgconfig(openssl)
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5DBus)
@@ -36,6 +37,8 @@ BuildRequires: pkgconfig(Qt5Xml)
 BuildRequires: desktop-file-utils
 BuildRequires: git
 
+Requires: aseman-qt-tools
+Requires: libtelegramqml
 Requires: qt5-qtquickcontrols
 Requires: qt5-qtgraphicaleffects
 Requires(post): desktop-file-utils
@@ -56,22 +59,33 @@ Cutegram 是一款 Telegram 第三方客户端. 它拥有智能美观的用户�
 
 %prep
 %setup -q -n %repo-%{_commit}
-git clone --depth 1 https://github.com/Aseman-Land/aseman-qt-tools Cutegram/asemantools
 
 %build
 mkdir build && pushd build
 %{qmake_qt5} PREFIX=%{_prefix} \
+%if 0%{?with_binary}
+    CONFIG+=binaryMode \
+%endif
     OPENSSL_LIB_DIR=%{_libdir}/openssl \
     OPENSSL_INCLUDE_PATH=%{_includedir}/openssl \
     LIBQTELEGRAM_LIB_DIR=%{_libdir} \
     LIBQTELEGRAM_INCLUDE_PATH=%{_includedir}/libqtelegram-ae \
     TELEGRAMQML_LIB_DIR=%{_libdir} \
     TELEGRAMQML_INCLUDE_PATH=%{_includedir}/telegramqml ..
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot} -C build
-desktop-file-validate %{buildroot}/%{_datadir}/applications/Cutegram.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/Cutegram.desktop
+
+%if 0%{?with_binary}
+install -Dm755 build/%{name} %{buildroot}%{_bindir}/%{name}
+%else
+install -d %{buildroot}%{_bindir}
+cat > %{buildroot}%{_bindir}/%{name} << EOF
+qmlscene %{_datadir}/%{name}/3.0/main.qml
+EOF
+%endif
 
 # stripe shared files
 %{__strip_shared}
@@ -94,15 +108,15 @@ fi
 %defattr(-,root,root,-)
 %doc README.md
 %license LICENSE
-%{_bindir}/%{name}
+%attr(755,-,-) %{_bindir}/%{name}
 %{_datadir}/%{name}
 %{_datadir}/pixmaps/%{name}.png
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/applications/Cutegram.desktop
-%exclude %{_datadir}/icons/%{name}.png
-%exclude %{_datadir}/%{name}/icons
+%{_datadir}/applications/%{repo}.desktop
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 2.9.5-1.gitabc33b6
+- Update to 2.9.5-1.gitabc33b6
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 2.7.1-1.git1dbe279
 - Update to 2.7.1-1.git1dbe279
 * Wed Dec  9 2015 mosquito <sensor.wen@gmail.com> - 2.7.0-1.gitbd3bd34
