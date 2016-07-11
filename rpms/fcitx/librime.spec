@@ -3,18 +3,18 @@
 %global repo %{project}
 
 # commit
-%global _commit 1da0c637d98c6381f755b24d15bb2ec358246348
+%global _commit dbedd73e0c0c525f95acdbecb515441d3206844f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           librime
-Version:        1.2
-Release:        9.git%{_shortcommit}%{?dist}
+Version:        1.2.9
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Rime Input Method Engine Library
 Summary(zh_CN): Rime 输入法引擎应用程序库
 
 License:        BSD
 URL:            https://github.com/rime/librime
-Source0:        https://github.com/rime/librime/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  cmake, opencc-devel
 BuildRequires:  boost-devel >= 1.46
@@ -76,10 +76,10 @@ The %{name}-tools package contains tools for %{name}.
   -DBOOST_USE_CXX11=ON \
 %endif
   -DCMAKE_BUILD_TYPE=Release
-make VERBOSE=1 %{?_smp_mflags}
+%make_build VERBOSE=1
 
 %install
-%make_install DESTDIR=%{buildroot} INSTALL="install -p"
+%make_install INSTALL="install -p"
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %post -p /sbin/ldconfig
@@ -105,6 +105,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_bindir}/rime_dict_manager
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1.2.9-1.gitdbedd73
+- Update to 1.2.9-1.gitdbedd73
+
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.2-9.git1da0c63
 - Update to 1.2-9.git1da0c63
 
