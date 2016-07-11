@@ -8,7 +8,7 @@
 %endif
 
 Name:           python-%{realname}
-Version:        1.32
+Version:        1.33.2
 Release:        1%{?dist}
 Summary:        Mutagen is a Python module to handle audio metadata
 Summary(zh_CN): 一个处理音频元数据的Python模块
@@ -86,7 +86,7 @@ pushd %{py3dir}
 
 %files
 %defattr(-,root,root,-)
-%doc NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
+%doc NEWS README.rst
 %license COPYING
 %if ! 0%{?with_python3}
 %{_bindir}/m*
@@ -98,7 +98,7 @@ pushd %{py3dir}
 %if 0%{?with_python3}
 %files -n python3-mutagen
 %defattr(-,root,root,-)
-%doc NEWS README.rst docs/tutorial.rst docs/api_notes.rst docs/bugs.rst
+%doc NEWS README.rst
 %license COPYING
 %{_bindir}/m*
 %{_mandir}/man1/m*.1*
@@ -107,6 +107,9 @@ pushd %{py3dir}
 %endif # with_python3
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1.33.2-1
+- Update to 1.33.2
+
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.32-1
 - Update to 1.32
 
