@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 48185cc404d441552b85d798b851e34a96ac2c88
+%global _commit 2732375dba2a41799543994d46524afff6010dbd
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.14.2
+Version:    0.15.1
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -71,7 +71,7 @@ mkdir build && pushd build
 %endif
     -DOBS_VERSION_OVERRIDE=%{version} \
     -DCMAKE_BUILD_TYPE=Release
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install -C build
@@ -113,6 +113,8 @@ fi
 %{_includedir}/obs
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 0.15.1-1.git2732375
+- Update to 0.15.1-1.git2732375
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 0.14.2-1.git48185cc
 - Update to 0.14.2-1.git48185cc
 * Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 0.13.4-1.gitbcdb3dc
