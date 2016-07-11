@@ -38,7 +38,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.3.6
+%global  fancy_version       0.4.0
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.11.1
+Version:           1.11.2
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -554,6 +554,10 @@ fi
 
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.2-1.modsec_2.9.0
+- update to upstream release 1.11.2
+- update ngx_fancyindex 0.4.0
+
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.1-1.modsec_2.9.0
 - update to upstream release 1.11.1
 
