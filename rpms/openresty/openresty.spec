@@ -28,7 +28,7 @@
 %endif
 
 # nginx mainline version
-%global  ngx_version         1.9.10
+%global  ngx_version         1.11.2
 %global  with_ngx_mainline   1
 
 # ModSecurity module
@@ -46,7 +46,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.3.6
+%global  fancy_version       0.4.0
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -73,7 +73,7 @@
 
 Name:              openresty
 Epoch:             1
-Version:           1.9.7.2
+Version:           1.9.15.1
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -219,7 +219,7 @@ This package provides the base rules for mod_security.
 
 
 %prep
-%setup -q -a2 -a4 -a5 -a6 -a7 -a8 -a9 -n ngx_%{name}-%{version}
+%setup -q -a2 -a4 -a5 -a6 -a7 -a8 -a9 -n %{name}-%{version}
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
 %patch1 -p1
@@ -462,7 +462,7 @@ install -p -m 0644 %{SOURCE101} %{SOURCE102} \
 install -p -m 0644 %{SOURCE103} %{SOURCE104} \
     %{buildroot}%{nginx_webroot}
 
-install -p -D -m 0644 %{_builddir}/ngx_%{name}-%{version}/bundle/nginx-*/man/nginx.8 \
+install -p -D -m 0644 %{_builddir}/%{name}-%{version}/bundle/nginx-*/man/nginx.8 \
     %{buildroot}%{_mandir}/man8/%{name}.8
 
 install -p -D -m 0755 %{SOURCE13} %{buildroot}%{_bindir}/%{name}-upgrade
@@ -527,7 +527,9 @@ fi
 %doc bundle/nginx-*/{CHANGES,README} README.markdown
 %{!?_licensedir:%global license %doc}
 %license bundle/nginx-*/LICENSE
+%{nginx_datadir}/resty.index
 %{nginx_datadir}/bin/*
+%{nginx_datadir}/pod/*
 %{nginx_datadir}/html/*
 %{nginx_datadir}/luajit/*
 %{nginx_datadir}/lualib/*
@@ -599,6 +601,9 @@ fi
 
 
 %changelog
+* Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.15.1-1.modsec_2.9.0
+- update to upstream release 1.11.2
+- update ngx_fancyindex 0.4.0
 * Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.7.2-1.modsec_2.9.0
 - update to upstream release 1.9.10
 - update ngx_fancyindex 0.3.6
