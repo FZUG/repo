@@ -10,17 +10,17 @@
 %global electrondir %{_libdir}/%{name}/%{version}
 
 # commit
-%global _commit 553341db87fc095b25aaea180ebf90966c96611b
+%global _commit 13e1818bf7f45e1588f978c2c4d92a47f57a1d94
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 1.2.3
-Release: 3.prebuilt%{?dist}
+Version: 1.2.7
+Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 Group:   Applications/Editors
 License: MIT
 URL:     https://github.com/electron/electron
-#Source0: https://github.com/electron/electron/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
+#Source0: %%{url}/archive/%%{_commit}/%%{repo}-%%{_shortcommit}.tar.gz
 
 BuildRequires: wget
 Requires(post): chkconfig
@@ -78,6 +78,8 @@ fi
 %{_libdir}/%{name}/%{version}/
 
 %changelog
+* Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 1.2.7-1.git13e1818
+- Release 1.2.7
 * Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-3.git553341d
 - Dont edit the global config file in postscript
 * Sun Jun 19 2016 mosquito <sensor.wen@gmail.com> - 1.2.3-2.git553341d
