@@ -1,7 +1,7 @@
 --- a/build/npm/postinstall.js
 +++ b/build/npm/postinstall.js
-@@ -15,9 +15,6 @@
- 	'javascript'
+@@ -18,9 +18,6 @@
+ 	'css'
  ];
  
 -extensions.forEach(extension => {

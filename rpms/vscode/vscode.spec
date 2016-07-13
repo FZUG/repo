@@ -6,15 +6,15 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 1.2.3
-%global node_ver 0.12
+%global electron_ver 1.2.7
+%global node_ver 5
 
 # commit
-%global _commit fe7f407b95b7f78405846188259504b34ef72761
+%global _commit e6b4afa53e9c0f54edef1673de9001e9f0f547ae
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 1.2.1
+Version: 1.3.1
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -58,7 +58,7 @@ sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
 sed -i '/tsb/s|"^.*"|"1.10.3"|' package.json
 
 # fsevents dont support linux
-sed -i '130,134d' npm-shrinkwrap.json
+sed -i '135,139d' npm-shrinkwrap.json
 
 # Use ELECTRON_RUN_AS_NODE for Electron 1.2.0
 sed -i '/RUN_AS_NODE/s|ATOM_SHELL_INTERNAL|ELECTRON|g' \
@@ -110,14 +110,32 @@ cat <<EOT >> %{buildroot}%{_datadir}/applications/%{name}.desktop
 [Desktop Entry]
 Type=Application
 Name=Visual Studio Code
-GenericName=VS Code
+GenericName=Text Editor
 Comment=Code Editing. Redefined.
-Exec=%{name}
+Exec=%{name} %U
 Icon=%{name}
 Terminal=false
-Categories=GTK;Development;IDE;
-MimeType=text/plain;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;text/x-java;text/x-dsrc;text/x-pascal;text/x-perl;text/x-python;application/x-php;application/x-httpd-php3;application/x-httpd-php4;application/x-httpd-php5;application/xml;text/html;text/css;text/x-sql;text/x-diff;
 StartupNotify=true
+StartupWMClass=VSCode
+Categories=Utility;TextEditor;Development;IDE;
+MimeType=text/plain;
+Actions=new-window;
+Keywords=Text;Editor;vscode;
+Keywords[zh_CN]=文本;编辑器;Text;Editor;vscode;
+
+[Desktop Action new-window]
+Name=New Window
+Name[de]=Neues Fenster
+Name[es]=Nueva ventana
+Name[fr]=Nouvelle fenêtre
+Name[it]=Nuova finestra
+Name[ja]=新規ウインドウ
+Name[ko]=새 창
+Name[ru]=Новое окно
+Name[zh_CN]=新建窗口
+Name[zh_TW]=開新視窗
+Exec=%{name} --new-window %U
+Icon=%{name}
 EOT
 
 desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -173,6 +191,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 1.3.1-1
+- Release 1.3.1
+- Build for electron 1.2.7
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.2.1-1
 - Release 1.2.1
 - Build for electron 1.2.3
