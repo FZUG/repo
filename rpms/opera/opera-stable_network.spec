@@ -6,8 +6,8 @@
 %global appfile %{name}_%{version}_%{arch}.deb
 %global appurl  http://ftp.opera.com/pub/%{appname}/desktop/%{version}/linux/%{appfile}
 %global sha1sum %(test %arch = amd64 &&
-           echo "718b636c9cdd44566a516b5314e120ef70cb99b1" ||
-           echo "1f4d9bc44c38726fc699a917e441a5c344898261")
+           echo "8e6f85d41eeb8bbf59f6f348b84e6600ff18f77c" ||
+           echo "2ef66c409be843a90013af65e17b229e41f8a7e1")
 
 # Due to changes in Chromium, Opera is no longer able to use the system
 # FFmpeg library for H264 video playback on Linux, so H264-encoded videos
@@ -28,7 +28,7 @@ Download\
 %{nil}
 
 Name:    opera-stable
-Version: 37.0.2178.54
+Version: 38.0.2220.41
 Release: 1.net
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -167,6 +167,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Fri Jul 15 2016 nrechn <nrechn@gmail.com> -38.0.2220.41-1
+- Update to 38.0.2220.41
 * Mon Jun 06 2016 nrechn <nrechn@gmail.com> -37.0.2178.54-1
 - Update to 37.0.2178.54
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> -36.0.2130.32-1

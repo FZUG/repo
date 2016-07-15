@@ -8,7 +8,7 @@
 %global __requires_exclude (libffmpeg)
 
 Name:    opera-developer
-Version: 39.0.2248.0
+Version: 40.0.2288.0
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -111,6 +111,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Fri Jul 15 2016 nrechn <nrechn@gmail.com> -40.0.2288.0-1
+- Update to 40.0.2288.0
 * Mon Jun 06 2016 nrechn <nrechn@gmail.com> -39.0.2248.0-1
 - Update to 39.0.2248.0
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> -37.0.2171.0-1

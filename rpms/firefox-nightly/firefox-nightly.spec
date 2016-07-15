@@ -1,6 +1,6 @@
 AutoReqProv: no
 
-%global currenf 49.0a1
+%global currenf 50.0a1
 %global _optdir /opt
 %ifarch x86_64
 %global arch x86_64
@@ -11,16 +11,34 @@ AutoReqProv: no
 
 Summary:  Standalone web browser from mozilla.org, nightly build
 Name: firefox-nightly
-Version: 49 
+Version: 50 
 Release: 0a1.prebuilt%{?dist}
 License: MPLv1.1 or GPLv2+ or LGPLv2+
 Group: Applications/Internet
 URL: http://www.mozilla.org/projects/firefox
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 
-BuildRequires: wget tar
-
-Requires: alsa-lib libX11 libXcomposite libXdamage libnotify libXt libXext glib2 dbus-glib libjpeg-turbo cairo-gobject libffi fontconfig freetype libgcc gtk3 gtk2 hunspell zlib
+BuildRequires: wget
+BuildRequires: tar
+Requires: alsa-lib
+Requires: libX11
+Requires: libXcomposite
+Requires: libXdamage
+Requires: libnotify
+Requires: libXt
+Requires: libXext
+Requires: glib2
+Requires: dbus-glib
+Requires: libjpeg-turbo
+Requires: cairo-gobject
+Requires: libffi
+Requires: fontconfig
+Requires: freetype
+Requires: libgcc
+Requires: gtk3
+Requires: gtk2
+Requires: hunspell
+Requires: zlib
 Requires: nspr >= 4.10.8
 Requires: nss >= 3.19.2
 Requires: sqlite >= 3.8.10.2
@@ -91,7 +109,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_optdir}/firefox-%{version}/
 
 %changelog
-* Tue Mar 29 2016 nrechn <neil@gyz.io> - 49.0a1-1
+* Fri Jul 15 2016 nrechn <nrechn@gmail.com> - 50.0a1-1
+- Updated to 50.0a1
+
+* Tue Mar 29 2016 nrechn <nrechn@gmail.com> - 49.0a1-1
 - Updated to 49.0a1
 
 * Tue Mar 29 2016 David Vásquez <davidjeremias82@gmail.com> - 48.0a1-1
