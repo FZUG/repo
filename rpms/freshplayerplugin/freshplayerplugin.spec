@@ -8,7 +8,7 @@
 
 Name:    freshplayerplugin
 Version: 0.3.5
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
 
@@ -84,6 +84,8 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Fri Jul 15 2016 mosquito <sensor.wen@gmail.com> - 0.3.5-2.git51946f8
+- Rebuild for ffmpeg 3.0.2
 * Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 0.3.5-1.git51946f8
 - Update version to 0.3.5-1.git51946f8
 * Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 0.3.4-1.git2b06d00
