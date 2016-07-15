@@ -7,7 +7,7 @@
 
 %global project N1
 %global repo %{project}
-%global electron_ver 1.2.3
+%global electron_ver 1.2.7
 %global node_ver 0.12
 
 # commit
@@ -16,7 +16,7 @@
 
 Name:    n1
 Version: 0.4.45
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: an open-source mail client
 
 Group:   Applications/System
@@ -230,6 +230,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.45-3.git7637265
+- Build for electron 1.2.7
 * Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 0.4.45-2.git7637265
 - Fix double windows
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.45-1.git7637265
