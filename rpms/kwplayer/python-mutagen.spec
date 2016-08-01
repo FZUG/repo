@@ -8,7 +8,7 @@
 %endif
 
 Name:           python-%{realname}
-Version:        1.33.2
+Version:        1.34
 Release:        1%{?dist}
 Summary:        Mutagen is a Python module to handle audio metadata
 Summary(zh_CN): 一个处理音频元数据的Python模块
@@ -107,6 +107,9 @@ pushd %{py3dir}
 %endif # with_python3
 
 %changelog
+* Mon Aug 01 2016 mosquito <sensor.wen@gmail.com> - 1.34-1
+- Update to 1.34
+
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1.33.2-1
 - Update to 1.33.2
 
