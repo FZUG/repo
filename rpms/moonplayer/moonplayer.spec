@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 2f5c7213a505e49db132374adbb1a3a884fdcded
+%global _commit 3505479eea4dcf05af8f31317507a9dd056f9b63
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    moonplayer
-Version: 0.63
+Version: 0.64
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Video player that can play online videos
 Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播放器
@@ -79,6 +79,9 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.64-1.git3505479
+- Update version to 0.64-1.git3505479
+
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 0.63-1.git2f5c721
 - Update version to 0.63-1.git2f5c721
 
