@@ -1,5 +1,5 @@
 Name:           gnome-mpv
-Version:        0.9
+Version:        0.10
 Release:        1%{?dist}
 Summary:        A simple GTK+ frontend for mpv
 License:        GPLv3+
@@ -67,6 +67,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}-symbolic.svg
 
 %changelog
+* Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.10-1
+- Update to 0.10
+
 * Tue May 24 2016 mosquito <sensor.wen@gmail.com> - 0.9-1
 - Rebuild for Fedora 24
 
