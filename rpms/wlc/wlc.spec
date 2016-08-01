@@ -1,11 +1,19 @@
+%global _with_latest 1
+%global _commit 4cbd5b71a598603231786161af7ae5a75aa49fa4
+%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+
 Name:           wlc
-Version:        0.0.3
+Version:        0.0.4
 Release:        1%{?dist}
 Summary:        Wayland compositor library
 Group:          User Interface/X
 License:        MIT
 URL:            https://github.com/Cloudef/wlc
-Source0:        https://github.com/Cloudef/%{name}/archive/v%{version}.tar.gz
+%if 0%{?_with_latest}
+Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+%else
+Source0:        %{url}/archive/v%{version}.tar.gz
+%endif
 
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(pixman-1)
@@ -44,14 +52,18 @@ This package contains files useful for software development with wlc,
 a Wayland compositor library.
 
 %prep
+%if 0%{?_with_latest}
+%autosetup -n %{name}-%{_commit}
+%else
 %autosetup -n %{name}-%{version}
+%endif
 
 %build
 %cmake .
-make %{?_smp_mflags}
+%make_build
 
 %install
-make install DESTDIR=%{buildroot}
+%make_install
 
 %check
 ctest -V %{?_smp_mflags}
@@ -71,6 +83,9 @@ ctest -V %{?_smp_mflags}
 %{_libdir}/pkgconfig/wlc.pc
 
 %changelog
+* Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.0.4-1
+- Update to 0.0.4
+
 * Mon May 23 2016 nrechn <neil@gyz.io> - 0.0.3-1
 - Update to 0.0.3
 
