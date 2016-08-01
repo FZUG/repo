@@ -140,7 +140,8 @@ def parse_spec(specFile, cacheFile='.repocache.json'):
         # parse buildrequires
         for i in reqlist:
             if re.match('.*\((.*)\)', i):
-                reqpkgs.append(query_package(i)[0].name)
+                if len(query_package(i)) > 0:
+                    reqpkgs.append(query_package(i)[0].name)
             else:
                 reqpkgs.append(i)
 
