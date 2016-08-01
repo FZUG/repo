@@ -1,13 +1,13 @@
 %global debug_package %{nil}
 
 Name:           sway
-Version:        0.8
-Release:        1%{?dist}
+Version:        0.9
+Release:        0.1.rc3%{?dist}
 Summary:        i3-compatible window manager for Wayland
 Group:          User Interface/X
 License:        MIT
-URL:            https://github.com/SirCmpwn/sway/
-Source0:        https://github.com/SirCmpwn/%{name}/archive/%{version}.tar.gz
+URL:            https://github.com/SirCmpwn/sway
+Source0:        %{url}/archive/%{version}-rc3.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(wlc)
@@ -31,10 +31,11 @@ Sway is a tiling window manager supporting Wayland compositor protocol and
 i3-compatible configuration.
 
 %prep
-%autosetup -n %{name}-%{version}
+%autosetup -n %{name}-%{version}-rc3
 
 %build
 %cmake \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_SYSCONFDIR=%{_sysconfdir} \
     -DBUILD_SHARED_LIBS:BOOL=OFF \
     -Dzsh-completions=YES \
@@ -63,11 +64,20 @@ i3-compatible configuration.
 %{_datadir}/wayland-sessions/%{name}.desktop
 
 %changelog
+* Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.9-0.1
+- Update to 0.9 rc3
+
+* Sun Jun 26 2016 mosquito <sensor.wen@gmail.com> - 0.8-2
+- Disable debuginfo pkg
+- Rewrite BuildRequires items
+- Remove CMAKE_INSTALL_PREFIX option
+- Use name macro instead of pkgname
+
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 0.8-1
-- Upddate to 0.8
+- Update to 0.8
 
 * Mon May 23 2016 nrechn <neil@gyz.io> - 0.7-1
-- Upddate to 0.7
+- Update to 0.7
 
 * Mon May 09 2016 nrechn <neil@gyz.io> - 0.6-1
 - Initial packaging
