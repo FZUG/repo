@@ -1,6 +1,6 @@
 --- a/build/Gruntfile.coffee
 +++ b/build/Gruntfile.coffee
-@@ -300,7 +300,7 @@
+@@ -302,7 +302,7 @@
  
    grunt.registerTask('ci', ciTasks)
  
@@ -37,13 +37,13 @@
      "url": "https://github.com/atom/atom/issues"
    },
    "license": "MIT",
--  "electronVersion": "0.36.8",
+-  "electronVersion": "0.37.8",
    "dependencies": {
      "async": "0.2.6",
      "atom-keymap": "6.3.2",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
-@@ -194,20 +194,24 @@
+@@ -194,8 +194,8 @@
    return
  
  registerBuiltins = (devMode) ->
@@ -54,23 +54,6 @@
      atomCoffeePath = path.join(cache.resourcePath, 'exports', 'atom.coffee')
      cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
    cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
- 
--  atomShellRoot = path.join(process.resourcesPath, 'atom.asar')
-+  atomShellRoot = path.join(process.resourcesPath, 'electron.asar')
- 
-   commonRoot = path.join(atomShellRoot, 'common', 'api', 'lib')
-+  if not fs.existsSync(commonRoot)
-+    commonRoot = path.join(atomShellRoot, 'common', 'api')
-   commonBuiltins = ['callbacks-registry', 'clipboard', 'crash-reporter', 'screen', 'shell']
-   for builtin in commonBuiltins
-     cache.builtins[builtin] = path.join(commonRoot, "#{builtin}.js")
- 
-   rendererRoot = path.join(atomShellRoot, 'renderer', 'api', 'lib')
-+  if not fs.existsSync(rendererRoot)
-+    rendererRoot = path.join(atomShellRoot, 'renderer', 'api')
-   rendererBuiltins = ['ipc-renderer', 'remote']
-   for builtin in rendererBuiltins
-     cache.builtins[builtin] = path.join(rendererRoot, "#{builtin}.js")
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
 @@ -521,7 +521,7 @@

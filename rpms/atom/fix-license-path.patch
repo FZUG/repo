@@ -1,6 +1,6 @@
---- a/src/browser/atom-application.coffee
-+++ b/src/browser/atom-application.coffee
-@@ -210,7 +210,7 @@
+--- a/src/main-process/atom-application.coffee
++++ b/src/main-process/atom-application.coffee
+@@ -213,7 +213,7 @@
      @openPathOnEvent('application:open-your-keymap', 'atom://.atom/keymap')
      @openPathOnEvent('application:open-your-snippets', 'atom://.atom/snippets')
      @openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
@@ -11,7 +11,7 @@
        @quitting = true
 --- a/src/workspace.coffee
 +++ b/src/workspace.coffee
-@@ -448,7 +448,7 @@
+@@ -449,7 +449,7 @@
  
    # Open Atom's license in the active pane.
    openLicense: ->
