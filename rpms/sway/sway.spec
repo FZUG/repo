@@ -2,12 +2,12 @@
 
 Name:           sway
 Version:        0.9
-Release:        0.1.rc3%{?dist}
+Release:        1%{?dist}
 Summary:        i3-compatible window manager for Wayland
 Group:          User Interface/X
 License:        MIT
 URL:            https://github.com/SirCmpwn/sway
-Source0:        %{url}/archive/%{version}-rc3.tar.gz
+Source0:        %{url}/archive/%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(wlc)
@@ -31,7 +31,7 @@ Sway is a tiling window manager supporting Wayland compositor protocol and
 i3-compatible configuration.
 
 %prep
-%autosetup -n %{name}-%{version}-rc3
+%autosetup -n %{name}-%{version}
 
 %build
 %cmake \
@@ -64,6 +64,9 @@ i3-compatible configuration.
 %{_datadir}/wayland-sessions/%{name}.desktop
 
 %changelog
+* Fri Aug  5 2016 mosquito <sensor.wen@gmail.com> - 0.9-1
+- Update to 0.9
+
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.9-0.1
 - Update to 0.9 rc3
 
