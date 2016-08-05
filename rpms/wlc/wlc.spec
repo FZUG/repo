@@ -1,9 +1,9 @@
-%global _with_latest 1
-%global _commit 4cbd5b71a598603231786161af7ae5a75aa49fa4
+%global _with_latest 0
+%global _commit 09146b68163978aa0a49c2d271c9f891e1538d42
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           wlc
-Version:        0.0.4
+Version:        0.0.5
 Release:        1%{?dist}
 Summary:        Wayland compositor library
 Group:          User Interface/X
@@ -83,6 +83,9 @@ ctest -V %{?_smp_mflags}
 %{_libdir}/pkgconfig/wlc.pc
 
 %changelog
+* Fri Aug  5 2016 mosquito <sensor.wen@gmail.com> - 0.0.5-1
+- Update to 0.0.5
+
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.0.4-1
 - Update to 0.0.4
 
