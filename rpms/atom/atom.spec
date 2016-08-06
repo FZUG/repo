@@ -16,11 +16,11 @@
 %global node_ver 0.12
 
 # commit
-%global _commit a2228795bf00a1a071d9967464d911289cdd010f
+%global _commit 4c1a1e39d80e981e702a869257b52b1f9ff070da
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.9.4
+Version: 1.9.5
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
@@ -74,7 +74,8 @@ export CXXFLAGS="%{optflags} -fPIC -pie"
 
 # Update node for fc23 and el7
 %if 0%{?fedora} < 24 || 0%{?rhel}
-git clone https://github.com/creationix/nvm.git .nvm
+git clone https://github.com/creationix/nvm.git .nvm; cd .nvm
+git checkout v0.31.2; cd ..
 source .nvm/nvm.sh
 nvm install %{node_ver}
 nvm use %{node_ver}
@@ -217,6 +218,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Aug  6 2016 mosquito <sensor.wen@gmail.com> - 1.9.5-1.git4c1a1e3
+- Release 1.9.5
 * Fri Aug  5 2016 mosquito <sensor.wen@gmail.com> - 1.9.4-1.gita222879
 - Release 1.9.4
 * Tue Aug  2 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-1.git59b62a2
