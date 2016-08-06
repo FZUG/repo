@@ -1,6 +1,6 @@
 AutoReqProv: no
 
-%global currenf 50.0a1
+%global currenf 51.0a1
 %global _optdir /opt
 %ifarch x86_64
 %global arch x86_64
@@ -8,10 +8,9 @@ AutoReqProv: no
 %global arch i686
 %endif
 
-
 Summary:  Standalone web browser from mozilla.org, nightly build
 Name: firefox-nightly
-Version: 50 
+Version: 51
 Release: 0a1.prebuilt%{?dist}
 License: MPLv1.1 or GPLv2+ or LGPLv2+
 Group: Applications/Internet
@@ -63,7 +62,6 @@ install -m644 %{_builddir}/firefox/browser/icons/mozicon128.png %{buildroot}/usr
 cp -rf %{_builddir}/firefox/* %{buildroot}/opt/firefox-%{version}/
 ln -s /opt/firefox-%{version}/firefox %{buildroot}/usr/bin/firefox-nightly
 
-
 cat > %{buildroot}/%{_datadir}/applications/%{name}.desktop << EOF
 [Desktop Entry]
 Name=Firefox Nightly
@@ -101,7 +99,6 @@ pref("app.update.enabled", false);' > %{buildroot}/opt/firefox-%{version}/browse
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-
 %files
 %{_bindir}/%{name}
 %{_datadir}/applications/%{name}*.desktop
@@ -109,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_optdir}/firefox-%{version}/
 
 %changelog
+* Sat Aug 6 2016 nrechn <nrechn@gmail.com> - 51.0a1-1
+- Updated to 51.0a1
+
 * Fri Jul 15 2016 nrechn <nrechn@gmail.com> - 50.0a1-1
 - Updated to 50.0a1
 
