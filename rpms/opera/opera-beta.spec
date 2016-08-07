@@ -8,7 +8,7 @@
 %global __requires_exclude (libffmpeg)
 
 Name:    opera-beta
-Version: 39.0.2256.9
+Version: 40.0.2308.3
 Release: 1%{?dist}
 Summary: Fast and secure web browser
 Summary(ru): Быстрый и безопасный Веб-браузер
@@ -111,6 +111,8 @@ fi
 %{_defaultdocdir}/%{name}
 
 %changelog
+* Sat Aug 06 2016 nrechn <nrechn@gmail.com> -40.0.2308.3-1
+- Update to 40.0.2308.3
 * Fri Jul 15 2016 nrechn <nrechn@gmail.com> -39.0.2256.9-1
 - Update to 39.0.2256.9
 * Mon Jun 06 2016 nrechn <nrechn@gmail.com> -38.0.2220.25-1
