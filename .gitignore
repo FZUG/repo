@@ -2,3 +2,5 @@ chrome
 FZUG
 old
 visitor.html
+*.pyc
+__pycache__
