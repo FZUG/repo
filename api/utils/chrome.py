@@ -2,6 +2,7 @@
 # coding: utf-8
 import urllib.request, urllib.error
 import xml.etree.ElementTree as tree
+import configparser
 import random
 import time
 import gzip
@@ -134,6 +135,42 @@ def get_rpm_info(branch):
         'urls': [url + pkg_uri, fzug_url + pkg_uri]
     }
 
+def get_deb_info(branch):
+    arch = 'amd64'
+    url = 'https://dl.google.com/linux/chrome/deb/'
+    fzug_url = 'https://repo.fdzh.org/chrome/deb/'
+    pkgname = {
+        'stable': 'google-chrome-stable',
+        'beta': 'google-chrome-beta',
+        'dev': 'google-chrome-unstable'
+    }
+    metafile = 'Packages.gz'
+
+    meta_inf = get(url +'dists/stable/main/binary-amd64/'+ metafile)
+    for i in ['stable', 'beta', 'dev']:
+        off = meta_inf.find(pkgname[i])
+        meta_inf = meta_inf[:off-9] + '[%s]\n'%i + meta_inf[off-9:]
+    config = configparser.ConfigParser()
+    config.read_string(meta_inf)
+    pkg_uri = config.get(branch, 'Filename')
+    pkg_name = '{}_{}_{}.deb'.format(
+        config.get(branch, 'Package'),
+        config.get(branch, 'Version'),
+        arch
+    )
+
+    return {
+        'timestamp': str(time.time()).split('.')[0],
+        'os': 'linux',
+        'arch': arch,
+        'channel': branch,
+        'name': pkg_name,
+        'version': config.get(branch, 'Version')[:-2],
+        'size': config.get(branch, 'Size'),
+        'sha256': config.get(branch, 'SHA256'),
+        'urls': [url + pkg_uri, fzug_url + pkg_uri]
+    }
+
 def get_pkg_info(platform, branch, arch):
     api_url = 'https://tools.google.com/service/update2'
     result = []
@@ -145,8 +182,10 @@ def get_pkg_info(platform, branch, arch):
                 if i in ['mac', 'linux'] and k == 'x64':
                     continue
                 if i == 'linux':
-                    # Get rpm metadata
+                    # Get rpm and deb metadata
                     data = get_rpm_info(j)
+                    result.append(data)
+                    data = get_deb_info(j)
                 else:
                     # Get exe and dmg metadata
                     resp = get(api_url, post(i, j, k))
