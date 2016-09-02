@@ -16,11 +16,11 @@
 %global node_ver 0.12
 
 # commit
-%global _commit e0801e756fb85bbd5214225f4aca67c963817ceb
+%global _commit 4f3b013b6e99aa0bfb53753aee9bbc3e9fb23217
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.9.6
+Version: 1.10.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
@@ -218,6 +218,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-1.git4f3b013
+- Release 1.10.0
 * Sun Aug  7 2016 mosquito <sensor.wen@gmail.com> - 1.9.6-1.gite0801e7
 - Release 1.9.6
 * Sat Aug  6 2016 mosquito <sensor.wen@gmail.com> - 1.9.5-1.git4c1a1e3
