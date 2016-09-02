@@ -5,18 +5,18 @@
 %global __requires_exclude (npm|0.12)
 
 # commit
-%global _commit 5058348258b3a83f26daa417b282763f5cd8800e
+%global _commit c0c466706f18a32e20c49fc34a290c717c3cf64d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    wechat
-Version: 1.3.0
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.4.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: An Electron application for WeChat
 
 Group:   Applications/Internet
 License: MIT
 URL:     https://github.com/geeeeeeeeek/wechat-electron/
-Source0: https://github.com/geeeeeeeeek/wechat-electron/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: /usr/bin/npm
 Requires: electron
@@ -82,6 +82,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 1.4.0-1.gitc0c4667
+- Release 1.4.0
 * Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-3.git5058348
 - Change datadir to libdir for binary file
 - Remove some npm dependences
