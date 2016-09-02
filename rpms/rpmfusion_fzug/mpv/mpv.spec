@@ -1,5 +1,5 @@
 Name:           mpv
-Version:        0.18.1
+Version:        0.20.0
 Release:        1%{?dist}
 Summary:        Movie player playing most video formats and DVDs
 License:        GPLv2+
@@ -147,6 +147,9 @@ gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/pkgconfig/mpv.pc
 
 %changelog
+* Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 0.20.0-1
+- update to 0.20.0
+
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 0.18.1-1
 - update to 0.18.1
 
