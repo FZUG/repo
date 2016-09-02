@@ -43,7 +43,7 @@
 %endif # with_selinux
 
 Name:     ircd-hybrid
-Version:  8.2.18
+Version:  8.2.19
 Release:  1%{?dist}
 Summary:  Internet Relay Chat Server
 
@@ -283,6 +283,9 @@ fi
 %endif # with_selinux
 
 %changelog
+* Fri Sep 02 2016 mosquito <sensor.wen@gmail.com> - 8.2.19-1
+- Update to 8.2.19
+
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 8.2.18-1
 - Update to 8.2.18
 
