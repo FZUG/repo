@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 3505479eea4dcf05af8f31317507a9dd056f9b63
+%global _commit 0ee65e56574dd3e52e5a33eef95e2b8c3a457570
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    moonplayer
-Version: 0.64
+Version: 0.66
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Video player that can play online videos
 Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播放器
@@ -43,12 +43,12 @@ Video player that can play online videos from youku, tudou etc.
 mkdir src/build
 pushd src/build
 %{qmake_qt5} ..
-make %{?_smp_mflags}
+%{make_build}
 popd
 
 %install
 pushd src/build
-make install INSTALL_ROOT=%{buildroot}
+%{make_install} INSTALL_ROOT=%{buildroot}
 install -m 0755 %{name} %{buildroot}%{_bindir}
 install -m 0644 %{S:1} %{buildroot}%{_datadir}/%{name}/plugins/
 install -m 0644 %{S:2} %{buildroot}%{_datadir}/%{name}/plugins/
@@ -79,6 +79,9 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 0.66-1.git0ee65e5
+- Update version to 0.66-1.git0ee65e5
+
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.64-1.git3505479
 - Update version to 0.64-1.git3505479
 
