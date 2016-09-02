@@ -1,4 +1,10 @@
 %global debug_package %{nil}
+
+# This is temporary and should eventually be resolved. This bypasses
+# the default rhel __os_install_post which throws a python compile
+# error.
+%global __os_install_post %{nil}
+
 # Conditional build
 %if 0%{?fedora}
 %bcond_without nfacct
@@ -8,13 +14,13 @@
 %endif
 
 Name:    netdata
-Version: 1.2.0
-Release: 4%{?dist}
+Version: 1.3.0
+Release: 1%{?dist}
 Summary: Real-time performance monitoring, done right
 License: GPLv3+
 Group:   Applications/System
 URL:     http://github.com/firehol/netdata/
-Source0: http://github.com/firehol/netdata/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: %{name}.conf
 Source2: %{name}.tmpfiles
 Source3: %{name}.logrotate
@@ -113,23 +119,33 @@ fi
 %defattr(-,root,root,-)
 %doc README.md
 %license COPYING
+
+%dir %{_sysconfdir}/%{name}
+%config(noreplace) %{_sysconfdir}/%{name}/*.conf
+%config(noreplace) %{_sysconfdir}/%{name}/health.d/*.conf
+%config(noreplace) %{_sysconfdir}/%{name}/python.d/*.conf
+%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
+
 %{_sbindir}/%{name}
 %{_libexecdir}/%{name}
+
+%attr(-,%{name},%{name}) %dir %{_localstatedir}/cache/%{name}
+%attr(-,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
+%attr(-,%{name},%{name}) %dir %{_localstatedir}/lib/%{name}
+
 %dir %{_datadir}/%{name}
 %attr(-,root,%{name}) %{_datadir}/%{name}/web
+
 %if %{with systemd}
 %{_unitdir}/%{name}.service
 %{_tmpfilesdir}/%{name}.conf
 %else
 %attr(0755,root,root) %{_initrddir}/%{name}
 %endif
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%attr(-,%{name},%{name}) %dir %{_localstatedir}/cache/%{name}
-%attr(-,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
-%attr(-,%{name},%{name}) %{_localstatedir}/lib/%{name}
 
 %changelog
+* Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-1
+- Release 1.3.0
 * Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-4
 - Fix build error for rhel
 * Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-3
