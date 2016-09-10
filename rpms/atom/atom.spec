@@ -44,6 +44,7 @@ BuildRequires: nodejs-atom-package-manager
 Requires: nodejs-atom-package-manager
 Requires: electron = %{electron_ver}
 Requires: desktop-file-utils
+Requires: gvfs
 
 %description
 Atom is a text editor that's modern, approachable, yet hack-able to the core
