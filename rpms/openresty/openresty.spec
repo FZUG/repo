@@ -28,7 +28,7 @@
 %endif
 
 # nginx mainline version
-%global  ngx_version         1.11.2
+%global  ngx_version         1.11.4
 %global  with_ngx_mainline   1
 
 # ModSecurity module
@@ -46,7 +46,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.4.0
+%global  fancy_version       0.4.1
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -73,7 +73,7 @@
 
 Name:              openresty
 Epoch:             1
-Version:           1.9.15.1
+Version:           1.11.2.1
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -88,8 +88,8 @@ Group:             System Environment/Daemons
 License:           BSD
 URL:               http://openresty.org
 
-Source0:           https://openresty.org/download/ngx_%{name}-%{version}.tar.gz
-Source1:           https://openresty.org/download/ngx_%{name}-%{version}.tar.gz.asc
+Source0:           https://openresty.org/download/%{name}-%{version}.tar.gz
+Source1:           https://openresty.org/download/%{name}-%{version}.tar.gz.asc
 Source2:           http://nginx.org/download/nginx-%{ngx_version}.tar.gz
 Source3:           http://nginx.org/download/nginx-%{ngx_version}.tar.gz.asc
 Source4:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
@@ -601,6 +601,9 @@ fi
 
 
 %changelog
+* Mon Sep 26 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.2.1-1.modsec_2.9.0
+- update to upstream release 1.11.4
+- update ngx_fancyindex 0.4.1
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1:1.9.15.1-1.modsec_2.9.0
 - update to upstream release 1.11.2
 - update ngx_fancyindex 0.4.0
