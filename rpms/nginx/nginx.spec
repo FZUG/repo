@@ -15,12 +15,12 @@
 %global  with_http2          1
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.10.5
+%global  ngx_lua_version     0.10.6
 %global  ndk_version         0.3.0
 %global  with_ngx_lua        1
 
 # ngx_echo module
-%global  ngx_echo_version    0.59
+%global  ngx_echo_version    0.60
 %global  with_ngx_echo       1
 
 # ModSecurity module
@@ -38,7 +38,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.4.0
+%global  fancy_version       0.4.1
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.11.3
+Version:           1.11.4
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -554,6 +554,12 @@ fi
 
 
 %changelog
+* Mon Sep 26 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.4-1.modsec_2.9.0
+- update to upstream release 1.11.4
+- update ngx_fancyindex 0.4.1
+- update ngx_lua 0.10.6
+- update ngx_echo 0.60
+
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.3-1.modsec_2.9.0
 - update to upstream release 1.11.3
 
