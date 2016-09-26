@@ -11,7 +11,7 @@
        @quitting = true
 --- a/src/workspace.coffee
 +++ b/src/workspace.coffee
-@@ -449,7 +449,7 @@
+@@ -459,7 +459,7 @@
  
    # Open Atom's license in the active pane.
    openLicense: ->

@@ -1,6 +1,6 @@
 --- a/build/tasks/build-task.coffee
 +++ b/build/tasks/build-task.coffee
-@@ -168,10 +168,6 @@
+@@ -162,10 +162,6 @@
      cp 'src', path.join(appDir, 'src'), filter: /.+\.(cson|coffee)$/
      cp 'static', path.join(appDir, 'static')
  
