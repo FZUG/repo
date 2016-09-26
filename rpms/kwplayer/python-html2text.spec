@@ -3,7 +3,7 @@
 %global repo %{project}
 
 # commit
-%global _commit 751d1ce5f1c755003488a4248664982248c3d253
+%global _commit ba5e670bc676492a22a89013e0cb56a3af6531a1
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %if 0%{?fedora} || 0%{?rhel} >= 7
@@ -15,7 +15,7 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:    python-html2text
-Version: 2016.5.29
+Version: 2016.9.19
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Converts a page of HTML into plain ASCII text
 Summary(zh_CN): 转换页面中的 HTML 为 ASCII 字符
@@ -127,6 +127,9 @@ PYTHONPATH=%{buildroot}%{python3_sitelib} coverage run --source=html2text setup.
 
 
 %changelog
+* Mon Sep 26 2016 mosquito <sensor.wen@gmail.com> - 2016.9.19-1.gitba5e670
+- Update version to 2016.9.19
+
 * Fri Jun  3 2016 mosquito <sensor.wen@gmail.com> - 2016.5.29-1.git751d1ce
 - Update version to 2016.5.29
 
