@@ -1,6 +1,6 @@
 AutoReqProv: no
 
-%global currenf 51.0a1
+%global currenf 52.0a1
 %global _optdir /opt
 %ifarch x86_64
 %global arch x86_64
@@ -10,8 +10,8 @@ AutoReqProv: no
 
 Summary:  Standalone web browser from mozilla.org, nightly build
 Name: firefox-nightly
-Version: 51.0a1
-Release: 2.prebuilt%{?dist}
+Version: 52.0a1
+Release: 1.prebuilt%{?dist}
 License: MPLv1.1 or GPLv2+ or LGPLv2+
 Group: Applications/Internet
 URL: http://www.mozilla.org/projects/firefox
@@ -106,6 +106,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_optdir}/firefox-%{version}/
 
 %changelog
+* Wed Sep 28 2016 nrechn <nrechn@gmail.com> - 52.0a1-1
+- Updated to 52.0a1
+
 * Sun Sep 4 2016 nrechn <nrechn@gmail.com> - 51.0a1-2
 - Rebuild 51.0a1
 - Fix "Release" version number
