@@ -4,7 +4,7 @@
 
 Name:    netease-cloud-music
 Version: 1.0.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Netease Cloud Music, converted from .deb package
 
 Group:   Applications/Multimedia
@@ -12,8 +12,8 @@ License: EULA
 URL:     http://music.163.com/
 Source0: http://s1.music.126.net/download/pc/%{name}_%{version}_amd64_ubuntu16.04.deb
 Source1: http://s1.music.126.net/download/pc/%{name}_%{version}_i386_ubuntu16.04.deb
-Source2: http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.1_amd64.deb
-Source3: http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.1_i386.deb
+Source2: http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.5_amd64.deb
+Source3: http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.5_i386.deb
 Source4: http://archive.ubuntu.com/ubuntu/pool/universe/libc/libcue/libcue1_1.4.0-1_amd64.deb
 Source5: http://archive.ubuntu.com/ubuntu/pool/universe/libc/libcue/libcue1_1.4.0-1_i386.deb
 
@@ -87,6 +87,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Mon Oct 03 2016 nrechn <nrechn@gmail.com> - 1.0.0-2
+- Fix source libssl not found
+- Update source libssl package
 * Sun Jul 31 2016 mosquito <sensor.wen@gmail.com> - 1.0.0-1
 - Update to 1.0.0
 * Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 0.9.0-2
