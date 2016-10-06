@@ -2,26 +2,26 @@
 %global debug_package %{nil}
 %global _hardened_build 1
 %global __provides_exclude (npm)
-%global __requires_exclude (npm|0.12)
+%global __requires_exclude (npm|0.12|nodejs.abi)
 
 %global project vscode
 %global repo %{project}
 %global electron_ver 1.2.7
-%global node_ver 5
+%global node_ver 6
 
 # commit
-%global _commit e6b4afa53e9c0f54edef1673de9001e9f0f547ae
+%global _commit 5be4091987a98e3870d89d630eb87be6d9bafd27
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 1.3.1
+Version: 1.5.3
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
 License: MIT
 URL:     https://github.com/Microsoft/vscode
-Source0: https://github.com/Microsoft/vscode/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
 Source1: about.json
 Patch0:  improve-i18n.patch
@@ -53,9 +53,6 @@ sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
 
 # Do not download electron
 sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
-
-# Use gulp-tsb 1.10.3 for node 0.12
-sed -i '/tsb/s|"^.*"|"1.10.3"|' package.json
 
 # fsevents dont support linux
 sed -i '135,139d' npm-shrinkwrap.json
@@ -191,6 +188,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-1
+- Release 1.5.3
 * Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 1.3.1-1
 - Release 1.3.1
 - Build for electron 1.2.7
