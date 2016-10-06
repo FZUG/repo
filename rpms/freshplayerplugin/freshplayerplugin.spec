@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 51946f8dbc569993270ae2bedbd96b685502295e
+%global _commit 333df0b4667ce3d6a10c33f38cbb43f8dbffc8c0
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    freshplayerplugin
-Version: 0.3.5
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 0.3.6
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
 
@@ -16,7 +16,7 @@ Group:   System Environment/Libraries
 # https://github.com/i-rinat/freshplayerplugin/raw/master/LICENSE
 License: MIT
 URL:     https://github.com/i-rinat/freshplayerplugin
-Source0: https://github.com/i-rinat/freshplayerplugin/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: cmake >= 2.8.8
 BuildRequires: pkgconfig chrpath
@@ -27,7 +27,6 @@ BuildRequires: glib2-devel
 BuildRequires: libconfig-devel
 BuildRequires: pango-devel
 BuildRequires: libevent-devel
-BuildRequires: gtk2-devel
 BuildRequires: libXrandr-devel
 BuildRequires: libXrender-devel
 BuildRequires: libXcursor-devel
@@ -40,6 +39,7 @@ BuildRequires: soxr-devel
 BuildRequires: ffmpeg-devel
 BuildRequires: libva-devel
 BuildRequires: libvdpau-devel
+BuildRequires: libicu-devel
 
 %description
  The main goal of this project is to get PPAPI (Pepper)
@@ -58,7 +58,7 @@ BuildRequires: libvdpau-devel
 %build
 mkdir build && pushd build
 %{cmake} -DCMAKE_BUILD_TYPE=Release ..
-make %{?_smp_mflags}
+%{make_build}
 
 %install
 # library file
@@ -84,6 +84,8 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 0.3.6-1.git333df0b
+- Update to 0.3.6
 * Fri Jul 15 2016 mosquito <sensor.wen@gmail.com> - 0.3.5-2.git51946f8
 - Rebuild for ffmpeg 3.0.2
 * Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 0.3.5-1.git51946f8
