@@ -14,12 +14,12 @@
 %endif
 
 Name:    netdata
-Version: 1.3.0
+Version: 1.4.0
 Release: 1%{?dist}
 Summary: Real-time performance monitoring, done right
 License: GPLv3+
 Group:   Applications/System
-URL:     http://github.com/firehol/netdata/
+URL:     http://github.com/firehol/netdata
 Source0: %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1: %{name}.conf
 Source2: %{name}.tmpfiles
@@ -144,6 +144,8 @@ fi
 %endif
 
 %changelog
+* Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 1.4.0-1
+- Release 1.4.0
 * Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 1.3.0-1
 - Release 1.3.0
 * Sat Jun 18 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-4
