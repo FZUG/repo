@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 632f0bff5abec954fe84f191affb5243002890dd
+%global _commit 580cfc1a95a6bb2b4ea6f002c95c630ae4542ed7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.15.4
+Version:    0.16.2
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -17,13 +17,16 @@ License:    GPLv2
 URL:        https://obsproject.com
 Source:     https://github.com/jp9000/obs-studio/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
+BuildRequires:  gcc-objc
 BuildRequires:  cmake
-BuildRequires:  hicolor-icon-theme
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  ffmpeg-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  alsa-lib-devel
 BuildRequires:  pulseaudio-libs-devel
 BuildRequires:  jansson-devel
+BuildRequires:  jack-audio-connection-kit-devel
 BuildRequires:  x264-devel
 BuildRequires:  libv4l-devel
 BuildRequires:  freetype-devel
@@ -33,10 +36,14 @@ BuildRequires:  libXinerama-devel
 BuildRequires:  libXrandr-devel
 BuildRequires:  libX11-devel
 BuildRequires:  libGL-devel
+BuildRequires:  vlc-devel
 BuildRequires:  systemd-devel
 BuildRequires:  ImageMagick-devel
 BuildRequires:  libcurl-devel
-BuildRequires:  zlib-devel
+BuildRequires:  doxygen
+BuildRequires:  desktop-file-utils
+BuildRequires:  hicolor-icon-theme
+Requires:       ffmpeg x264
 
 %description
 Open Broadcaster Software is free and open source software
@@ -46,6 +53,13 @@ for video recording and live streaming.
 Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 - 使用 H264/AAC 编码视频, 支持封装格式为 MP4/FLV
 - 支持 RTMP 流媒体直播
+
+%package libs
+Summary:    Open Broadcaster Software Studio libraries
+Requires:   %{name}%{?_isa} = %{version}-%{release}
+
+%description libs
+Library files for Open Broadcaster Software
 
 %package devel
 Summary:    Header files and library for %{name}
@@ -59,12 +73,24 @@ for video recording and live streaming.
 %description devel -l zh_CN
 Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 
+%package doc
+Summary:    Documentation files for %{name}
+Group:      Documentation
+BuildArch:  noarch
+
+%description doc
+The %{name}-doc package contains html documentation
+that use %{name}.
+
 %prep
 %setup -q -n %repo-%{_commit}
 
+# rpmlint reports E: hardcoded-library-path
+# replace OBS_MULTIARCH_SUFFIX by LIB_SUFFIX
+sed -i 's|OBS_MULTIARCH_SUFFIX|LIB_SUFFIX|g' cmake/Modules/ObsHelpers.cmake
+
 %build
-mkdir build && pushd build
-%{cmake} .. \
+%{cmake} . \
     -DUNIX_STRUCTURE=ON \
 %ifarch x86_64
     -DOBS_MULTIARCH_SUFFIX=64 \
@@ -73,16 +99,24 @@ mkdir build && pushd build
     -DCMAKE_BUILD_TYPE=Release
 %make_build
 
-%install
-%make_install -C build
+# build docs
+doxygen
 
-%post devel -p /sbin/ldconfig
-%postun devel -p /sbin/ldconfig
+%install
+%make_install
+
+mkdir -p %{buildroot}/%{_libexecdir}/obs-plugins/obs-ffmpeg/
+mv -f %{buildroot}/%{_datadir}/obs/obs-plugins/obs-ffmpeg/ffmpeg-mux \
+      %{buildroot}/%{_libexecdir}/obs-plugins/obs-ffmpeg/ffmpeg-mux
+
+%check
+/usr/bin/desktop-file-validate %{buildroot}/%{_datadir}/applications/obs.desktop
+
+%post libs -p /sbin/ldconfig
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
-/sbin/ldconfig
 
 %postun
 if [ $1 -eq 0 ]; then
@@ -90,7 +124,8 @@ if [ $1 -eq 0 ]; then
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
 /usr/bin/update-desktop-database -q ||:
-/sbin/ldconfig
+
+%postun libs -p /sbin/ldconfig
 
 %posttrans
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
@@ -100,19 +135,27 @@ fi
 %doc CONTRIBUTING README
 %license COPYING
 %{_bindir}/obs
-%{_libdir}/obs-plugins
-%{_libdir}/libobs*.so.*
 %{_datadir}/applications/obs.desktop
-%{_datadir}/icons/hicolor/*/apps/obs*
+%{_datadir}/icons/hicolor/256x256/apps/obs.png
 %{_datadir}/obs/
+%{_libexecdir}/obs-plugins/
+
+%files libs
+%{_libdir}/obs-plugins/
+%{_libdir}/*.so.*
 
 %files devel
-%defattr(-,root,root,-)
-%{_libdir}/cmake/LibObs
-%{_libdir}/libobs*.so
-%{_includedir}/obs
+%{_libdir}/cmake/LibObs/
+%{_libdir}/*.so
+%{_includedir}/obs/
+
+%files doc
+%doc docs/html
 
 %changelog
+* Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 0.16.2-1.git580cfc1
+- Update to 0.16.2-1.get580cfc1
+- Added BR doxygen
 * Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 0.15.4-1.git632f0bf
 - Update to 0.15.4-1.get632f0bf
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.15.2-1.gitcf983b7
