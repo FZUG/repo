@@ -29,7 +29,7 @@
 %endif # with_selinux
 
 Name:       sogoupinyin
-Version:    2.0.0.0078
+Version:    2.1.0.0082
 Release:    1%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
@@ -37,8 +37,8 @@ Summary(zh_CN): 搜狗拼音输入法
 License:    Proprietary and GPLv2
 URL:        http://pinyin.sogou.com/linux
 Group:      Applications/System
-Source0:    http://cdn2.ime.sogou.com/dl/index/1465191139/%{name}_%{version}_amd64.deb
-Source1:    http://cdn2.ime.sogou.com/dl/index/1465186614/%{name}_%{version}_i386.deb
+Source0:    http://cdn2.ime.sogou.com/dl/index/1475147394/%{name}_%{version}_amd64.deb
+Source1:    http://cdn2.ime.sogou.com/dl/index/1475146281/%{name}_%{version}_i386.deb
 Source11:   %{name}.te
 Source12:   %{name}.fc
 Source13:   %{name}.if
@@ -438,6 +438,8 @@ fi
 %endif # with_selinux
 
 %changelog
+* Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-1
+- Update version 2.1.0.0082
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0078-1
 - Update version 2.0.0.0078
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0072-1
