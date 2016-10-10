@@ -1,0 +1,38 @@
+diff --git a/bcloud/SigninDialog.py b/bcloud/SigninDialog.py
+index f38c03d..4c320e6 100644
+--- a/bcloud/SigninDialog.py
++++ b/bcloud/SigninDialog.py
+@@ -115,7 +115,7 @@ class SigninVcodeDialog(Gtk.Dialog):
+         self.refresh_vcode()
+ 
+     def on_vcode_confirm_clicked(self, button):
+-        self.check_entry()
++        self.response(Gtk.ResponseType.OK)
+ 
+ 
+ class SigninDialog(Gtk.Dialog):
+@@ -313,13 +313,13 @@ class SigninDialog(Gtk.Dialog):
+                     vcodetype = query['vcodetype']
+                     codeString = query['codeString']
+                     dialog = SigninVcodeDialog(self, username, cookie,
+-                                               tokens['token'], codeString,
++                                               tokens, codeString,
+                                                vcodetype)
+                     response = dialog.run()
+                     verifycode = dialog.get_vcode()
+                     codeString = dialog.codeString
+                     dialog.destroy()
+-                    if not verifycode or len(verifycode) != 4:
++                    if not verifycode:
+                         self.signin_failed(_('Please input verification code!'))
+                         return
+                     else:
+@@ -383,7 +383,7 @@ class SigninDialog(Gtk.Dialog):
+                     verifycode = dialog.get_vcode()
+                     codeString = dialog.codeString
+                     dialog.destroy()
+-                    if not verifycode or len(verifycode) != 4:
++                    if not verifycode:
+                         self.signin_failed(_('Please input verification code!'))
+                         return
+                     else:
