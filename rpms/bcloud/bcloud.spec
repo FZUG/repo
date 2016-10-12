@@ -1,5 +1,5 @@
 # bcloud.spec
-# Used to build rpm for bcloud on Fedora 21/22/23/rawhide
+# Used to build rpm for bcloud on Fedora 21/22/23/24/rawhide
 # Released by mosquito <sensor.wen@gmail.com>, wangjiezhe <wangjiezhe@gmail.com>
 # This spec file is published under the GPLv3 license
 
@@ -15,7 +15,7 @@
 
 Name:    bcloud
 Version: 3.8.2
-Release: 4.git%{_shortcommit}%{?dist}
+Release: 5.git%{_shortcommit}%{?dist}
 Summary: Baidu Pan client for Linux Desktop users
 Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
@@ -24,6 +24,7 @@ License: GPLv3
 URL:     https://github.com/LiuLang/bcloud
 Source0: https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Patch0:	00_fix_network_error.patch
+Patch1: 01_verifycode_length.patch
 
 BuildArch: noarch
 BuildRequires: python3-devel
@@ -51,9 +52,12 @@ Baidu Pan client for Linux Desktop users.
 # not bind cellphone
 # https://github.com/LiuLang/bcloud/pull/177
 sed -i '/err.*18/s|=.*18|in (18, 400032)|' bcloud/auth.py
-# fix network error, https://github.com/LiuLang/bcloud/issues/244
+# Fix network error, https://github.com/LiuLang/bcloud/issues/244
 # patch comes from https://github.com/licamla/bcloud/commit/e8cce73e94fa247f9206f26dc9c73dd3c1120893
 %patch0 -p1
+# Allow Chinese characters in verify code.
+# Patch comes form https://github.com/LiuLang/bcloud/issues/255#issuecomment-247511561
+%patch1 -p1
 
 
 %build
@@ -92,6 +96,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Mon Oct 10 2016 Zamir SUN <sztsian@gmail.com> - 3.8.2-5.git4b54e0f
+- Add patch to allow Chinese characters in verify code
+
 * Fri Jun 10 2016 Zamir SUN <sztsian@gmail.com> - 3.8.2-4.git4b54e0f
 - Add patch to fix network error before upstream merge
 
