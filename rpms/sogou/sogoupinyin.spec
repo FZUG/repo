@@ -30,7 +30,7 @@
 
 Name:       sogoupinyin
 Version:    2.1.0.0082
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
@@ -300,20 +300,6 @@ mv usr/share/doc/%{name}/* .
 install -d %{buildroot}%{_datadir}/%{name}
 echo "%{version}" > %{buildroot}%{_datadir}/%{name}/sogou-version
 
-# rename files
-pushd %{buildroot}%{_datadir}/sogou-qimpanel/recommendSkin/skin
-rm -rf "三国杀"* *"路飞" *"团兵"*
-for i in *;do
-  j=$(echo "$i"|sed 's|[【〖].*[】〗]||')
-  if [ "$i" == "【优客】简约" ];then
-    j="优客简约"
-  fi
-  if [ "$i" != "$j" ];then
-    mv "$i" "$j"
-  fi
-done
-popd
-
 %if 0%{?with_selinux}
 # install SELinux interfaces
 %_format INTERFACES $x.if
@@ -438,6 +424,8 @@ fi
 %endif # with_selinux
 
 %changelog
+* Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-2
+- Dont rename skin files, fixed #177, #179
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-1
 - Update version 2.1.0.0082
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0078-1
