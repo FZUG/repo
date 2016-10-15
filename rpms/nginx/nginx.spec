@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.11.4
+Version:           1.11.5
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -301,7 +301,6 @@ export DESTDIR=%{buildroot}
 %if 0%{?with_aio}
     --with-file-aio \
 %endif
-    --with-ipv6 \
     --with-http_ssl_module \
 %if 0%{?with_http2}
     --with-http_v2_module \
@@ -554,6 +553,10 @@ fi
 
 
 %changelog
+* Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.5-1.modsec_2.9.0
+- update to upstream release 1.11.5
+- Remove --with-ipv6 option, IPv6 support is configured automatically
+
 * Mon Sep 26 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.4-1.modsec_2.9.0
 - update to upstream release 1.11.4
 - update ngx_fancyindex 0.4.1
