@@ -6,15 +6,15 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 1.2.7
+%global electron_ver 1.3.7
 %global node_ver 6
 
 # commit
-%global _commit 5be4091987a98e3870d89d630eb87be6d9bafd27
+%global _commit 9e4e44c19e393803e2b05fe2323cf4ed7e36880e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    vscode
-Version: 1.5.3
+Version: 1.6.1
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -188,6 +188,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1
+- Release 1.6.1
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-1
 - Release 1.5.3
 * Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 1.3.1-1

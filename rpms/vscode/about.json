@@ -58,12 +58,14 @@
 		"hoovercj.ruby-linter": "{**/*.rb}",
 		"misogi.ruby-rubocop": "{**/*.rb}",
 		"CraigMaslowski.erb": "{**/*.erb}",
-		"groksrc.haml": "{**/*.haml}"
+		"groksrc.haml": "{**/*.haml}",
+		"PeterJausovec.vscode-docker": "{**/dockerfile,**/Dockerfile,**/docker-compose.yml,**/docker-compose.*.yml}"
 	},
 	"extensionImportantTips": {
 		"ms-vscode.csharp": "**/*.cs",
 		"lukehoban.Go": "**/*.go",
 		"donjayamanne.python": "{**/*.py}",
+		"redhat.java": "{**/*.java}",
 		"ms-vscode.PowerShell": "{**/*.ps,**/*.ps1}",
 		"ms-vscode.cpptools": "{**/*.c,**/*.cpp,**/*.cc,**/.cxx,**/*.hh,**/*.hpp,**/*.hxx,**/*.h}"
 	},
@@ -92,3 +94,10 @@
 	"requestFeatureUrl": "https://go.microsoft.com/fwlink/?LinkID=533482",
 	"privacyStatementUrl": "https://go.microsoft.com/fwlink/?LinkId=786907",
 	"npsSurveyUrl": "https://www.research.net/r/Z2RMYRJ",
+	"checksumFailMoreInfoUrl": "https://go.microsoft.com/fwlink/?LinkId=828886",
+	"checksums": {
+		"vs/workbench/workbench.main.js": "PMVAHTv7sP5sWhVAHqmeUg",
+		"vs/workbench/workbench.main.css": "hHKl7OKCy+GIkt7Dm2+fPw",
+		"vs/workbench/electron-browser/bootstrap/index.html": "A7FcwiFQwy0ydQR6MrrRrQ",
+		"vs/workbench/electron-browser/bootstrap/index.js": "ReGWRjGfF2Rwcgfk7F5ljw"
+	},
