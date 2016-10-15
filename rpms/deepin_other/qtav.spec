@@ -3,14 +3,14 @@
 %global project QtAV
 %global repo %{project}
 
-%global _commit ba14c2ae9448bda7b252d8cdea0fb6f45ec84270
+%global _commit ab4866655f1fcc71594206ca195c08a92ec7a500
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    qtav
 Version: 1.11.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A media playback framework based on Qt and FFmpeg
 Summary(zh_CN): 基于Qt和FFmpeg的跨平台高性能音视频播放框架
 
@@ -297,6 +297,8 @@ fi
 
 
 %changelog
+* Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.11.0-2.gitab48666
+- Update version to 1.11.0-2.gitab48666
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1.11.0-1.gitba14c2a
 - Update version to 1.11.0-1.gitba14c2a
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-2.gitc8f88a0
