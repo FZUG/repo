@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 3726be634fb8ed473b91c825632ee669347b302e
+%global _commit 6cc5e86b1c1cd751f098560bf51178d25b96842c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    fcitx-qt5
-Version: 1.0.5
+Version: 1.0.6
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Fcitx IM module for Qt5
 Summary(zh_CN): Fcitx QT5 输入模块
@@ -16,7 +16,7 @@ Summary(zh_CN): Fcitx QT5 输入模块
 # platforminputcontext/keyserver_x11.h which is LGPLv2+
 License: GPLv2+ and LGPLv2+
 Url:     https://github.com/fcitx/fcitx-qt5
-Source0: https://github.com/fcitx/fcitx-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: cmake
 BuildRequires: libicu-devel
@@ -48,7 +48,7 @@ Fcitx 输入法框架 (Qt5) 的头文件.
 
 %build
 %cmake .
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install
@@ -76,6 +76,8 @@ make %{?_smp_mflags}
 %{_libdir}/cmake/FcitxQt5WidgetsAddons/FcitxQt5WidgetsAddons*.cmake
 
 %changelog
+* Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.0.6-1.git6cc5e86
+- Update to 1.0.6
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 1.0.5-1.git3726be6
 - Update version to 1.0.5
 * Mon Aug 31 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-2.git73337c5
