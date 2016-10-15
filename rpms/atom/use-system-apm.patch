@@ -1,16 +1,54 @@
---- a/build/tasks/build-task.coffee
-+++ b/build/tasks/build-task.coffee
-@@ -162,10 +162,6 @@
-     cp 'src', path.join(appDir, 'src'), filter: /.+\.(cson|coffee)$/
-     cp 'static', path.join(appDir, 'static')
+--- a/script/config.js
++++ b/script/config.js
+@@ -7,7 +7,7 @@
+ const path = require('path')
  
--    cp path.join('apm', 'node_modules', 'atom-package-manager'), path.resolve(appDir, '..', 'new-app', 'apm'), filter: filterNodeModule
--    if process.platform isnt 'win32'
--      fs.symlinkSync(path.join('..', '..', 'bin', 'apm'), path.resolve(appDir, '..', 'new-app', 'apm', 'node_modules', '.bin', 'apm'))
--
-     channel = grunt.config.get('atom.channel')
+ const repositoryRootPath = path.resolve(__dirname, '..')
+-const apmRootPath = path.join(repositoryRootPath, 'apm')
++const apmRootPath = path.join('/usr/lib')
+ const scriptRootPath = path.join(repositoryRootPath, 'script')
+ const buildOutputPath = path.join(repositoryRootPath, 'out')
+ const docsOutputPath = path.join(repositoryRootPath, 'docs', 'output')
+@@ -18,7 +18,7 @@
+ const atomHomeDirPath = path.join(homeDirPath, '.atom')
  
-     cp path.join('resources', 'app-icons', channel, 'png', '1024.png'), path.join(appDir, 'resources', 'atom.png')
+ const appMetadata = require(path.join(repositoryRootPath, 'package.json'))
+-const apmMetadata = require(path.join(apmRootPath, 'package.json'))
++const apmMetadata = require(path.join(apmRootPath, 'node_modules', 'atom-package-manager', 'package.json'))
+ const channel = getChannel()
+ 
+ module.exports = {
+--- a/script/lib/package-application.js
++++ b/script/lib/package-application.js
+@@ -57,17 +57,6 @@
+ 
+ function copyNonASARResources (packagedAppPath, bundledResourcesPath) {
+   console.log(`Copying non-ASAR resources to ${bundledResourcesPath}`)
+-  fs.copySync(
+-    path.join(CONFIG.repositoryRootPath, 'apm', 'node_modules', 'atom-package-manager'),
+-    path.join(bundledResourcesPath, 'app', 'apm'),
+-    {filter: includePathInPackagedApp}
+-  )
+-  if (process.platform !== 'win32') {
+-    // Existing symlinks on user systems point to an outdated path, so just symlink it to the real location of the apm binary.
+-    // TODO: Change command installer to point to appropriate path and remove this fallback after a few releases.
+-    fs.symlinkSync(path.join('..', '..', 'bin', 'apm'), path.join(bundledResourcesPath, 'app', 'apm', 'node_modules', '.bin', 'apm'))
+-    fs.copySync(path.join(CONFIG.repositoryRootPath, 'atom.sh'), path.join(bundledResourcesPath, 'app', 'atom.sh'))
+-  }
+   if (process.platform === 'darwin') {
+     fs.copySync(path.join(CONFIG.repositoryRootPath, 'resources', 'mac', 'file.icns'), path.join(bundledResourcesPath, 'file.icns'))
+   } else if (process.platform === 'linux') {
+--- a/script/lib/dependencies-fingerprint.js
++++ b/script/lib/dependencies-fingerprint.js
+@@ -21,7 +21,7 @@
+   compute: function () {
+     // Include the electron minor version in the fingerprint since that changing requires a re-install
+     const electronVersion = CONFIG.appMetadata.electronVersion.replace(/\.\d+$/, '')
+-    const apmVersion = CONFIG.apmMetadata.dependencies['atom-package-manager']
++    const apmVersion = CONFIG.apmMetadata.version
+     const body = electronVersion + apmVersion + process.platform + process.version
+     return crypto.createHash('sha1').update(body).digest('hex')
+   }
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
 @@ -136,12 +136,7 @@

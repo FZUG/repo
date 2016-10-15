@@ -1,36 +1,37 @@
---- a/build/Gruntfile.coffee
-+++ b/build/Gruntfile.coffee
-@@ -304,7 +304,7 @@
+--- a/script/build
++++ b/script/build
+@@ -4,7 +4,7 @@
  
-   grunt.registerTask('ci', ciTasks)
+ // Run bootstrap first to ensure all the dependencies used later in this script
+ // are installed.
+-require('./bootstrap')
++//require('./bootstrap')
  
--  defaultTasks = ['download-electron', 'download-electron-chromedriver', 'build', 'set-version', 'generate-asar']
-+  defaultTasks = ['build', 'set-version', 'generate-asar']
-   unless process.platform is 'linux' or grunt.option('no-install')
-     defaultTasks.push 'install'
-   grunt.registerTask('default', defaultTasks)
---- a/build/tasks/build-task.coffee
-+++ b/build/tasks/build-task.coffee
-@@ -14,19 +14,6 @@
-     rm path.join(buildDir, 'installer')
-     mkdir path.dirname(buildDir)
- 
--    if process.platform is 'darwin'
--      cp 'electron/Electron.app', shellAppDir, filter: /default_app/
--      fs.renameSync path.join(shellAppDir, 'Contents', 'MacOS', 'Electron'), path.join(shellAppDir, 'Contents', 'MacOS', 'Atom')
--      fs.renameSync path.join(shellAppDir, 'Contents', 'Frameworks', 'Electron Helper.app'), path.join(shellAppDir, 'Contents', 'Frameworks', 'Atom Helper.app')
--      fs.renameSync path.join(shellAppDir, 'Contents', 'Frameworks', 'Atom Helper.app', 'Contents', 'MacOS', 'Electron Helper'), path.join(shellAppDir, 'Contents', 'Frameworks', 'Atom Helper.app', 'Contents', 'MacOS', 'Atom Helper')
--    else
--      cp 'electron', shellAppDir, filter: /default_app/
--
--      if process.platform is 'win32'
--        fs.renameSync path.join(shellAppDir, 'electron.exe'), path.join(shellAppDir, 'atom.exe')
--      else
--        fs.renameSync path.join(shellAppDir, 'electron'), path.join(shellAppDir, 'atom')
--
-     mkdir appDir
- 
-     if process.platform isnt 'win32'
+ // Needed so we can require src/module-cache.coffee during generateModuleCache
+ require('coffee-script/register')
+@@ -33,7 +33,7 @@
+ const generateAPIDocs = require('./lib/generate-api-docs')
+ const generateMetadata = require('./lib/generate-metadata')
+ const generateModuleCache = require('./lib/generate-module-cache')
+-const installApplication = require('./lib/install-application')
++//const installApplication = require('./lib/install-application')
+ const packageApplication = require('./lib/package-application')
+ const prebuildLessCache = require('./lib/prebuild-less-cache')
+ const transpileBabelPaths = require('./lib/transpile-babel-paths')
+@@ -55,10 +55,10 @@
+ generateModuleCache()
+ prebuildLessCache()
+ generateMetadata()
+-generateAPIDocs()
+-downloadChromedriver()
++//generateAPIDocs()
++//downloadChromedriver()
+ dumpSymbols()
+-  .then(packageApplication)
++//  .then(packageApplication)
+   .then(packagedAppPath => {
+     if (process.platform === 'darwin') {
+       if (argv.codeSign) {
 --- a/package.json
 +++ b/package.json
 @@ -12,7 +12,6 @@
@@ -51,8 +52,8 @@
 -    fs = require 'fs-plus'
 +  fs = require 'fs-plus'
 +  if devMode or not cache.resourcePath.startsWith("/usr/<lib>/atom")
-     atomCoffeePath = path.join(cache.resourcePath, 'exports', 'atom.coffee')
-     cache.builtins.atom = atomCoffeePath if fs.isFileSync(atomCoffeePath)
+     atomJsPath = path.join(cache.resourcePath, 'exports', 'atom.js')
+     cache.builtins.atom = atomJsPath if fs.isFileSync(atomJsPath)
    cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee

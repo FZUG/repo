@@ -21,18 +21,19 @@
  while getopts ":wtfvh-:" opt; do
    case "$opt" in
      -)
-@@ -52,66 +37,22 @@
+@@ -52,68 +37,21 @@
    export ELECTRON_ENABLE_LOGGING=1
  fi
  
 -if [ $OS == 'Mac' ]; then
 -  if [ -n "$BETA_VERSION" ]; then
 -    ATOM_APP_NAME="Atom Beta.app"
+-    ATOM_EXECUTABLE_NAME="Atom Beta"
 -  else
 -    ATOM_APP_NAME="Atom.app"
+-    ATOM_EXECUTABLE_NAME="Atom"
 -  fi
-+ATOM_PATH="/usr/bin/electron-<version> --app=/usr/<lib>/atom"
- 
+-
 -  if [ -z "${ATOM_PATH}" ]; then
 -    # If ATOM_PATH isnt set, check /Applications and then ~/Applications for Atom.app
 -    if [ -x "/Applications/$ATOM_APP_NAME" ]; then
@@ -50,11 +51,9 @@
 -      fi
 -    fi
 -  fi
-+ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
-+mkdir -p "$ATOM_HOME"
- 
+-
 -  if [ $EXPECT_OUTPUT ]; then
--    "$ATOM_PATH/$ATOM_APP_NAME/Contents/MacOS/Atom" --executed-from="$(pwd)" --pid=$$ "$@"
+-    "$ATOM_PATH/$ATOM_APP_NAME/Contents/MacOS/$ATOM_EXECUTABLE_NAME" --executed-from="$(pwd)" --pid=$$ "$@"
 -    exit $?
 -  else
 -    open -a "$ATOM_PATH/$ATOM_APP_NAME" -n --args --executed-from="$(pwd)" --pid=$$ --path-environment="$PATH" "$@"
@@ -75,7 +74,10 @@
 -  : ${TMPDIR:=/tmp}
 -
 -  [ -x "$ATOM_PATH" ] || ATOM_PATH="$TMPDIR/atom-build/Atom/atom"
--
++ATOM_PATH="/usr/bin/electron-<version> --app=/usr/<lib>/atom"
++ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
++mkdir -p "$ATOM_HOME"
+ 
 -  if [ $EXPECT_OUTPUT ]; then
 -    "$ATOM_PATH" --executed-from="$(pwd)" --pid=$$ "$@"
 +if [ $EXPECT_OUTPUT ]; then
