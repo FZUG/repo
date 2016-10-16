@@ -95,9 +95,3 @@
 	"privacyStatementUrl": "https://go.microsoft.com/fwlink/?LinkId=786907",
 	"npsSurveyUrl": "https://www.research.net/r/Z2RMYRJ",
 	"checksumFailMoreInfoUrl": "https://go.microsoft.com/fwlink/?LinkId=828886",
-	"checksums": {
-		"vs/workbench/workbench.main.js": "PMVAHTv7sP5sWhVAHqmeUg",
-		"vs/workbench/workbench.main.css": "hHKl7OKCy+GIkt7Dm2+fPw",
-		"vs/workbench/electron-browser/bootstrap/index.html": "A7FcwiFQwy0ydQR6MrrRrQ",
-		"vs/workbench/electron-browser/bootstrap/index.js": "ReGWRjGfF2Rwcgfk7F5ljw"
-	},

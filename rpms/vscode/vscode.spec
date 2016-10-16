@@ -13,9 +13,21 @@
 %global _commit 9e4e44c19e393803e2b05fe2323cf4ed7e36880e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
+# compute checksum for file
+# https://github.com/Microsoft/vscode/blob/master/build/gulpfile.vscode.js#L165
+%global hash MD5() { openssl md5 -binary $1 |openssl base64 |cut -d= -f1; }
+%global line_num LN() { wc -l $1 |cut -d" " -f1; }
+%global _files files=(\
+  "vs/workbench/workbench.main.js"\
+  "vs/workbench/workbench.main.css"\
+  "vs/workbench/electron-browser/bootstrap/index.html"\
+  "vs/workbench/electron-browser/bootstrap/index.js"\
+)
+%{nil}
+
 Name:    vscode
 Version: 1.6.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -27,6 +39,7 @@ Source1: about.json
 Patch0:  improve-i18n.patch
 Patch1:  fix-post-script.patch
 
+BuildRequires: openssl
 BuildRequires: /usr/bin/npm
 BuildRequires: node-gyp, git
 BuildRequires: python, libX11-devel
@@ -145,13 +158,29 @@ sed -i -e \
     %{buildroot}%{_libdir}/%{name}/product.json
 
 # About.json
-sed -i '$a\\t"commit": "%{_commit}",\n\t"date": "'`date -u +%FT%T.%3NZ`'"\n}' \
+sed -i '$a\\t"commit": "%{_commit}",\n\t"date": "'`date -u +%FT%T.%3NZ`'",\n\t"checksums": {' \
     %{buildroot}%{_libdir}/%{name}/product.json
 sed -i '2s|:.*,$|: "VSCode",|' \
     %{buildroot}%{_libdir}/%{name}/package.json
 
+# Compute checksum
+%{hash}
+%{line_num}
+%{_files}
+pushd ../VSCode-linux-*/out/
+for i in `seq ${#files[@]}`; do
+  _md5=`MD5 ${files[$((i-1))]}`
+  sed -i '$a\\t\t"'${files[$((i-1))]}'": "'${_md5}'"' %{buildroot}%{_libdir}/%{name}/product.json
+  if [ ${#files[@]} -ne $i ]; then
+    _ln=`LN %{buildroot}%{_libdir}/%{name}/product.json`
+    sed -i ''${_ln}'s|$|,|' %{buildroot}%{_libdir}/%{name}/product.json
+  else
+    sed -i '$a\\t}\n}' %{buildroot}%{_libdir}/%{name}/product.json
+  fi
+done
+
 # find all *.js files and generate node.file-list
-pushd ../VSCode-linux-*/
+pushd ..
 for ext in js json node; do
     find node_modules -iname "*.${ext}" \
     ! -path '*doc*' \
@@ -188,6 +217,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Oct 16 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-2
+- Compute checksum
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1
 - Release 1.6.1
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-1
