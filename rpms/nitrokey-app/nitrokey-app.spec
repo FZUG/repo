@@ -10,7 +10,6 @@ License:	GPLv3
 URL:		https://github.com/Nitrokey/nitrokey-app
 #Source0:	%{url}/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source0:	%{url}/archive/v%{version}.tar.gz
-Source1:	https://www.nitrokey.com/sites/default/files/40-nitrokey.rules
 
 BuildRequires:	qt5-qtbase-devel
 BuildRequires:	libnotify-devel
@@ -25,10 +24,9 @@ Nitrokey app, the application to configure Nitrokey Pro and Nitrokey Storage.
 
 %prep
 %setup -q -n %{name}-%{version}
-cp -p %SOURCE1 .
 
 %build
-%{_qt5_qmake} %{name}-qt5.pro
+%{qmake_qt5} %{name}-qt5.pro
 %make_build
 
 %install
