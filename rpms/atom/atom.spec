@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.11.1
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -159,13 +159,14 @@ done
 pushd out/app/
 for ext in js jsm json coffee map node types less png svg aff dic; do
     find node_modules -regextype posix-extended \
-      -iname \*.${ext} \
+      -iname \*.${ext} -print \
     ! -name '.*' \
     ! -path '*test*' \
     ! -path '*example*' \
     ! -path '*sample*' \
-    ! -path '*benchmark*' \
-      -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/{}' \;
+    ! -path '*benchmark*', \
+      -regex '.*shortest_path.*' -print | \
+      xargs -i -n1 install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/{}' ||:
 done
 popd
 
@@ -199,6 +200,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Oct 20 2016 mosquito <sensor.wen@gmail.com> - 1.11.1-2.git099ffef
+- Fix cannot find shortest_path_tree module
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.11.1-1.git099ffef
 - Release 1.11.1
 - Replace Grunt-based build system. See https://github.com/atom/atom/pull/12410
