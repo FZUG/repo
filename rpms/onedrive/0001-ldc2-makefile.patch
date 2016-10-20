@@ -1,0 +1,64 @@
+diff --git a/Makefile b/Makefile
+index 006d1a0..425b313 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,4 +1,4 @@
+-DC = dmd
++DC = ldc2
+ DFLAGS = -ofonedrive -L-lcurl -L-lsqlite3 -L-ldl
+ DESTDIR = /usr/local/bin
+ CONFDIR = /usr/local/etc
+diff --git a/onedrive.service b/onedrive.service
+index 71db5ae..3e32056 100644
+--- a/onedrive.service
++++ b/onedrive.service
+@@ -3,7 +3,7 @@ Description=OneDrive Free Client
+ Documentation=https://github.com/skilion/onedrive
+ 
+ [Service]
+-ExecStart=/usr/local/bin/onedrive -m
++ExecStart=/usr/bin/onedrive -m
+ Restart=no
+ 
+ [Install]
+diff --git a/src/onedrive.d b/src/onedrive.d
+index 6e57294..f61c892 100644
+--- a/src/onedrive.d
++++ b/src/onedrive.d
+@@ -18,7 +18,7 @@ class OneDriveException: Exception
+ 	// HTTP status code
+ 	int code;
+ 
+-    @nogc @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
++    @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
+     {
+         super(msg, file, line, next);
+     }
+@@ -266,7 +266,7 @@ final class OneDriveApi
+ 	private auto patch(T)(const(char)[] url, const(T)[] patchData)
+ 	{
+ 		scope(exit) http.clearRequestHeaders();
+-		http.method = HTTP.Method.patch;
++		//http.method = HTTP.Method.patch;
+ 		http.url = url;
+ 		addAccessTokenHeader();
+ 		auto response = perform(patchData);
+diff --git a/src/sync.d b/src/sync.d
+index 1789e77..4cd3037 100644
+--- a/src/sync.d
++++ b/src/sync.d
+@@ -33,12 +33,12 @@ private bool testCrc32(string path, const(char)[] crc32)
+ 
+ class SyncException: Exception
+ {
+-    @nogc @safe pure nothrow this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null)
++    @safe pure nothrow this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null)
+     {
+         super(msg, file, line, next);
+     }
+ 
+-    @nogc @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
++    @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
+     {
+         super(msg, file, line, next);
+     }
