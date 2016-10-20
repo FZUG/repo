@@ -16,12 +16,12 @@
 %global node_ver 6
 
 # commit
-%global _commit 099ffefca36057084aac3d55748f35cf6c3bcae6
+%global _commit 0ecc15013866194a3b97713df97ce7391ac916e5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.11.1
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.11.2
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -200,6 +200,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Oct 20 2016 mosquito <sensor.wen@gmail.com> - 1.11.2-1.git0ecc150
+- Release 1.11.2
 * Thu Oct 20 2016 mosquito <sensor.wen@gmail.com> - 1.11.1-2.git099ffef
 - Fix cannot find shortest_path_tree module
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.11.1-1.git099ffef
