@@ -6,9 +6,9 @@
  path = require 'path'
  _ = require 'underscore-plus'
  semver = require 'semver'
-@@ -93,6 +94,11 @@
-       # TODO Remove ATOM_NODE_VERSION env var support after a couple releases
-       @electronVersion = process.env.ATOM_ELECTRON_VERSION ? process.env.ATOM_NODE_VERSION ? electronVersion ? '0.22.0'
+@@ -94,6 +95,11 @@ class Command
+       unless @electronVersion?
+         throw new Error('Could not determine Electron version')
  
 +      electronNodeDir = path.join('/usr/<lib>/electron/node')
 +      atomNodeDevDir = path.join(config.getAtomDirectory(), '.node-gyp', '.node-gyp', @electronVersion)

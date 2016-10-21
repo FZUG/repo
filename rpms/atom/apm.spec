@@ -14,12 +14,12 @@
 %global node_ver v4
 
 # commit
-%global _commit 87b4bcb678682ff9e64f8aa1e11dd8d51c1ab2c5
+%global _commit 33e67dd1d482110b697a38d2290fb18b90eb1e33
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.10.0
-Release: 6.git%{_shortcommit}%{?dist}
+Version: 1.13.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -30,10 +30,12 @@ Source1: apm.js
 
 Patch0:  use-system-npm.patch
 Patch1:  use-local-node-devel.patch
+Patch2:  no-scripts.patch
 
 BuildRequires: /usr/bin/npm, git
 BuildRequires: nodejs-packaging
 BuildRequires: libgnome-keyring-devel
+BuildRequires: coffee-script
 Requires: /usr/bin/npm, git, python2
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
 Requires: node-gyp
@@ -44,19 +46,18 @@ Discover and install Atom packages powered by https://atom.io
 
 %prep
 %setup -q -n %repo-%{_commit}
-sed -i 's|<lib>|%{_lib}|' %{S:1} %{P:2}
+sed -i 's|<lib>|%{_lib}|' %{S:1} %{P:1}
 %patch0 -p1
 %patch1 -p1
-
-# Fix system arch of dedupe
-sed -i "/ia32/s|ia32'|' + process.arch|" src/dedupe.coffee
+%patch2 -p1
 
 # Use custom launcher
+rm bin/apm{,.cmd} bin/npm{,.cmd}
 rm src/cli.coffee
 install -m755 %{S:1} bin/apm
 
-# Do not download node 0.10
-sed -i '/download-node/d' package.json
+# Don't download binary Node
+rm BUNDLED_NODE_VERSION script/*
 
 %build
 export CFLAGS="%{optflags}"
@@ -70,7 +71,7 @@ nvm install %{node_ver}
 nvm use %{node_ver}
 %endif
 
-npm install --loglevel info
+coffee -c --no-header -o lib src/*.coffee
 npm install --loglevel info -g --prefix build/usr
 
 # Copy system node binary
@@ -103,7 +104,7 @@ find %{buildroot} -regextype posix-extended -type f \
     -regex '.*node' -exec strip '{}' \; -or \
     -name '.*' -exec rm -rf '{}' \; -or \
     -name '*.md' -delete -or \
-    -name 'apm.cmd' -delete
+    -name 'appveyor.yml' -delete
 
 %files
 %defattr(-,root,root,-)
@@ -113,6 +114,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri Oct 21 2016 mosquito <sensor.wen@gmail.com> - 1.13.0-1.git33e67dd
+- Release 1.13.0
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-6.git87b4bcb
 - Fix launcher
 * Fri May 27 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-5.git87b4bcb
