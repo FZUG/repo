@@ -25,13 +25,11 @@ Summary: Atom package manager
 Group:   Applications/System
 License: MIT
 URL:     https://github.com/atom/apm/
-Source0: https://github.com/atom/apm/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source1: apm.js
 
 Patch0:  use-system-npm.patch
-# Fix for callbacks that run process.exit() before JSON output completes
-Patch1:  truncated-json-output.patch
-Patch2:  use-local-node-devel.patch
+Patch1:  use-local-node-devel.patch
 
 BuildRequires: /usr/bin/npm, git
 BuildRequires: nodejs-packaging
@@ -49,7 +47,6 @@ Discover and install Atom packages powered by https://atom.io
 sed -i 's|<lib>|%{_lib}|' %{S:1} %{P:2}
 %patch0 -p1
 %patch1 -p1
-%patch2 -p1
 
 # Fix system arch of dedupe
 sed -i "/ia32/s|ia32'|' + process.arch|" src/dedupe.coffee
