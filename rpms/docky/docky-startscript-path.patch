@@ -1,0 +1,17 @@
+diff -rupN docky-2.1.4.orig/Docky/docky.in docky-2.1.4/Docky/docky.in
+--- docky-2.1.4.orig/Docky/docky.in	2012-04-03 17:15:28.359056371 +0200
++++ docky-2.1.4/Docky/docky.in	2012-04-03 17:53:37.908012201 +0200
+@@ -3,12 +3,5 @@
+ SCRIPT_PATH=`dirname $0`
+ SCRIPT_PATH=`cd $SCRIPT_PATH; pwd`
+
+-if [ "x$SCRIPT_PATH" = "x@abs_srcdir@/bin/Debug" ] ||
+-   [ "x$SCRIPT_PATH" = "x@abs_srcdir@" ] ; then
+-    echo "*** Running uninstalled ***"
+-    DOCKY_EXE="@abs_srcdir@/bin/Debug/Docky.exe"
+-else
+-    DOCKY_EXE="@expanded_libdir@/@PACKAGE@/Docky.exe"
+-fi
+-
++DOCKY_EXE="@expanded_libdir@/@PACKAGE@/Docky.exe"
+ exec mono @MONO_DEBUG_ARGS@ "$DOCKY_EXE" @DOCKY_DEBUG_ARGS@ "$@"
