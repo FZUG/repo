@@ -19,7 +19,7 @@
 
 Name:    nodejs-atom-package-manager
 Version: 1.13.0
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -69,9 +69,14 @@ git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
 nvm install %{node_ver}
 nvm use %{node_ver}
+
+# Install coffee-script
+npm install coffee-script --loglevel info
+Coffee="node_modules/.bin/coffee"
 %endif
 
-coffee -c --no-header -o lib src/*.coffee
+# Build apm
+${Coffee:-coffee} -c --no-header -o lib src/*.coffee
 npm install --loglevel info -g --prefix build/usr
 
 # Copy system node binary
@@ -114,6 +119,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Fri Oct 21 2016 mosquito <sensor.wen@gmail.com> - 1.13.0-2.git33e67dd
+- Fix coffee script error for fc23
 * Fri Oct 21 2016 mosquito <sensor.wen@gmail.com> - 1.13.0-1.git33e67dd
 - Release 1.13.0
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.10.0-6.git87b4bcb
