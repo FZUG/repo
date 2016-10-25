@@ -1,0 +1,79 @@
+--- a/Makefile
++++ b/Makefile
+@@ -1,7 +1,9 @@
+ DC = dmd
+ DFLAGS = -ofonedrive -L-lcurl -L-lsqlite3 -L-ldl
+-DESTDIR = /usr/local/bin
+-CONFDIR = /usr/local/etc
++DESTDIR = /
++PREFIX = /usr/local
++CONFDIR = $(DESTDIR)$(PREFIX)/etc
++BINDIR = $(DESTDIR)$(PREFIX)/bin
+ 
+ SOURCES = \
+ 	src/config.d \
+@@ -28,11 +30,11 @@
+ 	rm -f onedrive.o onedrive
+ 
+ install: onedrive onedrive.conf
+-	install onedrive $(DESTDIR)/onedrive
+-	install -m 644 onedrive.conf $(CONFDIR)/onedrive.conf
+-	install -m 644 onedrive.service /usr/lib/systemd/user
++	install -Dm 0755 onedrive $(BINDIR)/onedrive
++	install -Dm 0644 onedrive.conf $(CONFDIR)/onedrive.conf
++	install -Dm 0644 onedrive.service $(DESTDIR)/usr/lib/systemd/user/onedrive.service
+ 
+ uninstall:
+-	rm -f $(DESTDIR)/onedrive
++	rm -f $(BINDIR)/onedrive
+ 	rm -f $(CONFDIR)/onedrive.conf
+-	rm -f /usr/lib/systemd/user/onedrive.service
++	rm -f $(DESTDIR)/usr/lib/systemd/user/onedrive.service
+--- a/onedrive.service
++++ b/onedrive.service
+@@ -3,7 +3,7 @@
+ Documentation=https://github.com/skilion/onedrive
+ 
+ [Service]
+-ExecStart=/usr/local/bin/onedrive -m
++ExecStart=/usr/bin/onedrive -m
+ Restart=no
+ 
+ [Install]
+--- a/src/onedrive.d
++++ b/src/onedrive.d
+@@ -18,7 +18,7 @@
+ 	// HTTP status code
+ 	int code;
+ 
+-    @nogc @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
++    @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
+     {
+         super(msg, file, line, next);
+     }
+@@ -266,7 +266,7 @@
+ 	private auto patch(T)(const(char)[] url, const(T)[] patchData)
+ 	{
+ 		scope(exit) http.clearRequestHeaders();
+-		http.method = HTTP.Method.patch;
++		//http.method = HTTP.Method.patch;
+ 		http.url = url;
+ 		addAccessTokenHeader();
+ 		auto response = perform(patchData);
+--- a/src/sync.d
++++ b/src/sync.d
+@@ -33,12 +33,12 @@
+ 
+ class SyncException: Exception
+ {
+-    @nogc @safe pure nothrow this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null)
++    @safe pure nothrow this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable next = null)
+     {
+         super(msg, file, line, next);
+     }
+ 
+-    @nogc @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
++    @safe pure nothrow this(string msg, Throwable next, string file = __FILE__, size_t line = __LINE__)
+     {
+         super(msg, file, line, next);
+     }
