@@ -7,7 +7,7 @@
 
 Name:           onedrive
 Version:        1.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        OneDrive Free Client written in D
 Group:          Applications/Internet
 License:        GPLv3
@@ -18,6 +18,7 @@ Patch2:         0002-create-default-config.patch
 BuildRequires:  ldc
 BuildRequires:  libcurl-devel
 BuildRequires:  sqlite-devel
+BuildRequires:  systemd
 Requires(post): systemd
 Requires(preun): systemd 
 
@@ -52,5 +53,7 @@ This do not support OneDrive for business.
 %{_userunitdir}/%{name}.service
 
 %changelog
+* Tue Oct 25 2016 mosquito <sensor.wen@gmail.com> 1.1-2.giteb8d0fe
+- add BReq systemd
 * Thu Oct 20 2016 Ziqian SUN <sztsian@gmail.com> 1.1-1.giteb8d0fe
 - initial package
