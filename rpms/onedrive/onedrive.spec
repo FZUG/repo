@@ -17,8 +17,9 @@ Patch1:         0001-ldc2-makefile.patch
 Patch2:         0002-create-default-config.patch
 BuildRequires:  ldc
 BuildRequires:  libcurl-devel
-BuildRequires:	sqlite-devel
-
+BuildRequires:  sqlite-devel
+Requires(post): systemd
+Requires(preun): systemd 
 
 %description
 Free CLI client for Microsoft OneDrive written in D.
@@ -30,20 +31,25 @@ This do not support OneDrive for business.
 %patch2 -p1
 
 %build
-export DFLAGS="%{_d_optflags}"
-make %{?_smp_mflags}
+%make_build DC="ldc2"
 
 %install
-%{__mkdir_p} %{buildroot}%{_bindir}
-install -Dm 0755 %{name} %{buildroot}%{_bindir}/%{name}
+%make_install \
+    PREFIX="%{_prefix}" \
+    CONFDIR="%{buildroot}%{_sysconfdir}"
 
-%clean
-rm -rf %{buildroot}
+%post
+%systemd_user_post %{name}.service
+
+%preun
+%systemd_user_preun %{name}.service
 
 %files
 %doc README.md
 %license LICENSE
+%config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_bindir}/%{name}
+%{_userunitdir}/%{name}.service
 
 %changelog
 * Thu Oct 20 2016 Ziqian SUN <sztsian@gmail.com> 1.1-1.giteb8d0fe

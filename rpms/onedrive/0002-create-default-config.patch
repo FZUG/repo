@@ -1,5 +1,3 @@
-diff --git a/src/config.d b/src/config.d
-index 797c372..173bede 100644
 --- a/src/config.d
 +++ b/src/config.d
 @@ -1,4 +1,5 @@
@@ -8,7 +6,7 @@ index 797c372..173bede 100644
  static import log;
  
  final class Config
-@@ -24,10 +25,20 @@ final class Config
+@@ -24,10 +25,20 @@
  	void init()
  	{
  		bool found = false;
