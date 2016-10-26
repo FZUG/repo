@@ -17,6 +17,7 @@ import json
 import shutil
 import fnmatch
 import argparse
+import requests
 
 srcDir = os.path.join(os.getcwd(), 'build')
 outDir = os.path.join(os.getcwd(), 'output')
@@ -454,6 +455,25 @@ def repo_cache(output=None, verb=None):
     with open(output, 'w') as f:
         json.dump(cacheDict, f)
 
+def send_comment(content):
+    '''Send comment to Github.
+
+    Args:
+        content: A string of comments.
+
+    Returns:
+        Return json response from Github API.
+    '''
+
+    pr_url = 'https://api.github.com/repos/FZUG/repo/issues/%s/comments'
+    pr_num = os.getenv('ghprbPullId')
+    pr_token = os.getenv('PR_TOKEN')
+    session = requests.session()
+    session.headers['Authorization'] = 'token %s' % pr_token
+    comment = json.dumps({"body": content})
+    resp = session.post(pr_url % pr_num, data=comment)
+    return resp.json()
+
 if __name__ == '__main__':
     args = parse_args()
     Archs = args.archs if args.archs else ['x86_64', 'i386']
@@ -555,6 +575,12 @@ if __name__ == '__main__':
                     result(args.result, [value, specs[tasks.index(task)], rel, arch])
                 resultList.append(result('-', [value, task, rel, arch]))
 
+    build_result = '** Build result **\n'
     echo('cyan', '\n** Build result **')
     for i in resultList:
+        build_result += '%s\n' % ''.join(i)
         echo(''.join(i))
+
+    # Sent build result
+    if os.getenv('ghprbActualCommit') and send_comment(build_result).get('id'):
+        echo('green', 'info:', 'Comment sent successfully.')
