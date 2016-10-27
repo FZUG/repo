@@ -29,21 +29,23 @@ def get_commit_list():
         Return all of commit list.
     '''
 
-    stdout = getoutput('/bin/git log --pretty=%h')
+    commit_list = getoutput('/bin/git rev-list -n100 --abbrev-commit HEAD').split()
     commit = getoutput('/bin/git rev-parse --short HEAD~')
 
-    if 'GIT_PREVIOUS_COMMIT' in os.environ:
-        commit = os.environ['GIT_PREVIOUS_COMMIT'][0:7]
+    if os.getenv('GIT_PREVIOUS_COMMIT'):
+        commit = os.getenv('GIT_PREVIOUS_COMMIT')[0:7]
 
-    if 'ghprbActualCommit' in os.environ:
-        commit = getoutput('/bin/git ls-remote https://github.com/FZUG/repo master')[0:7]
-        commitList = re.findall('\w{7}', stdout)[1:]
-    else:
-        commitList = re.findall('\w{7}', stdout)
+    if os.getenv('ghprbActualCommit'):
+        commit_list = commit_list[1:]
+        code = call(['/bin/git', 'fetch', '-q'])
+        master_commit_list = getoutput('/bin/git rev-list -n100 --abbrev-commit origin/master').split()
+        inter_list = list(set(master_commit_list).intersection(set(commit_list)))
+        inter_list.sort(key=commit_list.index)
+        commit = inter_list[0]
 
-    commitList = commitList[0:commitList.index(commit)]
-    commitList.reverse()
-    return commitList
+    commit_list = commit_list[0:commit_list.index(commit)]
+    commit_list.reverse()
+    return commit_list
 
 def get_file_list(commit):
     '''Get modified files for commit.
