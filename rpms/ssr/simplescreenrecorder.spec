@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit c580a19e6ab21146bffa74fe2ff5f774c53ec20f
+%global _commit c20e56a8eabb2677b0c538d0d056ff48d4cfc971
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           simplescreenrecorder
-Version:        0.3.6
+Version:        0.3.8
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        A feature-rich screen recorder that supports X11 and OpenGL
 Summary(zh_CN): 一个功能丰富的屏幕录像软件, 支持录制 X11 和 OpenGL 程序
@@ -18,10 +18,10 @@ Url:            http://www.maartenbaert.be/simplescreenrecorder
 Source0:        https://github.com/MaartenBaert/ssr/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  desktop-file-utils
-BuildRequires:  hicolor-icon-theme
 BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libswscale)
-BuildRequires:  pkgconfig(QtCore) >= 4.8
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(jack)
@@ -31,93 +31,87 @@ BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xfixes)
-Requires:       %{name}-lib = %{version}-%{release}
+BuildRequires:  qt5-linguist
+BuildRequires:  libappstream-glib
+
+Requires: hicolor-icon-theme
+Obsoletes: %{name}-lib
 
 %description
 SimpleScreenRecorder is a feature-rich screen recorder that supports X11 and OpenGL.
 It has a Qt-based graphical user interface. It can record the entire screen or part
  of it, or record OpenGL applications directly. The recording can be paused and resumed
  at any time. Many different file formats and codecs are supported.
-.
-This package contains the main program.
 
 %description -l zh_CN
 SimpleScreenRecorder 是一个功能丰富的屏幕录像软件, 支持录制 X11 和 OpenGL 程序.
 我的图形界面基于 Qt 开发. 我还能够记录整个或部分屏幕, 并可以直接记录 OpenGL 应用程序.
 此外, 在任何时候都能方便的暂停和恢复记录. 并且我还支持许多不同的文件格式和编码器.
-.
-此包包含主程序.
-
-%package lib
-Summary:        %{name} GLInject library
-Summary(zh_CN): %{name} 的 GLInject 库
-Group:          System Environment/Libraries
-Requires:       %{name} = %{version}-%{release}
-
-%description lib
-SimpleScreenRecorder is a feature-rich screen recorder that supports X11 and OpenGL.
-It has a Qt-based graphical user interface. It can record the entire screen or part
- of it, or record OpenGL applications directly. The recording can be paused and resumed
- at any time. Many different file formats and codecs are supported.
-.
-This package contains the GLInject library.
-
-%description lib -l zh_CN
-SimpleScreenRecorder 是一个功能丰富的屏幕录像软件, 支持录制 X11 和 OpenGL 程序.
-我的图形界面基于 Qt 开发. 我还能够记录整个或部分屏幕, 并可以直接记录 OpenGL 应用程序.
-此外, 在任何时候都能方便的暂停和恢复记录. 并且我还支持许多不同的文件格式和编码器.
-.
-此包包含 GLInject 库.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%autosetup -n %{repo}-%{_commit}
 
 %build
-export LDFLAGS="$LDFLAGS `pkg-config --libs-only-l libavformat libavcodec libavutil libswscale`"
-export CPPFLAGS="$CPPFLAGS `pkg-config --cflags-only-I libavformat libavcodec libavutil libswscale`"
+export LDFLAGS="$LDFLAGS `pkg-config --libs-only-L libavformat libavcodec libavutil libswscale`"
+export CPPFLAGS="$CPPFLAGS -fPIC `pkg-config --cflags-only-I libavformat libavcodec libavutil libswscale`"
 %configure \
-%ifarch %{ix86} x86_64
-    --disable-assert
-%else
+    --with-qt5 \
+    --disable-static \
+%ifnarch %{ix86} x86_64
     --disable-x86-asm \
+%endif
+%ifarch %{arm} aarch64
     --disable-glinjectlib
 %endif
-make %{?_smp_mflags}
+%nil
+%make_build
 
 %install
 %make_install
+
 rm -f %{buildroot}%{_libdir}/*.la
+mkdir -p %{buildroot}%{_libdir}/%{name}
+%ifnarch %{arm} aarch64
+    mv %{buildroot}%{_libdir}/libssr-glinject.so \
+       %{buildroot}%{_libdir}/%{name}/libssr-glinject.so
+%endif
+
+%check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
-install -Dm 0644 %{buildroot}/%{_datadir}/icons/hicolor/256x256/apps/%{name}.png \
-    %{buildroot}/%{_datadir}/pixmaps/%{name}.png
+appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata.xml
 
 %post
-update-desktop-database -q ||:
-gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor ||:
-/sbin/ldconfig
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+/usr/bin/update-desktop-database &>/dev/null ||:
 
 %postun
-update-desktop-database -q ||:
-gtk-update-icon-cache -q -t -f %{_datadir}/icons/hicolor ||:
-/sbin/ldconfig
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
+fi
+/usr/bin/update-desktop-database &>/dev/null ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
 %files
 %defattr(-,root,root,-)
-%doc *.txt *.md data/resources/about.htm
+%doc README.md AUTHORS.md CHANGELOG.md notes.txt todo.txt
 %license COPYING
 %{_bindir}/%{name}
-%{_bindir}/ssr-glinject
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/pixmaps/%{name}.png
 %{_datadir}/icons/hicolor/*/apps/%{name}*
-%{_mandir}/man1/*
-
-%files lib
-%defattr(-,root,root,-)
-%{_libdir}/libssr-glinject.so
+%{_bindir}/ssr-glinject
+%{_libdir}/%{name}/
+%{_mandir}/man1/%{name}.1.*
+%{_mandir}/man1/ssr-glinject.1.*
+%{_datadir}/appdata/%{name}.appdata.xml
 
 %changelog
+* Thu Dec 01 2016 mosquito <sensor.wen@gmail.com> - 0.3.8-1.gitc20e56a
+- Update version to 0.3.8-1.gitc20e56a
+
 * Sun Dec 06 2015 mosquito <sensor.wen@gmail.com> - 0.3.6-1.gitc580a19
 - Update version to 0.3.6-1.gic580a19
 
