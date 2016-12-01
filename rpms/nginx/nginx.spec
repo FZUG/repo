@@ -15,7 +15,7 @@
 %global  with_http2          1
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.10.6
+%global  ngx_lua_version     0.10.7
 %global  ndk_version         0.3.0
 %global  with_ngx_lua        1
 
@@ -65,7 +65,7 @@
 
 Name:              nginx
 Epoch:             1
-Version:           1.11.5
+Version:           1.11.6
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -553,6 +553,10 @@ fi
 
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.6-1.modsec_2.9.0
+- update to upstream release 1.11.6
+- update ngx_lua 0.10.7
+
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.5-1.modsec_2.9.0
 - update to upstream release 1.11.5
 - Remove --with-ipv6 option, IPv6 support is configured automatically
