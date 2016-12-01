@@ -10,11 +10,11 @@
 %global electrondir %{_libdir}/%{name}/%{version}
 
 # commit
-%global _commit e3688a8e9d052ffee3eb0cc9521cc1d33396f48a
+%global _commit cb9fdc45e6fb31397cf6b1bc0455d4d9b78f1a79
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    electron
-Version: 1.3.7
+Version: 1.3.9
 Release: 1.prebuilt%{?dist}
 Summary: Framework for build cross-platform desktop applications
 Group:   Applications/Editors
@@ -78,6 +78,8 @@ fi
 %{_libdir}/%{name}/%{version}/
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.3.9-1.gitcb9fdc4
+- Release 1.3.9
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.3.7-1.gite3688a8
 - Release 1.3.7
 * Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 1.2.7-1.git13e1818
