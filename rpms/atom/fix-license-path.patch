@@ -1,14 +1,14 @@
 --- a/src/main-process/atom-application.coffee
 +++ b/src/main-process/atom-application.coffee
-@@ -231,7 +231,7 @@
+@@ -226,7 +226,7 @@
      @openPathOnEvent('application:open-your-keymap', 'atom://.atom/keymap')
      @openPathOnEvent('application:open-your-snippets', 'atom://.atom/snippets')
      @openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
 -    @openPathOnEvent('application:open-license', path.join(process.resourcesPath, 'LICENSE.md'))
 +    @openPathOnEvent('application:open-license', '/usr/share/licenses/atom/LICENSE.md')
  
-     @disposable.add ipcHelpers.on app, 'before-quit', =>
-       @quitting = true
+     @disposable.add ipcHelpers.on app, 'before-quit', (event) =>
+       unless @quitting
 --- a/src/workspace.coffee
 +++ b/src/workspace.coffee
 @@ -461,7 +461,7 @@

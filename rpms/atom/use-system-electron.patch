@@ -9,7 +9,7 @@
  
  // Needed so we can require src/module-cache.coffee during generateModuleCache
  require('coffee-script/register')
-@@ -33,7 +33,7 @@
+@@ -35,7 +35,7 @@
  const generateAPIDocs = require('./lib/generate-api-docs')
  const generateMetadata = require('./lib/generate-metadata')
  const generateModuleCache = require('./lib/generate-module-cache')
@@ -18,7 +18,7 @@
  const packageApplication = require('./lib/package-application')
  const prebuildLessCache = require('./lib/prebuild-less-cache')
  const transpileBabelPaths = require('./lib/transpile-babel-paths')
-@@ -55,10 +55,10 @@
+@@ -57,10 +57,10 @@
  generateModuleCache()
  prebuildLessCache()
  generateMetadata()
@@ -38,10 +38,10 @@
      "url": "https://github.com/atom/atom/issues"
    },
    "license": "MIT",
--  "electronVersion": "0.37.8",
+-  "electronVersion": "1.3.9",
    "dependencies": {
      "async": "0.2.6",
-     "atom-keymap": "6.3.2",
+     "atom-keymap": "7.1.3-8",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
 @@ -194,8 +194,8 @@
@@ -57,7 +57,7 @@
    cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -521,7 +521,7 @@
+@@ -531,7 +531,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
