@@ -15,10 +15,10 @@
 %global  nginx_datadir       %{_datadir}/tengine
 %global  nginx_logdir        %{_localstatedir}/log/tengine
 %global  nginx_webroot       %{nginx_datadir}/html
-%global  with_http2          0
+%global  with_http2          1
 
 # ngx_http_lua_module
-%global  ngx_lua_version     0.10.0
+%global  ngx_lua_version     0.10.6
 %global  with_ngx_lua_latest 1
 
 # ModSecurity module
@@ -36,7 +36,7 @@
 %global  with_modsec_crs     1
 
 # FancyIndex module
-%global  fancy_version       0.3.6
+%global  fancy_version       0.4.1
 %global  with_fancy          1
 
 # gperftools exist only on selected arches
@@ -63,7 +63,7 @@
 
 Name:              tengine
 Epoch:             1
-Version:           2.1.2
+Version:           2.2.0
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{?dist}
 %else
@@ -78,7 +78,7 @@ Group:             System Environment/Daemons
 License:           BSD
 URL:               http://tengine.taobao.org
 
-Source0:           http://tengine.taobao.org/download/%{name}-%{version}.tar.gz
+Source0:           https://github.com/alibaba/tengine/archive/%{name}-%{version}.tar.gz
 Source1:           https://github.com/openresty/lua-nginx-module/archive/v%{ngx_lua_version}/lua-nginx-module-%{ngx_lua_version}.tar.gz
 Source2:           https://www.modsecurity.org/tarball/2.9.0/modsecurity-2.9.0.tar.gz
 Source3:           https://www.modsecurity.org/tarball/2.8.0/modsecurity-2.8.0.tar.gz
@@ -222,10 +222,10 @@ This package provides the base rules for mod_security.
 
 
 %prep
-%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7
+%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7 -n %{name}-%{name}-%{version}
 %if 0%{?fedora} > 21
 pushd modsecurity-%{modsec_version}
-%patch1 -p1
+#patch1 -p1
 popd
 %endif
 %patch0 -p0
@@ -332,8 +332,6 @@ export DESTDIR=%{buildroot}
     --with-http_ssl_module \
 %if 0%{?with_http2}
     --with-http_v2_module \
-%else
-    --with-http_spdy_module \
 %endif
     --with-http_realip_module \
     --with-http_addition_module \
@@ -465,7 +463,7 @@ install -p -m 0644 %{SOURCE101} %{SOURCE102} \
 install -p -m 0644 %{SOURCE103} %{SOURCE104} \
     %{buildroot}%{nginx_webroot}
 
-install -p -D -m 0644 %{_builddir}/%{name}-%{version}/man/nginx.8 \
+install -p -D -m 0644 %{_builddir}/%{name}-%{name}-%{version}/man/nginx.8 \
     %{buildroot}%{_mandir}/man8/%{name}.8
 
 install -p -D -m 0755 %{SOURCE13} %{buildroot}%{_bindir}/%{name}-upgrade
@@ -601,6 +599,10 @@ fi
 
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1:2.2.0-1.modsec_2.9.0
+- update to upstream release 2.2.0
+- update ngx_lua 0.10.7
+- update ngx_fancyindex 0.4.1
 * Thu Jan 28 2016 mosquito <sensor.wen@gmail.com> - 1:2.1.2-1.modsec_2.9.0
 - update to upstream release 2.1.2
 - update ngx_lua 0.10.0
