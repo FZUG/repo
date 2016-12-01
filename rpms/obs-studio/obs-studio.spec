@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 580cfc1a95a6bb2b4ea6f002c95c630ae4542ed7
+%global _commit b7b8ad476f1f62376833a224d64aa7b747d3b58b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:       obs-studio
-Version:    0.16.2
+Version:    0.16.6
 Release:    1.git%{_shortcommit}%{?dist}
 Summary:    A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -153,11 +153,13 @@ fi
 %doc docs/html
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 0.16.6-1.gitb7b8ad4
+- Update to 0.16.6-1.gitb7b8ad4
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 0.16.2-1.git580cfc1
-- Update to 0.16.2-1.get580cfc1
+- Update to 0.16.2-1.git580cfc1
 - Added BR doxygen
 * Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 0.15.4-1.git632f0bf
-- Update to 0.15.4-1.get632f0bf
+- Update to 0.15.4-1.git632f0bf
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.15.2-1.gitcf983b7
 - Update to 0.15.2-1.gitcf983b7
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 0.15.1-1.git2732375
