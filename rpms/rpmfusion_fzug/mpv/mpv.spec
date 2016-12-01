@@ -1,5 +1,5 @@
 Name:           mpv
-Version:        0.20.0
+Version:        0.22.0
 Release:        1%{?dist}
 Summary:        Movie player playing most video formats and DVDs
 License:        GPLv2+
@@ -110,18 +110,18 @@ desktop-file-install etc/mpv.desktop
 install -Dpm 644 README.md %{buildroot}%{_docdir}/%{name}/README.md
 
 %post
-update-desktop-database &>/dev/null || :
-touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/update-desktop-database &>/dev/null || :
 
 %postun
-update-desktop-database &> /dev/null || :
+/usr/bin/update-desktop-database &> /dev/null || :
 if [ $1 -eq 0 ] ; then
-  touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-  gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &>/dev/null || :
+  /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+  /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 fi
 
 %posttrans
-gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &>/dev/null || :
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 
 %post -n libmpv -p /sbin/ldconfig
 
@@ -147,6 +147,9 @@ gtk-update-icon-cache --quiet %{_datadir}/icons/hicolor &>/dev/null || :
 %{_libdir}/pkgconfig/mpv.pc
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 0.22.0-1
+- update to 0.22.0
+
 * Fri Sep  2 2016 mosquito <sensor.wen@gmail.com> - 0.20.0-1
 - update to 0.20.0
 
