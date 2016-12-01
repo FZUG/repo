@@ -6,11 +6,11 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 1.3.7
+%global electron_ver 1.3.9
 %global node_ver 6
 
 # commit
-%global _commit 9e4e44c19e393803e2b05fe2323cf4ed7e36880e
+%global _commit 7ba55c5860b152d999dda59393ca3ebeb1b5c85f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # compute checksum for file
@@ -26,8 +26,8 @@
 %{nil}
 
 Name:    vscode
-Version: 1.6.1
-Release: 2%{?dist}
+Version: 1.7.2
+Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -37,7 +37,6 @@ Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 # https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
 Source1: about.json
 Patch0:  improve-i18n.patch
-Patch1:  fix-post-script.patch
 
 BuildRequires: openssl
 BuildRequires: /usr/bin/npm
@@ -55,7 +54,7 @@ Requires: electron = %{electron_ver}
 %prep
 %setup -q -n %{repo}-%{_commit}
 %patch0 -p1
-%patch1 -p1
+
 git clone https://github.com/creationix/nvm.git .nvm
 source .nvm/nvm.sh
 nvm install %{node_ver}
@@ -66,18 +65,6 @@ sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
 
 # Do not download electron
 sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
-
-# fsevents dont support linux
-sed -i '135,139d' npm-shrinkwrap.json
-
-# Use ELECTRON_RUN_AS_NODE for Electron 1.2.0
-sed -i '/RUN_AS_NODE/s|ATOM_SHELL_INTERNAL|ELECTRON|g' \
-    scripts/code-cli.sh \
-    resources/linux/bin/code.sh \
-    src/vs/code/node/cli.ts \
-    src/vs/base/node/stdFork{.ts,Start.js} \
-    src/vs/workbench/parts/git/electron-browser/electronGitService.ts \
-    extensions/typescript/src/utils/electron{,ForkStart}.ts
 
 %build
 export CFLAGS="%{optflags} -fPIC -pie"
@@ -217,6 +204,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-1
+- Release 1.7.2
 * Sun Oct 16 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-2
 - Compute checksum
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1

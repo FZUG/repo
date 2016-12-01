@@ -62,12 +62,34 @@
 		"PeterJausovec.vscode-docker": "{**/dockerfile,**/Dockerfile,**/docker-compose.yml,**/docker-compose.*.yml}"
 	},
 	"extensionImportantTips": {
-		"ms-vscode.csharp": "**/*.cs",
-		"lukehoban.Go": "**/*.go",
-		"donjayamanne.python": "{**/*.py}",
-		"redhat.java": "{**/*.java}",
-		"ms-vscode.PowerShell": "{**/*.ps,**/*.ps1}",
-		"ms-vscode.cpptools": "{**/*.c,**/*.cpp,**/*.cc,**/.cxx,**/*.hh,**/*.hpp,**/*.hxx,**/*.h}"
+		"ms-vscode.csharp": {
+			"name": "C#",
+			"pattern": "{**/*.cs,**/project.json,**/global.json,**/*.csproj,**/*.sln}"
+		},
+		"lukehoban.Go": {
+			"name": "Go",
+			"pattern": "**/*.go"
+		},
+		"donjayamanne.python": {
+			"name": "Python",
+			"pattern": "{**/*.py}"
+		},
+		"redhat.java": {
+			"name": "Language Support for Java(TM) by Red Hat",
+			"pattern": "{**/*.java}"
+		},
+		"ms-vscode.PowerShell": {
+			"name": "PowerShell",
+			"pattern": "{**/*.ps,**/*.ps1}"
+		},
+		"ms-vscode.cpptools": {
+			"name": "C/C++",
+			"pattern": "{**/*.c,**/*.cpp,**/*.cc,**/.cxx,**/*.hh,**/*.hpp,**/*.hxx,**/*.h}"
+		},
+		"PeterJausovec.vscode-docker": {
+			"name": "Docker",
+			"pattern": "{**/dockerfile,**/Dockerfile,**/docker-compose.yml,**/docker-compose.*.yml}"
+		}
 	},
 	"crashReporter": {
 		"productName": "VSCode",
@@ -90,6 +112,10 @@
 	},
 	"documentationUrl": "https://go.microsoft.com/fwlink/?LinkID=533484#vscode",
 	"releaseNotesUrl": "https://go.microsoft.com/fwlink/?LinkID=533483#vscode",
+	"keyboardShortcutsUrlMac": "https://go.microsoft.com/fwlink/?linkid=832143",
+	"keyboardShortcutsUrlLinux": "https://go.microsoft.com/fwlink/?linkid=832144",
+	"keyboardShortcutsUrlWin": "https://go.microsoft.com/fwlink/?linkid=832145",
+	"introductoryVideosUrl": "https://go.microsoft.com/fwlink/?linkid=832146",
 	"twitterUrl": "https://go.microsoft.com/fwlink/?LinkID=533687",
 	"requestFeatureUrl": "https://go.microsoft.com/fwlink/?LinkID=533482",
 	"privacyStatementUrl": "https://go.microsoft.com/fwlink/?LinkId=786907",
