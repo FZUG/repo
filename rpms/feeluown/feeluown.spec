@@ -5,11 +5,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 8ccb1feb8a4c5fa385efa55c0b8c165dfcf5e7d4
+%global _commit 698ed58c4ab33f78bd1a0700480a066f9c2fbe5b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    feeluown
-Version: 9.2
+Version: 9.3
 Release: 0.1.git%{_shortcommit}%{?dist}
 Summary: Net Ease Music for Linux
 Summary(zh_CN): 网易云音乐 for Linux
@@ -17,7 +17,7 @@ Summary(zh_CN): 网易云音乐 for Linux
 Group:   Applications/Multimedia
 License: GPLv3
 URL:     https://github.com/cosven/FeelUOwn
-Source0: https://github.com/cosven/FeelUOwn/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildArch: noarch
 BuildRequires: dos2unix
@@ -29,6 +29,7 @@ Requires: python3-qt5
 Requires: python3-dbus
 Requires: python3-xlib
 Requires: python3-requests
+Requires: python3-beautifulsoup4
 Requires: python3-sqlalchemy
 Requires: python3-PyYAML
 Requires: gstreamer1-plugins-base
@@ -83,14 +84,14 @@ EOF
 
 %post
 if [ $1 -eq 1 ]; then
-    /usr/bin/pip3 install -U -q 'quamash==0.5.5' &>/dev/null ||:
+    /usr/bin/pip3 install -U -q 'quamash==0.5.5' pycrypto &>/dev/null ||:
 fi
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
 if [ $1 -eq 0 ]; then
-    /usr/bin/pip3 uninstall -y -q quamash &>/dev/null ||:
+    /usr/bin/pip3 uninstall -y -q quamash pycrypto &>/dev/null ||:
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
@@ -109,6 +110,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 9.3-0.1.git698ed58
+- Release 9.3a
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 9.2-0.1.git8ccb1fe
 - Release 9.2a
 * Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 8.0-0.1.gita6d4cde
