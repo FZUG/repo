@@ -2,11 +2,11 @@
 %global gtest_version 1.7.0
 
 # commit
-%global _commit a5859f6e046686bdbad22b5266e756030c157f60
+%global _commit 2234ff7c2b143046fd196f544ca4baccc7e2b2ec
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:          apt
-Version:       1.2.14
+Version:       1.2.17
 Release:       1%{?dist}
 Summary:       Debian's commandline package manager
 
@@ -240,6 +240,8 @@ install -d %{buildroot}%{_var}/log/apt
 %{_libdir}/libapt-private.so
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.2.17-1
+- Update to 1.2.17
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 1.2.14-1
 - Update to 1.2.14
 * Sat Feb 27 2016 mosquito <sensor.wen@gmail.com> - 1.2.4-1
