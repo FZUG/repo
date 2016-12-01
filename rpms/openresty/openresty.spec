@@ -28,7 +28,7 @@
 %endif
 
 # nginx mainline version
-%global  ngx_version         1.11.4
+%global  ngx_version         1.11.6
 %global  with_ngx_mainline   1
 
 # ModSecurity module
@@ -73,7 +73,7 @@
 
 Name:              openresty
 Epoch:             1
-Version:           1.11.2.1
+Version:           1.11.2.2
 %if 0%{?with_modsec}
 Release:           1.modsec_%{modsec_version}%{dist}
 %else
@@ -120,6 +120,10 @@ Patch1:            modsec_lua_dump.patch
 
 # HTTP/2 patch
 #Patch2:            http://nginx.org/patches/http2/patch.http2.txt
+
+# Fix build with nginx 1.11.6
+# https://github.com/FRiCKLE/ngx_postgres/pull/52
+Patch3:            fix_default_port.patch
 
 %if 0%{?rhel}
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
@@ -227,6 +231,9 @@ popd
 %endif
 %if 0%{?rhel} != 5
 %patch0 -p0 -d nginx-%{ngx_version}
+%endif
+%if 0%{?with_ngx_mainline}
+%patch3 -p1
 %endif
 
 # Change server and library name
@@ -601,6 +608,8 @@ fi
 
 
 %changelog
+* Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.2.2-1.modsec_2.9.0
+- update to upstream release 1.11.6
 * Mon Sep 26 2016 mosquito <sensor.wen@gmail.com> - 1:1.11.2.1-1.modsec_2.9.0
 - update to upstream release 1.11.4
 - update ngx_fancyindex 0.4.1

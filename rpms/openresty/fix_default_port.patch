@@ -1,0 +1,77 @@
+--- a/bundle/memc-nginx-module-0.17/src/ngx_http_memc_util.c
++++ b/bundle/memc-nginx-module-0.17/src/ngx_http_memc_util.c
+@@ -140,14 +140,14 @@
+                     (int) uscfp[i]->port, (int) url->port);
+             continue;
+         }
+-
++  #if (nginx_version < 1011006)
+         if (uscfp[i]->default_port && url->default_port
+             && uscfp[i]->default_port != url->default_port)
+         {
+             dd("upstream_add: default_port not match");
+             continue;
+         }
+-
++  #endif
+         return uscfp[i];
+     }
+ 
+--- a/bundle/ngx_postgres-1.0rc7/src/ngx_postgres_module.c
++++ b/bundle/ngx_postgres-1.0rc7/src/ngx_postgres_module.c
+@@ -1319,14 +1319,14 @@
+                (int) uscfp[i]->port, (int) url->port);
+             continue;
+         }
+-
++  #if (nginx_version < 1011006)
+         if (uscfp[i]->default_port && url->default_port
+             && (uscfp[i]->default_port != url->default_port))
+         {
+             dd("default_port doesn't match");
+             continue;
+         }
+-
++  #endif
+         dd("returning");
+         return uscfp[i];
+     }
+--- a/bundle/redis-nginx-module-0.3.7/ngx_http_redis_module.c
++++ b/bundle/redis-nginx-module-0.3.7/ngx_http_redis_module.c
+@@ -1004,14 +1004,14 @@
+         if (uscfp[i]->port != url->port) {
+             continue;
+         }
+-
++  #if (nginx_version < 1011006)
+         if (uscfp[i]->default_port
+             && url->default_port
+             && uscfp[i]->default_port != url->default_port)
+         {
+             continue;
+         }
+-
++  #endif
+         return uscfp[i];
+     }
+ 
+--- a/bundle/redis2-nginx-module-0.13/src/ngx_http_redis2_util.c
++++ b/bundle/redis2-nginx-module-0.13/src/ngx_http_redis2_util.c
+@@ -76,7 +76,7 @@
+                     (int) uscfp[i]->port, (int) url->port);
+             continue;
+         }
+-
++  #if (nginx_version < 1011006)
+         if (uscfp[i]->default_port
+             && url->default_port
+             && uscfp[i]->default_port != url->default_port)
+@@ -84,7 +84,7 @@ ngx_http_redis2_upstream_add(ngx_http_request_t *r, ngx_url_t *url)
+             dd("upstream_add: default_port not match");
+             continue;
+         }
+-
++  #endif
+         return uscfp[i];
+     }
+ 
