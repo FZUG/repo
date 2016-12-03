@@ -27,7 +27,7 @@
 
 Name:    vscode
 Version: 1.7.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -93,7 +93,7 @@ NAME="%{name}"
 VSCODE_PATH="%{_libdir}/\$NAME"
 ELECTRON="%{_bindir}/electron-%{electron_ver}"
 CLI="\$VSCODE_PATH/out/cli.js"
-ELECTRON_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" "\$VSCODE_PATH" "\$@"
+ELECTRON_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" --app="\$VSCODE_PATH" "\$@"
 exit \$?
 EOT
 
@@ -204,6 +204,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Dec  3 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-2
+- Fix reopen /usr/lib64/vscode/ directory every time
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-1
 - Release 1.7.2
 * Sun Oct 16 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-2
