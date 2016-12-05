@@ -1,0 +1,11 @@
+--- a/src/build_mozc.py
++++ b/src/build_mozc.py
+@@ -830,7 +830,7 @@
+   ninja = GetNinjaPath()
+ 
+   ninja_targets = [GetNinjaTargetName(target) for target in targets]
+-  RunOrDie([ninja, '-C', build_arg] + ninja_targets)
++  RunOrDie([ninja, '-v', '-C', build_arg] + ninja_targets)
+ 
+ 
+ def BuildOnWindows(targets):

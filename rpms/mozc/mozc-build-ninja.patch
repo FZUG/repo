@@ -1,0 +1,11 @@
+--- a/src/build_mozc.py
++++ b/src/build_mozc.py
+@@ -804,7 +804,7 @@
+ 
+ def GetNinjaPath():
+   """Returns the path to Ninja."""
+-  ninja = 'ninja'
++  ninja = 'ninja-build'
+   if IsWindows():
+     ninja = 'ninja.exe'
+   return ninja

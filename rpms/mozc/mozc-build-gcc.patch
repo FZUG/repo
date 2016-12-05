@@ -1,0 +1,25 @@
+--- a/src/gyp/common.gypi
++++ b/src/gyp/common.gypi
+@@ -128,9 +128,9 @@
+         'compiler_host_version_int': 304,  # Clang 3.4 or higher
+       }],
+       ['target_platform=="Linux"', {
+-        'compiler_target': 'clang',
++        'compiler_target': 'gcc',
+         'compiler_target_version_int': 304,  # Clang 3.4 or higher
+-        'compiler_host': 'clang',
++        'compiler_host': 'gcc',
+         'compiler_host_version_int': 304,  # Clang 3.4 or higher
+       }],
+     ],
+@@ -450,8 +450,8 @@
+     ['target_platform=="Linux"', {
+       'make_global_settings': [
+         ['AR', '<!(which ar)'],
+-        ['CC', '<!(which clang)'],
+-        ['CXX', '<!(which clang++)'],
++        ['CC', '<!(which gcc)'],
++        ['CXX', '<!(which g++)'],
+         ['LD', '<!(which ld)'],
+         ['NM', '<!(which nm)'],
+         ['READELF', '<!(which readelf)'],

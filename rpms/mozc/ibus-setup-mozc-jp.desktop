@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=IBus Mozc Setup
+Comment=Set up IBus Mozc engine
+Exec=/usr/libexec/mozc/mozc_tool --mode=config_dialog
+Icon=production
+NoDisplay=true
+Type=Application
+StartupNotify=true
