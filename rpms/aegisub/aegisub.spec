@@ -1,30 +1,33 @@
-%bcond_with ffms2
+# https://github.com/RussianFedora/aegisub
+# https://build.opensuse.org/package/show/openSUSE:Factory/aegisub
+# https://www.archlinux.org/packages/community/x86_64/aegisub
 
 Name:           aegisub
 Version:        3.2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A general-purpose subtitle editor with ASS/SSA support
 License:        BSD-3-Clause
 Url:            http://www.aegisub.org/
 Source0:        http://ftp.aegisub.org/pub/releases/%{name}-%{version}.tar.xz
 
-BuildRequires:  automake
-BuildRequires:  boost-devel
-BuildRequires:  desktop-file-utils
 BuildRequires:  intltool
+BuildRequires:  boost-devel
 BuildRequires:  wxWidgets-devel
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(fftw3)
+BuildRequires:  pkgconfig(ffms2)
 BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glu)
 BuildRequires:  pkgconfig(hunspell)
+BuildRequires:  pkgconfig(icu-i18n)
 BuildRequires:  pkgconfig(libass)
 BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(portaudio-2.0)
+BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(lua)
-BuildRequires:  pkgconfig(zlib)
-%if %{with ffms2}
-BuildRequires:  pkgconfig(ffms2)
-%endif
+BuildRequires:  desktop-file-utils
 
 %description
 Aegisub is an advanced subtitle editor for Windows, and UNIX-like systems, such
@@ -44,17 +47,25 @@ sed -i "s|__DATE__|\"$FAKE_BUILDDATE\"|
         s|__TIME__|\"$FAKE_BUILDTIME\"|" src/version.cpp
 sed -i "/^LDFLAGS/s|$| -pthread|" Makefile.inc.in
 
+#remove version postfix
+sed -e 's|aegisub-[0-9.]*|aegisub|' -i configure.ac
+
 %build
 autoreconf -fi
 %configure \
-    --with-player-audio=PulseAudio \
     --without-oss \
+    --without-openal \
+    --with-player-audio=PulseAudio \
+    --with-wx-config=wx-config-3.0 \
     --disable-update-checker
 %make_build
 
 %install
 %make_install
-%find_lang %{name}-32
+%find_lang %{name}
+
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -70,14 +81,18 @@ fi
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
-%files -f %{name}-32.lang
+%files -f %{name}.lang
 %defattr(-,root,root,-)
-%doc LICENCE
-%{_bindir}/%{name}-3.2
+%doc automation/demos/ automation/v4-docs/
+%license LICENCE
+%{_bindir}/%{name}
 %{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.*
 
 %changelog
+* Sun Dec 11 2016 mosquito <sensor.wen@gmail.com> - 3.2.2-2
+- Add BReq ffms2, freetype2, icu-i18n, portaudio-2.0, libavcodec
+- Rename execution file
 * Sat Dec  3 2016 mosquito <sensor.wen@gmail.com> - 3.2.2-1
 - Initial build
