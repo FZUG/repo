@@ -1,27 +1,33 @@
-%{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%global debug_package %{nil}
+# https://aur.archlinux.org/packages/youdao-dict
+# http://fedoraproject.org/wiki/Packaging:Python#Byte_compiling
+# http://fedoraproject.org/wiki/Packaging:Python_Appendix#Manual_byte_compilation
+
+# Manual byte compilation for python 3(__pycache__)
+%global __python %{__python3}
 
 Name:    youdao-dict
 Version: 1.1.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Youdao Dict
 Summary(zh_CN): 有道词典
 
-License: Proprietary
+License: GPLv3 and Proprietary
 URL:     http://cidian.youdao.com/index-linux.html
 Group:   Applications/System
 Source0: http://codown.youdao.com/cidian/linux/%{name}_%{version}-0-ubuntu_amd64.deb
 Source1: http://codown.youdao.com/cidian/linux/%{name}_%{version}-0-ubuntu_i386.deb
+Patch0:  youdao-dict-1.1.0-dbus-register-object.patch
 
 BuildRequires: dpkg
 BuildRequires: python3-devel
-Requires: python3-qt5
-Requires: python3-requests
-Requires: python3-xlib
-Requires: python3-pillow
-Requires: python3-lxml
-Requires: python3-pyxdg
 Requires: python3-dbus
+Requires: python3-lxml
+Requires: python3-requests
+Requires: python3-pillow
+Requires: python3-pyxdg
+Requires: python3-qt5
+Requires: python3-qt5-webkit
+Requires: python3-xlib
 Requires: libappindicator-gtk3
 Requires: qt5-qtquickcontrols
 Requires: qt5-qtgraphicaleffects
@@ -37,34 +43,31 @@ Youdao Dict
 %prep
 # Extract DEB package
 %ifarch x86_64
-dpkg-deb -X %{SOURCE0} %{_builddir}/%{name}-%{version}
+dpkg-deb -x %{SOURCE0} %{_builddir}/%{name}-%{version}
 %else
-dpkg-deb -X %{SOURCE1} %{_builddir}/%{name}-%{version}
+dpkg-deb -x %{SOURCE1} %{_builddir}/%{name}-%{version}
 %endif
+
+# Fix dbus register object
+pushd %{_builddir}/%{name}-%{version}%{_datadir}
+%patch0 -p1 -b .dbus-register-object
 
 %build
 
 %install
-pushd %{_builddir}/%{name}-%{version}
+pushd %{_builddir}/%{name}-%{version}%{_datadir}
 
 # data files
-install -d %{buildroot}{%{_datadir},%{_bindir}}
-cp -r usr/share/* %{buildroot}%{_datadir}/
-
-# python files
-install -d %{buildroot}%{python3_sitelib}
-mv %{buildroot}%{_datadir}/%{name} %{buildroot}%{python3_sitelib}/
+install -d %{buildroot}%{_datadir}/
+cp -r %{name} %{buildroot}%{_datadir}/
+cp -r icons %{buildroot}/%{_datadir}/
+cp -r dbus-1 %{buildroot}%{_datadir}/
+cp -r applications %{buildroot}%{_datadir}/
+cp -r doc %{buildroot}%{_datadir}/
 
 # bin file
-ln -sfv %{python3_sitelib}/%{name}/main.py %{buildroot}%{_bindir}/%{name}
-
-# autostart
-cp etc/xdg/autostart/* %{buildroot}%{_datadir}/applications/
-
-# fix path
-sed -i 's|/usr/share|%{python3_sitelib}|' \
-  %{buildroot}%{_datadir}/dbus-1/services/com.youdao.backend.service \
-  %{buildroot}%{_datadir}/dbus-1/services/com.youdao.indicator.service
+install -d %{buildroot}%{_bindir}
+ln -sfv %{_datadir}/%{name}/main.py %{buildroot}%{_bindir}/%{name}
 
 %post
 if [ $1 -eq 1 ]; then
@@ -76,7 +79,7 @@ fi
 
 %preun
 if [ $1 -eq 0 ];then
-    rm -rf %{_sysconfdir}/xdg/autostart/%{name}-autostart.desktop
+    rm -f %{_sysconfdir}/xdg/autostart/%{name}-autostart.desktop
     pkill %{name} &>/dev/null ||:
 fi
 
@@ -93,13 +96,15 @@ fi
 %files
 %defattr(-,root,root,-)
 %{_bindir}/%{name}
-%{python3_sitelib}/%{name}
-%{_datadir}/applications/*.desktop
-%{_datadir}/dbus-1/services/
+%{_datadir}/%{name}
 %{_datadir}/doc/%{name}/
+%{_datadir}/applications/*.desktop
+%{_datadir}/dbus-1/services/*.service
 %{_datadir}/icons/hicolor/*/apps/%{name}*
 
 %changelog
+* Sun Dec 11 2016 mosquito <sensor.wen@gmail.com> - 1.1.0-2
+- fix dbus register object
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 1.1.0-1
 - release 1.1.0
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.0.2-2
