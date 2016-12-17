@@ -2,7 +2,7 @@
 
 Name:           you-get
 Version:        0.4.595
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A YouTube/Youku/Niconico video downloader written in Python 3
 
 License:        MIT
@@ -15,6 +15,7 @@ BuildRequires:  python3-devel
 Requires:       ffmpeg
 Recommends:     rtmpdump
 Recommends:     vlc
+Recommends:     mpv
 Provides:       python3-%{name} = %{version}-%{release}
 
 %description
@@ -56,20 +57,41 @@ else
 fi
 EOF
 
+# you-mpv
+%{__cat} > %{buildroot}%{_bindir}/you-mpv << EOF
+#!/usr/bin/env bash
+if [ -x "%{_bindir}/mpv" ]; then
+  %{_bindir}/%{name} --player mpv \$@
+else
+  echo "Please install mpv video player."
+fi
+EOF
+
 # bash completion
-%{__install} -Dm644 contrib/completion/%{name}-completion.bash \
-    %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+pushd contrib/completion/
+cp %{name}-completion.bash you-vlc-completion.bash
+cp %{name}-completion.bash you-mpv-completion.bash
+sed -i 's|%{name}|you-vlc|g' you-vlc-completion.bash
+sed -i 's|%{name}|you-mpv|g' you-mpv-completion.bash
+%{__install} -Dm644 %{name}-completion.bash %{buildroot}%{_datadir}/bash-completion/completions/%{name}
+%{__install} -Dm644 you-vlc-completion.bash %{buildroot}%{_datadir}/bash-completion/completions/you-vlc
+%{__install} -Dm644 you-mpv-completion.bash %{buildroot}%{_datadir}/bash-completion/completions/you-mpv
 
 # zsh completion
-%{__install} -Dm644 contrib/completion/_%{name} \
-    %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
-sed -i '/compdef/s|%{name}|you-vlc=%{name}|;/player/d' contrib/completion/_%{name}
-%{__install} -Dm644 contrib/completion/_%{name} \
-    %{buildroot}%{_datadir}/zsh/site-functions/_you-vlc
+cp _%{name} _you-vlc; cp _%{name} _you-mpv
+sed -i '/compdef/s|%{name}|you-vlc=%{name}|;/player/d' _you-vlc
+sed -i '/compdef/s|%{name}|you-mpv=%{name}|;/player/d' _you-mpv
+%{__install} -Dm644 _%{name} %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
+%{__install} -Dm644 _you-vlc %{buildroot}%{_datadir}/zsh/site-functions/_you-vlc
+%{__install} -Dm644 _you-mpv %{buildroot}%{_datadir}/zsh/site-functions/_you-mpv
 
 # fish completion
-%{__install} -Dm644 contrib/completion/%{name}.fish \
-    %{buildroot}%{_datadir}/fish/completions/%{name}.fish
+cp %{name}.fish you-vlc.fish; cp %{name}.fish you-mpv.fish
+sed -i 's|%{name}|you-vlc|g' you-vlc.fish
+sed -i 's|%{name}|you-mpv|g' you-mpv.fish
+%{__install} -Dm644 %{name}.fish %{buildroot}%{_datadir}/fish/completions/%{name}.fish
+%{__install} -Dm644 you-vlc.fish %{buildroot}%{_datadir}/fish/completions/you-vlc.fish
+%{__install} -Dm644 you-mpv.fish %{buildroot}%{_datadir}/fish/completions/you-mpv.fish
 
 %check
 %{__python3} setup.py test
@@ -80,16 +102,24 @@ sed -i '/compdef/s|%{name}|you-vlc=%{name}|;/player/d' contrib/completion/_%{nam
 %license LICENSE.txt
 %attr(755,-,-) %{_bindir}/%{name}
 %attr(755,-,-) %{_bindir}/you-vlc
+%attr(755,-,-) %{_bindir}/you-mpv
 %{python3_sitelib}/*
 %{_datadir}/bash-completion/completions/%{name}
+%{_datadir}/bash-completion/completions/you-vlc
+%{_datadir}/bash-completion/completions/you-mpv
 
 %files zsh-completion
 %{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/zsh/site-functions/_you-vlc
+%{_datadir}/zsh/site-functions/_you-mpv
 
 %files fish-completion
 %{_datadir}/fish/completions/%{name}.fish
+%{_datadir}/fish/completions/you-vlc.fish
+%{_datadir}/fish/completions/you-mpv.fish
 
 %changelog
+* Sat Dec 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.595-2
+- Add you-mpv command
 * Tue Dec 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.595-1
 - Initial build
