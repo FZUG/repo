@@ -7,7 +7,7 @@ Summary:       GTK+ audio player
 License:       GPLv2
 Group:         Applications/Multimedia
 Url:           https://github.com/Alexey-Yakovenko/deadbeef
-Source0:       https://github.com/Alexey-Yakovenko/deadbeef/archive/0.7.2/%{name}-%{version}.tar.gz
+Source0:       https://github.com/Alexey-Yakovenko/deadbeef/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:        desktop.patch
 
 BuildRequires: bison
