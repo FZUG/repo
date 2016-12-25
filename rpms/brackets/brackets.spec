@@ -14,7 +14,7 @@
 
 Name:    brackets
 Version: 1.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: An open source code editor for the web
 
 Group:   Development/Tools
@@ -57,7 +57,9 @@ Requires: libgcrypt
 git clone https://github.com/adobe/brackets
 git clone https://github.com/adobe/brackets-shell
 pushd %{name} && git checkout %{_commit0} && git submodule update --init && popd
-pushd %{name}-shell && git checkout %{_commit1} && popd
+# Note: use the linux-1547 branch for build brackets-shell
+# https://github.com/adobe/brackets/issues/12551
+pushd %{name}-shell && git checkout linux-1547 && popd
 
 %build
 ln -sfv %{_libdir}/libudev.so.1 %{_builddir}/libudev.so.0
@@ -68,6 +70,11 @@ export CXXFLAGS="%{optflags} -fPIC -pie"
 pushd %{_builddir}/%{name}
 npm install && npm install grunt-cli
 ./node_modules/.bin/grunt clean less targethtml useminPrepare htmlmin requirejs concat copy usemin
+
+# change version
+sed "/timestamp/s|:.*|: \"`date -u '+%a %b %d %Y %T GMT+0000'`\",|;
+  /version/s|-0|-17108|; /branch/s|:.*|: \"alf_localization_release_1.8\",|;
+  /SHA/s|:.*|: \"%{_commit0}\"|" -i src/config.json
 cp -a src/config.json dist/config.json
 
 pushd %{_builddir}/%{name}-shell
@@ -141,6 +148,9 @@ fi
 %attr(755,root,root) %{_libdir}/%{name}/Brackets-node
 
 %changelog
+* Sun Dec 25 2016 mosquito <sensor.wen@gmail.com> - 1.8-2
+- Back to linux-1547 branch
+- Set config.json for check version
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.8-1
 - Release 1.8
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.7-1
