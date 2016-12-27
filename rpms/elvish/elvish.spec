@@ -2,7 +2,7 @@
 
 Name:    elvish
 Version: 0.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Elvish - A friendly and expressive Unix shell
 
 Group:   System Environment/Shells
