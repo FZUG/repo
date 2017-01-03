@@ -6,11 +6,11 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 1.3.9
+%global electron_ver 1.3.13
 %global node_ver 6
 
 # commit
-%global _commit 7ba55c5860b152d999dda59393ca3ebeb1b5c85f
+%global _commit ee428b0eead68bf0fb99ab5fdc4439be227b6281
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # compute checksum for file
@@ -26,8 +26,8 @@
 %{nil}
 
 Name:    vscode
-Version: 1.7.2
-Release: 2%{?dist}
+Version: 1.8.1
+Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -204,6 +204,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-1
+- Release 1.8.1
 * Sat Dec  3 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-2
 - Fix reopen /usr/lib64/vscode/ directory every time
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-1

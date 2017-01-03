@@ -1,7 +1,7 @@
 {
-	"nameShort": "Code",
+	"nameShort": "vscode",
 	"nameLong": "Visual Studio Code",
-	"applicationName": "vscode",
+	"applicationName": "code",
 	"dataFolderName": ".vscode",
 	"win32MutexName": "vscode",
 	"licenseUrl": "https://go.microsoft.com/fwlink/?LinkID=533485",
@@ -25,41 +25,39 @@
 		"itemUrl": "https://marketplace.visualstudio.com/items"
 	},
 	"extensionTips": {
-		"ms-vscode.csharp": "{**/*.cs,**/project.json,**/global.json,**/*.csproj,**/*.sln}",
+		"ms-vscode.csharp": "{**/*.cs,**/project.json,**/global.json,**/*.csproj,**/*.sln,**/appsettings.json}",
 		"ms-vscode.mono-debug": "{**/*.cs,**/*.csproj,**/*.sln}",
-		"msjsdiag.debugger-for-chrome": "{**/*.ts,**/*.tsx**/*.js,**/*.jsx,**/*.es6}",
+		"msjsdiag.debugger-for-chrome": "{**/*.ts,**/*.tsx**/*.js,**/*.jsx,**/*.es6,**/.babelrc}",
 		"lukehoban.Go": "**/*.go",
-		"ms-vscode.PowerShell": "{**/*.ps,**/*.ps1}",
+		"ms-vscode.PowerShell": "{**/*.ps,**/*.ps1,**/*.ps.config,**/*.ps1.config}",
+		"austin.code-gnu-global": "{**/*.c,**/*.cpp,**/*.h}",
 		"Ionide.Ionide-fsharp": "{**/*.fsx,**/*.fsi,**/*.fs,**/*.ml,**/*.mli}",
-		"dbaeumer.vscode-eslint": "{**/*.js,**/*.jsx,**/*.es6}",
-		"eg2.tslint": "{**/*.ts,**/*.tsx}",
-		"Kasik96.format-indent": "{**/*.php}",
-		"felixfbecker.php-debug": "{**/*.php}",
-		"linyang95.phpmd": "{**/*.php}",
-		"ikappas.phpcs": "{**/*.php}",
-		"HvyIndustries.crane": "{**/*.php}",
+		"dbaeumer.vscode-eslint": "{**/*.js,**/*.jsx,**/*.es6,**/.eslintrc.*,**/.eslintrc,**/.babelrc,**/jsconfig.json}",
+		"dbaeumer.jshint": "{**/*.js,**/*.jsx,**/*.es6,**/.babelrc,**/jsconfig.json,**/.jshintrc,**/.jshintignore}",
+		"eg2.tslint": "{**/*.ts,**/*.tsx,**/tslint.json,**/tsconfig.json}",
+		"felixfbecker.php-debug": "{**/*.php,**/php.ini}",
+		"ikappas.phpcs": "{**/*.php,**/php.ini}",
 		"tht13.python": "{**/*.py}",
 		"donjayamanne.python": "{**/*.py}",
 		"magicstack.MagicPython": "{**/*.py}",
 		"saviorisdead.RustyCode": "{**/*.rs,**/*.rslib}",
-		"austin.code-gnu-global": "{**/*.c,**/*.cpp,**/*.h}",
-		"hars.CppSnippets": "{**/*.cpp,**/*.cc,**/*.h}",
 		"mitaki28.vscode-clang": "{**/*.cpp,**/*.cc,**/*.h}",
 		"ms-vscode.cpptools": "{**/*.c,**/*.cpp,**/*.cc,**/.cxx,**/*.hh,**/*.hpp,**/*.hxx,**/*.h}",
-		"seanmcbreen.Spell": "{**/*.md}",
-		"cssho.vscode-svgviewer": "{**/*.svg}",
-		"ms-vscode.latex": "{**/*.tex}",
-		"mathiasfrohlich.latexcompile": "{**/*.tex}",
+		"ms-vscode.Theme-MarkdownKit": "{**/*.md}",
+		"DavidAnson.vscode-markdownlint": "{**/*.md}",
+		"PeterJausovec.vscode-docker": "{**/dockerfile,**/Dockerfile,**/docker-compose.yml,**/docker-compose.*.yml}",
 		"EditorConfig.EditorConfig": "{**/.editorconfig}",
+		"HookyQR.beautify": "{**/.jsbeautifyrc,**/*.js,**/*.jsx,**/*.es6,**/.eslintrc.*,**/.babelrc,**/jsconfig.json}",
 		"donjayamanne.githistory": "{**/.gitignore}",
-		"Unity.unity-debug": "{**/*.meta}",
-		"donjayamanne.javadebugger": "{**/*.java}",
-		"rebornix.Ruby": "{**/*.rb}",
-		"hoovercj.ruby-linter": "{**/*.rb}",
-		"misogi.ruby-rubocop": "{**/*.rb}",
-		"CraigMaslowski.erb": "{**/*.erb}",
-		"groksrc.haml": "{**/*.haml}",
-		"PeterJausovec.vscode-docker": "{**/dockerfile,**/Dockerfile,**/docker-compose.yml,**/docker-compose.*.yml}"
+		"rebornix.Ruby": "{**/*.rb,**/*.erb,**/*.reek,**/.fasterer.yml,**/ruby-lint.yml,**/.rubocop.yml}",
+		"lonefy.vscode-JS-CSS-HTML-formatter": "{**/.jsbeautifyrc,**/*.js,**/*.jsx,**/*.es6,**/.eslintrc.*,**/.babelrc,**/jsconfig.json}",
+		"DotJoshJohnson.xml": "{**/*.xml}",
+		"shinnn.stylelint": "{**/.stylelintrc,**/stylelint.config.js}",
+		"eg2.vscode-npm-script": "{**/package.json}",
+		"fknop.vscode-npm": "{**/package.json}",
+		"donjayamanne.bower": "{**/.bowerrc}",
+		"ms-mssql.mssql": "{**/*.sql}",
+		"ms-vscode.jscs": "{**/.jscsrc}"
 	},
 	"extensionImportantTips": {
 		"ms-vscode.csharp": {
@@ -91,15 +89,21 @@
 			"pattern": "{**/dockerfile,**/Dockerfile,**/docker-compose.yml,**/docker-compose.*.yml}"
 		}
 	},
+	"keymapExtensionTips": [
+		"vscodevim.vim",
+		"ms-vscode.sublime-keybindings",
+		"ms-vscode.atom-keybindings",
+		"ms-vscode.vs-keybindings",
+		"k--kato.intellij-idea-keybindings",
+		"hiro-sun.vscode-emacs",
+		"alphabotsec.vscode-eclipse-keybindings",
+		"alefragnani.delphi-keybindings"
+	],
 	"crashReporter": {
 		"productName": "VSCode",
 		"companyName": "Microsoft",
 		"submitURL": "https://ticinocrashreporter.azurewebsites.net/crash",
-		"extra": {
-			"vscode_sessionId": "$(sessionId)",
-			"vscode_version": "$(version)",
-			"vscode_commit": "$(commit)"
-		}
+		"extra": {}
 	},
 	"enableTelemetry": true,
 	"aiConfig": {
