@@ -51,7 +51,7 @@
    }
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -138,12 +138,7 @@
+@@ -140,12 +140,7 @@
      return configPath if configPath
      return @apmPath if @apmPath?
  
