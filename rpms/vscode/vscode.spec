@@ -27,7 +27,7 @@
 
 Name:    vscode
 Version: 1.8.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -43,6 +43,10 @@ BuildRequires: /usr/bin/npm
 BuildRequires: node-gyp, git
 BuildRequires: python, libX11-devel
 BuildRequires: desktop-file-utils
+# sysctl_apply macro
+BuildRequires: systemd
+# /usr/lib/systemd/systemd-sysctl
+Requires: systemd
 Requires: electron = %{electron_ver}
 
 %description
@@ -180,6 +184,13 @@ for ext in js json node; do
 done
 popd
 
+# Set user watch files
+#https://github.com/FZUG/repo/issues/210
+install -d %{buildroot}%{_sysconfdir}/sysctl.d
+cat > %{buildroot}%{_sysconfdir}/sysctl.d/50-%{name}.conf << EOF
+fs.inotify.max_user_watches=$((8192*64))
+EOF
+
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database &>/dev/null ||:
@@ -193,17 +204,21 @@ fi
 
 %posttrans
 /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
+%sysctl_apply %{_sysconfdir}/sysctl.d/50-%{name}.conf
 
 %files
 %defattr(-,root,root,-)
 %doc README.md ThirdPartyNotices.txt
 %license LICENSE.txt
+%{_sysconfdir}/sysctl.d/50-%{name}.conf
 %attr(755,-,-) %{_bindir}/%{name}
 %{_libdir}/%{name}/
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Jan  7 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-2
+- Fix watch files limit
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-1
 - Release 1.8.1
 * Sat Dec  3 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-2
