@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.12.7
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -46,6 +46,7 @@ Requires: nodejs-atom-package-manager
 Requires: electron = %{electron_ver}
 Requires: desktop-file-utils
 Requires: gvfs
+Requires: ctags
 
 %description
 Atom is a text editor that's modern, approachable, yet hack-able to the core
@@ -176,6 +177,11 @@ find %{buildroot} -type f -regextype posix-extended \
     -name '.*?' -print -or \
     -size 0 -print | xargs rm -rf
 
+# link ctags-linux for symbols-view
+# https://github.com/FZUG/repo/issues/211
+install -d %{buildroot}%{_libdir}/%{name}/node_modules/symbols-view/vendor/
+ln -sfv %{_bindir}/ctags %{buildroot}%{_libdir}/%{name}/node_modules/symbols-view/vendor/ctags-linux
+
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database &>/dev/null ||:
@@ -200,6 +206,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sun Jan  8 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-2.git4573089
+- Fix jump to method causes error
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-1.git4573089
 - Release 1.12.7
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.12.6-1.git5a3d615
