@@ -40,6 +40,9 @@ pushd build
 install -d %{buildroot}%{goroot}
 cp -rv bin lib %{buildroot}%{_prefix}/
 cp -rv pkg src %{buildroot}%{goroot}/
+popd
+
+cp -rv tools/* %{buildroot}%{_bindir}/
 
 %check
 make test
@@ -51,6 +54,7 @@ make test
 %{_bindir}/coverparse
 %{_bindir}/diffrange
 %{_bindir}/grumpc
+%{_bindir}/grumprun
 %{python_sitelib}/%{name}/
 %{gopkgdir}/%{name}/
 %{gopkgdir}/%{name}.a
