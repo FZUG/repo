@@ -21,7 +21,7 @@
 
 Name:    atom
 Version: 1.12.7
-Release: 2.git%{_shortcommit}%{?dist}
+Release: 3.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -179,8 +179,10 @@ find %{buildroot} -type f -regextype posix-extended \
 
 # link ctags-linux for symbols-view
 # https://github.com/FZUG/repo/issues/211
-install -d %{buildroot}%{_libdir}/%{name}/node_modules/symbols-view/vendor/
-ln -sfv %{_bindir}/ctags %{buildroot}%{_libdir}/%{name}/node_modules/symbols-view/vendor/ctags-linux
+SYMBOLS_DIR="%{_libdir}/%{name}/node_modules/symbols-view"
+install -d %{buildroot}${SYMBOLS_DIR}/vendor/
+ln -sfv %{_bindir}/ctags %{buildroot}${SYMBOLS_DIR}/vendor/ctags-linux
+install -m644 out/app/node_modules/symbols-view/lib/ctags-config %{buildroot}${SYMBOLS_DIR}/lib/
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -206,6 +208,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri Jan 13 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-3.git4573089
+- Add ctags-config file for symbols-view
 * Sun Jan  8 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-2.git4573089
 - Fix jump to method causes error
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-1.git4573089
