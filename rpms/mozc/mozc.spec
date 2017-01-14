@@ -1,12 +1,13 @@
-# http://pkgs.fedoraproject.org/cgit/rpms/mozc.git
-# https://build.opensuse.org/package/show/openSUSE:Factory/mozc
-# https://www.archlinux.org/packages/community/x86_64/fcitx-mozc
-# https://aur.archlinux.org/packages/fcitx-mozc-ut
-
-%global _mozc_rev 05464eadaf8c0dc3255bc8a9c64019af58da35ea
-%global _jp_dict_rev e5b3425575734c323e1d947009dd74709437b684
-%global _protobuf_rev a428e42072765993ff674fda72863c9f1aa2d268
-%global _zipcode_rel 201610
+%global _mozc_commit 280e38fe3d9db4df52f0713acf2ca65898cd697a
+%global _mozc_shortcommit %(c=%{_mozc_commit}; echo ${c:0:7})
+%global _jud_commit e5b3425575734c323e1d947009dd74709437b684
+%global _jud_shortcommit %(c=%{_jud_commit}; echo ${c:0:7})
+%global _protobuf_commit c44ca26fe89ed8a81d3ee475a2ccc1797141dbce
+%global _protobuf_shortcommit %(c=%{_protobuf_commit}; echo ${c:0:7})
+%global _gtest_commit 82b11b8cfcca464c2ac74b623d04e74452e74f32
+%global _gtest_shortcommit %(c=%{_gtest_commit}; echo ${c:0:7})
+%global _jsoncpp_commit 11086dd6a7eba04289944367ca82cea71299ed70
+%global _jsoncpp_shortcommit %(c=%{_gtest_commit}; echo ${c:0:7})
 %global _fcitx_patchver 2.18.2612.102.1
 %global _build_type Release
 
@@ -15,110 +16,116 @@
 %global fcitx_inputmethod_dir %{_datadir}/fcitx/inputmethod/
 %global fcitx_lib_dir %{_libdir}/fcitx/
 
-%global ibus_mozc_path %{_libexecdir}/ibus-engine-mozc
-%global ibus_mozc_icon_path %{_datadir}/ibus-mozc/product_icon.png
-%global gen_url() https://github.com/%1/%2/archive/%3/%2-%3.tar.gz
+%global		pkg	mozc
 
-Name:    mozc
-Version: 2.18.2612.102
-Release: 1%{?dist}
-Summary: A Japanese Input Method Editor (IME) designed for multi-platform
-Group:   System Environment/Libraries
-License: BSD and ASL 2.0 and UCD and Public Domain and mecab-ipadic
-URL:     https://github.com/google/mozc
+Name:		mozc
+Version:	2.20.2673.102
+Release:	1%{?dist}
+Summary:	A Japanese Input Method Editor (IME) designed for multi-platform
 
-Source0: %{gen_url google mozc %{_mozc_rev}}
-Source1: %{gen_url google protobuf %{_protobuf_rev}}
-Source2: %{gen_url hiroyuki-komatsu japanese-usage-dictionary %{_jp_dict_rev}}
-Source3: http://downloads.sourceforge.net/pnsft-aur/x-ken-all-%{_zipcode_rel}.zip
-Source4: http://downloads.sourceforge.net/pnsft-aur/jigyosyo-%{_zipcode_rel}.zip
-Source5: http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz
-Source6: ibus-setup-mozc-jp.desktop
-Source7: mozc-init.el
-
-Patch0:  mozc-build-ninja.patch
+Group:		System Environment/Libraries
+License:	BSD and ASL 2.0 and UCD and Public Domain and mecab-ipadic
+URL:		https://github.com/google/mozc
+# src/data/unicode/: UCD
+#  Copyright (c) 1991-2008 Unicode, Inc.
+# src/data/test/stress_test/sentences.txt: Public Domain
+# src/data/dictionary/: mecab-ipadic and BSD
+#   See http://code.google.com/p/mozc/issues/detail?id=20
+#   also data/installer/credits_en.html
+Source0:	https://github.com/google/%{name}/archive/%{_mozc_commit}.tar.gz#/%{name}-%{_mozc_shortcommit}.tar.gz
+Source1:	mozc-init.el
+# Public Domain
+Source2:	http://www.post.japanpost.jp/zipcode/dl/kogaki/zip/ken_all.zip
+Source3:	http://www.post.japanpost.jp/zipcode/dl/jigyosyo/zip/jigyosyo.zip
+Source4:	ibus-setup-mozc-jp.desktop
+# BSD
+Source5:	https://github.com/hiroyuki-komatsu/japanese-usage-dictionary/archive/%{_jud_commit}/%{_jud_commit}.tar.gz#/japanese-usage-dictionary-%{_jud_shortcommit}.tar.gz
+# BSD
+Source6:	https://github.com/google/protobuf/archive/%{_protobuf_commit}/%{_protobuf_commit}.tar.gz#/protobuf-%{_protobuf_shortcommit}.tar.gz
+# BSD
+# only for tests
+Source7:	https://github.com/google/googletest/archive/%{_gtest_commit}/%{_gtest_commit}.tar.gz#/gtest-%{_gtest_shortcommit}.tar.gz
+# Public Domain or MIT
+# only for tests
+Source8:	https://github.com/open-source-parsers/jsoncpp/archive/%{_jsoncpp_commit}/%{_jsoncpp_commit}.tar.gz#/jsoncpp-%{_jsoncpp_shortcommit}.tar.gz
+Patch0:		mozc-build-ninja.patch
 ## to avoid undefined symbols with clang.
-Patch1:  mozc-build-gcc.patch
-Patch2:  mozc-build-verbosely.patch
-Patch3:  http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-%{_fcitx_patchver}.patch
+Patch1:		mozc-build-gcc.patch
+Patch2:		mozc-build-verbosely.patch
+Patch3:		http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-%{_fcitx_patchver}.patch
 
-BuildRequires: python gettext
-BuildRequires: clang ninja-build
-BuildRequires: gyp >= 0.1-0.4.840svn
-BuildRequires: libstdc++-devel zlib-devel libxcb-devel
-BuildRequires: protobuf-devel protobuf-c glib2-devel
-BuildRequires: qt5-qtbase-devel zinnia-devel gtk2-devel
-BuildRequires: emacs
-BuildRequires: xemacs xemacs-packages-extra
+BuildRequires:	python gettext
+BuildRequires:	libstdc++-devel zlib-devel libxcb-devel glib2-devel qt5-qtbase-devel zinnia-devel gtk2-devel
+BuildRequires:	clang ninja-build
+BuildRequires:	gyp >= 0.1-0.4.840svn
+BuildRequires:	ibus-devel >= 1.5.4
+BuildRequires:	emacs
+BuildRequires:	xemacs xemacs-packages-extra
+BuildRequires:	fcitx-devel
 
-Requires:  zinnia-tomoe-ja
-Requires:  emacs-filesystem >= %{_emacs_version}
-Requires:  xemacs-filesystem >= %{_xemacs_version}
-Provides:  emacs-mozc <= 2.17.2077.102-4, emacs-mozc-el <= 2.17.2077.102-4
-Obsoletes: emacs-mozc <= 2.17.2077.102-4, emacs-mozc-el <= 2.17.2077.102-4
-Provides:  xemacs-mozc <= 2.17.2077.102-4, xemacs-mozc-el <= 2.17.2077.102-4
-Obsoletes: xemacs-mozc <= 2.17.2077.102-4, xemacs-mozc-el <= 2.17.2077.102-4
-Provides:  emacs-common-mozc <= 2.17.2077.102-4
-Obsoletes: emacs-common-mozc <= 2.17.2077.102-4
+Requires:	zinnia-tomoe-ja
+Requires:	emacs-filesystem >= %{_emacs_version}
+Requires:	xemacs-filesystem >= %{_xemacs_version}
+Provides:	bundled(protobuf) = 3.0.2-1.git%{_protobuf_shortcommit}
+Provides:	emacs-mozc = %{version}-%{release}, emacs-mozc-el = %{version}-%{release}
+Obsoletes:	emacs-mozc <= 2.17.2077.102-4, emacs-mozc-el <= 2.17.2077.102-4
+Provides:	xemacs-mozc = %{version}-%{release}, xemacs-mozc-el = %{version}-%{release}
+Obsoletes:	xemacs-mozc <= 2.17.2077.102-4, xemacs-mozc-el <= 2.17.2077.102-4
+Provides:	emacs-common-mozc = %{version}-%{release}
+Obsoletes:	emacs-common-mozc <= 2.17.2077.102-4
 
 %description
 Mozc is a Japanese Input Method Editor (IME) designed for
 multi-platform such as Chromium OS, Windows, Mac and Linux.
 
-%package -n ibus-%{name}
-Summary:       The mozc engine for IBus input platform
-Group:         System Environment/Libraries
-BuildRequires: ibus-devel >= 1.5.4
-Requires:      %{name}%{?_isa} = %{version}-%{release}
-Requires:      ibus%{?_isa} >= 1.5.4
+%package	-n ibus-mozc
+Summary:	The mozc engine for IBus input platform
+Group:		System Environment/Libraries
+Requires:	%{name}%{?_isa} = %{version}-%{release}
+Requires:	ibus%{?_isa} >= 1.5.4
 
-%description -n ibus-%{name}
+%description	-n ibus-mozc
 Mozc is a Japanese Input Method Editor (IME) designed for
 multi-platform such as Chromium OS, Windows, Mac and Linux.
 
 This package contains the Input Method Engine for IBus.
 
-%package -n fcitx-%{name}
-Summary:       The Mozc backend for Fcitx
-Group:         System Environment/Libraries
-BuildRequires: fcitx-devel
-Requires:      fcitx
-Requires:      %{name}%{?_isa} = %{version}-%{release}
+%package	-n fcitx-%{name}
+Summary:	The Mozc backend for Fcitx
+Group:		System Environment/Libraries
+Requires:	fcitx%{?_isa}
+Requires:	%{name}%{?_isa} = %{version}-%{release}
 
-%description -n fcitx-%{name}
+%description	-n fcitx-%{name}
 The Mozc backend for Fcitx provides a Japanese input method.
 
 
 %prep
-%setup -q -n %{name}-%{_mozc_rev} -a1 -a2 -a3 -a4
+%setup -q -n %{name}-%{_mozc_commit} -a 2 -a 3 -a 5 -a 6 -a 7 -a 8
 %patch0 -p1 -b .0-ninja
 %patch1 -p1 -b .1-gcc
 %patch2 -p1 -b .2-verbose
-%patch3 -p1
-
-# Generate zip code seed
+%patch3 -p1 -b .3-fcitx
 pushd src
 PYTHONPATH="$PWD:$PYTHONPATH" \
 python2 dictionary/gen_zip_code_seed.py \
-    --zip_code="../x-ken-all.csv" \
+    --zip_code="../KEN_ALL.CSV" \
     --jigyosyo="../JIGYOSYO.CSV" \
     >> data/dictionary_oss/dictionary09.txt
-
-cp -a ../japanese-usage-dictionary-%{_jp_dict_rev}/* third_party/japanese_usage_dictionary
-cp -a ../protobuf-%{_protobuf_rev}/* third_party/protobuf
-
+popd
+rmdir src/third_party/{japanese_usage_dictionary,protobuf,gtest,jsoncpp}
+mv japanese-usage-dictionary-%{_jud_commit} src/third_party/japanese_usage_dictionary
+mv protobuf-%{_protobuf_commit} src/third_party/protobuf
+mv googletest-%{_gtest_commit} src/third_party/gtest
+mv jsoncpp-%{_jsoncpp_commit} src/third_party/jsoncpp
 
 %build
-# Fix compatibility with google-glog 0.3.3 (symbol conflict)
-CFLAGS="${CFLAGS} -fvisibility=hidden"
-CXXFLAGS="${CXXFLAGS} -fvisibility=hidden"
-
 pushd src
 # replace compiler flags to build with the proper debugging information
 t=`mktemp /tmp/mozc.gyp-XXXXXXXX`
 opts=$(for i in $RPM_OPT_FLAGS; do
-    echo "i \\"
-    echo "\"$i\","
+	echo "i \\"
+	echo "\"$i\","
 done)
 sed -ne "/'linux_cflags':/{p;n;p;:a;/[[:space:]]*\],/{\
 $opts
@@ -145,72 +152,73 @@ python2 build_mozc.py build -c %{_build_type} \
     server/server.gyp:mozc_server \
     gui/gui.gyp:mozc_tool \
     renderer/renderer.gyp:mozc_renderer
+popd
 
 
 %install
 pushd src
-install -d %{buildroot}%{_libexecdir}/%{name}/documents
-install -p -m0755 out_linux/%{_build_type}/mozc_server %{buildroot}%{_libexecdir}/%{name}/
-install -p -m0755 out_linux/%{_build_type}/mozc_tool %{buildroot}%{_libexecdir}/%{name}/
-install -p -m0755 out_linux/%{_build_type}/mozc_renderer %{buildroot}%{_libexecdir}/%{name}/
-install -p -m0644 data/installer/credits_{en,ja}.html %{buildroot}%{_libexecdir}/%{name}/documents/
+install -d $RPM_BUILD_ROOT%{_libexecdir}/mozc/documents
+install -p -m0755 out_linux/Release/mozc_server $RPM_BUILD_ROOT%{_libexecdir}/mozc
+install -p -m0755 out_linux/Release/mozc_tool $RPM_BUILD_ROOT%{_libexecdir}/mozc
+install -p -m0755 out_linux/Release/mozc_renderer $RPM_BUILD_ROOT%{_libexecdir}/mozc
+install -p -m0644 data/installer/credits_en.html $RPM_BUILD_ROOT%{_libexecdir}/mozc/documents
 
 # ibus-mozc
-install -d %{buildroot}%{_datadir}/ibus/component
-install -d %{buildroot}%{_datadir}/ibus-mozc
-install -p -m0755 out_linux/%{_build_type}/ibus_mozc %{buildroot}%{_libexecdir}/ibus-engine-mozc
-install -p -m0644 out_linux/%{_build_type}/gen/unix/ibus/mozc.xml %{buildroot}%{_datadir}/ibus/component/
-
+install -d $RPM_BUILD_ROOT%{_datadir}/ibus/component
+install -d $RPM_BUILD_ROOT%{_datadir}/ibus-mozc
+install -p -m0755 out_linux/Release/ibus_mozc $RPM_BUILD_ROOT%{_libexecdir}/ibus-engine-mozc
+install -p -m0644 out_linux/Release/gen/unix/ibus/mozc.xml $RPM_BUILD_ROOT%{_datadir}/ibus/component/
 (cd data/images/unix;
-install -p -m0644 ime_product_icon_opensource-32.png %{buildroot}%{_datadir}/ibus-mozc/product_icon.png
+install -p -m0644 ime_product_icon_opensource-32.png $RPM_BUILD_ROOT%{_datadir}/ibus-mozc/product_icon.png
 for i in ui-*.png; do
-    install -p -m0644 $i %{buildroot}%{_datadir}/ibus-mozc/${i//ui-/}
+	install -p -m0644 $i $RPM_BUILD_ROOT%{_datadir}/ibus-mozc/${i//ui-/}
 done)
-desktop-file-install --dir=%{buildroot}%{_datadir}/applications %{SOURCE6}
+desktop-file-install --dir=${RPM_BUILD_ROOT}%{_datadir}/applications  %{SOURCE4}
 
 # fcitx-mozc
 for mofile in out_linux/%{_build_type}/gen/unix/fcitx/po/*.mo; do
     filename=`basename $mofile`
     lang=${filename/.mo/}
-    install -Dm0644 $mofile %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES/fcitx-%{name}.mo
+    install -Dm0644 $mofile ${RPM_BUILD_ROOT}%{_datadir}/locale/$lang/LC_MESSAGES/fcitx-%{name}.mo
 done
-install -m755 -d %{buildroot}%{fcitx_addon_dir}
-install -m755 -d %{buildroot}%{fcitx_inputmethod_dir}
-install -m755 -d %{buildroot}%{fcitx_icon_dir}
-install -m755 -d %{buildroot}%{fcitx_lib_dir}
-install -m755 out_linux/%{_build_type}/fcitx-mozc.so %{buildroot}%{fcitx_lib_dir}
-install -m644 unix/fcitx/fcitx-mozc.conf %{buildroot}%{fcitx_addon_dir}
-install -m644 unix/fcitx/mozc.conf %{buildroot}%{fcitx_inputmethod_dir}
-install -m644 data/images/product_icon_32bpp-128.png %{buildroot}%{fcitx_icon_dir}/mozc.png
-install -m644 data/images/unix/ui-alpha_full.png %{buildroot}%{fcitx_icon_dir}/mozc-alpha_full.png
-install -m644 data/images/unix/ui-alpha_half.png %{buildroot}%{fcitx_icon_dir}/mozc-alpha_half.png
-install -m644 data/images/unix/ui-direct.png %{buildroot}%{fcitx_icon_dir}/mozc-direct.png
-install -m644 data/images/unix/ui-hiragana.png %{buildroot}%{fcitx_icon_dir}/mozc-hiragana.png
-install -m644 data/images/unix/ui-katakana_full.png %{buildroot}%{fcitx_icon_dir}/mozc-katakana_full.png
-install -m644 data/images/unix/ui-katakana_half.png %{buildroot}%{fcitx_icon_dir}/mozc-katakana_half.png
-install -m644 data/images/unix/ui-dictionary.png %{buildroot}%{fcitx_icon_dir}/mozc-dictionary.png
-install -m644 data/images/unix/ui-properties.png %{buildroot}%{fcitx_icon_dir}/mozc-properties.png
-install -m644 data/images/unix/ui-tool.png %{buildroot}%{fcitx_icon_dir}/mozc-tool.png
+install -m755 -d ${RPM_BUILD_ROOT}%{fcitx_addon_dir}
+install -m755 -d ${RPM_BUILD_ROOT}%{fcitx_inputmethod_dir}
+install -m755 -d ${RPM_BUILD_ROOT}%{fcitx_icon_dir}
+install -m755 -d ${RPM_BUILD_ROOT}%{fcitx_lib_dir}
+install -m755 out_linux/%{_build_type}/fcitx-mozc.so ${RPM_BUILD_ROOT}%{fcitx_lib_dir}
+install -m644 unix/fcitx/fcitx-mozc.conf ${RPM_BUILD_ROOT}%{fcitx_addon_dir}
+install -m644 unix/fcitx/mozc.conf ${RPM_BUILD_ROOT}%{fcitx_inputmethod_dir}
+install -m644 data/images/product_icon_32bpp-128.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc.png
+install -m644 data/images/unix/ui-alpha_full.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-alpha_full.png
+install -m644 data/images/unix/ui-alpha_half.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-alpha_half.png
+install -m644 data/images/unix/ui-direct.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-direct.png
+install -m644 data/images/unix/ui-hiragana.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-hiragana.png
+install -m644 data/images/unix/ui-katakana_full.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-katakana_full.png
+install -m644 data/images/unix/ui-katakana_half.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-katakana_half.png
+install -m644 data/images/unix/ui-dictionary.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-dictionary.png
+install -m644 data/images/unix/ui-properties.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-properties.png
+install -m644 data/images/unix/ui-tool.png ${RPM_BUILD_ROOT}%{fcitx_icon_dir}/mozc-tool.png
 
 # emacs-common-mozc
-install -d %{buildroot}%{_bindir}
-install -p -m0755 out_linux/%{_build_type}/mozc_emacs_helper %{buildroot}%{_bindir}/
+install -d $RPM_BUILD_ROOT%{_bindir}
+install -p -m0755 out_linux/Release/mozc_emacs_helper $RPM_BUILD_ROOT%{_bindir}
 
 # emacs-mozc*
-install -d %{buildroot}%{_emacs_sitelispdir}/%{name}
-install -d %{buildroot}%{_emacs_sitestartdir}
-install -p -m0644 unix/emacs/mozc.el %{buildroot}%{_emacs_sitelispdir}/%{name}
-install -p -m0644 %{SOURCE7} %{buildroot}%{_emacs_sitestartdir}
+install -d $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}
+install -d $RPM_BUILD_ROOT%{_emacs_sitestartdir}
+install -p -m0644 unix/emacs/mozc.el $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}
+install -p -m0644 %{SOURCE1} $RPM_BUILD_ROOT%{_emacs_sitestartdir}
 
-emacs -batch -f batch-byte-compile %{buildroot}%{_emacs_sitelispdir}/%{name}/%{name}.el
+emacs -batch -f batch-byte-compile $RPM_BUILD_ROOT%{_emacs_sitelispdir}/%{pkg}/mozc.el
 
 # xemacs-mozc*
-install -d %{buildroot}%{_xemacs_sitelispdir}/%{name}
-install -d %{buildroot}%{_xemacs_sitestartdir}
-install -p -m0644 unix/emacs/%{name}.el %{buildroot}%{_xemacs_sitelispdir}/%{name}
-install -p -m0644 %{SOURCE7} %{buildroot}%{_xemacs_sitestartdir}
+install -d $RPM_BUILD_ROOT%{_xemacs_sitelispdir}/%{pkg}
+install -d $RPM_BUILD_ROOT%{_xemacs_sitestartdir}
+install -p -m0644 unix/emacs/mozc.el $RPM_BUILD_ROOT%{_xemacs_sitelispdir}/%{pkg}
+install -p -m0644 %{SOURCE1} $RPM_BUILD_ROOT%{_xemacs_sitestartdir}
 
-xemacs -batch -f batch-byte-compile %{buildroot}%{_xemacs_sitelispdir}/%{name}/%{name}.el
+xemacs -batch -f batch-byte-compile $RPM_BUILD_ROOT%{_xemacs_sitelispdir}/%{pkg}/mozc.el
+popd
 
 # Register as an AppStream component to be visible in the software center
 #
@@ -219,8 +227,8 @@ xemacs -batch -f batch-byte-compile %{buildroot}%{_xemacs_sitelispdir}/%{name}/%
 #
 # See http://www.freedesktop.org/software/appstream/docs/ for more details.
 #
-mkdir -p %{buildroot}%{_datadir}/appdata
-cat > %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml <<EOF
+mkdir -p $RPM_BUILD_ROOT%{_datadir}/appdata
+cat > $RPM_BUILD_ROOT%{_datadir}/appdata/mozc.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="inputmethod">
   <id>mozc.xml</id>
@@ -247,41 +255,45 @@ cat > %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml <<EOF
   <update_contact><!-- upstream-contact_at_email.com --></update_contact>
 </component>
 EOF
-popd
 
 %find_lang fcitx-mozc
 
-%post -n ibus-%{name}
+%check
+pushd src
+python2 build_mozc.py runtests -c %{_build_type}
+popd
+
+%post -n ibus-mozc
 [ -x %{_bindir}/ibus ] && %{_bindir}/ibus write-cache --system >& /dev/null || :
 
-%postun -n ibus-%{name}
+%postun -n ibus-mozc
 [ -x %{_bindir}/ibus ] && %{_bindir}/ibus write-cache --system >& /dev/null || :
-
 
 %files
-%defattr(-,root,root,-)
-%dir %{_libexecdir}/%{name}
-%{_bindir}/%{name}_emacs_helper
-%{_libexecdir}/%{name}/mozc_server
-%{_libexecdir}/%{name}/mozc_tool
-%{_libexecdir}/%{name}/documents
-%dir %{_emacs_sitelispdir}/%{name}
-%{_emacs_sitelispdir}/%{name}/*.elc
+%doc AUTHORS CONTRIBUTING.md CONTRIBUTORS docs README.md docs/about_branding.md
+%doc docs/design_doc docs/release_history.md
+%license LICENSE
+%dir %{_libexecdir}/mozc
+%{_bindir}/mozc_emacs_helper
+%{_libexecdir}/mozc/mozc_server
+%{_libexecdir}/mozc/mozc_tool
+%{_libexecdir}/mozc/documents
+%dir %{_emacs_sitelispdir}/%{pkg}
+%{_emacs_sitelispdir}/%{pkg}/*.elc
 %{_emacs_sitestartdir}/*.el
-%{_emacs_sitelispdir}/%{name}/*.el
-%dir %{_xemacs_sitelispdir}/%{name}
-%{_xemacs_sitelispdir}/%{name}/*.elc
+%{_emacs_sitelispdir}/%{pkg}/*.el
+%dir %{_xemacs_sitelispdir}/%{pkg}
+%{_xemacs_sitelispdir}/%{pkg}/*.elc
 %{_xemacs_sitestartdir}/*.el
-%{_xemacs_sitelispdir}/%{name}/*.el
+%{_xemacs_sitelispdir}/%{pkg}/*.el
 
-%files -n ibus-mozc
-%defattr(-,root,root,-)
-%dir %{_datadir}/ibus-%{name}
-%{_libexecdir}/ibus-engine-%{name}
-%{_libexecdir}/%{name}/mozc_renderer
+%files	-n ibus-mozc
+%dir %{_datadir}/ibus-mozc
+%{_libexecdir}/ibus-engine-mozc
+%{_libexecdir}/mozc/mozc_renderer
 %{_datadir}/appdata/*.appdata.xml
 %{_datadir}/applications/ibus-setup-mozc-jp.desktop
-%{_datadir}/ibus/component/%{name}.xml
+%{_datadir}/ibus/component/mozc.xml
 %{_datadir}/ibus-mozc/*.png
 
 %files -n fcitx-mozc -f fcitx-mozc.lang
@@ -303,10 +315,24 @@ popd
 %{fcitx_icon_dir}/%{name}-properties.png
 %{fcitx_icon_dir}/%{name}-tool.png
 
-
 %changelog
+* Thu Jan 12 2017 Robin Lee <cheeselee@fedoraproject.org> - 2.20.2673.102-1
+- Update to 2.20.2673.102
+- URL changed to github
+- Bundled japanese-usage-dictionary and protobuf
+- Enable tests, and bundled googletest and jsoncpp for tests
+- BR removed: protobuf-devel protobuf-c
+- BR qt5 instead of qt4, since upstream no longer supports qt4
+- Fix Provides for elisp packages
+- Don't undefine _hardened_build
+- Include some documents
+- Add fcitx input module
+
 * Sun Dec  4 2016 mosquito <sensor.wen@gmail.com> - 2.18.2612.102-1
 - Update to 2.18.2612.102
+
+* Sat Nov 19 2016 Orion Poplawski <orion@cora.nwra.com> - 2.17.2322.102-2
+- Rebuild for protobuf 3.1.0
 
 * Fri Jun  3 2016 Akira TAGOH <tagoh@redhat.com> - 2.17.2322.102-1
 - Update to 2.17.2322.102.
