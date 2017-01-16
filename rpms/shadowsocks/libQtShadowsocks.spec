@@ -3,17 +3,17 @@
 %global repo %{project}
 
 # commit
-%global _commit c60df469d97f2678e887d25577a95226e6152a3c
+%global _commit 87958459a45292efd9c7c9d61c2a99b4d4fcae05
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    libQtShadowsocks
-Version: 1.9.0
+Version: 1.10.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A lightweight and ultra-fast shadowsocks library
 
 License: LGPLv3+
 URL:     https://github.com/librehat/libQtShadowsocks
-Source0: https://github.com/librehat/libQtShadowsocks/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-qttools
@@ -37,7 +37,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 A shadowsocks CLI client using %{name}.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{_commit}
 
 %build
 %ifarch x86_64
@@ -45,7 +45,7 @@ A shadowsocks CLI client using %{name}.
 %else
 %{qmake_qt5}
 %endif
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
@@ -72,6 +72,8 @@ make %{?_smp_mflags}
 %{_bindir}/shadowsocks-*
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.10.0-1.git8795845
+- Update to 1.10.0-1.git8795845
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-1.gitc60df46
 - Update to 1.9.0-1.gitc60df46
 * Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-2.gitd2c76c5
