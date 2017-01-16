@@ -42,7 +42,7 @@ Containing dbus (forking from guelfey), glib, gdkpixbuf, pulse and more.
 %install
 install -d %{buildroot}%{gopath}/src/%{goleader}/lib/
 cp -r * %{buildroot}%{gopath}/src/%{goleader}/lib/
-rm -rf %{buildroot}%{gopath}/src/%{goleader}/lib/dabian
+rm -rf %{buildroot}%{gopath}/src/%{goleader}/lib/debian
 
 %files devel
 %defattr(-,root,root,-)
