@@ -5,18 +5,18 @@
 %global project LightTable
 %global repo %{project}
 
-%global _commit 53a90bee4c2c6758e4b5dffdffbc32256a05e00d
+%global _commit b83f440115726199563c232364e9b3168456b701
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    lighttable
 Version: 0.8.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: LightTable - An open source code editor
 
 Group:   Development/Tools
 License: MIT
 URL:     https://github.com/LightTable/LightTable
-Source0: https://github.com/LightTable/LightTable/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Patch0:  fix-lt-exception.patch
 Patch1:  fix-electron-1.2.0.patch
 
@@ -48,6 +48,7 @@ sed -i '/b.hasOwnProperty/s@))@))||true@' \
     deploy/core/node_modules/lighttable/bootstrap.js
 
 # Fetch plugins
+#https://github.com/LightTable/LightTable/blob/master/script/build.sh
 PLUGINS=(
     'Clojure,0.3.3'
     'CSS,0.0.6'
@@ -158,6 +159,8 @@ fi
 %{_datadir}/%{name}/
 
 %changelog
+* Mon Jan 16 2017 mosquito <sensor.wen@gmail.com> - 0.8.1-5
+- Update to latest (b83f440)
 * Mon Jun 20 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-4
 - Fixes path must be a string for electron 1.2.3
 * Sat Jun  4 2016 mosquito <sensor.wen@gmail.com> - 0.8.1-3
