@@ -1,10 +1,10 @@
 Name:           gnome-mpv
-Version:        0.10
+Version:        0.11
 Release:        1%{?dist}
 Summary:        A simple GTK+ frontend for mpv
 License:        GPLv3+
 URL:            https://github.com/gnome-mpv/gnome-mpv
-Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 
 # main dependencies
 BuildRequires:  libappstream-glib
@@ -67,6 +67,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}-symbolic.svg
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.11-1
+- Update to 0.11
+
 * Mon Aug  1 2016 mosquito <sensor.wen@gmail.com> - 0.10-1
 - Update to 0.10
 
