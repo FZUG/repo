@@ -3,11 +3,11 @@
 %global repo %{project}
 
 # commit
-%global _commit 4540be9a4d9509d522d3fd33922aef7dbce8eaea
+%global _commit 92a51a4712b9a70a35d765b486f3a218856c82f6
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    shadowsocks-qt5
-Version: 2.7.0
+Version: 2.8.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A cross-platform shadowsocks GUI client
 Summary(zh_CN): 跨平台 shadowsocks GUI 客户端
@@ -15,7 +15,7 @@ Summary(zh_CN): 跨平台 shadowsocks GUI 客户端
 Group:   Applications/Internet
 License: LGPLv3+
 URL:     https://github.com/librehat/shadowsocks-qt5
-Source0: https://github.com/librehat/shadowsocks-qt5/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: pkgconfig
 BuildRequires: qt5-qtbase-devel >= 5.2.0
@@ -34,11 +34,11 @@ with advanced features.
 Shadowsocks-Qt5 是一个本地跨平台 shadowsocks GUI 客户端.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{_commit}
 
 %build
 %{qmake_qt5} INSTALL_PREFIX=%{_prefix}
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
@@ -68,6 +68,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.8.0-1.git92a51a4
+- Update to 2.8.0-1.git92a51a4
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 2.7.0-1.git4540be9
 - Update to 2.7.0-1.git4540be9
 * Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 2.6.1-2.gitba70fd1
