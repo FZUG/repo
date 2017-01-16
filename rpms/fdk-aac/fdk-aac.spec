@@ -1,6 +1,6 @@
 Name:           fdk-aac
-Version:        0.1.4
-Release:        2%{?dist}
+Version:        0.1.5
+Release:        1%{?dist}
 Summary:        Fraunhofer FDK AAC Codec Library
 License:        Apache License v2.0
 URL:            http://sourceforge.net/projects/opencore-amr
@@ -60,6 +60,9 @@ find %{buildroot} -type f -name '*.la' -delete -print
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.1.5-1
+- Release 0.1.5
+
 * Tue May 24 2016 mosquito <sensor.wen@gmail.com> - 0.1.4-2
 - Rebuild for fedora 24
 
