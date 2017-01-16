@@ -1,16 +1,17 @@
-%global __strip_shared %(test $(rpm -E%?fedora) -eq 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
+# https://github.com/WizTeam/WizQTClient/blob/master/src/WizDef.h
+%global __strip_shared %(test $(rpm -E%?fedora) -ge 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
 %global debug_package %{nil}
 %global project WizQTClient
 %global repo %{project}
 
 # commit
-%global _commit 5976b84919f151652d0c8825f9c50f751b506521
+%global _commit 80351f77547fa9d13edfffeba76169d263e148f5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    wiznote-beta
-Version: 2.3.2
+Version: 2.4.3
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Cross platform cloud based note-taking application
 Summary(zh_CN): 为知笔记 Qt 客户端
@@ -19,12 +20,14 @@ Group:   Applications/Editors
 # https://raw.githubusercontent.com/WizTeam/WizQTClient/master/LICENSE
 License: GPLv3
 URL:     https://github.com/WizTeam/WizQTClient
-Source0: https://github.com/WizTeam/WizQTClient/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires: cmake >= 2.8.4
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-qttools-devel
-BuildRequires: qt5-qtwebkit-devel
+BuildRequires: qt5-qtwebengine-devel
+BuildRequires: qt5-qtwebsockets-devel
+BuildRequires: qt5-qtwebchannel-devel
 BuildRequires: boost-devel
 BuildRequires: cryptopp-devel
 BuildRequires: quazip-devel
@@ -48,7 +51,7 @@ This is a development version.
 此包为开发版.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{_commit}
 
 # dynamic library (crypt|zip|json)
 sed -i -r '/crypt/d' lib/CMakeLists.txt
@@ -62,36 +65,25 @@ sed -i '1a#define CRYPTOPP_DISABLE_SSE2' lib/cryptopp/config.h
 fi
 
 %if 0%{?rhel} == 6
-sed -i '/QT_VERSION/s|504|540|g' src/wizCategoryViewItem.cpp
+#sed -i '/QT_VERSION/s|504|540|g' src/wizCategoryViewItem.cpp
 %endif
 
 # change library path
 %ifarch x86_64
 sed -i 's|lib/wiznote/plugins|lib64/%{name}/plugins|' \
-    src/main.cpp \
-    src/plugins/coreplugin/CMakeLists.txt \
-    src/plugins/helloworld/CMakeLists.txt \
-    src/plugins/markdown/CMakeLists.txt \
     lib/aggregation/CMakeLists.txt \
-    lib/extensionsystem/CMakeLists.txt \
-    CMakeLists.txt
+    lib/extensionsystem/CMakeLists.txt
 %else
 sed -i 's|lib/wiznote/plugins|lib/%{name}/plugins|' \
-    src/main.cpp \
-    src/plugins/coreplugin/CMakeLists.txt \
-    src/plugins/helloworld/CMakeLists.txt \
-    src/plugins/markdown/CMakeLists.txt \
     lib/aggregation/CMakeLists.txt \
-    lib/extensionsystem/CMakeLists.txt \
-    CMakeLists.txt
+    lib/extensionsystem/CMakeLists.txt
 %endif
 
 # change share path
 sed -i 's|share/wiznote|share/%{name}|' \
-    src/utils/pathresolve.cpp \
+    src/utils/WizPathResolve.cpp \
     src/main.cpp \
-    src/CMakeLists.txt \
-    src/plugins/markdown/markdown.cpp
+    src/CMakeLists.txt
 
 %build
 mkdir dist
@@ -109,7 +101,7 @@ pushd dist
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
     -DWIZNOTE_USE_QT5=ON \
     -DCMAKE_BUILD_TYPE=Release
-make %{?_smp_mflags}
+%make_build
 
 %install
 %make_install -C dist
@@ -157,13 +149,14 @@ fi
 %defattr(-,root,root,-)
 %doc README.md CHANGELOG.md
 %license LICENSE
-%{_libdir}/%{name}/plugins/*
-%{_bindir}/%{name}*
+%{_bindir}/%{name}
+%{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
-%{_datadir}/%{name}/*
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.4.3-1.git80351f7
+- Update to 2.4.3-1.get80351f7
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 2.3.2-1.git5976b84
 - Update version to 2.3.2-1.git5976b84
 * Sun Dec 06 2015 mosquito <sensor.wen@gmail.com> - 2.3.1-1.gitfdd16c9
