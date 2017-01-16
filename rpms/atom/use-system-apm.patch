@@ -20,7 +20,7 @@
  module.exports = {
 --- a/script/lib/package-application.js
 +++ b/script/lib/package-application.js
-@@ -57,17 +57,6 @@
+@@ -62,17 +62,6 @@
  
  function copyNonASARResources (packagedAppPath, bundledResourcesPath) {
    console.log(`Copying non-ASAR resources to ${bundledResourcesPath}`)

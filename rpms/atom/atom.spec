@@ -16,12 +16,12 @@
 %global node_ver 6
 
 # commit
-%global _commit 4573089108d3ebf48515f0a1c049ce22600ee878
+%global _commit a357b4d0628bbdac906a32e8cd0a7e3c87fb7aac
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.12.7
-Release: 3.git%{_shortcommit}%{?dist}
+Version: 1.13.0
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
@@ -208,6 +208,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.13.0-1.gita357b4d
+- Release 1.13.0
 * Fri Jan 13 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-3.git4573089
 - Add ctags-config file for symbols-view
 * Sun Jan  8 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-2.git4573089

@@ -1,6 +1,6 @@
 --- a/src/main-process/atom-application.coffee
 +++ b/src/main-process/atom-application.coffee
-@@ -226,7 +226,7 @@
+@@ -246,7 +246,7 @@
      @openPathOnEvent('application:open-your-keymap', 'atom://.atom/keymap')
      @openPathOnEvent('application:open-your-snippets', 'atom://.atom/snippets')
      @openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
