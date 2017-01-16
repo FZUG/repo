@@ -3,7 +3,7 @@
 %global __jar_repack %{nil}
 
 Name:    leiningen
-Version: 2.6.1
+Version: 2.7.1
 Release: 1%{?dist}
 Summary: Clojure projects manager with bundled clojure
 Group:   Development/Tools
@@ -71,5 +71,7 @@ install -p -m 644 %{S:3} %{buildroot}%{_datadir}/zsh/site-functions/_%{name}
 %{_datadir}/zsh/site-functions/_%{name}
 
 %changelog
+* Mon Jan 16 2017 mosquito <sensor.wen@gmail.com> - 2.7.1-1
+- Update to 2.7.1
 * Mon Mar 28 2016 mosquito <sensor.wen@gmail.com> - 2.6.1-1
 - Initial build
