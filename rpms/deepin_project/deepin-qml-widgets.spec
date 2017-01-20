@@ -1,35 +1,32 @@
-%global debug_package %{nil}
-%global project deepin-qml-widgets
-%global repo %{project}
-
-# commit
-%global _commit a864d6ff58d8d185bd98b5ad4408da154da275d2
+%global _commit ef84331e3d8c413b3080ae833e37b0f47082e438
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		deepin-qml-widgets
-Version:	2.3.0
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	Deepin QML widgets
-Summary(zh_CN):	深度 QML 部件库
+# for fedora 24
+%global _qt5_qmldir %{_qt5_archdatadir}/qml
 
-Group:		Development/Libraries
-License:	GPLv3
-URL:		https://github.com/linuxdeepin/deepin-qml-widgets
-Source:		https://github.com/linuxdeepin/deepin-qml-widgets/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Name:           deepin-qml-widgets
+Version:        2.3.4
+Release:        1.git%{_shortcommit}%{?dist}
+Summary:        Deepin QML widgets
+Summary(zh_CN): 深度 QML 部件库
 
-BuildRequires:	pkgconfig
-BuildRequires:	gettext
-BuildRequires:	desktop-file-utils
-BuildRequires:	gtk2-devel
-BuildRequires:	qt5-qtbase-devel
-BuildRequires:	qt5-qtdeclarative-devel >= 5.3.1
-BuildRequires:	qt5-qtwebkit-devel >= 5.3.1
-BuildRequires:	qt5-qtx11extras-devel
-#BuildRequires:	qt5-qtmultimedia-devel
-#BuildRequires:	qt5-qtgraphicaleffects
-#BuildRequires:	qt5-qtquickcontrols
-BuildRequires:	libXcomposite-devel
-BuildRequires:	libxcb-devel
+Group:          Development/Libraries
+License:        GPLv3
+URL:            https://github.com/linuxdeepin/deepin-qml-widgets
+Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+
+BuildRequires:  pkgconfig
+BuildRequires:  gettext
+BuildRequires:  deepin-gettext-tools
+BuildRequires:  desktop-file-utils
+BuildRequires:  gtk2-devel
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtdeclarative-devel
+BuildRequires:  qt5-qtwebkit-devel
+BuildRequires:  qt5-qtx11extras-devel
+BuildRequires:  qt5-qtquick1-devel
+BuildRequires:  libXcomposite-devel
+BuildRequires:  libxcb-devel
 
 %description
 Deepin QML widgets
@@ -38,14 +35,14 @@ Deepin QML widgets
 深度 QML 部件库, deepin 应用需要此程序库.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{name}-%{_commit}
 
 %build
-%{_qt5_qmake}
-make %{?_smp_mflags}
+%qmake_qt5
+%make_build
 
 %install
-make install INSTALL_ROOT=%{buildroot}
+%make_install INSTALL_ROOT=%{buildroot}
 
 pushd locale
 for i in `ls *.po`
@@ -60,12 +57,14 @@ popd
 %files -f %{name}.lang
 %defattr(-,root,root,-)
 %{_bindir}/deepin-dialog
-%{_qt5_archdatadir}/qml/Deepin/Locale
-%{_qt5_archdatadir}/qml/Deepin/StyleResources
-%{_qt5_archdatadir}/qml/Deepin/Widgets
+%{_qt5_qmldir}/Deepin/Locale/
+%{_qt5_qmldir}/Deepin/StyleResources/
+%{_qt5_qmldir}/Deepin/Widgets/
 %{_datadir}/dbus-1/services/com.deepin.dialog.service
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.3.4-1.gitef84331
+- Update to 2.3.4
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 2.3.0-1.gita864d6f
 - Update version to 2.3.0-1.gita864d6f
 * Wed Dec 31 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141231-1

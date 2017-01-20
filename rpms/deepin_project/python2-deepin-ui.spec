@@ -1,53 +1,63 @@
-%global debug_package %{nil}
 %global project deepin-ui
 %global repo %{project}
 
-# commit
-%global _commit 8d758066245fcb5829f403f9452e571fcfca2b4b
+%global _commit 03bcd2050aef4e8f6a91bb5ef0b194bebd558715
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		deepin-ui
-Version:	1.0.4
-Release:	1.git%{_shortcommit}%{?dist}
-Summary:	UI toolkit for Linux Deepin
+Name:           python2-%{repo}
+Version:        1.0.5
+Release:        1.git%{_shortcommit}%{?dist}
+Summary:        UI toolkit for Linux Deepin
 
-License:	GPLv3
-Group:		Development/Libraries
-Url:		https://github.com/linuxdeepin/deepin-ui
-Source0:	https://github.com/linuxdeepin/deepin-ui/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+License:        GPLv3
+Group:          Development/Libraries
+Url:            https://github.com/martyr-deepin/deepin-ui
+Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildArch:	noarch
-BuildRequires:	gettext
-BuildRequires:	pkgconfig
-BuildRequires:	cairo-devel
-BuildRequires:	webkitgtk-devel
-BuildRequires:	python-devel
-BuildRequires:	pygtk2-devel
-BuildRequires:	python-setuptools
-BuildRequires:	hicolor-icon-theme
-Requires:	pywebkitgtk
-Requires:	deepin-utils
-Requires:	deepin-gsettings
+BuildArch:      noarch
+BuildRequires:  gettext
+BuildRequires:  pkgconfig
+BuildRequires:  python-devel
+BuildRequires:  python2-setuptools
+BuildRequires:  pygtk2-devel
+BuildRequires:  cairo-devel
+BuildRequires:  webkitgtk-devel
+BuildRequires:  deepin-gettext-tools
+BuildRequires:  hicolor-icon-theme
+Requires:       libsoup
+Requires:       pywebkitgtk
+Requires:       pygtk2
+Requires:       pycairo
+Requires:       python-pillow
+Requires:       python-xlib
+Requires:       python2-scipy
+Requires:       python2-deepin-utils
+Requires:       python2-deepin-gsettings
+Provides:       python-%{repo} = %{version}-%{release}
 
 %description
 UI toolkit libs for Linux Deepin, Awesome and Beautiful UI libs with LinuxDeepin.
 
 %package demo
-Summary:	UI toolkit for Linux Deepin
-Group:		Development/Languages
-Requires:	%{name} = %{version}
+Summary:        UI toolkit for Linux Deepin
+Group:          Development/Languages
+Requires:       %{name} = %{version}
 
 %description demo
 UI toolkit libs demos for Linux Deepin, Awesome and Beautiful UI libs with LinuxDeepin.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{_commit}
+
+# fix python version
+find -iname "*.py" | xargs sed -i '1s|python$|python2|'
 
 %build
+%{__python2} setup.py build
+deepin-generate-mo dtk/tools/locale_config.ini
 
 %install
-export CFLAGS="$RPM_OPT_FLAGS"
-%{__python} setup.py install --prefix=%{_prefix} --root=%{buildroot}
+%{__python} setup.py install -O1 --prefix=%{_prefix} --root=%{buildroot}
 
 # locale files
 rm -rf dtk/locale/deepin-ui.pot
@@ -55,31 +65,33 @@ pushd dtk/locale
 for i in `ls *.po`
  do
     install -d %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/
-    msgfmt $i -o %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/%{name}.mo
+    msgfmt $i -o %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/%{repo}.mo
  done
 popd
 
 # deepin-ui-demo files install
-install -d %{buildroot}%{_datadir}/%{name}-demo
-cp -R demos/* %{buildroot}%{_datadir}/%{name}-demo
+install -d %{buildroot}%{_datadir}/%{repo}-demo
+cp -R demos/* %{buildroot}%{_datadir}/%{repo}-demo
 
 install -d %{buildroot}%{_bindir}
-ln -s %{_datadir}/%{name}-demo/demo.py %{buildroot}%{_bindir}/%{name}-demo
-chmod 755 %{buildroot}%{_datadir}/%{name}-demo/demo.py
+ln -s %{_datadir}/%{repo}-demo/demo.py %{buildroot}%{_bindir}/%{repo}-demo
+chmod 755 %{buildroot}%{_datadir}/%{repo}-demo/demo.py
 
-%find_lang %{name}
+%find_lang %{repo}
 
-%files -f %{name}.lang
+%files -f %{repo}.lang
 %defattr(-,root,root,-)
 %doc AUTHORS COPYING FAQ TODO README
 %{python_sitelib}/dtk*
 
 %files demo
 %defattr(-,root,root,-)
-%{_bindir}/%{name}-demo
-%{_datadir}/%{name}-demo
+%{_bindir}/%{repo}-demo
+%{_datadir}/%{repo}-demo
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.5-1.git03bcd20
+- Update to 1.0.5
 * Wed Jul  1 2015 mosquito <sensor.wen@gmail.com> - 1.0.4-1.git8d75806
 - Update version to 1.0.4-1.git8d75806
 * Sat Nov  8 2014 mosquito <sensor.wen@gmail.com> - 1.0.3git20141104-2

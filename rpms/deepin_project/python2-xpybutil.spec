@@ -1,24 +1,24 @@
-%global debug_package %{nil}
 %global project xpybutil
 %global repo %{project}
 
-# commit
-%global _commit 8ee7dc406aabb3d54f38e692bf068b1b61131d83
+%global _commit c2d438d4ac246b60e25e1f04da2db0eab40acda5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:       python-xpybutil
-Version:    0.0.1
-Release:    1.git%{_shortcommit}%{?dist}
-Summary:    An abstraction over the X Python Binding
+Name:           python2-%{repo}
+Version:        0.0.1
+Release:        1.git%{_shortcommit}%{?dist}
+Summary:        An incomplete xcb-util port plus some extras
 
-Group:      Development/Libraries
-License:    MIT
-URL:        https://github.com/BurntSushi/xpybutil
-Source0:    https://github.com/BurntSushi/xpybutil/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Group:          Development/Libraries
+License:        WTFPL
+URL:            https://github.com/BurntSushi/xpybutil
+Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
-BuildArch: noarch
-BuildRequires: python-devel
-BuildRequires: python-xpyb
+BuildArch:      noarch
+BuildRequires:  python2-devel
+BuildRequires:  python-xpyb-devel
+Requires:       python-xpyb
+Provides:       python-%{repo} = %{version}-%{release}
 
 %description
 xpybutil exists because xpyb is a very low level library that communicates
@@ -30,13 +30,13 @@ other utilities (i.e., xcompmgr and transset-df) while the latter is used by my
 fork of Openbox called Openbox Multihead.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{_commit}
 
 %build
-%{__python} setup.py build
+%{__python2} setup.py build
 
 %install
-%{__python} setup.py install --skip-build --root=%{buildroot} --prefix=%{_prefix}
+%{__python2} setup.py install --skip-build --root=%{buildroot} --prefix=%{_prefix}
 rm -rf %{buildroot}%{_datadir}/doc
 
 %files
@@ -45,6 +45,8 @@ rm -rf %{buildroot}%{_datadir}/doc
 %{python_sitelib}/*
 
 %changelog
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.0.1-1.git8ee7dc4
+- Rebuild for Fedora 25
 * Fri Jul  3 2015 mosquito <sensor.wen@gmail.com> - 0.0.1-1.git8ee7dc4
 - Rebuild for Fedora
 * Sun May 12 2013 Huaren Zhong <huaren.zhong@gmail.com> - 0.0.1
