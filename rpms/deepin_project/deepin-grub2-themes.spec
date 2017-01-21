@@ -16,7 +16,7 @@ Deepin grub2 themes
 %setup -q -n %{name}-%{_commit}
 
 %install
-%make_install
+%make_install TARGET="%{buildroot}/boot/grub2/themes"
 
 %files
 /boot/grub/themes/deepin/

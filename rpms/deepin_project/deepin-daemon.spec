@@ -84,6 +84,9 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
     bin/search/main.go \
     accounts/user.go
 
+# Fix grub.cfg path
+sed -i '/MenuFile/s|grub/|grub2/|' grub2/grub2.go
+
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
 go get gopkg.in/alecthomas/kingpin.v2 \
