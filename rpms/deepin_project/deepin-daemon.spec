@@ -50,19 +50,25 @@ BuildRequires:  golang-github-alecthomas-kingpin-devel
 
 Requires:       deepin-desktop-base
 Requires:       deepin-desktop-schemas
+Requires:       deepin-grub2-themes
 Requires:       deepin-notifications
 Requires:       acpid
 Requires:       bluez-libs
 Requires:       gvfs
-Requires:       iso-codes
 Requires:       libudisks2
-Requires:       mobile-broadband-provider-info
 Requires:       polkit-gnome
 Requires:       qt5-qtaccountsservice
 Requires:       rfkill
 Requires:       upower
-Recommends:     NetworkManager
-Recommends:     deepin-grub2-themes
+Requires:       xdotool
+Recommends:     NetworkManager-vpnc-gnome
+Recommends:     NetworkManager-pptp-gnome
+Recommends:     NetworkManager-l2tp-gnome
+Recommends:     NetworkManager-strongswan-gnome
+Recommends:     NetworkManager-openvpn-gnome
+Recommends:     NetworkManager-openconnect-gnome
+Recommends:     iso-codes
+Recommends:     mobile-broadband-provider-info
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
