@@ -7,7 +7,7 @@ These files are based on [cz-guardian/fedora-deepin](https://github.com/cz-guard
     sudo dnf install http://download1.rpmfusion.org/free/fedora/releases/$(rpm -E %fedora)/Everything/$(uname -i)/os/Packages/r/rpmfusion-free-release-$(rpm -E %fedora)-1.noarch.rpm
     sudo dnf copr enable mosquito/deepin
     sudo dnf update
-    sudo dnf install deepin-desktop deepin-session-ui deepin-screenshot deepin-terminal
+    sudo dnf install deepin-desktop deepin-session-ui deepin-launcher deepin-screenshot deepin-terminal
     sudo systemctl disable gdm.service && sudo systemctl enable lightdm.service
     sudo sed -i "/SELINUX=/s|enforcing|disabled|" /etc/selinux/config
 
@@ -79,7 +79,8 @@ This repository contains the following .specs for integrating the deepin desktop
 ## Resources
 * [Deepin Github](https://github.com/linuxdeepin/), [Official site](https://www.deepin.org/en/)
 * [fedora-deepin repository list](https://copr.fedorainfracloud.org/coprs/mosquito/deepin/packages/)
-* [fedora-deepin (jstepanek)](https://copr.fedorainfracloud.org/coprs/jstepanek/deepin/): thanks @cz-guardian
+* [fedora-deepin (jstepanek)](https://github.com/cz-guardian/fedora-deepin/): thanks @cz-guardian
 * [arch-deepin](https://github.com/fasheng/arch-deepin/): [Deepin Desktop Environment on Arch](https://bbs.archlinux.org/viewtopic.php?id=181861)
 * [manjaro-deepin](https://github.com/manjaro/packages-community/): [issue 98](https://github.com/fasheng/arch-deepin/issues/98)
 * [debian-deepin](https://github.com/debiancn/repo/issues/31)
+* [gentoo-deepin](https://github.com/zhtengw/deepin-overlay/)
