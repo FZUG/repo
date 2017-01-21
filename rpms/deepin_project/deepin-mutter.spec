@@ -1,8 +1,8 @@
-%global _commit c86611beb94e2e8e6fd0e7ecc91748c06a4e01c3
+%global _commit 3c2a807663a9923163bf818a81a788151e4e8864
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-mutter
-Version:        3.20.7
+Version:        3.20.8
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Base window manager for deepin, fork of gnome mutter
 License:        GPLv3
@@ -98,6 +98,8 @@ fi
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.20.8-1.git3c2a807
+- Update to 3.20.8
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.20.7-1.gitc86611b
 - Update to 3.20.7
 * Fri Dec 16 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.20.6-1
