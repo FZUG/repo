@@ -1,8 +1,8 @@
-%global _commit 933325f50aeb99d2c625db25eba9106f6ba4b7d7
+%global _commit 8378500da9a6588a06191a4be2d38353e80b3af9
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-image-viewer
-Version:        1.2.0
+Version:        1.2.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
@@ -60,6 +60,8 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 1.2.1-1.git8378500
+- Update to 1.2.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.2.0-1.git933325f
 - Update to 1.2.0
 * Fri Jan 06 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 1.1.3-2
