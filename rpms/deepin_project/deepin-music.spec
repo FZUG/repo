@@ -1,16 +1,8 @@
-%global _commit 76f52e97d443a6851fe6439d27194af3190748b9
+%global _commit 51107807423074268c75bcaa2e6eb6ee7e2a31b4
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-%global option_plugins 1
-%global bd_repo dmusic-plugin-baidumusic
-%global bd_commit 319ded887f7944a9bee0339e6d767f6640994b1d
-%global bd_scommit %(c=%{bd_commit}; echo ${c:0:7})
-%global nm_repo dmusic-plugin-NeteaseCloudMusic
-%global nm_commit 503701ce6c2c4d94f1fcd40a158c7a0077861793
-%global nm_scommit %(c=%{nm_commit}; echo ${c:0:7})
-
 Name:           deepin-music
-Version:        2.3.2
+Version:        3.0.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
@@ -18,42 +10,22 @@ Summary(zh_CN): 深度音乐播放器
 License:        GPLv3
 Group:          Applications/Multimedia
 Url:            https://github.com/linuxdeepin/deepin-music
-Source0:        https://github.com/linuxdeepin/deepin-music/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
-Source1:        https://github.com/sumary/dmusic-plugin-baidumusic/archive/%{bd_commit}/%{bd_repo}-%{bd_scommit}.tar.gz
-Source2:        https://github.com/wu-nerd/dmusic-plugin-NeteaseCloudMusic/archive/%{nm_commit}/%{nm_repo}-%{nm_scommit}.tar.gz
+Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
-BuildArch:      noarch
-BuildRequires:  python-devel
+BuildRequires:  git
+BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  ffmpeg-devel
+BuildRequires:  libicu-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libXext-devel
+BuildRequires:  qt5-linguist
+BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtsvg-devel
+BuildRequires:  qt5-qtx11extras-devel
+BuildRequires:  qt5-qtmultimedia-devel
+BuildRequires:  taglib-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:  hicolor-icon-theme
-BuildRequires:  deepin-gettext-tools
-BuildRequires:  gettext
-Requires:       python2-deepin-ui
-Requires:	      scipy
-Requires:	      pygtk2
-Requires:	      python-xlib
-Requires:	      python2-pillow
-Requires:	      python-CDDB
-Requires:       dbus-python
-Requires:	      python-pycurl
-Requires:       python-pyquery
-Requires:       python-chardet
-Requires:       python-mutagen
-Requires:       python-keybinder
-Requires:       gstreamer-python
-Requires:       gstreamer-ffmpeg
-Requires:       gstreamer-plugins-good
-Requires:       gstreamer-plugins-bad
-Requires:       gstreamer-plugins-ugly
-%if 0%{?option_plugins}
-# Baidu Music
-Requires:       python2-javascriptcore
-# Netease Cloud Music
-Requires:       python2-requests
-Requires:       python2-crypto
-%endif
-Provides:       deepin-music-player = %{version}-%{release}
-Obsoletes:      deepin-music-player < %{version}-%{release}
+Provides:       deepin-music-player%{?_isa} = %{version}-%{release}
 
 %description
 Deepin Music Player with brilliant and tweakful UI Deepin-UI based,
@@ -65,76 +37,57 @@ you will found.
 深度音乐播放器界面基于 Deepin-UI , 后端使用 gstreamer ,
 其他特性如音乐搜索, 丰富多彩的歌词支持, 更多功能等待您发现.
 
+%package devel
+Summary:        Development package for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Header files and libraries for %{name}
+
 %prep
 %setup -q -n %{name}-%{_commit}
-%if 0%{?option_plugins}
-%setup -q -a1 -a2 -n %{name}-%{_commit}
-%endif
+sed -i 's|-0-2||g' music-player/music-player.pro
+sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 
-# fix python version
-find src -type f | xargs sed -i '1s|python$|python2|'
+sed -i '/%1/s|lib|%{_lib}|' music-player/core/pluginmanager.cpp
+sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
+    plugin/netease-meta-search/netease-meta-search.pro
 
 %build
-deepin-generate-mo tools/locale_config.ini
+%qmake_qt5 PREFIX=%{_prefix}
+%make_build
 
 %install
-install -d %{buildroot}%{_datadir}/{applications,icons,%{name}}
-install -m 644 %{name}-player.desktop %{buildroot}%{_datadir}/applications/
-cp -r {app_theme,image,plugins,skin,src,wizard} %{buildroot}%{_datadir}/%{name}/
-
-# generate locale
-pushd locale
-for i in `ls *.po`
- do
-    mkdir -p %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/
-    msgfmt $i -o %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/%{name}-player.mo
- done
-popd
-
-# install icons
-for i in 16x16 24x24 48x48 64x64 96x96; do
-  install -D image/hicolor/$i/apps/%{name}-player.png \
-    %{buildroot}%{_datadir}/icons/hicolor/$i/apps/%{name}-player.png
-done
-install -D image/hicolor/scalable/apps/%{name}-player.svg \
-    %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}-player.svg
-
-# link exec file
-install -d %{buildroot}%{_bindir}
-ln -sfv %{_datadir}/%{name}/src/main.py %{buildroot}%{_bindir}/%{name}-player
-chmod 755 %{buildroot}%{_datadir}/%{name}/src/*.py
-
-# install plugins
-%if 0%{?option_plugins}
-cp -r %{bd_repo}-%{bd_commit}/baidumusic %{buildroot}%{_datadir}/%{name}/plugins/
-cp -r %{nm_repo}-%{nm_commit}/neteasecloudmusic %{buildroot}%{_datadir}/%{name}/plugins/
-%endif
-
-%find_lang %{name}-player
+%make_install INSTALL_ROOT=%{buildroot}
 
 %post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
 /usr/bin/update-desktop-database -q ||:
 
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+%files
+%doc AUTHORS README.md
+%license COPYING
+%{_bindir}/%{name}
+%{_libdir}/lib*.so.*
+%{_libdir}/%{name}/plugins/lib*.so.*
+%{_datadir}/%{name}/
+%{_datadir}/dman/%{name}/
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/dbus-1/services/*.service
 
-%files -f %{name}-player.lang
-%defattr(-,root,root,-)
-%doc AUTHORS COPYING README.md ChangeLog
-%{_datadir}/applications/%{name}-player.desktop
-%{_datadir}/icons/hicolor/*
-%{_datadir}/%{name}
-%{_bindir}/%{name}-player
+%files devel
+%{_qt5_headerdir}/DBusExtended/
+%{_qt5_headerdir}/MprisQt/
+%{_qt5_archdatadir}/mkspecs/features/*-qt5.prf
+%{_libdir}/lib*.so
+%{_libdir}/%{name}/plugins/lib*.so
+%{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.1-1.git5110780
+- Update to 3.0.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.3.2-1.git76f52e9
 - Update to 2.3.2-1.git76f52e9
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 2.3.0-1.gitc43b01d
