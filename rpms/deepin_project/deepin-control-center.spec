@@ -6,7 +6,7 @@
 
 Name:           deepin-control-center
 Version:        4.0.2
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        New control center for linux deepin
 
 License:        GPLv3
@@ -29,7 +29,10 @@ BuildRequires:  desktop-file-utils
 Requires:       deepin-account-faces
 Requires:       deepin-api
 Requires:       deepin-daemon
+Requires:       GeoIP-GeoLite-data
+Requires:       GeoIP-GeoLite-data-extra
 Requires:       startdde
+Requires:       gtk-murrine-engine
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
@@ -68,6 +71,8 @@ sed -i 's|lib|lib64|' \
 %{_datadir}/%{repo}/
 
 %changelog
+* Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-2.git8b1a736
+- Fix can not start
 * Thu Jan 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-1.git8b1a736
 - Update to 4.0.2
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-1.gitd1c1c9a
