@@ -55,13 +55,13 @@ find -iname "*.py" | xargs sed -i '1s|python$|python2|'
 
 %preun
 if [ $1 -eq 0 ]; then
-    update-alternatives --remove x-window-screenshot %{_bindir}/%{name}
+  /usr/sbin/alternatives --remove x-window-screenshot %{_bindir}/%{name}
 fi
 
 %post
 if [ $1 -eq 1 ]; then
-    update-alternatives --install %{_bindir}/x-window-screenshot x-window-screenshot \
-        %{_bindir}/%{name} 20
+  /usr/sbin/alternatives --install %{_bindir}/x-window-screenshot \
+    x-window-screenshot %{_bindir}/%{name} 20
 fi
 
 %files -f %{name}.lang

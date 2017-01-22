@@ -3,7 +3,7 @@
 
 Name:           deepin-terminal
 Version:        2.1.7
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
 URL:            https://github.com/manateelazycat/deepin-terminal
@@ -37,6 +37,17 @@ sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' projec
 
 %find_lang %{name}
 
+%preun
+if [ $1 -eq 0 ]; then
+  /usr/sbin/alternatives --remove x-terminal-emulator %{_bindir}/%{name}
+fi
+
+%post
+if [ $1 -eq 1 ]; then
+  /usr/sbin/alternatives --install %{_bindir}/x-terminal-emulator \
+    x-terminal-emulator %{_bindir}/%{name} 20
+fi
+
 %files -f %{name}.lang
 %{_bindir}/%{name}
 %{_datadir}/%{name}/
@@ -45,6 +56,8 @@ sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' projec
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Jan 22 2017 mosquito <sensor.wen@gmail.com> - 2.1.7-2.git32f96be
+- Add x-terminal-emulator command for dde-file-manager
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.1.7-1.git32f96be
 - Update to 2.1.7
 * Thu Jan 12 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 2.1.6-1
