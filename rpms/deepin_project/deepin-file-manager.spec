@@ -6,7 +6,7 @@
 
 Name:           deepin-file-manager
 Version:        1.3.7
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
@@ -26,10 +26,15 @@ BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtsvg-devel
 BuildRequires:  qt5-qtx11extras-devel
+# run command by QProcess
 Requires:       deepin-shortcut-viewer
+Requires:       deepin-manual
+Requires:       deepin-terminal
+Requires:       file-roller
+Requires:       gvfs-client
+Requires:       xdg-user-dirs
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
 Obsoletes:      %{repo}%{?_isa} < %{version}-%{release}
-# deepin-file-manager-backend
 
 %description
 Deepin File Manager
@@ -77,6 +82,8 @@ sed -i '/Icon/s|dde|system|' %{repo}/%{repo}.desktop
 %{_libdir}/lib%{repo}.so
 
 %changelog
+* Sun Jan 22 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-2.gitf1915f8
+- Add Req for run command
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-1.gitf1915f8
 - Update to 1.3.7
 * Thu Jan 12 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 1.3.6-3
