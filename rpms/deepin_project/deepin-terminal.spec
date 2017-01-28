@@ -1,9 +1,9 @@
-%global _commit 32f96be99e94a021e5a8ad30a41c306ac928a1e3
+%global _commit 1ded0386a0af6cc9ccfd4c3222043f9896b955e2
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-terminal
-Version:        2.1.7
-Release:        2.git%{_shortcommit}%{?dist}
+Version:        2.1.9
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
 URL:            https://github.com/manateelazycat/deepin-terminal
@@ -56,6 +56,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-1.git1ded038
+- Update to 2.1.9
 * Sun Jan 22 2017 mosquito <sensor.wen@gmail.com> - 2.1.7-2.git32f96be
 - Add x-terminal-emulator command for dde-file-manager
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.1.7-1.git32f96be
