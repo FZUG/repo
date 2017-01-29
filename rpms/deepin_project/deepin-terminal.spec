@@ -1,9 +1,11 @@
 %global _commit 1ded0386a0af6cc9ccfd4c3222043f9896b955e2
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
+%global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
+
 Name:           deepin-terminal
 Version:        2.1.9
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
 URL:            https://github.com/manateelazycat/deepin-terminal
@@ -39,13 +41,32 @@ sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' projec
 
 %preun
 if [ $1 -eq 0 ]; then
-  /usr/sbin/alternatives --remove x-terminal-emulator %{_bindir}/%{name}
+  %{_sbindir}/alternatives --remove x-terminal-emulator %{_bindir}/%{name}
 fi
 
 %post
-if [ $1 -eq 1 ]; then
-  /usr/sbin/alternatives --install %{_bindir}/x-terminal-emulator \
+if [ $1 -ge 1 ]; then
+  %{_sbindir}/alternatives --install %{_bindir}/x-terminal-emulator \
     x-terminal-emulator %{_bindir}/%{name} 20
+fi
+
+%triggerin -- konsole5 %_terminals
+if [ $1 -ge 1 ]; then
+  PRI=20
+  for i in konsole %{_terminals}; do
+    PRI=$((PRI-1))
+    test -x %{_bindir}/$i && \
+    %{_sbindir}/alternatives --install %{_bindir}/x-terminal-emulator \
+      x-terminal-emulator %{_bindir}/$i $PRI
+  done
+fi
+
+%triggerpostun -- konsole5 %_terminals
+if [ $2 -eq 0 ]; then
+  for i in konsole %{_terminals}; do
+    test -x %{_bindir}/$i || \
+    %{_sbindir}/alternatives --remove x-terminal-emulator %{_bindir}/$i &>/dev/null ||:
+  done
 fi
 
 %files -f %{name}.lang
@@ -56,6 +77,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-2.git1ded038
+- Add trigger for terminal emulator
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-1.git1ded038
 - Update to 2.1.9
 * Sun Jan 22 2017 mosquito <sensor.wen@gmail.com> - 2.1.7-2.git32f96be
