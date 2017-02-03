@@ -8,7 +8,7 @@ These files are based on [cz-guardian/fedora-deepin](https://github.com/cz-guard
     sudo dnf copr enable mosquito/deepin
     sudo dnf update
     sudo dnf install deepin-desktop deepin-session-ui deepin-launcher deepin-screenshot deepin-terminal
-    sudo systemctl disable gdm.service && sudo systemctl enable lightdm.service
+    sudo systemctl disable gdm.service && sudo systemctl enable lightdm.service (optional, gdm also available)
     sudo sed -i "/SELINUX=/s|enforcing|disabled|" /etc/selinux/config
 
 After this is done, simply reboot into your new nice environment.
@@ -77,7 +77,7 @@ This repository contains the following .specs for integrating the deepin desktop
 
 
 ## Resources
-* [Deepin Github](https://github.com/linuxdeepin/), [Official site](https://www.deepin.org/en/)
+* [Deepin Github](https://github.com/linuxdeepin/), [Official site](https://www.deepin.org/en/), [Deepin OS Design](https://my.oschina.net/ManateeLazyCat/blog/831104)
 * [fedora-deepin repository list](https://copr.fedorainfracloud.org/coprs/mosquito/deepin/packages/)
 * [fedora-deepin (jstepanek)](https://github.com/cz-guardian/fedora-deepin/): thanks @cz-guardian
 * [arch-deepin](https://github.com/fasheng/arch-deepin/): [Deepin Desktop Environment on Arch](https://bbs.archlinux.org/viewtopic.php?id=181861)
