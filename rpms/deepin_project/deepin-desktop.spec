@@ -6,7 +6,7 @@
 
 Name:           deepin-desktop
 Version:        4.0.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Desktop module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-desktop
@@ -37,6 +37,7 @@ Deepin desktop-environment - Desktop module
 %setup -q -n %{repo}-%{_commit}
 sed -i 's|-0-2||g' build.pri
 sed -i 's|lrelease|lrelease-qt5|g' app/translate_generation.sh
+sed -i 's|/usr/lib|%{_libexecdir}|' app/view/canvasgridview.cpp
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -53,6 +54,8 @@ sed -i 's|lrelease|lrelease-qt5|g' app/translate_generation.sh
 %{_datadir}/dbus-1/services/*.service
 
 %changelog
+* Fri Feb  3 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-2.git6468342
+- Fix not work wallpaper choose
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-1.git6468342
 - Update to 4.0.1
 * Mon Dec 19 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.0-1

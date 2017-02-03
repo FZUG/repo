@@ -4,7 +4,7 @@
 
 Name:           deepin-file-manager-backend
 Version:        0.1.16
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{_shortcommit}%{?dist}
 Summary:        Deepin file manager backend
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-file-manager-backend
@@ -35,7 +35,7 @@ Deepin file manager backend
 %prep
 %setup -q -n %{name}-%{_commit}
 
-sed -i 's|lib|libexec|' services/*.service
+sed -i 's|/usr/lib|%{_libexecdir}|' services/*.service desktop/desktop.go
 sed -i '3s|lib|libexec|' Makefile
 sed -i 's|DFMB|%{name}|' locale/Makefile i18n.go
 
@@ -51,7 +51,7 @@ make USE_GCCGO=0
 %find_lang %{name}
 
 %post
-/usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas/
+/usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas/ &>/dev/null ||:
 
 %files -f %{name}.lang
 %{_libexecdir}/deepin-daemon/%{name}
@@ -59,6 +59,8 @@ make USE_GCCGO=0
 %{_datadir}/glib-2.0/schemas/com.deepin.filemanager.gschema.xml
 
 %changelog
+* Fri Feb 3 2017 mosquito <sensor.wen@gmail.com> - 0.1.16-2.git2032d5a
+- Fix not work wallpaper choose
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.1.16-1.git2032d5a
 - Update to 0.1.16
 * Sat Oct 01 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.1.16-1
