@@ -30,29 +30,19 @@ Header files and libraries for %{name}
 %prep
 %setup -q -n %{name}-%{_commit}
 sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
+sed -i -E '/test|examples/d' dtk.pro
 
 %build
-%qmake_qt5 PREFIX=%{_prefix}
+%qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}
 %make_build
 
 %install
 %make_install INSTALL_ROOT="%{buildroot}"
 
-%ifarch x86_64
-  rm -rf %{buildroot}/usr/lib64/qt5
-  mv %{buildroot}/usr/lib/* %{buildroot}/usr/lib64/
-  rmdir %{buildroot}/usr/lib/
-%endif
-%ifarch i386 i686
-  rm -rf %{buildroot}/usr/lib64/
-  # Remove the tests
-  rm -rf %{buildroot}%{_libdir}/qt5/tests
-  rmdir %{buildroot}%{_libdir}/qt5
-%endif
-
 %files
-%doc README.md
+%doc README.md Specification.md
 %{_libdir}/lib*.so.*
+%{_datadir}/dtkwidget/translations/*.qm
 
 %files devel
 %{_includedir}/libdtk-1.0/
