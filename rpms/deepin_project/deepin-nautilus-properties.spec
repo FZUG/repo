@@ -43,7 +43,7 @@ libtoolize && aclocal && autoheader && \
 %install
 cd src
 install -d %{buildroot}%{_bindir}
-install -m755 %{name} deepin-open-chooser %{buildroot}%{_bindir}/
+libtool --mode=install /bin/install -c %{name} deepin-open-chooser %{buildroot}%{_bindir}/
 
 %files
 %doc README
