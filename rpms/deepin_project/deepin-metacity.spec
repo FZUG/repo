@@ -12,20 +12,19 @@ Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 BuildRequires:  intltool
 BuildRequires:  itstool
 BuildRequires:  libtool
-BuildRequires:  yelp-devel
+BuildRequires:  yelp-tools
 BuildRequires:  autoconf-archive
+BuildRequires:  bamf-devel
 BuildRequires:  glib2-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  gsettings-desktop-schemas-devel
-BuildRequires:  libcanberra-devel
-BuildRequires:  bamf-devel
 BuildRequires:  json-glib-devel
-BuildRequires:  zenity
-BuildRequires:  yelp-tools
+BuildRequires:  libcanberra-devel
+BuildRequires:  libgtop2-devel
 BuildRequires:  startup-notification-devel
+BuildRequires:  zenity
 Requires:       dconf
 Requires:       deepin-desktop-schemas
-Requires:       libgtop2
 
 %description
 2D window manager for Deepin
