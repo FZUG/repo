@@ -17,7 +17,6 @@ Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  pkgconfig
 BuildRequires:  gettext
-BuildRequires:  deepin-gettext-tools
 BuildRequires:  desktop-file-utils
 BuildRequires:  gtk2-devel
 BuildRequires:  qt5-qtbase-devel
@@ -56,6 +55,8 @@ popd
 
 %files -f %{name}.lang
 %defattr(-,root,root,-)
+%doc README.md
+%license LICENSE
 %{_bindir}/deepin-dialog
 %{_qt5_qmldir}/Deepin/Locale/
 %{_qt5_qmldir}/Deepin/StyleResources/
