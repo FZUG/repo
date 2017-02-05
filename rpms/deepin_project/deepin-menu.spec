@@ -18,7 +18,6 @@ BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtx11extras-devel
 Requires:       python-qt5
-Requires:       qt5-qtx11extras
 
 %description
 Deepin menu service for building beautiful menus.
@@ -29,7 +28,9 @@ Deepin menu service for building beautiful menus.
 # fix python version
 find -iname "*.py" | xargs sed -i '1s|python$|python2|'
 
-sed -i '/target.path/s|lib|libexec|' deepin-menu.pro
+# Modify lib path to reflect the platform
+sed -i 's|/usr/lib|%{_libexecdir}|' com.deepin.menu.service \
+    deepin-menu.desktop deepin-menu.pro
 
 %build
 %{__python2} setup.py build
@@ -44,10 +45,6 @@ rm -rf %{buildroot}/usr/deepin_menu
 install -d %{buildroot}%{_datadir}/dbus-1/services/
 install -d %{buildroot}%{_datadir}/applications/
 install -d %{buildroot}/etc/xdg/autostart/
-
-# Modify lib path to reflect the platform
-sed -i 's|/usr/lib|%{_libexecdir}|' \
-    com.deepin.menu.service deepin-menu.desktop
 
 install -m644 *.service %{buildroot}%{_datadir}/dbus-1/services/
 install -m644 *.desktop %{buildroot}%{_datadir}/applications/
