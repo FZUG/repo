@@ -5,7 +5,7 @@
 
 Name:           deepin-terminal
 Version:        2.1.9
-Release:        2.git%{_shortcommit}%{?dist}
+Release:        3.git%{_shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
 URL:            https://github.com/manateelazycat/deepin-terminal
@@ -13,15 +13,21 @@ Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  vala
+BuildRequires:  fontconfig-devel
 BuildRequires:  gettext
 BuildRequires:  glib2-devel
 BuildRequires:  gtk3-devel
 BuildRequires:  json-glib-devel
-BuildRequires:  libsecret-devel
-BuildRequires:  vte291-devel
 BuildRequires:  libgee-devel
+BuildRequires:  libsecret-devel
 BuildRequires:  libwnck3-devel
-Requires:       vala
+BuildRequires:  vte291-devel
+# right-click menu style
+Requires:       deepin-menu
+# run command by create_from_commandline
+Requires:       deepin-shortcut-viewer
+Requires:       xdg-utils
+Recommends:     deepin-manual
 
 %description
 Default terminal emulation application for Deepin
@@ -77,6 +83,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Feb  5 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-3.git1ded038
+- Rewrite Req depends
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-2.git1ded038
 - Add trigger for terminal emulator
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-1.git1ded038
