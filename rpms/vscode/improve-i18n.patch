@@ -1,6 +1,6 @@
 --- a/i18n/chs/src/vs/workbench/browser/parts/editor/editorStatus.i18n.json
 +++ b/i18n/chs/src/vs/workbench/browser/parts/editor/editorStatus.i18n.json
-@@ -43,5 +43,5 @@
+@@ -44,5 +44,5 @@
  	"singleSelectionRange": "行 {0}，列 {1} (已选择{2})",
  	"spacesSize": "空格: {0}",
  	"tabFocusModeEnabled": "按 Tab 移动焦点",

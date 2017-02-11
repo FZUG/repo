@@ -10,7 +10,7 @@
 %global node_ver 6
 
 # commit
-%global _commit ee428b0eead68bf0fb99ab5fdc4439be227b6281
+%global _commit f9d0c687ff2ea7aabd85fb9a43129117c0ecf519
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # compute checksum for file
@@ -18,16 +18,16 @@
 %global hash MD5() { openssl md5 -binary $1 |openssl base64 |cut -d= -f1; }
 %global line_num LN() { wc -l $1 |cut -d" " -f1; }
 %global _files files=(\
-  "vs/workbench/workbench.main.js"\
-  "vs/workbench/workbench.main.css"\
+  "vs/workbench/electron-browser/workbench.main.js"\
+  "vs/workbench/electron-browser/workbench.main.css"\
   "vs/workbench/electron-browser/bootstrap/index.html"\
   "vs/workbench/electron-browser/bootstrap/index.js"\
 )
 %{nil}
 
 Name:    vscode
-Version: 1.8.1
-Release: 2%{?dist}
+Version: 1.9.1
+Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
 Group:   Development/Tools
@@ -217,6 +217,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.9.1-1
+- Release 1.9.1
 * Sat Jan  7 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-2
 - Fix watch files limit
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-1
