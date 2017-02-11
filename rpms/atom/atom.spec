@@ -16,11 +16,11 @@
 %global node_ver 6
 
 # commit
-%global _commit a357b4d0628bbdac906a32e8cd0a7e3c87fb7aac
+%global _commit a49cd5975b887b4bd51677aac067ec72e8ecb221
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.13.0
+Version: 1.14.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
@@ -58,7 +58,7 @@ Visit https://atom.io to learn more.
 %prep
 %setup -q -n %repo-%{_commit}
 sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
-sed -i 's|<version>|%{electron_ver}|' %{P:0}
+sed -i 's|<version>|%{electron_ver}|' %{P:0} %{P:3}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -72,13 +72,15 @@ sed -i -E -e '/(exception-reporting|metrics)/d' package.json
 export CFLAGS="%{optflags} -fPIC -pie"
 export CXXFLAGS="%{optflags} -fPIC -pie"
 
-# Update node for fc23 and el7
-%if 0%{?fedora} < 24 || 0%{?rhel}
+# Update node for fc23
+%if 0%{?fedora} < 24
+%if ! 0%{?rhel}
 git clone https://github.com/creationix/nvm.git .nvm; cd .nvm
-git checkout v0.31.2; cd ..
+git checkout v0.33.0; cd ..
 source .nvm/nvm.sh
 nvm install %{node_ver}
 nvm use %{node_ver}
+%endif
 %endif
 
 # Build package
@@ -89,7 +91,7 @@ node-gyp -v; node -v; npm -v; apm -v
 npm_config_cache="${HOME}/.atom/.npm"
 npm_config_disturl="https://atom.io/download/atom-shell"
 npm_config_target="%{electron_ver}"
-#export npm_config_target_arch="x64|ia32"
+#npm_config_target_arch="x64|ia32"
 npm_config_runtime="electron"
 # The npm_config_target is no effect, set ATOM_NODE_VERSION
 ## https://github.com/atom/apm/blob/master/src/command.coffee
@@ -98,35 +100,8 @@ export ATOM_ELECTRON_URL="$npm_config_disturl"
 export ATOM_RESOURCE_PATH=`pwd`
 export ATOM_HOME="$npm_config_cache"
 
-_packagesToDedupe=(
-    'abbrev'
-    'amdefine'
-    'atom-space-pen-views'
-    'cheerio'
-    'domelementtype'
-    'fs-plus'
-    'grim'
-    'highlights'
-    'humanize-plus'
-    'iconv-lite'
-    'inherits'
-    'loophole'
-    'oniguruma'
-    'q'
-    'request'
-    'rimraf'
-    'roaster'
-    'season'
-    'sigmund'
-    'semver'
-    'through'
-    'temp'
-)
-
 # Installing atom dependencies
-#apm clean
 apm install --verbose
-apm dedupe ${_packagesToDedupe[@]}
 
 # Installing build tools
 pushd script/
@@ -208,6 +183,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.14.1-1.gita49cd59
+- Release 1.14.1
+- Move script to script-old, https://github.com/atom/atom/commit/6856534
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.13.0-1.gita357b4d
 - Release 1.13.0
 * Fri Jan 13 2017 mosquito <sensor.wen@gmail.com> - 1.12.7-3.git4573089
