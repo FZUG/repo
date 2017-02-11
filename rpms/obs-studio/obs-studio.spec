@@ -2,20 +2,19 @@
 %global project obs-studio
 %global repo %{project}
 
-# commit
-%global _commit 93e084088f3c1f3979d78eea3c5d9220b1cea3f7
+%global _commit c8d08932fb4b0362056bcd0724a2adcfabacdfba
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:       obs-studio
-Version:    0.17.0
-Release:    1.git%{_shortcommit}%{?dist}
-Summary:    A recording/broadcasting program
+Name:           obs-studio
+Version:        17.0.2
+Release:        1.git%{_shortcommit}%{?dist}
+Summary:        A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
 
-Group:      Applications/Multimedia
-License:    GPLv2
-URL:        https://obsproject.com
-Source:     https://github.com/jp9000/obs-studio/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Group:          Applications/Multimedia
+License:        GPLv2
+URL:            https://obsproject.com
+Source:         https://github.com/jp9000/obs-studio/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  gcc-objc
 BuildRequires:  cmake
@@ -43,7 +42,7 @@ BuildRequires:  libcurl-devel
 BuildRequires:  doxygen
 BuildRequires:  desktop-file-utils
 BuildRequires:  hicolor-icon-theme
-Requires:       ffmpeg x264
+Requires:       x264
 
 %description
 Open Broadcaster Software is free and open source software
@@ -55,16 +54,16 @@ Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 - 支持 RTMP 流媒体直播
 
 %package libs
-Summary:    Open Broadcaster Software Studio libraries
-Requires:   %{name}%{?_isa} = %{version}-%{release}
+Summary:        Open Broadcaster Software Studio libraries
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description libs
 Library files for Open Broadcaster Software
 
 %package devel
-Summary:    Header files and library for %{name}
-Group:      Development/Libraries
-Requires:   %{name}%{?_isa} = %{version}-%{release}
+Summary:        Header files and library for %{name}
+Group:          Development/Libraries
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 Open Broadcaster Software is free and open source software
@@ -74,9 +73,9 @@ for video recording and live streaming.
 Open Broadcaster Software 是一款免费开源的视频录制/直播软件.
 
 %package doc
-Summary:    Documentation files for %{name}
-Group:      Documentation
-BuildArch:  noarch
+Summary:        Documentation files for %{name}
+Group:          Documentation
+BuildArch:      noarch
 
 %description doc
 The %{name}-doc package contains html documentation
@@ -90,13 +89,9 @@ that use %{name}.
 sed -i 's|OBS_MULTIARCH_SUFFIX|LIB_SUFFIX|g' cmake/Modules/ObsHelpers.cmake
 
 %build
-%{cmake} . \
-    -DUNIX_STRUCTURE=ON \
-%ifarch x86_64
-    -DOBS_MULTIARCH_SUFFIX=64 \
-%endif
-    -DOBS_VERSION_OVERRIDE=%{version} \
-    -DCMAKE_BUILD_TYPE=Release
+%cmake -DUNIX_STRUCTURE=ON \
+       -DOBS_VERSION_OVERRIDE=%{version} \
+       -DCMAKE_BUILD_TYPE=Release
 %make_build
 
 # build docs
@@ -131,7 +126,6 @@ fi
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
-%defattr(-,root,root,-)
 %doc CONTRIBUTING README
 %license COPYING
 %{_bindir}/obs
@@ -153,6 +147,8 @@ fi
 %doc docs/html
 
 %changelog
+* Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 17.0.2-1.gitc8d0893
+- Update to 17.0.2
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 0.17.0-1.git93e0840
 - Update to 0.17.0-1.git93e0840
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 0.16.6-1.gitb7b8ad4
