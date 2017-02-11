@@ -1,11 +1,11 @@
-%global _commit 1ded0386a0af6cc9ccfd4c3222043f9896b955e2
+%global _commit 4f7069e064ae4e5437013295fd5bdbfd8867086c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
-Version:        2.1.9
-Release:        3.git%{_shortcommit}%{?dist}
+Version:        2.1.12
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
 URL:            https://github.com/manateelazycat/deepin-terminal
@@ -83,6 +83,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 2.1.12-1.git4f7069e
+- Update to 2.1.12
 * Sun Feb  5 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-3.git1ded038
 - Rewrite Req depends
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.1.9-2.git1ded038
