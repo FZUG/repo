@@ -21,18 +21,20 @@
 
 Name:    atom
 Version: 1.14.1
-Release: 1.git%{_shortcommit}%{?dist}
+Release: 2.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
 License: MIT
 URL:     https://atom.io/
 Source0: https://github.com/atom/atom/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source1: use-system-ctags.patch
 
 Patch0:  fix-atom-sh.patch
 Patch1:  fix-license-path.patch
-Patch2:  use-system-apm.patch
-Patch3:  use-system-electron.patch
+Patch2:  fix-restart.patch
+Patch3:  use-system-apm.patch
+Patch4:  use-system-electron.patch
 
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
 BuildRequires: git
@@ -57,12 +59,13 @@ Visit https://atom.io to learn more.
 
 %prep
 %setup -q -n %repo-%{_commit}
-sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:3}
-sed -i 's|<version>|%{electron_ver}|' %{P:0} %{P:3}
+sed -i 's|<lib>|%{_lib}|g' %{P:0} %{P:2} %{P:4}
+sed -i 's|<version>|%{electron_ver}|' %{P:0} %{P:4}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
 sed -i -E -e '/(exception-reporting|metrics)/d' package.json
@@ -85,7 +88,7 @@ nvm use %{node_ver}
 
 # Build package
 node-gyp -v; node -v; npm -v; apm -v
-## https://github.com/atom/atom/blob/master/script/bootstrap
+
 # If unset, ~/.atom/.node-gyp/.atom/.npm is used
 ## https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
 npm_config_cache="${HOME}/.atom/.npm"
@@ -93,6 +96,7 @@ npm_config_disturl="https://atom.io/download/atom-shell"
 npm_config_target="%{electron_ver}"
 #npm_config_target_arch="x64|ia32"
 npm_config_runtime="electron"
+
 # The npm_config_target is no effect, set ATOM_NODE_VERSION
 ## https://github.com/atom/apm/blob/master/src/command.coffee
 export ATOM_ELECTRON_VERSION="%{electron_ver}"
@@ -102,6 +106,11 @@ export ATOM_HOME="$npm_config_cache"
 
 # Installing atom dependencies
 apm install --verbose
+
+# Use system ctags for symbols-view
+# https://github.com/FZUG/repo/issues/211
+patch -p1 -i %{S:1}
+rm -r node_modules/symbols-view/vendor
 
 # Installing build tools
 pushd script/
@@ -152,12 +161,8 @@ find %{buildroot} -type f -regextype posix-extended \
     -name '.*?' -print -or \
     -size 0 -print | xargs rm -rf
 
-# link ctags-linux for symbols-view
-# https://github.com/FZUG/repo/issues/211
-SYMBOLS_DIR="%{_libdir}/%{name}/node_modules/symbols-view"
-install -d %{buildroot}${SYMBOLS_DIR}/vendor/
-ln -sfv %{_bindir}/ctags %{buildroot}${SYMBOLS_DIR}/vendor/ctags-linux
-install -m644 out/app/node_modules/symbols-view/lib/ctags-config %{buildroot}${SYMBOLS_DIR}/lib/
+install -m644 out/app/node_modules/symbols-view/lib/ctags-config \
+  %{buildroot}%{_libdir}/%{name}/node_modules/symbols-view/lib/
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -183,6 +188,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.14.1-2.gita49cd59
+- Fix restart
+- Use system ctags for symbols-view
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.14.1-1.gita49cd59
 - Release 1.14.1
 - Move script to script-old, https://github.com/atom/atom/commit/6856534

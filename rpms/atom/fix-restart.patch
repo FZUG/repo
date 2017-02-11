@@ -1,0 +1,11 @@
+--- a/src/main-process/atom-application.coffee
++++ b/src/main-process/atom-application.coffee
+@@ -797,7 +797,7 @@
+       @restart()
+ 
+   restart: ->
+-    args = []
++    args = ["--app=/usr/<lib>/atom"]
+     args.push("--safe") if @safeMode
+     args.push("--log-file=#{@logFile}") if @logFile?
+     args.push("--socket-path=#{@socketPath}") if @socketPath?
