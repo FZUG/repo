@@ -12,7 +12,7 @@ URL:            https://github.com/linuxdeepin/deepin-menu
 Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  desktop-file-utils
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtdeclarative-devel
@@ -25,12 +25,15 @@ Deepin menu service for building beautiful menus.
 %prep
 %setup -q -n %{name}-%{_commit}
 
-# fix python version
-find -iname "*.py" | xargs sed -i '1s|python$|python2|'
+# Remove python shebang
+find -iname "*.py" | xargs sed -i '/env python/d'
 
 # Modify lib path to reflect the platform
 sed -i 's|/usr/lib|%{_libexecdir}|' com.deepin.menu.service \
     deepin-menu.desktop deepin-menu.pro
+
+# Fix setup.py install path
+sed -i '/data_files/s|list_files.*)|"")|' setup.py
 
 %build
 %{__python2} setup.py build
@@ -41,13 +44,14 @@ sed -i 's|/usr/lib|%{_libexecdir}|' com.deepin.menu.service \
 %{__python2} setup.py install -O1 --skip-build --prefix=%{_prefix} --root=%{buildroot}
 %{make_install} INSTALL_ROOT="%{buildroot}"
 
-rm -rf %{buildroot}/usr/deepin_menu
 install -d %{buildroot}%{_datadir}/dbus-1/services/
-install -d %{buildroot}%{_datadir}/applications/
-install -d %{buildroot}/etc/xdg/autostart/
-
 install -m644 *.service %{buildroot}%{_datadir}/dbus-1/services/
-install -m644 *.desktop %{buildroot}%{_datadir}/applications/
+
+install -d %{buildroot}%{_datadir}/applications/
+desktop-file-install --remove-key=OnlyShowIn --mode=644 \
+    --dir=%{buildroot}%{_datadir}/applications deepin-menu.desktop
+
+install -d %{buildroot}/etc/xdg/autostart/
 ln -sfv %{_datadir}/applications/%{name}.desktop \
     %{buildroot}%{_sysconfdir}/xdg/autostart/
 
@@ -55,7 +59,7 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
+# TODO: require license, doc
 %{_sysconfdir}/xdg/autostart/%{name}.desktop
 %{_libexecdir}/%{name}
 %{python_sitelib}/deepin_menu*
