@@ -1,8 +1,8 @@
-%global _commit 6038c517f2adcd511f13c600423accd0cac38ff7
+%global _commit 3750b2f385c6e91978b3d03d5e571b626f3877a5
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-menu
-Version:        3.0.7
+Version:        3.0.10
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin menu service
 
@@ -12,6 +12,8 @@ URL:            https://github.com/linuxdeepin/deepin-menu
 Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  desktop-file-utils
+BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  deepin-qt-dbus-factory-devel
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
 BuildRequires:  qt5-qtbase-devel
@@ -29,7 +31,7 @@ Deepin menu service for building beautiful menus.
 find -iname "*.py" | xargs sed -i '/env python/d'
 
 # Modify lib path to reflect the platform
-sed -i 's|/usr/lib|%{_libexecdir}|' com.deepin.menu.service \
+sed -i 's|/usr/lib|%{_libexecdir}|' data/com.deepin.menu.service \
     deepin-menu.desktop deepin-menu.pro
 
 # Fix setup.py install path
@@ -45,7 +47,7 @@ sed -i '/data_files/s|list_files.*)|"")|' setup.py
 %{make_install} INSTALL_ROOT="%{buildroot}"
 
 install -d %{buildroot}%{_datadir}/dbus-1/services/
-install -m644 *.service %{buildroot}%{_datadir}/dbus-1/services/
+install -m644 data/*.service %{buildroot}%{_datadir}/dbus-1/services/
 
 install -d %{buildroot}%{_datadir}/applications/
 desktop-file-install --remove-key=OnlyShowIn --mode=644 \
@@ -59,7 +61,8 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %postun -p /sbin/ldconfig
 
 %files
-# TODO: require license, doc
+%doc README.md
+%license LICENSE
 %{_sysconfdir}/xdg/autostart/%{name}.desktop
 %{_libexecdir}/%{name}
 %{python_sitelib}/deepin_menu*
@@ -67,6 +70,8 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %{_datadir}/dbus-1/services/com.deepin.menu.service
 
 %changelog
+* Tue Feb 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.10-1.git3750b2f
+- Update to 3.0.10
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.7-1.git6038c51
 - Update to 3.0.7
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 2.90.0-1.git7557d46
