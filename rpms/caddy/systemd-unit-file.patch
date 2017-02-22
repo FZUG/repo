@@ -1,0 +1,33 @@
+--- a/dist/init/linux-systemd/caddy.service
++++ b/dist/init/linux-systemd/caddy.service
+@@ -10,14 +10,14 @@
+ StartLimitBurst=5
+ 
+ ; User and group the process will run as.
+-User=www-data
+-Group=www-data
++User=caddy
++Group=caddy
+ 
+ ; Letsencrypt-issued certificates will be written to this directory.
+ Environment=CADDYPATH=/etc/ssl/caddy
+ 
+ ; Always set "-root" to something safe in case it gets forgotten in the Caddyfile.
+-ExecStart=/usr/local/bin/caddy -log stdout -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmp
++ExecStart=/usr/bin/caddy -log stdout -agree=true -conf=/etc/caddy/Caddyfile -root=/var/tmp
+ ExecReload=/bin/kill -USR1 $MAINPID
+ 
+ ; Limit the number of file descriptors; see `man systemd.exec` for more limit settings.
+@@ -40,9 +40,9 @@
+ ; The following additional security directives only work with systemd v229 or later.
+ ; They further retrict privileges that can be gained by caddy. Uncomment if you like.
+ ; Note that you may have to add capabilities required by any plugins in use.
+-;CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+-;AmbientCapabilities=CAP_NET_BIND_SERVICE
+-;NoNewPrivileges=true
++CapabilityBoundingSet=CAP_NET_BIND_SERVICE
++AmbientCapabilities=CAP_NET_BIND_SERVICE
++NoNewPrivileges=true
+ 
+ [Install]
+ WantedBy=multi-user.target

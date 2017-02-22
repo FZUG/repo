@@ -1,0 +1,36 @@
+--- a/caddy/build.bash
++++ b/caddy/build.bash
+@@ -29,28 +29,28 @@
+ # Current tag, if HEAD is on a tag
+ name="${pkg}.gitTag"
+ set +e
+-value="$(git -C "${git_repo}" describe --exact-match HEAD 2>/dev/null)"
++value="<gitTag>"
+ set -e
+ ldflags+=("-X" "\"${name}=${value}\"")
+ 
+ # Nearest tag on branch
+ name="${pkg}.gitNearestTag"
+-value="$(git -C "${git_repo}" describe --abbrev=0 --tags HEAD)"
++value="<gitTag>"
+ ldflags+=("-X" "\"${name}=${value}\"")
+ 
+ # Commit SHA
+ name="${pkg}.gitCommit"
+-value="$(git -C "${git_repo}" rev-parse --short HEAD)"
++value="<gitCommit>"
+ ldflags+=("-X" "\"${name}=${value}\"")
+ 
+ # Summary of uncommitted changes
+ name="${pkg}.gitShortStat"
+-value="$(git -C "${git_repo}" diff-index --shortstat HEAD)"
++value=""
+ ldflags+=("-X" "\"${name}=${value}\"")
+ 
+ # List of modified files
+ name="${pkg}.gitFilesModified"
+-value="$(git -C "${git_repo}" diff-index --name-only HEAD)"
++value=""
+ ldflags+=("-X" "\"${name}=${value}\"")
+ 
+ go build -ldflags "${ldflags[*]}" -o "${output_filename}"
