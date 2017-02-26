@@ -1,11 +1,11 @@
 %global project dde-dock
 %global repo %{project}
 
-%global _commit a88259093ebcbe8dc0f8517908139ab0ee025476
+%global _commit 26f189d5a8f6da621aabf4e93839911ace943bbe
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-dock
-Version:        4.0.8
+Version:        4.1.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -43,11 +43,8 @@ Header files and libraries for %{name}
 %prep
 %setup -q -n %{repo}-%{_commit}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
-
-%ifarch x86_64
 sed -i '/target.path/s|lib|%{_lib}|' plugins/*/*.pro
 sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
-%endif
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -57,6 +54,7 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %make_install INSTALL_ROOT=%{buildroot}
 
 %files
+%license LICENSE
 %{_bindir}/%{repo}
 %{_libdir}/%{repo}/
 %{_datadir}/%{repo}/
@@ -66,6 +64,8 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.1.3-1.git26f189d
+- Update to 4.1.3
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.8-1.gita882590
 - Update to 4.0.8
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.7-1
