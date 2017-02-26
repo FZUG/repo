@@ -1,13 +1,13 @@
 %global project dde-api
 %global repo %{project}
 
-%global _commit cfdb295e076828f3872a92e914ae95c7e930636a
+%global _commit f93dbd7db26ff2bc312f86659c5cf089a522129e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-api
-Version:        3.0.16.1
+Version:        3.1.2
 Release:        1.git%{_shortcommit}%{?dist}
-Summary:        Go-lang bingdings for dde-daemon
+Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-api
 Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
@@ -37,7 +37,7 @@ Provides:       %{repo}%{?_isa} = %{version}-%{release}
 Obsoletes:      %{repo}%{?_isa} < %{version}-%{release}
 
 %description
-Go-lang bingdings for dde-daemon
+Go-lang bingding for dde-daemon
 
 %package devel
 Summary:        Development package for %{name}
@@ -82,6 +82,8 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{gopath}/src/pkg.deepin.io/dde/api/
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitf93dbd7
+- Update to 3.1.2
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.16.1-1.gitcfdb295
 - Update to 3.0.16.1
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.16-1
