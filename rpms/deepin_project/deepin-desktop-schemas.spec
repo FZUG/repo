@@ -1,8 +1,8 @@
-%global _commit 10efc5eb1faf1b5400e39ebed173236841a11617
+%global _commit f6ffe70d00acd45d862041e8080f785bfd1f8768
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-desktop-schemas
-Version:        3.0.13
+Version:        3.1.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        GSettings deepin desktop-wide schemas
 License:        GPLv3
@@ -38,6 +38,8 @@ rm overrides/x86/{org.gnome.desktop,other}.override
 %{_datadir}/glib-2.0/schemas/*
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.1-1.gitf6ffe70
+- Update to 3.1.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.13-1.git10efc5e
 - Update to 3.0.13
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.13-1
