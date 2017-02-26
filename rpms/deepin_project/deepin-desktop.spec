@@ -1,12 +1,12 @@
 %global project dde-desktop
 %global repo %{project}
 
-%global _commit 6468342ea569db307136a451bf7aeb61dfb3327f
+%global _commit 5dbbc8b35e234eb0476bedefcc57343fb5fd9627
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-desktop
-Version:        4.0.1
-Release:        2.git%{_shortcommit}%{?dist}
+Version:        4.0.2
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Desktop module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-desktop
@@ -48,12 +48,15 @@ sed -i 's|/usr/lib|%{_libexecdir}|' app/view/canvasgridview.cpp
 
 %files
 %doc README.md
+%license LICENSE
 %{_bindir}/%{repo}
 %{_datadir}/%{repo}/
 %{_datadir}/applications/*.desktop
 %{_datadir}/dbus-1/services/*.service
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-1.git5dbbc8b
+- Update to 4.0.2
 * Fri Feb  3 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-2.git6468342
 - Fix not work wallpaper choose
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-1.git6468342
