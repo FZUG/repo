@@ -1,8 +1,9 @@
-%global _commit d3ba123465f529eb93d662e06d34b01bbc9640ca
+%global debug_package %{nil}
+%global _commit d7c1216a9906b04843ed3cd6230ad71742b2ec76
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           startdde
-Version:        3.0.14.1
+Version:        3.1.2
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -10,7 +11,7 @@ URL:            https://github.com/linuxdeepin/startdde
 Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  cmake
-BuildRequires:  gcc-go
+BuildRequires:  golang
 BuildRequires:  libgo-devel
 BuildRequires:  coffee-script
 BuildRequires:  deepin-gir-generator
@@ -31,7 +32,7 @@ Starter of deepin desktop environment
 %prep
 %setup -q -n %{name}-%{_commit}
 
-sed -i 's|/usr/lib|%{_libexecdir}|g' Makefile session.go \
+sed -i '/deepin-daemon/s|lib|libexec|g' Makefile session.go \
     dde-readahead/dde-readahead.service
 
 # Fix systemd path
@@ -44,12 +45,9 @@ export GOPATH="%{gopath}"
 %install
 %make_install
 
-# Fix broken symlink
-rm -f %{buildroot}%{_unitdir}/multi-user.target.wants/dde-readahead.service
-ln -s %{_unitdir}/dde-readahead.service \
-  %{buildroot}%{_unitdir}/multi-user.target.wants/dde-readahead.service
-
 %files
+%doc README.md
+%license LICENSE
 %{_bindir}/%{name}
 %{_libexecdir}/deepin-daemon/dde-readahead
 %{_unitdir}/dde-readahead.service
@@ -57,6 +55,8 @@ ln -s %{_unitdir}/dde-readahead.service \
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitd7c1216
+- Update to 3.1.2
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.14.1-1.gitd3ba123
 - Update to 3.0.14.1
 * Wed Dec 28 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.13-2
