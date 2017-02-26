@@ -1,11 +1,11 @@
 %global project dde-session-ui
 %global repo %{project}
 
-%global _commit 9db2f1d3dbd3b26c92c039ee681993d7c8ede6ff
+%global _commit 6a09cb4d2de85c057924353bb02c47e4efa9d7e8
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-session-ui
-Version:        3.0.23
+Version:        3.0.27
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -78,6 +78,8 @@ EOF
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.0.27-1.git6a09cb4
+- Update to 3.0.27
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.23-1.git9db2f1d
 - Update to 3.0.23
 * Sun Dec 11 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.22-1
