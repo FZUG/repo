@@ -1,11 +1,11 @@
 %global project qt5integration
 %global repo %{project}
 
-%global _commit 40401af34606964aeb6fdfb9a689e02baf5d7bfa
+%global _commit aa563fd619d30316f1a52be0d018d1a7db3ea5cf
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-qt5integration
-Version:        0.0.6
+Version:        0.1.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3
@@ -45,6 +45,7 @@ BuildRequires:  xcb-util-renderutil-devel
 BuildRequires:  libxcb-devel
 BuildRequires:  libxkbcommon-x11-devel
 BuildRequires:  libxkbcommon-devel
+Recommends:     deepin-file-manager
 
 %description
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
@@ -65,6 +66,8 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %{_qt5_plugindir}/styles/libdstyleplugin.so
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.1.1-1.gitaa563fd
+- Update to 0.1.1
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 0.0.6-1.git40401af
 - Update to 0.0.6
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.0.5-1.gitc0dc3cf
