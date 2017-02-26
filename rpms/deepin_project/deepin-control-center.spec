@@ -1,11 +1,11 @@
 %global project dde-control-center
 %global repo %{project}
 
-%global _commit 481255b220fca0881ff75e316b90f6f9955125ad
+%global _commit 10c3be24beafcfb4d25c5ffe98bdcd310ba51127
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-control-center
-Version:        3.0.24
+Version:        4.0.7
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
@@ -39,16 +39,17 @@ New control center for linux deepin
 %setup -q -n %{repo}-%{_commit}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
-find -name '*.pro' | xargs sed -i '/target.path/s|lib|%{_lib}|'
-sed -i '/%{repo}/s|lib|%{_lib}|' frame/pluginsmanager.cpp
-sed -i '/deepin-daemon/s|lib|libexec|' modules/system_info/updatewidget.cpp
+sed -i -E '/target.path|utils.path/s|lib|%{_lib}|' plugins/*/*.pro
+sed -i 's|lib|%{_lib}|' frame/pluginscontroller.cpp plugins/notify/notifydata.cpp
+sed -i '/deepin-daemon/s|lib|libexec|' modules/update/updatemodule.cpp
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} \
     QMAKE_CFLAGS_ISYSTEM= \
     WITH_MODULE_GRUB=NO \
     WITH_MODULE_REMOTE_ASSIST=NO \
-    WITH_MODULE_SYSINFO_UPDATE=NO
+    WITH_MODULE_SYSINFO_UPDATE=NO \
+    DISABLE_SYS_UPDATE=YES
 %make_build
 
 %install
@@ -56,13 +57,14 @@ sed -i '/deepin-daemon/s|lib|libexec|' modules/system_info/updatewidget.cpp
 
 %files
 %{_bindir}/%{repo}
-%{_libdir}/%{repo}/modules/
+%{_libdir}/%{repo}/plugins/
 %{_datadir}/applications/%{repo}.desktop
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/%{repo}/
-%{_datadir}/dman/%{repo}/
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.7-1.git10c3be2
+- Update to 4.0.7
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.24-1.git481255b
 - Downgrade to 3.0.24 for end user
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-2.git8b1a736
