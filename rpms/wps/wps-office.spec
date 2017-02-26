@@ -16,8 +16,8 @@
 %global sha1sum %(test %arch = x86_64 &&
            echo "7e9b17572ed5cea50af24f01457f726fc558a515" ||
            echo "3e417203613c178d881be2ad7db21edb72d3f524")
-%global msfonts http://linux.linuxidc.com/2014年资料/4月/20日/Ubuntu 14.04 安装 WPS/symbol-fonts_1.2_all.deb
-%global getopts -t 5 --http-user=www.linuxidc.com --http-password=www.linuxidc.com
+%global msfonts symbol-fonts_1.2_all.deb
+%global msfonts_url http://linux.linuxidc.com/linuxconf/download.php?file=Li9saW51eGZpbGVzLzIwMTTE6tfKwc8vNNTCLzIwyNUvVWJ1bnR1IDE0LjA0ILCy17AgV1BTL3N5bWJvbC1mb250c18xLjJfYWxsLmRlYg==
 
 # Usage: DownloadPkg appfile appurl
 %global DownloadPkg() \
@@ -33,7 +33,7 @@ Download
 
 Name:           wps-office
 Version:        10.1.0.5672
-Release:        1.a21.net
+Release:        2.a21.net
 Summary:        WPS Office Suite
 Summary(zh_CN): 金山 WPS Office 办公套件
 Group:          Applications/Editors
@@ -72,10 +72,10 @@ Requires:       /usr/bin/update-mime-database
 %prep
 %DownloadPkg %{appfile} %{appurl1}
 %DownloadPkg %{appfile} %{appurl2}
-test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
+test -f %{msfonts} || wget -O %{msfonts} %{msfonts_url}
 
 # symbol-fonts
-dpkg-deb -X symbol-fonts_1.2_all.deb .
+dpkg-deb -X %{msfonts} .
 
 # Extract archive
 AppFile=%{appfile}
@@ -115,10 +115,10 @@ if [ $1 -ge 1 ]; then
 cd %{_tmppath}
 %DownloadPkg %{appfile} %{appurl1}
 %DownloadPkg %{appfile} %{appurl2}
-test -f symbol-fonts_1.2_all.deb || wget %{getopts} "%{msfonts}"
+test -f %{msfonts} || wget -O %{msfonts} %{msfonts_url}
 
 # symbol-fonts
-dpkg-deb -x symbol-fonts_1.2_all.deb . ||:
+dpkg-deb -x %{msfonts} . ||:
 
 # Extract archive
 AppFile=%{appfile}
@@ -173,6 +173,8 @@ fi
 %ghost /opt/kingsoft
 
 %changelog
+* Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5672-2
+- Fix symbol fonts url
 * Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5672-1
 - Release 10.1.0.5672
 - Check download url
