@@ -1,8 +1,8 @@
-%global _commit b633b858f20872fc8a2024791f0143ea0c01fcf2
+%global _commit 4a903359313a016c7d82a7f4a422cadb929242a4
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-metacity
-Version:        3.22.0
+Version:        3.22.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        2D window manager for Deepin
 License:        GPL
@@ -73,6 +73,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/lib%{name}*.so
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.22.3-1.git4a90335
+- Update to 3.22.3
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.22.0-1.gitb633b85
 - Update to 3.22.0
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.22.0-1
