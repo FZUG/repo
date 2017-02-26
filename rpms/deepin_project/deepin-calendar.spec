@@ -1,11 +1,11 @@
 %global project dde-calendar
 %global repo %{project}
 
-%global _commit d7e42a121b4b056f5c030fecbc601f4e0efb65be
+%global _commit b59053f71cfd4cec135a14b40f20d9edf866ea21
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-calendar
-Version:        1.0.3
+Version:        1.0.4
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3
@@ -38,6 +38,8 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 1.0.4-1.gitb59053f
+- Update to 1.0.4
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.3-1.gitd7e42a1
 - Update to 1.0.3
 * Mon Dec 19 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.3-1
