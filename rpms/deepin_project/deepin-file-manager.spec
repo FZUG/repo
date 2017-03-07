@@ -1,11 +1,11 @@
 %global project dde-file-manager
 %global repo %{project}
 
-%global _commit 207000daaddc4294921647cf5eefb6efefaef756
+%global _commit e303113cb4679e762447fac467cd66c0b5dfe1f1
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-file-manager
-Version:        1.3.8
+Version:        1.4.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
@@ -14,6 +14,7 @@ Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  atk-devel
 BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  dtksettings-devel
 BuildRequires:  ffmpegthumbnailer-devel
 BuildRequires:  file-devel
 BuildRequires:  gtk2-devel
@@ -24,6 +25,7 @@ BuildRequires:  polkit-devel
 BuildRequires:  polkit-qt5-1-devel
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
+BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtsvg-devel
 BuildRequires:  qt5-qtx11extras-devel
 # run command by QProcess
@@ -48,12 +50,9 @@ Header files and libraries for %{name}
 
 %prep
 %setup -q -n %{repo}-%{_commit}
-sed -i 's|-0-2||g' dde-file-manager*/dde-file-manager*.pro
-sed -i 's|lrelease|lrelease-qt5|g' dde-file-manager-lib/generate_translations.sh
+sed -i 's|-0-2||g' %{repo}*/*.pro usb-device-formatter/usb-device-formatter.pro
+sed -i 's|lrelease|lrelease-qt5|g' %{repo}*/generate_translations.sh usb-device-formatter/generate_translations.sh
 sed -i 's|qmake|qmake-qt5|g' vendor/prebuild
-
-# Fix broken icon link
-sed -i '/Icon/s|dde|system|' %{repo}/%{repo}.desktop
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} QMAKE_CFLAGS_ISYSTEM=
@@ -66,22 +65,27 @@ sed -i '/Icon/s|dde|system|' %{repo}/%{repo}.desktop
 %{_sysconfdir}/dbus-1/system.d/*.conf
 %{_sysconfdir}/xdg/autostart/%{repo}*.desktop
 %{_bindir}/dde-*
+%{_bindir}/usb-device-formatter*
 %{_libdir}/lib%{repo}.so.*
 %{_datadir}/applications/%{repo}.desktop
 %{_datadir}/dbus-1/interfaces/*.xml
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/%{repo}/
+%{_datadir}/usb-device-formatter/
 %{_datadir}/dman/%{repo}/
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/polkit-1/actions/*.policy
 
 %files devel
 %{_includedir}/%{repo}/*.h
+%{_includedir}/%{repo}/gvfs/*.h
 %{_libdir}/pkgconfig/%{repo}.pc
 %{_libdir}/lib%{repo}.so
 
 %changelog
+* Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 1.4.1-1.gite303113
+- Update to 1.4.1
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 1.3.8-1.git207000d
 - Update to 1.3.8
 * Sun Jan 22 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-2.gitf1915f8
