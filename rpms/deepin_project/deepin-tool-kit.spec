@@ -1,8 +1,8 @@
-%global _commit 2c1f4ec8f43938bac63d819f6c91dbeb8a0c9b21
+%global _commit cc5757fda577568888cf6d562a9d6fb87ceb898b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-tool-kit
-Version:        0.2.4
+Version:        0.2.5
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Base development tool of all C++/Qt Developer work on Deepin
 License:        GPLv3
@@ -52,6 +52,8 @@ sed -i -E '/test|examples/d' dtk.pro
 %{_libdir}/lib*.so
 
 %changelog
+* Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 0.2.5-1.gitcc5757f
+- Update to 0.2.5
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.2.4-1.git2c1f4ec
 - Update to 0.2.4
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1.git20e3672
