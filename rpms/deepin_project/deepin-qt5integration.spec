@@ -1,11 +1,11 @@
 %global project qt5integration
 %global repo %{project}
 
-%global _commit aa563fd619d30316f1a52be0d018d1a7db3ea5cf
+%global _commit ecde0760a5d2b5954dfac05655b4f34e7d83f5bb
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-qt5integration
-Version:        0.1.1
+Version:        0.1.2
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3
@@ -66,6 +66,8 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %{_qt5_plugindir}/styles/libdstyleplugin.so
 
 %changelog
+* Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 0.1.2-1.gitecde076
+- Update to 0.1.2
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.1.1-1.gitaa563fd
 - Update to 0.1.1
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 0.0.6-1.git40401af
