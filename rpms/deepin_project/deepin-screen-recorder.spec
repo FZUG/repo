@@ -1,8 +1,8 @@
-%global _commit 9eda269aee6de0902ec7eb66be4ebb19248c0f02
+%global _commit 8e0a4b35c599f1708ccbf7c485864b2cc73612fd
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-screen-recorder
-Version:        0.8
+Version:        1.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
@@ -15,6 +15,7 @@ BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb)
 BuildRequires:  pkgconfig(xcb-util)
 Requires:       byzanz
@@ -57,5 +58,7 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 1.3-1.git8e0a4b3
+- Update to 1.3
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.8-1.git9eda269
 - Initial build
