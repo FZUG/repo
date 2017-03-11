@@ -2,20 +2,19 @@
 %global project screenFetch
 %global repo %{project}
 
-# commit
-%global _commit 22e5bee7647453d45ec82f543f37b8a6a062835d
+%global _commit 36518ac06dc5cef4ab5fcf998bf5e09e3f570722
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
-Name:		screenfetch
-Version:	3.7.0
-Release:	3.git%{_shortcommit}%{?dist}
-Summary:	Fetches system/theme information in terminal
-Summary(zh_CN):	终端查询系统/主题信息
+Name:           screenfetch
+Version:        3.8.0
+Release:        1.git%{_shortcommit}%{?dist}
+Summary:        Fetches system/theme information in terminal
+Summary(zh_CN): 终端查询系统/主题信息
 
-License:	GPLv3
-URL:		https://github.com/KittyKatt/screenFetch
-Source:		https://github.com/KittyKatt/screenFetch/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-BuildArch:	noarch
+License:        GPLv3
+URL:            https://github.com/KittyKatt/screenFetch
+Source:         %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+BuildArch:      noarch
 
 %description
 Fetches system/theme information in terminal for Linux desktop screenshots.
@@ -24,7 +23,7 @@ Fetches system/theme information in terminal for Linux desktop screenshots.
 终端查询系统/主题信息.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{_commit}
 
 %build
 
@@ -33,13 +32,14 @@ install -Dm 0755 %{name}-dev %{buildroot}%{_bindir}/%{name}
 install -Dm 0644 %{name}.1   %{buildroot}%{_mandir}/man1/%{name}.1
 
 %files
-%defattr(-,root,root,-)
 %doc CHANGELOG README.mkdn TODO
 %license COPYING
 %{_bindir}/%{name}
 %{_mandir}/man1/%{name}.1.*
 
 %changelog
+* Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 3.8.0-1.git36518ac
+- Update to 3.8.0
 * Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 3.7.0-3.git22e5bee
 - Update version to 3.7.0-3.git22e5bee
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 3.7.0-2.gita86ce5e
