@@ -32,13 +32,15 @@
        if (argv.codeSign) {
 --- a/package.json
 +++ b/package.json
-@@ -12,5 +12,5 @@
+@@ -12,7 +12,7 @@
      "url": "https://github.com/atom/atom/issues"
    },
    "license": "MIT",
 -  "electronVersion": "1.3.13",
 +  "electronVersion": "<version>",
    "dependencies": {
+     "async": "0.2.6",
+     "atom-keymap": "7.1.20",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
 @@ -194,8 +194,8 @@
@@ -65,12 +67,12 @@
      packagePath?.startsWith(@resourcePathWithTrailingSlash)
 --- a/static/index.js
 +++ b/static/index.js
-@@ -29,7 +29,7 @@
-         throw loadSettingsError
-       }
+@@ -24,7 +24,7 @@
+       // Normalize to make sure drive letter case is consistent on Windows
+       process.resourcesPath = path.normalize(process.resourcesPath)
  
--      var devMode = loadSettings.devMode || !loadSettings.resourcePath.startsWith(process.resourcesPath + path.sep)
-+      var devMode = loadSettings.devMode || !loadSettings.resourcePath.startsWith('/usr/<lib>/atom')
+-      var devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith(process.resourcesPath + path.sep)
++      var devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith('/usr/<lib>/atom')
  
        if (devMode) {
          setupDeprecatedPackages()
