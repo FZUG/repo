@@ -2,11 +2,11 @@
 %global project moonplayer
 %global repo %{project}
 
-%global _commit 8b5e5f8610ddf01358ddd235e38bccd022f3dc62
+%global _commit 17140ab9fcb34a314042262acf59c73141eed33b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    moonplayer
-Version: 0.73
+Version: 0.75
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Video player that can play online videos
 Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播放器
@@ -25,6 +25,7 @@ Source4: plugin_sohu.py
 #BuildRequires: qt-devel
 BuildRequires: python-devel
 BuildRequires: qt5-qtbase-devel
+BuildRequires: mpv-libs-devel
 Requires: mplayer
 Requires: mencoder
 
@@ -75,6 +76,9 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 0.75-1.git17140ab
+- Update to 0.75
+
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 0.73-1.git8b5e5f8
 - Update to 0.73
 
