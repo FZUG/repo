@@ -1,12 +1,8 @@
-%global debug_package %{nil}
-%global project obs-studio
-%global repo %{project}
-
-%global _commit c8d08932fb4b0362056bcd0724a2adcfabacdfba
+%global _commit bc9a58174b75c445dcb14259443a74746f0b3d43
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           obs-studio
-Version:        17.0.2
+Version:        18.0.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        A recording/broadcasting program
 Summary(zh_CN): 跨平台屏幕录制软件
@@ -14,7 +10,7 @@ Summary(zh_CN): 跨平台屏幕录制软件
 Group:          Applications/Multimedia
 License:        GPLv2
 URL:            https://obsproject.com
-Source:         https://github.com/jp9000/obs-studio/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source:         https://github.com/jp9000/obs-studio/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  gcc-objc
 BuildRequires:  cmake
@@ -82,7 +78,7 @@ The %{name}-doc package contains html documentation
 that use %{name}.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{name}-%{_commit}
 
 # rpmlint reports E: hardcoded-library-path
 # replace OBS_MULTIARCH_SUFFIX by LIB_SUFFIX
@@ -147,6 +143,8 @@ fi
 %doc docs/html
 
 %changelog
+* Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 18.0.1-1.gitbc9a581
+- Update to 18.0.1
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 17.0.2-1.gitc8d0893
 - Update to 17.0.2
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 0.17.0-1.git93e0840
