@@ -10,21 +10,25 @@
 %global repo %{project}
 
 # commit
-%global _commit 4b54e0fdccf2b3013285fef05c97354cfa31697b
+#%global _commit 4b54e0fdccf2b3013285fef05c97354cfa31697b
+%global _commit 3847155641d29a66cdda67eef14876a288f285ac
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    bcloud
 Version: 3.8.2
-Release: 5.git%{_shortcommit}%{?dist}
+Release: 6.git%{_shortcommit}%{?dist}
 Summary: Baidu Pan client for Linux Desktop users
 Summary(zh_CN): 百度网盘 Linux 桌面客户端
 
 # https://raw.githubusercontent.com/LiuLang/bcloud/master/LICENSE
 License: GPLv3
-URL:     https://github.com/LiuLang/bcloud
-Source0: https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-Patch0:	00_fix_network_error.patch
-Patch1: 01_verifycode_length.patch
+#URL:     https://github.com/LiuLang/bcloud
+#Source0: https://github.com/LiuLang/bcloud/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+#Patch0:	00_fix_network_error.patch
+#Patch1: 01_verifycode_length.patch
+
+URL:     https://github.com/Yufeikang/bcloud
+Source0: https://github.com/Yufeikang/bcloud/archive/%{_commit}/%{repo}-%{_commit}.tar.gz
 
 BuildArch: noarch
 BuildRequires: python3-devel
@@ -51,13 +55,13 @@ Baidu Pan client for Linux Desktop users.
 %setup -q -n %repo-%{_commit}
 # not bind cellphone
 # https://github.com/LiuLang/bcloud/pull/177
-sed -i '/err.*18/s|=.*18|in (18, 400032)|' bcloud/auth.py
+# sed -i '/err.*18/s|=.*18|in (18, 400032)|' bcloud/auth.py
 # Fix network error, https://github.com/LiuLang/bcloud/issues/244
 # patch comes from https://github.com/licamla/bcloud/commit/e8cce73e94fa247f9206f26dc9c73dd3c1120893
-%patch0 -p1
+#%patch0 -p1
 # Allow Chinese characters in verify code.
 # Patch comes form https://github.com/LiuLang/bcloud/issues/255#issuecomment-247511561
-%patch1 -p1
+#%patch1 -p1
 
 
 %build
@@ -96,6 +100,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sat Mar 18 2017 Zamir SUN <sztsian@gmail.com> - 3.8.2-6.git3847155
+- Rebase upstream to https://github.com/Yufeikang/bcloud/
+
 * Mon Oct 10 2016 Zamir SUN <sztsian@gmail.com> - 3.8.2-5.git4b54e0f
 - Add patch to allow Chinese characters in verify code
 
