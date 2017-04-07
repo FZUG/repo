@@ -1,0 +1,12 @@
+diff -up pycairo-1.10.0/test/examples_test.py~ pycairo-1.10.0/test/examples_test.py
+--- pycairo-1.10.0/test/examples_test.py~	2010-05-29 08:28:35.000000000 +0300
++++ pycairo-1.10.0/test/examples_test.py	2013-12-20 22:53:07.806217741 +0200
+@@ -14,7 +14,7 @@ def test_snippets():
+   examples/cairo_snippets/snippets/
+   '''
+   def doSnippets(name):
+-    retcode = subprocess.call('python %s -s' % name, shell=True)
++    retcode = subprocess.call('python3 %s -s' % name, shell=True)
+     assert retcode == 0, 'Error: retcode == {0}'.format(retcode)
+ 
+   os.chdir(os.path.join(os.path.dirname(__file__), '..', 'examples',
