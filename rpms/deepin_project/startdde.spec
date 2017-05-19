@@ -1,9 +1,9 @@
 %global debug_package %{nil}
-%global _commit d7c1216a9906b04843ed3cd6230ad71742b2ec76
+%global _commit a9130d0fa86efe557cd3f2499015b4ead839b1e0
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           startdde
-Version:        3.1.2
+Version:        3.1.8
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -55,6 +55,8 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.8-1.gita9130d0
+- Update to 3.1.8
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitd7c1216
 - Update to 3.1.2
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.14.1-1.gitd3ba123
