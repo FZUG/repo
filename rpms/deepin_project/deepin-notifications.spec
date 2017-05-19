@@ -1,8 +1,8 @@
-%global _commit 9c70ddffecc6616e21d0cc9bcd73526fb194ab8b
+%global _commit 07c016386a06c9698ccefe810e32bbcadf849bfc
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-notifications
-Version:        3.0.0
+Version:        3.0.4
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        System notifications for linuxdeepin desktop environment
 License:        GPL3
@@ -37,6 +37,8 @@ sed -i 's|lib|libexec|' deepin-notifications.pro \
 %{_datadir}/dbus-1/services/com.deepin.Notifications.service
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.0.4-1.git07c0163
+- Update to 3.0.4
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.0.0-1.git9c70ddf
 - Update to 3.0.0
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 2.3.10-1.git1c35b5e
