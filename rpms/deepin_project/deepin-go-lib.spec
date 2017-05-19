@@ -1,11 +1,11 @@
 %global project go-lib
 %global repo %{project}
 
-%global _commit 01150d5dfa2249f792853148b10a9ae9acdad575
+%global _commit b084e27172bb28e68f44ea4cecddb25d7dcfdc49
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-%{repo}
-Version:        0.5.5
+Version:        1.0.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 
@@ -38,6 +38,8 @@ rm -rf %{buildroot}%{gopath}/src/pkg.deepin.io/lib/debian
 %{gopath}/src/pkg.deepin.io/lib/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.0.3-1.gitb084e27
+- Update to 1.0.3
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.5.5-1.git01150d5
 - Update to 0.5.5
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.5.3-1.git44767e8
