@@ -1,8 +1,8 @@
-%global _commit 9ee8ef2d2d7a266438f863dc492f8328b1785561
+%global _commit 1e1e1b8a97ecfc07de37e3f2646290d5c38be34f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-cogl
-Version:        1.22.3
+Version:        1.22.5
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        An object oriented GL/GLES Abstraction/Utility Layer for Deepin
 License:        GPLv2
@@ -85,6 +85,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/locale/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.22.5-1.git1e1e1b8
+- Update to 1.22.5
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.22.3-1.git9ee8ef2
 - Update to 1.22.3
 * Sat Dec 17 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.22.3-3
