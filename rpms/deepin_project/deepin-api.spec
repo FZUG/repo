@@ -1,11 +1,11 @@
 %global project dde-api
 %global repo %{project}
 
-%global _commit f93dbd7db26ff2bc312f86659c5cf089a522129e
+%global _commit 4c8e030f49cfc118dce28fe02418caa3937a2824
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-api
-Version:        3.1.2
+Version:        3.1.7
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3
@@ -50,6 +50,7 @@ Header files and libraries for %{name}
 
 sed -i 's|/usr/lib|%{_libexecdir}|' misc/*services/*.service \
     misc/systemd/system/deepin-shutdown-sound.service \
+    lunar-calendar/main.go \
     thumbnails/gtk/gtk.go
 
 sed -i 's|libdir|LIBDIR|g' Makefile
@@ -82,6 +83,8 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{gopath}/src/pkg.deepin.io/dde/api/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.7-1.git4c8e030
+- Update to 3.1.7
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitf93dbd7
 - Update to 3.1.2
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.16.1-1.gitcfdb295
