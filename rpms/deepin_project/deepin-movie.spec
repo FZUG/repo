@@ -1,9 +1,9 @@
-%global _commit 7896696c4fb13f86cc7db42cd29ba32c6564f562
+%global _commit a1ba8c318a3a16440adb2677dae5145737f7e038
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-movie
-Version:        2.2.11
-Release:        2.git%{_shortcommit}%{?dist}
+Version:        2.2.13
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Movie based on QtAV
 Summary(zh_CN): 深度影音
 
@@ -95,6 +95,8 @@ fi
 %{_datadir}/icons/hicolor/*
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2.2.13-1.gita1ba8c3
+- Update to 2.2.13
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.2.11-2.git7896696
 - Fix cannot register existing type 'GdkDisplayManager'
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.2.11-1.git7896696
