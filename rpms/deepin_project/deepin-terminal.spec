@@ -1,10 +1,10 @@
-%global _commit 3ec5488e463e34de8d35ae048c899b3f710343ea
+%global _commit 76b20cd5310fae1a4e43dc7001d438899eaf3bf6
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
-Version:        2.2.2
+Version:        2.4.2
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
@@ -83,6 +83,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2.4.2-1.git76b20cd
+- Update to 2.4.2
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 2.2.2-1.git3ec5488
 - Update to 2.2.2
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 2.1.12-1.git4f7069e
