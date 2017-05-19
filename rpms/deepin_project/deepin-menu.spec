@@ -1,8 +1,8 @@
-%global _commit 3750b2f385c6e91978b3d03d5e571b626f3877a5
+%global _commit 3aee346b771496d892604bc6c33f728f1f8a18de
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-menu
-Version:        3.0.10
+Version:        3.1.2
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin menu service
 
@@ -70,6 +70,8 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %{_datadir}/dbus-1/services/com.deepin.menu.service
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.git3aee346
+- Update to 3.1.2
 * Tue Feb 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.10-1.git3750b2f
 - Update to 3.0.10
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.7-1.git6038c51
