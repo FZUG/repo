@@ -1,12 +1,12 @@
-%global _commit 8e0a4b35c599f1708ccbf7c485864b2cc73612fd
+%global _commit c4040d0f2e98c40e9c897cdfd3cf20af62cadce2
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-screen-recorder
-Version:        1.3
+Version:        1.8
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
-URL:            https://github.com/manateelazycat/deepin-screen-recorder
+URL:            https://github.com/linuxdeepin/deepin-screen-recorder
 Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
@@ -54,10 +54,13 @@ fi
 %license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}/
+%{_datadir}/dman/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.8-1.gitc4040d0
+- Update to 1.8
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 1.3-1.git8e0a4b3
 - Update to 1.3
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.8-1.git9eda269
