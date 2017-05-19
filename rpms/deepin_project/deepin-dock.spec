@@ -1,11 +1,11 @@
 %global project dde-dock
 %global repo %{project}
 
-%global _commit d772fe206db297375625093f7796b42a9d97784f
+%global _commit 42610aec4621432aa6166537d5149d7204681b29
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-dock
-Version:        4.1.4
+Version:        4.2.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -64,6 +64,8 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.2.1-1.git42610ae
+- Update to 4.2.1
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 4.1.4-1.gitd772fe2
 - Update to 4.1.4
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.1.3-1.git26f189d
