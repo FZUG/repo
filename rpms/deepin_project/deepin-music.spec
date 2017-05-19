@@ -1,8 +1,8 @@
-%global _commit 51107807423074268c75bcaa2e6eb6ee7e2a31b4
+%global _commit 901b8a3bdb956c690d653de426a6d4fb024b4c55
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-music
-Version:        3.0.1
+Version:        3.1.0
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
@@ -14,7 +14,9 @@ Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  git
 BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  dtksettings-devel
 BuildRequires:  ffmpeg-devel
+BuildRequires:  libcue-devel
 BuildRequires:  libicu-devel
 BuildRequires:  libX11-devel
 BuildRequires:  libXext-devel
@@ -47,7 +49,7 @@ Header files and libraries for %{name}
 %prep
 %setup -q -n %{name}-%{_commit}
 sed -i 's|-0-2||g' music-player/music-player.pro
-sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
+sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.*
 
 sed -i '/%1/s|lib|%{_lib}|' music-player/core/pluginmanager.cpp
 sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
@@ -72,9 +74,10 @@ sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
 %{_bindir}/%{name}
 %{_libdir}/lib*.so.*
 %{_libdir}/%{name}/plugins/lib*.so.*
-%{_datadir}/%{name}/
+%ghost %{_datadir}/%{name}/
 %{_datadir}/dman/%{name}/
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/dbus-1/services/*.service
 
 %files devel
@@ -86,6 +89,8 @@ sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.0-1.git901b8a3
+- Update to 3.1.0
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.1-1.git5110780
 - Update to 3.0.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.3.2-1.git76f52e9
