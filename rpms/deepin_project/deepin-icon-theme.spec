@@ -1,8 +1,8 @@
-%global _commit 2f50a33745727362cc5ce8f2c5ce60322456d762
+%global _commit 59ca728afdd0afcda421070e255cd5c21e1882de
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-icon-theme
-Version:        15.12.33
+Version:        15.12.42
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Icons
 License:        GPLv3
@@ -11,25 +11,25 @@ Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python-devel
-#flattr-icon-theme faenza-icon-theme
 
 %description
 Deepin Icons
 
 %prep
 %setup -q -n %{name}-%{_commit}
-sed -i 's|flattr|Flattr|' deepin/index.theme
 
 %build
-mkdir build
 
 %install
 %{make_install} PREFIX=%{_prefix}
 
 %files
 %{_datadir}/icons/deepin/
+%{_datadir}/icons/Sea/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 15.12.42-1.git59ca728
+- Update to 15.12.42
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 15.12.33-1.git2f50a33
 - Update to 15.12.33
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 15.12.32-1.git69bcc88
