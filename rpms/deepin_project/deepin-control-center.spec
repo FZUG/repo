@@ -1,11 +1,11 @@
 %global project dde-control-center
 %global repo %{project}
 
-%global _commit 10c3be24beafcfb4d25c5ffe98bdcd310ba51127
+%global _commit 4d3827bf020885e725220be33b04c491285367c1
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-control-center
-Version:        4.0.7
+Version:        4.1.2
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
@@ -40,7 +40,7 @@ New control center for linux deepin
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 sed -i -E '/target.path|utils.path/s|lib|%{_lib}|' plugins/*/*.pro
-sed -i 's|lib|%{_lib}|' frame/pluginscontroller.cpp plugins/notify/notifydata.cpp
+sed -i 's|lib|%{_lib}|' frame/pluginscontroller.cpp
 sed -i '/deepin-daemon/s|lib|libexec|' modules/update/updatemodule.cpp
 
 %build
@@ -63,6 +63,8 @@ sed -i '/deepin-daemon/s|lib|libexec|' modules/update/updatemodule.cpp
 %{_datadir}/%{repo}/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.1.2-1.git4d3827b
+- Update to 4.1.2
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.7-1.git10c3be2
 - Update to 4.0.7
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.24-1.git481255b
