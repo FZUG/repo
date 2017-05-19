@@ -1,11 +1,11 @@
 %global project dde-session-ui
 %global repo %{project}
 
-%global _commit 6a09cb4d2de85c057924353bb02c47e4efa9d7e8
+%global _commit 1511ccf4dcf911a1f4e8d224eb58f4d5b9c63c14
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-session-ui
-Version:        3.0.27
+Version:        4.0.6
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -22,6 +22,7 @@ BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtsvg-devel
 BuildRequires:  qt5-qtx11extras-devel
+BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  systemd-devel
 Requires:       deepin-control-center
 Requires:       deepin-daemon
@@ -38,7 +39,7 @@ Deepin desktop-environment - Session UI module
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 sed -i 's|lib|libexec|' \
-    misc/applications/deepin-toggle-desktop.desktop \
+    misc/applications/deepin-toggle-desktop.desktop* \
     dde-osd/com.deepin.dde.osd.service \
     dde-offline-upgrader/dde-offline-upgrader.pro \
     dde-wallpaper-chooser/dde-wallpaper-chooser.pro \
@@ -78,6 +79,8 @@ EOF
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.6-1.git1511ccf
+- Update to 4.0.6
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.0.27-1.git6a09cb4
 - Update to 3.0.27
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.23-1.git9db2f1d
