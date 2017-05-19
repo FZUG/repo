@@ -1,8 +1,8 @@
-%global _commit fad9c986fdfbdd54517f4f2355a638d8ae26944a
+%global _commit a6ac7847f0124d855be5a329b28ce5ac5be41f4f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-image-viewer
-Version:        1.2.4
+Version:        1.2.13
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
@@ -25,9 +25,7 @@ Deepin Image Viewer
 
 %prep
 %setup -q -n %{name}-%{_commit}
-sed -i 's|-0-2||g' viewer/viewer.pro
 sed -i 's|lrelease|lrelease-qt5|g' viewer/generate_translations.sh
-sed -i 's|<exif-data.h|<libexif/exif-data.h|' viewer/utils/imageutils_libexif.h
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -61,6 +59,8 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.2.13-1.gita6ac784
+- Update to 1.2.13
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 1.2.4-1.gitfad9c98
 - Update to 1.2.4
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 1.2.1-1.git8378500
