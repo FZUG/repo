@@ -1,8 +1,8 @@
-%global _commit 477c9a7d43a69f8b90db8a28d7c64f6dba657ebd
+%global _commit a0f52f3223a1779ee3c8ce71371237c2ed7a552d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-desktop-base
-Version:        2016.11.29
+Version:        2016.11.30
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Base component for Deepin
 License:        GPLv3
@@ -43,8 +43,11 @@ rm -r %{buildroot}%{_datadir}/python-apt
 %{_datadir}/distro-info/deepin.csv
 %{_datadir}/i18n/*.json
 %{_datadir}/plymouth/deepin-logo.png
+%{_var}/cache/image-blur/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2016.11.30-1.gita0f52f3
+- Update to 2016.11.30
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2016.11.29-1.git477c9a7
 - Update to 2016.11.29
 * Fri Dec 16 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 2016.11.28-1
