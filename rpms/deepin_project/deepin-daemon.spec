@@ -1,11 +1,11 @@
 %global project dde-daemon
 %global repo %{project}
 
-%global _commit 87df95562fd21fe99d417225886892bb499a0f01
+%global _commit 82313d2e8afd3885f0c2c83d02aafcb613274746
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-daemon
-Version:        3.1.3
+Version:        3.1.9
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Daemon handling the DDE session settings
 
@@ -13,7 +13,6 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
 Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source1:        deepin-daemon.sysusers
-Source2:        polkit-gnome-authentication-agent-1-deepin.desktop
 
 BuildRequires:  git
 BuildRequires:  gettext
@@ -55,8 +54,9 @@ Requires:       deepin-notifications
 Requires:       acpid
 Requires:       bluez-libs
 Requires:       gvfs
+Requires:       iw
 Requires:       libudisks2
-Requires:       polkit-gnome
+Requires:       deepin-polkit-agent
 Requires:       qt5-qtaccountsservice
 Requires:       rfkill
 Requires:       upower
@@ -92,6 +92,7 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
 
 # Fix grub.cfg path
 sed -i '/MenuFile/s|grub/|grub2/|' grub2/grub2.go
+sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
@@ -108,7 +109,6 @@ go get gopkg.in/alecthomas/kingpin.v2 \
 %make_install
 
 install -Dm644 %{S:1} %{buildroot}/usr/lib/sysusers.d/deepin-daemon.conf
-install -Dm644 %{S:2} %{buildroot}/etc/xdg/autostart/polkit-gnome-authentication-agent-1-deepin.desktop
 
 %find_lang %{repo}
 
@@ -121,7 +121,6 @@ rm -f /var/cache/deepin/mark-setup-network-services
 %files -f %{repo}.lang
 %doc README.md
 %license LICENSE
-%{_sysconfdir}/xdg/autostart/*.desktop
 %{_libexecdir}/%{name}/
 %{_prefix}/lib/sysusers.d/%{name}.conf
 %{_datadir}/dbus-1/services/*.service
@@ -134,6 +133,8 @@ rm -f /var/cache/deepin/mark-setup-network-services
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.9-1.git82313d2
+- Update to 3.1.9
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.3-1.git87df955
 - Update to 3.1.3
 * Fri Jan 20 2017 mosquito <sensor.wen@gmail.com> - 3.0.25.2-1.gitcfbe9c8
