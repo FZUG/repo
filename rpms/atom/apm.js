@@ -12,6 +12,8 @@ try {
     process.env.ATOM_ELECTRON_VERSION = undefined;
 }
 
+//process.env.PYTHON = __dirname + "/python-interceptor.sh";
+
 require('../lib/apm-cli.js').run(process.argv.slice(2), function (error) {
     process.exitCode = +!!error;
 });

@@ -14,12 +14,12 @@
 %global node_ver v4
 
 # commit
-%global _commit 33e67dd1d482110b697a38d2290fb18b90eb1e33
+%global _commit cf5474e91f4b604c62665a207eade6dc9c27a8a6
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    nodejs-atom-package-manager
-Version: 1.13.0
-Release: 2.git%{_shortcommit}%{?dist}
+Version: 1.18.2
+Release: 1.git%{_shortcommit}%{?dist}
 Summary: Atom package manager
 
 Group:   Applications/System
@@ -31,10 +31,12 @@ Source1: apm.js
 Patch0:  use-system-npm.patch
 Patch1:  use-local-node-devel.patch
 Patch2:  no-scripts.patch
+# GYP needs python2
+Patch3:  python2.patch
 
 BuildRequires: /usr/bin/npm, git
 BuildRequires: nodejs-packaging
-BuildRequires: libgnome-keyring-devel
+BuildRequires: libsecret-devel
 BuildRequires: coffee-script
 Requires: /usr/bin/npm, git, python2
 # In fc25, the nodejs contains /bin/npm, and it do not depend node-gyp
@@ -50,6 +52,7 @@ sed -i 's|<lib>|%{_lib}|' %{S:1} %{P:1}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 # Use custom launcher
 rm bin/apm{,.cmd} bin/npm{,.cmd}
@@ -119,6 +122,8 @@ find %{buildroot} -regextype posix-extended -type f \
 %{nodejs_sitelib}/atom-package-manager/
 
 %changelog
+* Tue May 23 2017 mosquito <sensor.wen@gmail.com> - 1.18.2-1.gitcf5474e
+- Release 1.18.2
 * Fri Oct 21 2016 mosquito <sensor.wen@gmail.com> - 1.13.0-2.git33e67dd
 - Fix coffee script error for fc23
 * Fri Oct 21 2016 mosquito <sensor.wen@gmail.com> - 1.13.0-1.git33e67dd

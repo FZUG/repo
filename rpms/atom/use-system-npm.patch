@@ -1,10 +1,10 @@
 --- a/package.json
 +++ b/package.json
 @@ -32,7 +32,6 @@
-     "keytar": "^3.0",
+     "keytar": "^4.0",
      "mv": "2.0.0",
      "ncp": "~0.5.1",
--    "npm": "3.10.5",
+-    "npm": "3.10.10",
      "open": "0.0.4",
      "plist": "git+https://github.com/nathansobo/node-plist.git",
      "q": "~0.9.7",
@@ -56,23 +56,30 @@
      options = yargs(argv).wrap(100)
 --- a/src/install.coffee
 +++ b/src/install.coffee
-@@ -25,8 +25,8 @@
+@@ -25,7 +25,7 @@
      @atomDirectory = config.getAtomDirectory()
      @atomPackagesDirectory = path.join(@atomDirectory, 'packages')
      @atomNodeDirectory = path.join(@atomDirectory, '.node-gyp')
 -    @atomNpmPath = require.resolve('npm/bin/npm-cli')
--    @atomNodeGypPath = require.resolve('node-gyp/bin/node-gyp')
 +    @atomNpmPath = require.resolve('/bin/npm')
-+    @atomNodeGypPath = require.resolve('/bin/node-gyp')
-
+ 
    parseOptions: (argv) ->
      options = yargs(argv).wrap(100)
+@@ -84,7 +84,7 @@
+     opts = {env, cwd: @atomDirectory}
+     opts.streaming = true if @verbose
+ 
+-    atomNodeGypPath = process.env.ATOM_NODE_GYP_PATH or require.resolve('node-gyp/bin/node-gyp')
++    atomNodeGypPath = process.env.ATOM_NODE_GYP_PATH or require.resolve('/bin/node-gyp')
+     @fork atomNodeGypPath, installNodeArgs, opts, (code, stderr='', stdout='') ->
+       if code is 0
+         callback()
 @@ -103,6 +103,7 @@
      installArgs.push('--silent') if options.argv.silent
      installArgs.push('--quiet') if options.argv.quiet
      installArgs.push('--production') if options.argv.production
 +    installArgs.push('--legacy-bundling')
-
+ 
      if vsArgs = @getVisualStudioFlags()
        installArgs.push(vsArgs)
 --- a/src/publish.coffee
