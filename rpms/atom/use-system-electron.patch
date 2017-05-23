@@ -9,16 +9,16 @@
  
  // Needed so we can require src/module-cache.coffee during generateModuleCache
  require('coffee-script/register')
-@@ -35,7 +35,7 @@
- const generateAPIDocs = require('./lib/generate-api-docs')
+@@ -37,7 +37,7 @@
  const generateMetadata = require('./lib/generate-metadata')
  const generateModuleCache = require('./lib/generate-module-cache')
+ const generateStartupSnapshot = require('./lib/generate-startup-snapshot')
 -const installApplication = require('./lib/install-application')
 +//const installApplication = require('./lib/install-application')
  const packageApplication = require('./lib/package-application')
  const prebuildLessCache = require('./lib/prebuild-less-cache')
  const transpileBabelPaths = require('./lib/transpile-babel-paths')
-@@ -58,9 +58,9 @@
+@@ -62,10 +62,10 @@
  generateModuleCache()
  prebuildLessCache()
  generateMetadata()
@@ -26,7 +26,9 @@
 +//generateAPIDocs()
  dumpSymbols()
 -  .then(packageApplication)
+-  .then(packagedAppPath => generateStartupSnapshot(packagedAppPath).then(() => packagedAppPath))
 +//  .then(packageApplication)
++//  .then(packagedAppPath => generateStartupSnapshot(packagedAppPath).then(() => packagedAppPath))
    .then(packagedAppPath => {
      if (process.platform === 'darwin') {
        if (argv.codeSign) {
@@ -36,14 +38,14 @@
      "url": "https://github.com/atom/atom/issues"
    },
    "license": "MIT",
--  "electronVersion": "1.3.13",
+-  "electronVersion": "1.3.15",
 +  "electronVersion": "<version>",
    "dependencies": {
      "async": "0.2.6",
-     "atom-keymap": "7.1.20",
+     "atom-keymap": "8.1.1",
 --- a/src/module-cache.coffee
 +++ b/src/module-cache.coffee
-@@ -194,8 +194,8 @@
+@@ -195,8 +195,8 @@
    return
  
  registerBuiltins = (devMode) ->
@@ -56,7 +58,7 @@
    cache.builtins.atom ?= path.join(cache.resourcePath, 'exports', 'atom.js')
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -539,7 +539,7 @@
+@@ -603,7 +603,7 @@
  
    isBundledPackagePath: (packagePath) ->
      if @devMode
@@ -67,12 +69,12 @@
      packagePath?.startsWith(@resourcePathWithTrailingSlash)
 --- a/static/index.js
 +++ b/static/index.js
-@@ -24,7 +24,7 @@
-       // Normalize to make sure drive letter case is consistent on Windows
+@@ -23,7 +23,7 @@
        process.resourcesPath = path.normalize(process.resourcesPath)
  
--      var devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith(process.resourcesPath + path.sep)
-+      var devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith('/usr/<lib>/atom')
+       setupAtomHome()
+-      const devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith(process.resourcesPath + path.sep)
++      const devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith('/usr/<lib>/atom')
+       useSnapshot = !devMode && typeof snapshotResult !== 'undefined'
  
        if (devMode) {
-         setupDeprecatedPackages()

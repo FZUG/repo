@@ -16,11 +16,11 @@
 %global node_ver 6
 
 # commit
-%global _commit 3e457f3375b519fc0a78f593c3b96eb0e337b227
+%global _commit 2791572cd20b1d8c84a100e8308dcce57d1853d7
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.15.0
+Version: 1.17.0
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
@@ -68,7 +68,8 @@ sed -i 's|<version>|%{electron_ver}|' %{P:0} %{P:4}
 %patch4 -p1
 
 # They are known to leak data to GitHub, Google Analytics and Bugsnag.com.
-sed -i -E -e '/(exception-reporting|metrics)/d' package.json
+sed -i -E -e '/(exception-reporting|metrics)/d' package.json \
+    src/initialize-application-window.coffee
 
 %build
 # Hardened package
@@ -188,6 +189,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Tue May 23 2017 mosquito <sensor.wen@gmail.com> - 1.17.0-1.git2791572
+- Release 1.17.0
 * Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 1.15.0-1.git3e457f3
 - Release 1.15.0
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.14.1-2.gita49cd59

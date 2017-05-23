@@ -10,7 +10,7 @@
  const buildOutputPath = path.join(repositoryRootPath, 'out')
  const docsOutputPath = path.join(repositoryRootPath, 'docs', 'output')
 @@ -18,7 +18,7 @@
- const atomHomeDirPath = path.join(homeDirPath, '.atom')
+ const atomHomeDirPath = process.env.ATOM_HOME || path.join(homeDirPath, '.atom')
  
  const appMetadata = require(path.join(repositoryRootPath, 'package.json'))
 -const apmMetadata = require(path.join(apmRootPath, 'package.json'))
@@ -20,7 +20,7 @@
  module.exports = {
 --- a/script/lib/package-application.js
 +++ b/script/lib/package-application.js
-@@ -57,17 +57,6 @@
+@@ -56,17 +56,6 @@
  
  function copyNonASARResources (packagedAppPath, bundledResourcesPath) {
    console.log(`Copying non-ASAR resources to ${bundledResourcesPath}`)
@@ -51,7 +51,7 @@
    }
 --- a/src/package-manager.coffee
 +++ b/src/package-manager.coffee
-@@ -140,12 +140,7 @@
+@@ -145,12 +145,7 @@
      return configPath if configPath
      return @apmPath if @apmPath?
  

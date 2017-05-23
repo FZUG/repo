@@ -1,6 +1,6 @@
 --- a/src/main-process/atom-application.coffee
 +++ b/src/main-process/atom-application.coffee
-@@ -246,7 +246,7 @@
+@@ -262,7 +262,7 @@
      @openPathOnEvent('application:open-your-keymap', 'atom://.atom/keymap')
      @openPathOnEvent('application:open-your-snippets', 'atom://.atom/snippets')
      @openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
@@ -9,14 +9,14 @@
  
      @disposable.add ipcHelpers.on app, 'before-quit', (event) =>
        unless @quitting
---- a/src/workspace.coffee
-+++ b/src/workspace.coffee
-@@ -461,7 +461,7 @@
+--- a/src/workspace.js
++++ b/src/workspace.js
+@@ -1046,7 +1046,7 @@
  
-   # Open Atom's license in the active pane.
-   openLicense: ->
--    @open(path.join(process.resourcesPath, 'LICENSE.md'))
-+    @open('/usr/share/licenses/atom/LICENSE.md')
+   // Open Atom's license in the active pane.
+   openLicense () {
+-    return this.open(path.join(process.resourcesPath, 'LICENSE.md'))
++    return this.open('/usr/share/licenses/atom/LICENSE.md')
+   }
  
-   # Synchronously open the given URI in the active pane. **Only use this method
-   # in specs. Calling this in production code will block the UI thread and
+   // Synchronously open the given URI in the active pane. **Only use this method
