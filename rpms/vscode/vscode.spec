@@ -10,7 +10,7 @@
 %global node_ver 6
 
 # commit
-%global _commit f9d0c687ff2ea7aabd85fb9a43129117c0ecf519
+%global _commit 19222cdc84ce72202478ba1cec5cb557b71163de
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # compute checksum for file
@@ -26,7 +26,7 @@
 %{nil}
 
 Name:    vscode
-Version: 1.9.1
+Version: 1.12.2
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -41,7 +41,9 @@ Patch0:  improve-i18n.patch
 BuildRequires: openssl
 BuildRequires: /usr/bin/npm
 BuildRequires: node-gyp, git
-BuildRequires: python, libX11-devel
+BuildRequires: python
+BuildRequires: libX11-devel
+BuildRequires: libxkbfile-devel
 BuildRequires: desktop-file-utils
 # sysctl_apply macro
 BuildRequires: systemd
@@ -217,6 +219,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Wed May 24 2017 mosquito <sensor.wen@gmail.com> - 1.12.2-1
+- Release 1.12.2
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.9.1-1
 - Release 1.9.1
 * Sat Jan  7 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-2

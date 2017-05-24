@@ -11,6 +11,7 @@
 	"win32RegValueName": "VSCode",
 	"win32AppId": "{{F8A2A208-72B3-4D61-95FC-8A65D340689B}",
 	"win32AppUserModelId": "Microsoft.VisualStudioCode",
+	"win32ShellNameShort": "C&ode",
 	"darwinBundleIdentifier": "com.microsoft.VSCode",
 	"reportIssueUrl": "https://go.microsoft.com/fwlink/?LinkId=534872",
 	"urlProtocol": "vscode",
@@ -66,7 +67,8 @@
 		"ms-vscode.sublime-keybindings": "{**/.sublime-project, **/.sublime-workspace}",
 		"k--kato.intellij-idea-keybindings": "{**/.idea}",
 		"dzannotti.vscode-babel-coloring": "{**/.babelrc}",
-		"christian-kohler.npm-intellisense": "{**/package.json}"
+		"christian-kohler.npm-intellisense": "{**/package.json}",
+		"octref.vetur": "{**/*.vue}"
 	},
 	"extensionImportantTips": {
 		"ms-vscode.csharp": {
@@ -383,7 +385,6 @@
 	},
 	"enableTelemetry": true,
 	"aiConfig": {
-		"key": "8aa6e059-82b6-46f6-8138-5a43aa3dd621",
 		"asimovKey": "AIF-444c3af9-8e69-4462-ab49-4191e6ad1916"
 	},
 	"sendASmile": {
