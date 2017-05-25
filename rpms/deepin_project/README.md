@@ -7,7 +7,7 @@ These files are based on [cz-guardian/fedora-deepin](https://github.com/cz-guard
     sudo dnf install http://download1.rpmfusion.org/free/fedora/releases/$(rpm -E %fedora)/Everything/$(uname -i)/os/Packages/r/rpmfusion-free-release-$(rpm -E %fedora)-1.noarch.rpm
     sudo dnf copr enable mosquito/deepin
     sudo dnf update
-    sudo dnf install deepin-desktop deepin-session-ui deepin-launcher deepin-screenshot deepin-terminal
+    sudo dnf install deepin-file-manager deepin-dock deepin-session-ui deepin-launcher deepin-screenshot deepin-terminal
     sudo systemctl disable gdm.service && sudo systemctl enable lightdm.service (optional, gdm also available)
     sudo sed -i "/SELINUX=/s|enforcing|disabled|" /etc/selinux/config
 
