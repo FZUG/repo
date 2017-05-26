@@ -5,13 +5,13 @@
 %global repo %{project}
 
 # commit
-%global _commit 812ec4be19244d5f3865bc44454c0cfb7c2284d0
+%global _commit f1b53cba980d7c2428123e63c5bdbf5634fc2604
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    wiznote
-Version: 2.4.2
+Version: 2.5.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: Cross platform cloud based note-taking application
 Summary(zh_CN): 为知笔记 Qt 客户端
@@ -145,6 +145,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Fri May 26 2017 mosquito <sensor.wen@gmail.com> - 2.5.1-1.gitf1b53cb
+- Update to 2.5.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.4.2-1.git812ec4b
 - Update to 2.4.2-1.git812ec4b
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 2.3.1-1.gitfdd16c9
