@@ -17,11 +17,7 @@ After this is done, simply reboot into your new nice environment.
 ## fedora-deepin repository content
 
 This repository contains the following .specs for integrating the deepin desktop environment into Fedora. You can simply compile them in order.
-* deepin-gsettings
-* python2-javascriptcore
 * deepin-gettext-tools
-* python2-deepin-ui
-* python2-deepin-util
 * deepin-music
 * python2-xpybutil
 * deepin-screenshot
@@ -34,12 +30,10 @@ This repository contains the following .specs for integrating the deepin desktop
 * python2-ass
 * python3-dae
 * python2-pysrt
-* python2-deepin-storm
 * gsettings-qt
 * golang-github-*
 * deepin-tool-kit
 * deepin-sound-theme
-* deepin-social-sharing
 * deepin-shortcut-viewer
 * deepin-notifications
 * deepin-nautilus-properties
@@ -51,7 +45,6 @@ This repository contains the following .specs for integrating the deepin desktop
 * deepin-gtk-theme
 * deepin-grub2-themes
 * deepin-gir-generator
-* deepin-game
 * deepin-desktop-schemas
 * deepin-desktop-base
 * deepin-artwork-themes
