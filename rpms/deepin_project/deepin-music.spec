@@ -1,8 +1,8 @@
-%global _commit 901b8a3bdb956c690d653de426a6d4fb024b4c55
+%global _commit db99f656ee89607e6d1c6cb2047c7e6c7bc76d50
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-music
-Version:        3.1.0
+Version:        3.1.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
@@ -89,6 +89,8 @@ sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Fri Jul 07 2017 Felix Yan <felixonmars@archlinux.org> - 3.1.3-1.gitdb99f65
+- Update to 3.1.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.0-1.git901b8a3
 - Update to 3.1.0
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.1-1.git5110780
