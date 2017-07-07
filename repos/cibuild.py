@@ -479,7 +479,7 @@ def send_comment(content):
 if __name__ == '__main__':
     args = parse_args()
     Archs = args.archs if args.archs else ['x86_64', 'i386']
-    Releases = args.releases if args.releases else ['22', '23', '24']
+    Releases = args.releases if args.releases else ['24', '25']
     blackList = args.blacklist if args.blacklist else ['electron']
     args.file += args.files
 
