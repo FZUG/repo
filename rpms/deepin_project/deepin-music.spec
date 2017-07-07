@@ -10,7 +10,7 @@ Summary(zh_CN): 深度音乐播放器
 License:        GPLv3
 Group:          Applications/Multimedia
 Url:            https://github.com/linuxdeepin/deepin-music
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{_commit}/%{name}-%{_commit}.tar.gz
 
 BuildRequires:  git
 BuildRequires:  deepin-tool-kit-devel
