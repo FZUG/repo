@@ -1,8 +1,8 @@
-%global _commit 3aee346b771496d892604bc6c33f728f1f8a18de
+%global _commit a4c0bf8e72fb97cf9e90660cb536e182ef61b796
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-menu
-Version:        3.1.2
+Version:        3.1.4
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin menu service
 
@@ -31,7 +31,7 @@ Deepin menu service for building beautiful menus.
 find -iname "*.py" | xargs sed -i '/env python/d'
 
 # Modify lib path to reflect the platform
-sed -i 's|/usr/lib|%{_libexecdir}|' data/com.deepin.menu.service \
+sed -i 's|/usr/bin|%{_libexecdir}|' data/com.deepin.menu.service \
     deepin-menu.desktop deepin-menu.pro
 
 # Fix setup.py install path
@@ -70,6 +70,8 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %{_datadir}/dbus-1/services/com.deepin.menu.service
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.4-1.gita4c0bf8
+- Update to 3.1.4
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.git3aee346
 - Update to 3.1.2
 * Tue Feb 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.10-1.git3750b2f
