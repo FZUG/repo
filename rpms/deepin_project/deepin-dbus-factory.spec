@@ -3,7 +3,7 @@
 %global project dbus-factory
 %global repo %{project}
 
-%global _commit 2308ee32ca6fc273c4a09afd063947eb4447e8cd
+%global _commit 0ef92677c266a9b5c76651f00e21bf94b9dae56f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 %global _old_commit 5fe5f076b17d699de1dd04625a6b35e156a40efa
 %global _old_scommit %(c=%{_old_commit}; echo ${c:0:7})
@@ -12,7 +12,7 @@
 %global _qt5_qmldir %{_qt5_archdatadir}/qml
 
 Name:           deepin-%{repo}
-Version:        3.1.4
+Version:        3.1.6
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Golang and QML DBus factory for DDE
 
@@ -66,6 +66,8 @@ make install-qml DESTDIR=%{buildroot} QT5_LIBDIR=%{_qt5_prefix} -C old
 %{_qt5_qmldir}/DBus/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.6-1.git0ef9267
+- Update to 3.1.6
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.4-1.git2308ee3
 - Update to 3.1.4
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.0-1.git1fb380c
