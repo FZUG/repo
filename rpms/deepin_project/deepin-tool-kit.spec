@@ -1,13 +1,13 @@
-%global _commit 8850f8d0bfa2642dac195be5ba066b445e04c472
+%global _commit a6ebe4abb7ba2fe277f86d9c64aab21031a49067
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-tool-kit
-Version:        0.2.9
+Version:        0.3.0
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Base development tool of all C++/Qt Developer work on Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-tool-kit
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{_commit}/%{name}-%{_commit}.tar.gz
 
 BuildRequires:  dtksettings-devel
 BuildRequires:  qt5-linguist
@@ -52,6 +52,8 @@ sed -i -E '/test|examples/d' dtk.pro
 %{_libdir}/lib*.so
 
 %changelog
+* Fri Jul 07 2017 Zamir SUN <sztsian@gmail.com> - 0.3.0-1.gita6ebe4a
+- Update to 0.3.0
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 0.2.9-1.git8850f8d
 - Update to 0.2.9
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 0.2.5-1.gitcc5757f
