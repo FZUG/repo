@@ -1,11 +1,11 @@
 %global project dde-polkit-agent
 %global repo %{project}
 
-%global _commit 7e0fcbc9a4109069ed30a6efadc722a177a513e5
+%global _commit 680c12f0235d30af0395bf2cb2e55ef71bd3cb55
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-polkit-agent
-Version:        0.0.8
+Version:        0.0.10
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Polkit Agent
 License:        GPLv3
@@ -39,5 +39,7 @@ sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.d
 %{_datadir}/%{repo}/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.0.10-1.git680c12f
+- Update to 0.0.10
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 0.0.8-1.git7e0fcbc
 - Initial package build
