@@ -1,8 +1,8 @@
-%global _commit 8692ad3b17fe98291110d6135796ba652521cc9e
+%global _commit 4809e53ee33e35f3ae545d028ef92d5773a51a05
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-wm-switcher
-Version:        1.1.0
+Version:        1.1.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Window manager switcher for Deepin
 License:        GPLv3
@@ -38,6 +38,8 @@ Window manager switcher for Deepin
 %{_bindir}/%{name}
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.1.1-1.git4809e53
+- Update to 1.1.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.1.0-1.git8692ad3
 - Update to 1.1.0
 * Sat Oct 01 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.7-1
