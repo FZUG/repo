@@ -1,8 +1,8 @@
-%global _commit 6b2b181b047ee86615382e452181916c08be68c2
+%global _commit 0b40582e71266f10e8f2739aa558b9eef6a1f890
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-mutter
-Version:        3.20.17
+Version:        3.20.20
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Base window manager for deepin, fork of gnome mutter
 License:        GPLv3
@@ -98,6 +98,8 @@ fi
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.20.20-1.git0b40582
+- Update to 3.20.20
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.20.17-1.git6b2b181
 - Update to 3.20.17
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.20.11-1.git3834231
