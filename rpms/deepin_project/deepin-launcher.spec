@@ -1,11 +1,11 @@
 %global project dde-launcher
 %global repo %{project}
 
-%global _commit 67081d34b18759c82c1968a6b104173bda8c6540
+%global _commit 1cc701fd6e66ffb1ecdabbe46925903c6f38b58e
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-launcher
-Version:        4.0.11
+Version:        4.1.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
@@ -47,6 +47,8 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.1.3-1.git1cc701f
+- Update to 4.1.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.11-1.git67081d3
 - Update to 4.0.11
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.7-1.gitf2df6ea
