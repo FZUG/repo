@@ -1,11 +1,11 @@
-%global _commit ef84331e3d8c413b3080ae833e37b0f47082e438
+%global _commit 38135764aaad4f0ba818efee6735612df17d503c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # for fedora 24
 %global _qt5_qmldir %{_qt5_archdatadir}/qml
 
 Name:           deepin-qml-widgets
-Version:        2.3.4
+Version:        2.3.5
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin QML widgets
 Summary(zh_CN): 深度 QML 部件库
@@ -18,6 +18,7 @@ Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 BuildRequires:  pkgconfig
 BuildRequires:  gettext
 BuildRequires:  desktop-file-utils
+BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtdeclarative-devel
@@ -64,6 +65,8 @@ popd
 %{_datadir}/dbus-1/services/com.deepin.dialog.service
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.3.5-1.git3813576
+- Update to 2.3.5
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.3.4-1.gitef84331
 - Update to 2.3.4
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 2.3.0-1.gita864d6f
