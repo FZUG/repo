@@ -1,11 +1,11 @@
 %global project go-dbus-generator
 %global repo %{project}
 
-%global _commit 9f8b51d779957c3811b258b33f89325d347fb06b
+%global _commit ace6ac0af3ad2bbbddb4c3c770bee03b5edf6bf9
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-dbus-generator
-Version:        0.6.5
+Version:        0.6.6
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Convert dbus interfaces to go-lang or qml wrapper code
 
@@ -43,6 +43,8 @@ export GOPATH="%{gopath}"
 %{_bindir}/dbus-generator
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.6.6-1.gitace6ac0
+- Update to 0.6.6
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.6.5-1.git9f8b51d
 - Update to 0.6.5
 * Sun Jul 12 2015 mosquito <sensor.wen@gmail.com> - 0.0.3-1.git84ee26c
