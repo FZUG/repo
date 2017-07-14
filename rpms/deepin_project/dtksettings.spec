@@ -1,8 +1,8 @@
-%global _commit 63c6cb753f286fb7984c982b1de4e6208e0053ba
+%global _commit 32225b9ad60e1fcaee81312ea521f45b6fa5c78f
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           dtksettings
-Version:        0.1.6
+Version:        0.1.7
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        DtkSettings is a powerful tool to generate config from json
 License:        GPLv3
@@ -41,6 +41,8 @@ Header files and libraries for %{name}
 %{_libdir}/lib*.so
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.1.7-1.git32225b9
+- Update to 0.1.7
 * Sat May 20 2017 mosquito <sensor.wen@gmail.com> - 0.1.6-1.git63c6cb7
 - Update to 0.1.6
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 0.1.3-1.git02002c9
