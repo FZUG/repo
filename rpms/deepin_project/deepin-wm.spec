@@ -1,8 +1,8 @@
-%global _commit 42cd230355c91557b2c4cc88f15186fa5dfe17c7
+%global _commit 90453e308fbf7222b5c45f65a7497f5fcaf00fc4
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-wm
-Version:        1.9.12
+Version:        1.9.14
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Window Manager
 License:        GPLv3
@@ -77,6 +77,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.9.14-1.git90453e3
+- Update to 1.9.14
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.9.12-1.git42cd230
 - Update to 1.9.12
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 1.9.5-1.git3d3e077
