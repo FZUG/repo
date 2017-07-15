@@ -1,11 +1,11 @@
 %global project dde-dock
 %global repo %{project}
 
-%global _commit 42610aec4621432aa6166537d5149d7204681b29
+%global _commit bf79f1cca5edefd14bc823c8dbdb7a4a334b3671
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-dock
-Version:        4.2.1
+Version:        4.3.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -14,6 +14,7 @@ Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-qt-dbus-factory-devel
+BuildRequires:  gsettings-qt-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  libXtst-devel
 BuildRequires:  qt5-linguist
@@ -64,6 +65,8 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.3.3-1.gitbf79f1c
+- Update to 4.3.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.2.1-1.git42610ae
 - Update to 4.2.1
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 4.1.4-1.gitd772fe2
