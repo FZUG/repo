@@ -1,8 +1,8 @@
-%global _commit cb50df2c3865cf8a850f125c9b6616b45133258b
+%global _commit b7483cfef3717f540e4db057baea13628f062b84
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-screenshot
-Version:        4.0.0
+Version:        4.0.8
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
@@ -17,6 +17,7 @@ BuildRequires:  libXtst-devel
 BuildRequires:  xcb-util-devel
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtx11extras-devel
+#Requires:       deepin-daemon
 
 %description
 Provide a quite easy-to-use screenshot tool. Features:
@@ -62,6 +63,8 @@ fi
 %{_datadir}/icons/deepin/apps/scalable/%{name}.svg
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.0.8-1.gitb7483cf
+- Update to 4.0.8
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.0-1.gitcb50df2
 - Update to 4.0.0
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.1.10-1.gitb0cc9f8
