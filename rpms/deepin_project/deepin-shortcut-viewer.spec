@@ -1,8 +1,8 @@
-%global _commit 760b0825bb1ecbbef3f9c17b2bc77940fc3011df
+%global _commit 729e82d50a05d88eae61ccbf24f5b2b78eba34db
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-shortcut-viewer
-Version:        1.0.2
+Version:        1.3.1
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Shortcut Viewer
 License:        GPLv3
@@ -10,6 +10,7 @@ URL:            https://github.com/linuxdeepin/deepin-shortcut-viewer
 Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  qt5-qtbase-devel
+BuildRequires:  deepin-tool-kit-devel
 
 %description
 Deepin Shortcut Viewer
@@ -28,6 +29,8 @@ Deepin Shortcut Viewer
 %{_bindir}/%{name}
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git729e82d
+- Update to 1.3.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.2-1.git760b082
 - Update to 1.0.2
 * Sun Dec 04 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.02-1
