@@ -1,18 +1,18 @@
-%global _commit 901b8a3bdb956c690d653de426a6d4fb024b4c55
+%global _commit 7c31a72ac59ad5f43d4fdc17b36a8b058748a1c1
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-music
-Version:        3.1.0
+Version:        3.1.4
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
-
 License:        GPLv3
 Group:          Applications/Multimedia
 Url:            https://github.com/linuxdeepin/deepin-music
 Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
 
 BuildRequires:  git
+BuildRequires:  python
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  dtksettings-devel
 BuildRequires:  ffmpeg-devel
@@ -63,10 +63,18 @@ sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
 %make_install INSTALL_ROOT=%{buildroot}
 
 %post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
 /usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %doc AUTHORS README.md
@@ -89,6 +97,8 @@ sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.4-1.git7c31a72
+- Update to 3.1.4
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.0-1.git901b8a3
 - Update to 3.1.0
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.1-1.git5110780
