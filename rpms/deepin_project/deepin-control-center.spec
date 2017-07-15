@@ -1,11 +1,11 @@
 %global project dde-control-center
 %global repo %{project}
 
-%global _commit 4d3827bf020885e725220be33b04c491285367c1
+%global _commit 2f420f2051480800624e37ea531d1381e13836c0
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-control-center
-Version:        4.1.2
+Version:        4.2.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
@@ -15,6 +15,7 @@ Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-dock-devel
 BuildRequires:  deepin-qt-dbus-factory-devel
+BuildRequires:  gsettings-qt-devel
 BuildRequires:  GeoIP-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  qt5-linguist
@@ -41,7 +42,8 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 sed -i -E '/target.path|utils.path/s|lib|%{_lib}|' plugins/*/*.pro
 sed -i 's|lib|%{_lib}|' frame/pluginscontroller.cpp
-sed -i '/deepin-daemon/s|lib|libexec|' modules/update/updatemodule.cpp
+sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp \
+    dialogs/reboot-reminder-dialog/reboot-reminder-dialog.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} \
@@ -58,11 +60,14 @@ sed -i '/deepin-daemon/s|lib|libexec|' modules/update/updatemodule.cpp
 %files
 %{_bindir}/%{repo}
 %{_libdir}/%{repo}/plugins/
+%{_libexecdir}/%{repo}/reboot-reminder-dialog
 %{_datadir}/applications/%{repo}.desktop
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/%{repo}/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.2.3-1.git2f420f2
+- Update to 4.2.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.1.2-1.git4d3827b
 - Update to 4.1.2
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.7-1.git10c3be2
