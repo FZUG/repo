@@ -1,8 +1,8 @@
-%global _commit 59ca728afdd0afcda421070e255cd5c21e1882de
+%global _commit 10ccdc2cf25e8e172bf3b86d07085c014cde3012
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-icon-theme
-Version:        15.12.42
+Version:        15.12.46
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Icons
 License:        GPLv3
@@ -28,6 +28,8 @@ Deepin Icons
 %{_datadir}/icons/Sea/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 15.12.46-1.git10ccdc2
+- Update to 15.12.46
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 15.12.42-1.git59ca728
 - Update to 15.12.42
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 15.12.33-1.git2f50a33
