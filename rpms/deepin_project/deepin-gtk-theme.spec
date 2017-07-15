@@ -1,8 +1,8 @@
-%global _commit eba2cf48ff7ee8e4cd2cc783ef626bf500092b9b
+%global _commit 61405025aaa97e37e45c1d70e3719034da88b967
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-gtk-theme
-Version:        17.10.2
+Version:        17.10.3
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin GTK Theme
 License:        LGPLv3
@@ -26,6 +26,8 @@ Deepin GTK Theme
 %{_datadir}/themes/deepin-dark/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 17.10.3-1.git6140502
+- Update to 17.10.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 17.10.2-1.giteba2cf4
 - Update to 17.10.2
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 15.12.8-1.git9fd5f70
