@@ -1,11 +1,11 @@
 %global project dde-file-manager
 %global repo %{project}
 
-%global _commit 99d75976e596c9ed8eb044d70a4bccae6ab802d0
+%global _commit 9308953ef9b3f5ea42caebe3d191340d5392e750
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-file-manager
-Version:        4.1.5
+Version:        4.1.8
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
@@ -16,6 +16,7 @@ BuildRequires:  atk-devel
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-dock-devel
+BuildRequires:  deepin-qt-dbus-factory-devel
 BuildRequires:  dtksettings-devel
 BuildRequires:  ffmpegthumbnailer-devel
 BuildRequires:  file-devel
@@ -58,13 +59,13 @@ Header files and libraries for %{name}
 %prep
 %setup -q -n %{repo}-%{_commit}
 sed -i 's|-0-2||g' %{repo}*/*.pro usb-device-formatter/usb-device-formatter.pro
-sed -i 's|lrelease|lrelease-qt5|g' %{repo}*/generate_translations.sh \
+sed -i 's|lrelease|lrelease-qt5|' %{repo}*/generate_translations.sh \
   usb-device-formatter/generate_translations.sh \
   dde-desktop/translate_generation.sh
-sed -i 's|qmake|qmake-qt5|g' vendor/prebuild
+sed -i 's|qmake|qmake-qt5|' vendor/prebuild
 sed -i '/target.path/s|lib|%{_lib}|' dde-dock-plugins/disk-mount/disk-mount.pro \
   dde-dock-plugins/trash/trash.pro
-sed -i '/deepin-daemon/s|lib|libexec|' dde-desktop/view/canvasgridview.cpp
+sed -i '/deepin-daemon/s|lib|libexec|' dde-zone/mainwindow.h
 sed -i 's|lib/gvfs|libexec|' dde-file-manager-lib/gvfs/networkmanager.cpp
 
 %build
@@ -99,6 +100,8 @@ sed -i 's|lib/gvfs|libexec|' dde-file-manager-lib/gvfs/networkmanager.cpp
 %{_libdir}/lib%{repo}.so
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.1.8-1.git9308953
+- Update to 4.1.8
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.1.5-1.git99d7597
 - Update to 4.1.5
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 1.4.1-1.gite303113
