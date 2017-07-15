@@ -1,8 +1,8 @@
-%global _commit a1ba8c318a3a16440adb2677dae5145737f7e038
+%global _commit 69123ed11d04873b9559f4f93faf24346db43e64
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-movie
-Version:        2.2.13
+Version:        2.2.14
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Deepin Movie based on QtAV
 Summary(zh_CN): 深度影音
@@ -95,6 +95,8 @@ fi
 %{_datadir}/icons/hicolor/*
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.2.14-1.git69123ed
+- Update to 2.2.14
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2.2.13-1.gita1ba8c3
 - Update to 2.2.13
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.2.11-2.git7896696
