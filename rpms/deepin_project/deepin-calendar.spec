@@ -1,11 +1,11 @@
 %global project dde-calendar
 %global repo %{project}
 
-%global _commit a8a4f5b90b1b1456514f54ad76e60a38d1fa4ce8
+%global _commit d2c7b9e26b34ee5c30d393290fb0bba469c98a0b
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-calendar
-Version:        1.0.7
+Version:        1.0.11
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3
@@ -15,6 +15,7 @@ Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  deepin-gettext-tools
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
@@ -34,10 +35,12 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %files
 %{_bindir}/%{repo}
 %{_datadir}/%{repo}/
-%{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+%{_datadir}/applications/%{repo}.desktop
+%{_datadir}/icons/hicolor/scalable/apps/%{repo}.svg
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.11-1.gitd2c7b9e
+- Update to 1.0.11
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.0.7-1.gita8a4f5b
 - Update to 1.0.7
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 1.0.4-1.gitb59053f
