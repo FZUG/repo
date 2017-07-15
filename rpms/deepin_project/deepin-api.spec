@@ -1,11 +1,11 @@
 %global project dde-api
 %global repo %{project}
 
-%global _commit 4c8e030f49cfc118dce28fe02418caa3937a2824
+%global _commit 79125e7de8d8bc2793bad2baf0c26f4a60db8328
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-api
-Version:        3.1.7
+Version:        3.1.10
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3
@@ -24,6 +24,7 @@ BuildRequires:  libcanberra-devel
 BuildRequires:  librsvg2-devel
 BuildRequires:  libgudev-devel
 BuildRequires:  poppler-glib-devel
+BuildRequires:  polkit-qt5-1-devel
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-lib
 BuildRequires:  deepin-go-dbus-factory
@@ -78,11 +79,14 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/dbus-1/system.d/*.conf
 %{_datadir}/icons/hicolor/*/actions/*
+%{_polkit_qt_policydir}/com.deepin.api.locale-helper.policy
 
 %files devel
 %{gopath}/src/pkg.deepin.io/dde/api/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.10-1.git79125e7
+- Update to 3.1.10
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.7-1.git4c8e030
 - Update to 3.1.7
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitf93dbd7
