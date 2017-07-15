@@ -1,8 +1,8 @@
-%global _commit a0f52f3223a1779ee3c8ce71371237c2ed7a552d
+%global _commit 94a22cfe461a1d2d52ff69ababe14c649347260d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-desktop-base
-Version:        2016.11.30
+Version:        2016.12.6
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Base component for Deepin
 License:        GPLv3
@@ -46,6 +46,8 @@ rm -r %{buildroot}%{_datadir}/python-apt
 %{_var}/cache/image-blur/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2016.12.6-1.git94a22cf
+- Update to 2016.12.6
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2016.11.30-1.gita0f52f3
 - Update to 2016.11.30
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2016.11.29-1.git477c9a7
