@@ -1,11 +1,11 @@
 %global project dde-daemon
 %global repo %{project}
 
-%global _commit 82313d2e8afd3885f0c2c83d02aafcb613274746
+%global _commit 03541ad31570f9fb19863c5957eebc5af4367956
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           deepin-daemon
-Version:        3.1.9
+Version:        3.1.13
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Daemon handling the DDE session settings
 
@@ -24,6 +24,7 @@ BuildRequires:  deepin-api-devel
 BuildRequires:  libgnome-keyring-devel
 BuildRequires:  systemd-devel
 BuildRequires:  poppler-glib-devel
+BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
@@ -79,6 +80,7 @@ Daemon handling the DDE session settings
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile
+sed -i 's|lib/NetworkManager|libexec|' network/utils_test.go
 sed -i 's|/usr/lib|%{_libexecdir}|' \
     misc/*services/*.service \
     misc/applications/deepin-toggle-desktop.desktop \
@@ -91,7 +93,7 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
     accounts/user.go
 
 # Fix grub.cfg path
-sed -i '/MenuFile/s|grub/|grub2/|' grub2/grub2.go
+sed -i '/ScriptFile/s|grub/|grub2/|' grub2/log.go
 sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
 %build
@@ -102,7 +104,10 @@ go get gopkg.in/alecthomas/kingpin.v2 \
     github.com/BurntSushi/freetype-go/freetype/truetype \
     github.com/BurntSushi/graphics-go/graphics \
     github.com/fsnotify/fsnotify \
-    golang.org/x/sys/unix
+    github.com/axgle/mahonia \
+    github.com/msteinert/pam \
+    golang.org/x/sys/unix \
+    gopkg.in/yaml.v2
 %make_build
 
 %install
@@ -128,11 +133,12 @@ rm -f /var/cache/deepin/mark-setup-network-services
 %{_datadir}/dbus-1/system.d/*.conf
 %{_datadir}/%{repo}/
 %{_datadir}/dde/data/
-%{_datadir}/icons/hicolor/*/apps/*
 %{_datadir}/polkit-1/actions/*.policy
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git03541ad
+- Update to 3.1.13
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.9-1.git82313d2
 - Update to 3.1.9
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.3-1.git87df955
