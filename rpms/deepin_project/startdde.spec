@@ -1,9 +1,9 @@
 %global debug_package %{nil}
-%global _commit a9130d0fa86efe557cd3f2499015b4ead839b1e0
+%global _commit 08de5b9fa1f08e5e25d4d8611bbf67fa73bc6c11
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           startdde
-Version:        3.1.8
+Version:        3.1.13
 Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -32,6 +32,7 @@ Starter of deepin desktop environment
 %prep
 %setup -q -n %{name}-%{_commit}
 
+sed -i '/polkit-1/s|lib|libexec|' watchdog/dde_polkit_agent.go
 sed -i '/deepin-daemon/s|lib|libexec|g' Makefile session.go \
     dde-readahead/dde-readahead.service
 
@@ -55,6 +56,8 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git08de5b9
+- Update to 3.1.13
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.8-1.gita9130d0
 - Update to 3.1.8
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitd7c1216
