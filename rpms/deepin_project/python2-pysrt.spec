@@ -4,8 +4,8 @@
 %global project pysrt
 %global repo %{project}
 
-%global _commit e7c644fd0eac94985d25185a0e473c4802a52e0c
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit e7c644fd0eac94985d25185a0e473c4802a52e0c
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %if 0%{?fedora}
 %global with_python3 1
@@ -13,11 +13,11 @@
 
 Name:           python2-%{repo}
 Version:        1.1.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        pysrt is a Python library used to edit or create SubRip files.
 License:        GPLv3
 URL:            https://github.com/byroot/pysrt
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python-devel
@@ -37,7 +37,7 @@ pysrt is a Python library used to edit or create SubRip files.
 %endif # with_python3
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}

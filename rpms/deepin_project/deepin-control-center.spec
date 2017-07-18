@@ -1,16 +1,16 @@
 %global project dde-control-center
 %global repo %{project}
 
-%global _commit 2f420f2051480800624e37ea531d1381e13836c0
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 2f420f2051480800624e37ea531d1381e13836c0
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-control-center
 Version:        4.2.3
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-control-center
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-dock-devel
@@ -37,7 +37,7 @@ Provides:       %{repo}%{?_isa} = %{version}-%{release}
 New control center for linux deepin
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 sed -i -E '/target.path|utils.path/s|lib|%{_lib}|' plugins/*/*.pro

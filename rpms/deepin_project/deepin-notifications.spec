@@ -1,13 +1,13 @@
-%global _commit 0033758606f3e1ecf6a34e7d9e9fad0d4f00df76
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 0033758606f3e1ecf6a34e7d9e9fad0d4f00df76
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-notifications
 Version:        3.0.6
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        System notifications for linuxdeepin desktop environment
 License:        GPL3
 URL:            https://github.com/linuxdeepin/deepin-notifications
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  qt5-qtsvg-devel
 BuildRequires:  qt5-qtdeclarative-devel
@@ -18,7 +18,7 @@ BuildRequires:  gtk2-devel
 System notifications for linuxdeepin desktop environment.
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 sed -i 's|lib|libexec|' deepin-notifications.pro \
     files/com.deepin.Notifications.service.in

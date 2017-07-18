@@ -1,13 +1,13 @@
-%global _commit 4809e53ee33e35f3ae545d028ef92d5773a51a05
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 4809e53ee33e35f3ae545d028ef92d5773a51a05
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-wm-switcher
 Version:        1.1.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Window manager switcher for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wm-switcher
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  glib2-devel
@@ -23,7 +23,7 @@ Requires:       deepin-metacity
 Window manager switcher for Deepin
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release

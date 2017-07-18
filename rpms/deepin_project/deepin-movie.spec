@@ -1,16 +1,16 @@
-%global _commit 69123ed11d04873b9559f4f93faf24346db43e64
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 69123ed11d04873b9559f4f93faf24346db43e64
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-movie
 Version:        2.2.14
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Movie based on QtAV
 Summary(zh_CN): 深度影音
 
 License:        GPLv3
 Group:          Applications/Multimedia
 URL:            https://github.com/linuxdeepin/deepin-movie
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python-devel
@@ -46,7 +46,7 @@ Deepin movie with linuxdeepin desktop environment.
 深度影音播放器, 后端基于QtAV, 支持解码大多数视频格式.
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 # fix python version
 find -iname "*.py" | xargs sed -i '1s|python$|python2|'
 

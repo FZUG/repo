@@ -1,13 +1,13 @@
-%global _commit 94a22cfe461a1d2d52ff69ababe14c649347260d
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 94a22cfe461a1d2d52ff69ababe14c649347260d
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-desktop-base
 Version:        2016.12.6
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Base component for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-desktop-base
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 Requires:       deepin-wallpapers
 
@@ -15,7 +15,7 @@ Requires:       deepin-wallpapers
 Base component for Deepin
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 %make_build

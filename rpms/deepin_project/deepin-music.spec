@@ -1,15 +1,15 @@
-%global _commit 7c31a72ac59ad5f43d4fdc17b36a8b058748a1c1
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 7c31a72ac59ad5f43d4fdc17b36a8b058748a1c1
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-music
 Version:        3.1.4
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
 License:        GPLv3
 Group:          Applications/Multimedia
 Url:            https://github.com/linuxdeepin/deepin-music
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  git
 BuildRequires:  python
@@ -47,7 +47,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 sed -i 's|-0-2||g' music-player/music-player.pro
 sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.*
 

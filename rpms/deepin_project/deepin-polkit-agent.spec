@@ -1,16 +1,16 @@
 %global project dde-polkit-agent
 %global repo %{project}
 
-%global _commit 680c12f0235d30af0395bf2cb2e55ef71bd3cb55
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 680c12f0235d30af0395bf2cb2e55ef71bd3cb55
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-polkit-agent
 Version:        0.0.10
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Polkit Agent
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-polkit-agent
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  polkit-qt5-1-devel
@@ -22,7 +22,7 @@ Provides:       %{repo}%{?_isa} = %{version}-%{release}
 Deepin Polkit Agent
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.desktop
 

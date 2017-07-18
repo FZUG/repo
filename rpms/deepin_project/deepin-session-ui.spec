@@ -1,16 +1,16 @@
 %global project dde-session-ui
 %global repo %{project}
 
-%global _commit 4cadab1afada9834805aabc60e7741e20082b257
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 4cadab1afada9834805aabc60e7741e20082b257
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-session-ui
 Version:        4.0.13
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-session-ui
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-qt-dbus-factory-devel
@@ -37,7 +37,7 @@ Provides:       lightdm-deepin-greeter%{?_isa} = %{version}-%{release}
 Deepin desktop-environment - Session UI module
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 sed -i 's|lib|libexec|' \

@@ -1,17 +1,17 @@
 %global project dde-daemon
 %global repo %{project}
 
-%global _commit 03541ad31570f9fb19863c5957eebc5af4367956
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 03541ad31570f9fb19863c5957eebc5af4367956
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-daemon
 Version:        3.1.13
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Daemon handling the DDE session settings
 
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 Source1:        deepin-daemon.sysusers
 
 BuildRequires:  git
@@ -76,7 +76,7 @@ Provides:       %{repo}%{?_isa} = %{version}-%{release}
 Daemon handling the DDE session settings
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile

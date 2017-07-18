@@ -1,20 +1,20 @@
-%global _commit 3e5c89d5464e9e5a254c58e09a75ded0fce5dcd6
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 3e5c89d5464e9e5a254c58e09a75ded0fce5dcd6
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-wallpapers
 Version:        1.6
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Wallpapers provides wallpapers of dde
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wallpapers
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 %description
 Deepin Wallpapers provides wallpapers of dde
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 

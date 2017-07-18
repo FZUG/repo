@@ -1,16 +1,16 @@
 %global project dde-api
 %global repo %{project}
 
-%global _commit 79125e7de8d8bc2793bad2baf0c26f4a60db8328
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 79125e7de8d8bc2793bad2baf0c26f4a60db8328
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-api
 Version:        3.1.10
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-api
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires:  bzr
 BuildRequires:  git
@@ -47,7 +47,7 @@ Summary:        Development package for %{name}
 Header files and libraries for %{name}
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 sed -i 's|/usr/lib|%{_libexecdir}|' misc/*services/*.service \
     misc/systemd/system/deepin-shutdown-sound.service \

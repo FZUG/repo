@@ -1,19 +1,19 @@
-%global _commit 38135764aaad4f0ba818efee6735612df17d503c
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 38135764aaad4f0ba818efee6735612df17d503c
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 # for fedora 24
 %global _qt5_qmldir %{_qt5_archdatadir}/qml
 
 Name:           deepin-qml-widgets
 Version:        2.3.5
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin QML widgets
 Summary(zh_CN): 深度 QML 部件库
 
 Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-qml-widgets
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  pkgconfig
 BuildRequires:  gettext
@@ -35,7 +35,7 @@ Deepin QML widgets
 深度 QML 部件库, deepin 应用需要此程序库.
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 %qmake_qt5

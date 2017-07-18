@@ -1,13 +1,13 @@
-%global _commit 90453e308fbf7222b5c45f65a7497f5fcaf00fc4
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 90453e308fbf7222b5c45f65a7497f5fcaf00fc4
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-wm
 Version:        1.9.14
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Window Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wm
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  intltool
 BuildRequires:  gnome-common
@@ -40,7 +40,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 # fix background path
 sed -i 's|default_background.jpg|default.png|' \

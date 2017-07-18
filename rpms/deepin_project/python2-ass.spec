@@ -2,17 +2,17 @@
 %global project python-ass
 %global repo %{project}
 
-%global _commit c8ffa0b1008c2b2262a2ee7c0f8881f0201a4c8d
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit c8ffa0b1008c2b2262a2ee7c0f8881f0201a4c8d
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           python2-ass
 Version:        0.4.2
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Advanced SubStation Alpha subtitle files
 
 License:        MIT
 URL:            https://github.com/rfw/python-ass
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python-devel
@@ -23,7 +23,7 @@ Provides:       %{repo} = %{version}-%{release}
 Advanced SubStation Alpha subtitle files
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 %build
 %{__python2} setup.py build

@@ -1,16 +1,16 @@
 %global project dae
 %global repo %{project}
 
-%global _commit 350848717ee19b439ac51efd6d9dc2c88769ec3b
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 350848717ee19b439ac51efd6d9dc2c88769ec3b
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           python3-%{repo}
 Version:        1.0.2
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin desktop application engine
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dae
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -23,7 +23,7 @@ Requires:       python3-qt5-webkit
 Deepin desktop application engine
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 %build
 %{__python3} setup.py build

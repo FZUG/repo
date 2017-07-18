@@ -1,13 +1,13 @@
-%global _commit 276dd326eee81b337af44f6d4bdc09c8f1d91a9c
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 276dd326eee81b337af44f6d4bdc09c8f1d91a9c
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-artwork-themes
 Version:        15.12.4
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin artwork themes
 License:        LGPL3
 URL:            https://github.com/linuxdeepin/deepin-artwork-themes
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python-devel
@@ -18,7 +18,7 @@ Requires:       deepin-icon-theme
 Deepin artwork themes
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 make build

@@ -1,20 +1,20 @@
-%global _commit 61405025aaa97e37e45c1d70e3719034da88b967
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 61405025aaa97e37e45c1d70e3719034da88b967
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-gtk-theme
 Version:        17.10.3
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin GTK Theme
 License:        LGPLv3
 URL:            https://github.com/linuxdeepin/deepin-gtk-theme
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 %description
 Deepin GTK Theme
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 

@@ -1,15 +1,15 @@
-%global _commit 82c4a12c49eee03c4caedb64c3d4407c26bba070
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 82c4a12c49eee03c4caedb64c3d4407c26bba070
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
 Version:        2.5.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPL3
 URL:            https://github.com/linuxdeepin/deepin-terminal
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  vala
@@ -33,7 +33,7 @@ Recommends:     deepin-manual
 Default terminal emulation application for Deepin
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' project_path.c
 
 # fixes build fail for vala 0.36.3

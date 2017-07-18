@@ -1,14 +1,14 @@
 %global debug_package %{nil}
-%global _commit 2032d5abab8ebf5acc662aba80cfdf2cf862b892
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 2032d5abab8ebf5acc662aba80cfdf2cf862b892
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-file-manager-backend
 Version:        0.1.16
-Release:        2.git%{_shortcommit}%{?dist}
+Release:        2.git%{shortcommit}%{?dist}
 Summary:        Deepin file manager backend
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-file-manager-backend
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  git
 BuildRequires:  gettext
@@ -33,7 +33,7 @@ BuildRequires:  golang-github-alecthomas-kingpin-devel
 Deepin file manager backend
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 sed -i 's|/usr/lib|%{_libexecdir}|' services/*.service desktop/desktop.go
 sed -i '3s|lib|libexec|' Makefile

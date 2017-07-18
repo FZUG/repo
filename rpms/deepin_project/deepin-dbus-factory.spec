@@ -3,24 +3,24 @@
 %global project dbus-factory
 %global repo %{project}
 
-%global _commit 0ef92677c266a9b5c76651f00e21bf94b9dae56f
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
-%global _old_commit 5fe5f076b17d699de1dd04625a6b35e156a40efa
-%global _old_scommit %(c=%{_old_commit}; echo ${c:0:7})
+%global commit 0ef92677c266a9b5c76651f00e21bf94b9dae56f
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global old_commit 5fe5f076b17d699de1dd04625a6b35e156a40efa
+%global old_scommit %(c=%{old_commit}; echo ${c:0:7})
 
 # for fedora 24
 %global _qt5_qmldir %{_qt5_archdatadir}/qml
 
 Name:           deepin-%{repo}
 Version:        3.1.6
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Golang and QML DBus factory for DDE
 
 Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dbus-factory
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-Source1:        %{url}/archive/%{_old_commit}/%{repo}-%{_old_scommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source1:        %{url}/archive/%{old_commit}/%{repo}-%{old_scommit}.tar.gz
 
 BuildRequires:  gcc-go
 BuildRequires:  deepin-go-lib
@@ -44,8 +44,8 @@ Summary: QML DBus factory for DDE
 QML DBus factory for DDE.
 
 %prep
-%setup -q -a1 -n %{repo}-%{_commit}
-mv %{repo}-%{_old_commit} old
+%setup -q -a1 -n %{repo}-%{commit}
+mv %{repo}-%{old_commit} old
 
 %build
 %make_build

@@ -1,13 +1,13 @@
-%global _commit e77fde55bffdef074bb2746ad3792b3561a71a41
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit e77fde55bffdef074bb2746ad3792b3561a71a41
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-image-viewer
 Version:        1.2.14
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-image-viewer
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
@@ -24,7 +24,7 @@ BuildRequires:  xcb-util-devel
 Deepin Image Viewer
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 sed -i 's|lrelease|lrelease-qt5|g' viewer/generate_translations.sh
 
 %build

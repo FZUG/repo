@@ -1,20 +1,20 @@
-%global _commit 0045de406a143b798ac3b2fbe2b318b4a4894176
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 0045de406a143b798ac3b2fbe2b318b4a4894176
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-sound-theme
 Version:        15.10.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin sound theme
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-sound-theme
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 %description
 Deepin sound theme
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 

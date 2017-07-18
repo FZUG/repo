@@ -1,18 +1,18 @@
 %global project go-dbus-generator
 %global repo %{project}
 
-%global _commit ace6ac0af3ad2bbbddb4c3c770bee03b5edf6bf9
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit ace6ac0af3ad2bbbddb4c3c770bee03b5edf6bf9
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-dbus-generator
 Version:        0.6.6
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Convert dbus interfaces to go-lang or qml wrapper code
 
 Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/go-dbus-generator
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires:  gcc-go
 BuildRequires:  golang-gopkg-check-devel
@@ -26,7 +26,7 @@ BuildRequires:  qt5-qtdeclarative-devel
 Static dbus binding generator for dlib.
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 # qmake path
 sed -i 's|qmake|qmake-qt5|' build_test.go template_qml.go
 

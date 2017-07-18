@@ -1,16 +1,16 @@
 %global project dde-help
 %global repo %{project}
 
-%global _commit ad0be943ffeab911ac32efbfb0669a08dd14b753
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit ad0be943ffeab911ac32efbfb0669a08dd14b753
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-help
 Version:        15.4.7
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Help files for DDE
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-help
-Source0:        %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 Requires:       deepin-manual
 
@@ -18,7 +18,7 @@ Requires:       deepin-manual
 %{summary}
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 %build
 

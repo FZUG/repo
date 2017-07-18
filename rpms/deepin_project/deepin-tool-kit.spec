@@ -1,13 +1,13 @@
-%global _commit e8676963ecc585e7ed5d35dc7cda2eabb71a63c3
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit e8676963ecc585e7ed5d35dc7cda2eabb71a63c3
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-tool-kit
 Version:        0.3.1
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Base development tool of all C++/Qt Developer work on Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-tool-kit
-Source0:        %{url}/archive/%{_commit}/%{name}-%{_shortcommit}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  dtksettings-devel
 BuildRequires:  gsettings-qt-devel
@@ -30,7 +30,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}
 
 %prep
-%setup -q -n %{name}-%{_commit}
+%setup -q -n %{name}-%{commit}
 sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 sed -i -E '/test|examples/d' dtk.pro
 
