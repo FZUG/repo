@@ -10,7 +10,7 @@ URL:            https://github.com/linuxdeepin/deepin-gettext-tools
 Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python-devel
+BuildRequires:  python3-devel
 BuildRequires:  perl(Config::Tiny)
 BuildRequires:  perl(Exporter::Tiny)
 BuildRequires:  perl(XML::LibXML)
@@ -34,7 +34,7 @@ generate-mo - scan po files and generate mo files according to the ini file.
 %setup -q -n %{name}-%{commit}
 
 # fix shebang
-find -iname "*.py" | xargs sed -i '1s|.*|#!%{__python2}|'
+find -iname "*.py" | xargs sed -i '1s|.*|#!%{__python3}|'
 sed -i '1s|.*|#!%{__perl}|' desktop_ts/src/desktop_ts_convert.pl
 
 sed -i 's|sudo cp|cp|' src/generate_mo.py
@@ -51,8 +51,8 @@ install -m755 src/update_pot.py %{buildroot}%{_bindir}/deepin-update-pot
 
 %check
 /bin/perl desktop_ts/src/desktop_ts_convert.pl --help
-/bin/python2 src/generate_mo.py --help
-/bin/python2 src/update_pot.py --help
+/bin/python3 src/generate_mo.py --help
+/bin/python3 src/update_pot.py --help
 
 %files
 %doc README.md
