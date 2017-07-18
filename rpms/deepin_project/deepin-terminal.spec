@@ -36,6 +36,10 @@ Default terminal emulation application for Deepin
 %setup -q -n %{name}-%{_commit}
 sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' project_path.c
 
+# fixes build fail for vala 0.36.3
+# https://github.com/linuxdeepin/deepin-terminal/issues/8
+rm vapi/gee-0.8.vapi
+
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release
 %make_build
