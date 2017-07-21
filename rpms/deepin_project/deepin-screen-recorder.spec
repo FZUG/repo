@@ -1,8 +1,8 @@
-%global commit 61846193cc31e8cea48c1430a1f874dddbbab8aa
+%global commit bacac814fbaa37f3227c28fa3be8efaec93980c4
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-screen-recorder
-Version:        2.3
+Version:        2.4
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
@@ -59,6 +59,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 2.4-1.gitbacac81
+- Update to 2.4
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.3-1.git6184619
 - Update to 2.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.8-1.gitc4040d0
