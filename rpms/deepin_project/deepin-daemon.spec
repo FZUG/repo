@@ -1,11 +1,11 @@
 %global project dde-daemon
 %global repo %{project}
 
-%global commit 03541ad31570f9fb19863c5957eebc5af4367956
+%global commit 0f8418aba5e0ae9552d391d16b4bcc43e36649c9
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-daemon
-Version:        3.1.13
+Version:        3.1.14
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        Daemon handling the DDE session settings
 
@@ -137,6 +137,8 @@ rm -f /var/cache/deepin/mark-setup-network-services
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1.git0f8418a
+- Update to 3.1.14
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git03541ad
 - Update to 3.1.13
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.9-1.git82313d2
