@@ -1,8 +1,8 @@
-%global commit 6c05bf1532eec8d93656d1e7a43aee5cd74e5b9c
+%global commit 6cf1cb99d8d11d7bbbee74f91d6637f318456655
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-voice-recorder
-Version:        1.3
+Version:        1.3.1
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin Voice Recorder
 License:        GPLv3
@@ -53,6 +53,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git6cf1cb9
+- Update to 1.3.1
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.3-1.git6c05bf1
 - Update to 1.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.2-1.git2a95a46
