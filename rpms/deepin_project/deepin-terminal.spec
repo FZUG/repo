@@ -5,9 +5,9 @@
 
 Name:           deepin-terminal
 Version:        2.5.1
-Release:        1.git%{shortcommit}%{?dist}
+Release:        2.git%{shortcommit}%{?dist}
 Summary:        Default terminal emulation application for Deepin
-License:        GPL3
+License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-terminal
 Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
@@ -26,11 +26,21 @@ BuildRequires:  vte291-devel
 Requires:       deepin-menu
 # run command by create_from_commandline
 Requires:       deepin-shortcut-viewer
+Requires:       expect
 Requires:       xdg-utils
 Recommends:     deepin-manual
+Requires:       %{name}-data = %{version}-%{release}
 
 %description
 Default terminal emulation application for Deepin
+
+%package data
+Summary:        Data files of Deepin Terminal
+BuildArch:      noarch
+Requires:       hicolor-icon-theme
+
+%description data
+The %{name}-data package provides shared data for Deepin Terminal.
 
 %prep
 %setup -q -n %{name}-%{commit}
@@ -39,6 +49,10 @@ sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' projec
 # fixes build fail for vala 0.36.3
 # https://github.com/linuxdeepin/deepin-terminal/issues/8
 rm vapi/gee-0.8.vapi
+
+# remove es_419 locale
+rm -rf po/es_419/
+sed -i '/es_419/d' deepin-terminal.desktop
 
 %build
 %cmake -DCMAKE_BUILD_TYPE=Release
@@ -79,14 +93,22 @@ if [ $2 -eq 0 ]; then
   done
 fi
 
-%files -f %{name}.lang
+%files
+%doc README.md
+%license LICENSE
 %{_bindir}/%{name}
+
+%files data -f %{name}.lang
+%doc README.md
+%license LICENSE
 %{_datadir}/%{name}/
 %{_datadir}/dman/%{name}/
 %{_datadir}/icons/hicolor/*/apps/%{name}*
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Fri Jul 21 2017 mosquito <sensor.wen@gmail.com> - 2.5.1-2.git82c4a12
+- Split package
 * Tue Jul 18 2017 mosquito <sensor.wen@gmail.com> - 2.5.1-1.git82c4a12
 - Update to 2.5.1
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.5.0-1.git439ab57
