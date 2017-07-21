@@ -1,11 +1,11 @@
 %global project dde-control-center
 %global repo %{project}
 
-%global commit 2f420f2051480800624e37ea531d1381e13836c0
+%global commit 21d68b62443fa54907db82e2d998a0c9cefbac37
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-control-center
-Version:        4.2.3
+Version:        4.2.4
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
@@ -17,7 +17,6 @@ BuildRequires:  deepin-dock-devel
 BuildRequires:  deepin-qt-dbus-factory-devel
 BuildRequires:  gsettings-qt-devel
 BuildRequires:  GeoIP-devel
-BuildRequires:  gtk2-devel
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtsvg-devel
@@ -58,6 +57,8 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 %make_install INSTALL_ROOT=%{buildroot}
 
 %files
+%doc README.md
+%license LICENSE
 %{_bindir}/%{repo}
 %{_libdir}/%{repo}/plugins/
 %{_libexecdir}/%{repo}/reboot-reminder-dialog
@@ -66,6 +67,8 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 %{_datadir}/%{repo}/
 
 %changelog
+* Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.4-1.git21d68b6
+- Update to 4.2.4
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.2.3-1.git2f420f2
 - Update to 4.2.3
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.1.2-1.git4d3827b
