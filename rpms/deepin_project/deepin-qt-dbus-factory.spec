@@ -38,7 +38,13 @@ Header files and libraries for %{name}
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
 %files
+%doc README
+%license LICENSE
 %{_libdir}/libdframeworkdbus.so.*
 
 %files devel
