@@ -5,8 +5,6 @@ Name:           deepin-menu
 Version:        3.1.5
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin menu service
-
-Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-menu
 Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
@@ -50,15 +48,11 @@ install -d %{buildroot}%{_datadir}/dbus-1/services/
 install -m644 data/*.service %{buildroot}%{_datadir}/dbus-1/services/
 
 install -d %{buildroot}%{_datadir}/applications/
-desktop-file-install --remove-key=OnlyShowIn --mode=644 \
-    --dir=%{buildroot}%{_datadir}/applications deepin-menu.desktop
+install -m644 %{name}.desktop %{buildroot}%{_datadir}/applications/
 
 install -d %{buildroot}/etc/xdg/autostart/
 ln -sfv %{_datadir}/applications/%{name}.desktop \
     %{buildroot}%{_sysconfdir}/xdg/autostart/
-
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
 
 %files
 %doc README.md
