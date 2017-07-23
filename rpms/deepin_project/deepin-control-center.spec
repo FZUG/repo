@@ -33,7 +33,7 @@ Requires:       gtk-murrine-engine
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
-New control center for linux deepin
+New control center for linux deepin.
 
 %prep
 %setup -q -n %{repo}-%{commit}
@@ -55,6 +55,10 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %files
 %doc README.md

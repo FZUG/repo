@@ -33,14 +33,14 @@ Requires:       zenity
 #startup-notification
 
 %description
-Base window manager for deepin, fork of gnome mutter
+Base window manager for deepin, fork of gnome mutter.
 
 %package devel
 Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for base window manager for deepin, fork of gnome mutter
+Header files and libraries for base window manager for deepin, fork of gnome mutter.
 
 %prep
 %setup -q -n %{name}-%{commit}

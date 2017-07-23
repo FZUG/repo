@@ -26,7 +26,7 @@ Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for %{name}
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{repo}-%{commit}

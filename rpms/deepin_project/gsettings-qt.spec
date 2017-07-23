@@ -17,14 +17,14 @@ BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  glib2-devel
 
 %description
-Qml bindings for GSettings
+Qml bindings for GSettings.
 
 %package devel
 Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for %{name}
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{project}/%{name}/trunk
@@ -38,6 +38,10 @@ Header files and libraries for %{name}
 
 # remove test
 rm -rf %{buildroot}%{_libdir}/qt5/tests
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %files
 %{_libdir}/lib%{name}.so.*

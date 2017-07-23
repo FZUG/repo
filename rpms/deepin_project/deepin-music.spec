@@ -44,7 +44,7 @@ Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for %{name}
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{name}-%{commit}
@@ -63,10 +63,12 @@ sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
 %make_install INSTALL_ROOT=%{buildroot}
 
 %post
+/sbin/ldconfig
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
+/sbin/ldconfig
 if [ $1 -eq 0 ]; then
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
@@ -82,7 +84,7 @@ fi
 %{_bindir}/%{name}
 %{_libdir}/lib*.so.*
 %{_libdir}/%{name}/plugins/lib*.so.*
-%ghost %{_datadir}/%{name}/
+%{_datadir}/%{name}/
 %{_datadir}/dman/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg

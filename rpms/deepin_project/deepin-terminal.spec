@@ -32,7 +32,7 @@ Recommends:     deepin-manual
 Requires:       %{name}-data = %{version}-%{release}
 
 %description
-Default terminal emulation application for Deepin
+Default terminal emulation application for Deepin.
 
 %package data
 Summary:        Data files of Deepin Terminal
@@ -99,8 +99,6 @@ fi
 %{_bindir}/%{name}
 
 %files data -f %{name}.lang
-%doc README.md
-%license LICENSE
 %{_datadir}/%{name}/
 %{_datadir}/dman/%{name}/
 %{_datadir}/icons/hicolor/*/apps/%{name}*

@@ -18,7 +18,7 @@ Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for %{name}
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{name}-%{commit}
@@ -30,8 +30,13 @@ Header files and libraries for %{name}
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
 %files
 %doc README.md
+%license LICENSE
 %{_bindir}/dtk-settings-tool
 %{_libdir}/lib*.so.*
 

@@ -59,6 +59,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %find_lang %{name}
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
 %files -f %{name}.lang
 %doc README.md
 %license LICENSE

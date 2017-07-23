@@ -27,14 +27,14 @@ Requires:       dconf
 Requires:       deepin-desktop-schemas
 
 %description
-2D window manager for Deepin
+2D window manager for Deepin.
 
 %package devel
 Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for %{name}
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{name}-%{commit}
@@ -50,6 +50,10 @@ Header files and libraries for %{name}
 %make_install PREFIX=%{_prefix}
 #Remove libtool archives.
 find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
 
 %files
 %doc README

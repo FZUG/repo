@@ -70,13 +70,12 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root)
-%doc COPYING NEWS README ChangeLog
+%doc NEWS README ChangeLog
+%license COPYING
 %{_libdir}/*.so.*
 %{_libdir}/girepository-1.0/Cogl*.typelib
 
 %files devel
-%defattr(-,root,root)
 %{_libdir}/*.so
 %{_includedir}/cogl/
 %{_libdir}/pkgconfig/*.pc

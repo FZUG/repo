@@ -47,14 +47,14 @@ Provides:       deepin-desktop%{?_isa} = %{version}-%{release}
 Obsoletes:      deepin-desktop%{?_isa} < %{version}-%{release}
 
 %description
-Deepin File Manager
+Deepin File Manager.
 
 %package devel
 Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for %{name}
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{repo}-%{commit}
@@ -75,7 +75,13 @@ sed -i 's|lib/gvfs|libexec|' dde-file-manager-lib/gvfs/networkmanager.cpp
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+%post -p /sbin/ldconfig
+
+%postun -p /sbin/ldconfig
+
 %files
+%doc README.md
+%license LICENSE
 %{_sysconfdir}/dbus-1/system.d/*.conf
 %{_sysconfdir}/xdg/autostart/%{repo}*.desktop
 %{_bindir}/dde-*
