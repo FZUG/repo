@@ -1,13 +1,10 @@
-%global commit 8b3ae9dcb9737e8d43c82ddeac126f6c964defca
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-system-monitor
 Version:        0.0.9
 Release:        1%{?dist}
 Summary:        A more user-friendly system monitor
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-system-monitor
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  pkgconfig(dtkbase)
 BuildRequires:  pkgconfig(dtkutil)
@@ -32,7 +29,7 @@ BuildRequires:  ncurses-devel
 %{summary}
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' %{name}.pro
 
 %build

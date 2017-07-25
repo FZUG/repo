@@ -1,28 +1,24 @@
 %global project dde-calendar
 %global repo %{project}
 
-%global commit d2c7b9e26b34ee5c30d393290fb0bba469c98a0b
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-calendar
 Version:        1.0.11
 Release:        1%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-calendar
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-gettext-tools
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
 Calendar for Deepin Desktop Environment
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 %build

@@ -1,16 +1,13 @@
 %global project dde-launcher
 %global repo %{project}
 
-%global commit be7e4085bbbbb8704fd4cdd8d1213f6a4bc18e68
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-launcher
 Version:        4.1.4
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-launcher
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-qt-dbus-factory-devel
@@ -24,13 +21,12 @@ BuildRequires:  xcb-util-wm-devel
 Requires:       deepin-menu
 Requires:       deepin-daemon
 Requires:       startdde
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
 Deepin desktop-environment - Launcher module
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 %build

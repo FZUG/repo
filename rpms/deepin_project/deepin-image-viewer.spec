@@ -1,13 +1,10 @@
-%global commit e77fde55bffdef074bb2746ad3792b3561a71a41
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-image-viewer
 Version:        1.2.14
 Release:        1%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-image-viewer
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-devel
@@ -24,7 +21,7 @@ BuildRequires:  xcb-util-devel
 Deepin Image Viewer
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 sed -i 's|lrelease|lrelease-qt5|g' viewer/generate_translations.sh
 
 %build
@@ -49,6 +46,8 @@ fi
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
+%doc README.md
+%license LICENSE
 %{_bindir}/%{name}
 %{_qt5_plugindir}/imageformats/*.so
 %{_datadir}/applications/%{name}.desktop

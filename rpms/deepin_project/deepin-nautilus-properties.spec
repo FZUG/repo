@@ -1,14 +1,10 @@
-%global debug_package %{nil}
-%global commit 859b1134ff1a1bbf06ce5a03a616fe9fe192f1a9
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-nautilus-properties
 Version:        3.14.3
 Release:        1%{?dist}
 Summary:        Provide file property dialog for Deepin desktop environment
-License:        GPL
+License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-nautilus-properties
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  intltool
 BuildRequires:  libnotify-devel
@@ -25,7 +21,7 @@ BuildRequires:  gobject-introspection-devel
 Provide file property dialog for Deepin desktop environment
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 libtoolize && aclocal && autoheader && \

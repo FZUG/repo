@@ -1,13 +1,10 @@
-%global commit eeea1d45900d3bf98a45e6df369563c8238103af
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-desktop-schemas
 Version:        3.1.14
 Release:        1%{?dist}
 Summary:        GSettings deepin desktop-wide schemas
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-desktop-schemas
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python
@@ -21,7 +18,7 @@ Requires:       deepin-artwork-themes
 GSettings deepin desktop-wide schemas
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 # fix default background url
 sed -i '/picture-uri/s|default_background.jpg|default.png|' \

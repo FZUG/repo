@@ -1,14 +1,10 @@
-%global commit 10ccdc2cf25e8e172bf3b86d07085c014cde3012
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-icon-theme
 Version:        15.12.46
 Release:        1%{?dist}
 Summary:        Deepin Icons
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-icon-theme
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python-devel
 
@@ -16,7 +12,7 @@ BuildRequires:  python-devel
 Deepin Icons
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 
@@ -24,6 +20,8 @@ Deepin Icons
 %{make_install} PREFIX=%{_prefix}
 
 %files
+%doc README.md
+%license LICENSE
 %{_datadir}/icons/deepin/
 %{_datadir}/icons/Sea/
 

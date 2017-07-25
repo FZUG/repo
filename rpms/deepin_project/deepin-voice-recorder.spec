@@ -1,13 +1,10 @@
-%global commit 6cf1cb99d8d11d7bbbee74f91d6637f318456655
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-voice-recorder
 Version:        1.3.1
 Release:        1%{?dist}
 Summary:        Deepin Voice Recorder
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-voice-recorder
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  qt5-linguist
@@ -19,7 +16,7 @@ BuildRequires:  ffmpeg-devel
 Deepin Voice Recorder
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' deepin-voice-recorder.pro
 
 %build

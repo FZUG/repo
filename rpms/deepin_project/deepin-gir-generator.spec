@@ -1,27 +1,23 @@
 %global project go-gir-generator
 %global repo %{project}
 
-%global commit 9ee7058956d8debee0198f2b8b37bb9e361f3451
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-gir-generator
 Version:        1.0.1
 Release:        1%{?dist}
 Summary:        Generate static golang bindings for GObject
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/go-gir-generator
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  gcc-go
 BuildRequires:  gobject-introspection-devel
 BuildRequires:  libgudev-devel
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
 Generate static golang bindings for GObject
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 
 %build
 export GOPATH="%{gopath}"

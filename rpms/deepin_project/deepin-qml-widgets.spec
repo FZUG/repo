@@ -1,6 +1,3 @@
-%global commit 38135764aaad4f0ba818efee6735612df17d503c
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 # for fedora 24
 %global _qt5_qmldir %{_qt5_archdatadir}/qml
 
@@ -8,12 +5,10 @@ Name:           deepin-qml-widgets
 Version:        2.3.5
 Release:        1%{?dist}
 Summary:        Deepin QML widgets
-Summary(zh_CN): 深度 QML 部件库
-
 Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-qml-widgets
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  pkgconfig
 BuildRequires:  gettext
@@ -31,11 +26,8 @@ BuildRequires:  libxcb-devel
 %description
 Deepin QML widgets
 
-%description -l zh_CN
-深度 QML 部件库, deepin 应用需要此程序库.
-
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 %qmake_qt5
@@ -55,7 +47,6 @@ popd
 %find_lang %{name}
 
 %files -f %{name}.lang
-%defattr(-,root,root,-)
 %doc README.md
 %license LICENSE
 %{_bindir}/deepin-dialog

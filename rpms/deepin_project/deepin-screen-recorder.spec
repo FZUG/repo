@@ -1,13 +1,10 @@
-%global commit bacac814fbaa37f3227c28fa3be8efaec93980c4
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-screen-recorder
 Version:        2.4
 Release:        1%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-screen-recorder
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  qt5-linguist
@@ -25,7 +22,7 @@ Requires:       ffmpeg
 Deepin Screen Recorder
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' deepin-screen-recorder.pro
 
 %build

@@ -1,14 +1,10 @@
-%global debug_package %{nil}
-%global commit 08de5b9fa1f08e5e25d4d8611bbf67fa73bc6c11
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           startdde
 Version:        3.1.13
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/startdde
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  golang
@@ -30,7 +26,7 @@ Requires:       deepin-wm-switcher
 Starter of deepin desktop environment
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 sed -i '/polkit-1/s|lib|libexec|' watchdog/dde_polkit_agent.go
 sed -i '/deepin-daemon/s|lib|libexec|g' Makefile session.go \

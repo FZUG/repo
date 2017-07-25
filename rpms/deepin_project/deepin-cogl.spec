@@ -1,13 +1,10 @@
-%global commit 1e1e1b8a97ecfc07de37e3f2646290d5c38be34f
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-cogl
 Version:        1.22.5
 Release:        1%{?dist}
 Summary:        An object oriented GL/GLES Abstraction/Utility Layer for Deepin
 License:        GPLv2
 URL:            https://github.com/linuxdeepin/deepin-cogl
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  intltool libtool
 BuildRequires:  glib2-devel gtk-doc
@@ -46,7 +43,7 @@ Obsoletes:      cogl-devel < %{version}-%{release}
 Header files and libraries for building and developing apps with %{name}.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 NOCONFIGURE=1 ./autogen.sh
 
 %build

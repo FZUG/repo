@@ -1,13 +1,10 @@
-%global commit 8f4a8ab0a3d94765cce0c4af2aa809bfa48ad9c4
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-gettext-tools
 Version:        1.0.6
 Release:        1%{?dist}
 Summary:        Deepin Gettext Tools
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-gettext-tools
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -31,7 +28,7 @@ update-pot - scan msgid and generate pot file according to the ini file.
 generate-mo - scan po files and generate mo files according to the ini file.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 # fix shebang
 find -iname "*.py" | xargs sed -i '1s|.*|#!%{__python3}|'

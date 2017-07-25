@@ -1,24 +1,20 @@
 %global project dde-account-faces
 %global repo %{project}
 
-%global commit 799e6aa0605167bab6b283aa1114c8aee555a45f
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-account-faces
 Version:        1.0.10
 Release:        1%{?dist}
 Summary:        Account faces for Linux Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-account-faces
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 BuildArch:      noarch
-Provides:       %{repo} = %{version}-%{release}
 
 %description
 Account faces for Linux Deepin
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 
 %build
 

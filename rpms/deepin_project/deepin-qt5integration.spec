@@ -1,16 +1,13 @@
 %global project qt5integration
 %global repo %{project}
 
-%global commit 2cd743211e66fe9ddd4db820c5c84d11e378478d 
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-qt5integration
 Version:        0.2.1
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/qt5integration
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 # full build requires
 BuildRequires:  git
@@ -51,7 +48,7 @@ Recommends:     deepin-file-manager
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -61,6 +58,8 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %make_install INSTALL_ROOT=%{buildroot}
 
 %files
+%doc README.md
+%license LICENSE
 %{_qt5_plugindir}/platforms/libdxcb.so
 %{_qt5_plugindir}/platformthemes/libqdeepin.so
 %{_qt5_plugindir}/styles/libdstyleplugin.so

@@ -1,16 +1,13 @@
 %global project dde-dock
 %global repo %{project}
 
-%global commit bf79f1cca5edefd14bc823c8dbdb7a4a334b3671
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-dock
 Version:        4.3.3
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-dock
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-qt-dbus-factory-devel
@@ -42,7 +39,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}.
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 sed -i '/target.path/s|lib|%{_lib}|' plugins/*/*.pro
 sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp

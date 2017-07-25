@@ -1,13 +1,10 @@
-%global commit 32225b9ad60e1fcaee81312ea521f45b6fa5c78f
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           dtksettings
 Version:        0.1.7
 Release:        1%{?dist}
 Summary:        DtkSettings is a powerful tool to generate config from json
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtksettings
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  qt5-qtbase-devel
 
 %description
@@ -21,7 +18,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}

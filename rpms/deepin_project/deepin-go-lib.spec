@@ -1,19 +1,14 @@
 %global project go-lib
 %global repo %{project}
 
-%global commit 3c9791f1a391d7de7d50ee4e308da669143e2060
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-%{repo}
 Version:        1.0.5
 Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
-
 Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/go-lib
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
-
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  golang
 
@@ -22,7 +17,7 @@ DLib is a set of Go bindings/libraries for DDE development.
 Containing dbus (forking from guelfey), glib, gdkpixbuf, pulse and more.
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 
 %build
 

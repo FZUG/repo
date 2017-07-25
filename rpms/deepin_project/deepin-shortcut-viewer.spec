@@ -1,13 +1,10 @@
-%global commit 729e82d50a05d88eae61ccbf24f5b2b78eba34db
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-shortcut-viewer
 Version:        1.3.1
 Release:        1%{?dist}
 Summary:        Deepin Shortcut Viewer
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-shortcut-viewer
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  deepin-tool-kit-devel
@@ -17,7 +14,7 @@ Provides:       bundled(CuteLogger)
 Deepin Shortcut Viewer
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}

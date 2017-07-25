@@ -1,13 +1,10 @@
-%global commit 0b40582e71266f10e8f2739aa558b9eef6a1f890
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-mutter
 Version:        3.20.20
 Release:        1%{?dist}
 Summary:        Base window manager for deepin, fork of gnome mutter
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-mutter
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  intltool
 BuildRequires:  gnome-common
@@ -43,7 +40,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for base window manager for deepin, fork of gnome mutter.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 ./autogen.sh
@@ -80,8 +77,8 @@ fi
 /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null ||:
 
 %files -f %{name}.lang
-%license LICENSE
 %doc README.md
+%license LICENSE
 %{_bindir}/%{name}
 %{_libdir}/lib%{name}.so.*
 %{_libdir}/%{name}/

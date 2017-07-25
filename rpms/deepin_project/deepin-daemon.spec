@@ -1,17 +1,13 @@
 %global project dde-daemon
 %global repo %{project}
 
-%global commit 0f8418aba5e0ae9552d391d16b4bcc43e36649c9
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-daemon
 Version:        3.1.14
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
-
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Source1:        deepin-daemon.sysusers
 
 BuildRequires:  git
@@ -70,13 +66,12 @@ Recommends:     NetworkManager-openvpn-gnome
 Recommends:     NetworkManager-openconnect-gnome
 Recommends:     iso-codes
 Recommends:     mobile-broadband-provider-info
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
 Daemon handling the DDE session settings
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile

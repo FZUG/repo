@@ -1,16 +1,13 @@
 %global project dde-control-center
 %global repo %{project}
 
-%global commit 21d68b62443fa54907db82e2d998a0c9cefbac37
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-control-center
 Version:        4.2.4
 Release:        1%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-control-center
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-dock-devel
@@ -30,13 +27,12 @@ Requires:       GeoIP-GeoLite-data
 Requires:       GeoIP-GeoLite-data-extra
 Requires:       startdde
 Requires:       gtk-murrine-engine
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
 New control center for linux deepin.
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 sed -i -E '/target.path|utils.path/s|lib|%{_lib}|' plugins/*/*.pro

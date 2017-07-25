@@ -1,6 +1,3 @@
-%global commit 82c4a12c49eee03c4caedb64c3d4407c26bba070
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
@@ -9,7 +6,7 @@ Release:        2%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-terminal
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  vala
@@ -43,7 +40,7 @@ Requires:       hicolor-icon-theme
 The %{name}-data package provides shared data for Deepin Terminal.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' project_path.c
 
 # fixes build fail for vala 0.36.3

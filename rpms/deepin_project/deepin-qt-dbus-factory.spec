@@ -1,16 +1,13 @@
 %global project dde-qt-dbus-factory
 %global repo %{project}
 
-%global commit becf8526235cedac20622e6e1973952c84a14392
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-qt-dbus-factory
 Version:        0.2.1
 Release:        1%{?dist}
 Summary:        A repository stores auto-generated Qt5 dbus code
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-qt-dbus-factory
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  python-devel
 BuildRequires:  pkgconfig(gl)
@@ -29,7 +26,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}.
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 
 %build
 %qmake_qt5 LIB_INSTALL_DIR=%{_libdir}

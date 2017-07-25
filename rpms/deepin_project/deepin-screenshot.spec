@@ -1,16 +1,12 @@
-%global commit b7483cfef3717f540e4db057baea13628f062b84
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-screenshot
 Version:        4.0.8
 Release:        1%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
-
 License:        GPLv3
 Group:          Applications/Internet
 Url:            https://github.com/linuxdeepin/deepin-screenshot
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  libXtst-devel
@@ -32,7 +28,7 @@ Provide a quite easy-to-use screenshot tool. Features:
   * 支持为截图添加文本和图形
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -53,7 +49,6 @@ if [ $1 -eq 1 ]; then
 fi
 
 %files
-%defattr(-,root,root,-)
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}

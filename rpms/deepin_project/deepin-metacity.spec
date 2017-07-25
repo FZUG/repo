@@ -1,13 +1,10 @@
-%global commit e9af397c7cfdb67d4d7425d32853ec5cb92c8816
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-metacity
 Version:        3.22.10
 Release:        1%{?dist}
 Summary:        2D window manager for Deepin
 License:        GPL
 URL:            https://github.com/linuxdeepin/deepin-metacity
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  intltool
 BuildRequires:  itstool
@@ -37,7 +34,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 ./autogen.sh

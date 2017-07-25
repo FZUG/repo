@@ -1,20 +1,17 @@
-%global commit 0045de406a143b798ac3b2fbe2b318b4a4894176
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-sound-theme
 Version:        15.10.1
 Release:        1%{?dist}
 Summary:        Deepin sound theme
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-sound-theme
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
 %description
 Deepin sound theme
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 %build
 
@@ -22,7 +19,8 @@ Deepin sound theme
 %make_install PREFIX=%{_prefix}
 
 %files
-%defattr(-,root,root,-)
+%doc README.md
+%license LICENSE
 %dir %{_datadir}/sounds/deepin/
 %dir %{_datadir}/sounds/deepin/stereo/
 %{_datadir}/sounds/deepin/index.theme

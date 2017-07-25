@@ -2,16 +2,13 @@
 %global __python %{__python3}
 %global debug_package %{nil}
 
-%global commit 3ae465ea1274ddef845683bc7d9a0425f8171f88
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-manual
 Version:        1.0.6
 Release:        1%{?dist}
 Summary:        Deepin User Manual
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-manual
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  npm sassc
 Requires:       deepin-qml-widgets
@@ -24,7 +21,7 @@ Requires:       python3-dae
 Deepin User Manual
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 sed -e 's|ln -sf /usr/bin/nodejs ./symdir/node||' \
     -e 's|sass |sassc |' \
@@ -44,6 +41,7 @@ rmdir %{buildroot}/etc{/xdg/autostart,/xdg,}
 
 %files
 %doc README.md
+%license LICENSE
 %{_bindir}/dman
 %{_datadir}/%{name}/
 %{_datadir}/dman/dman/

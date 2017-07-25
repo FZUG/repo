@@ -1,16 +1,13 @@
 %global project dde-desktop
 %global repo %{project}
 
-%global commit a9a4c9e262e7e8373d02201821d6e2143cbe5481
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-desktop
 Version:        4.0.4
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Desktop module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-desktop
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  boost-devel
 BuildRequires:  deepin-file-manager-devel
@@ -28,13 +25,12 @@ Requires:       deepin-daemon
 Requires:       deepin-qt5integration
 Requires:       startdde
 #Requires:       deepin-nautilus-properties
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 
 %description
 Deepin desktop-environment - Desktop module
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 sed -i 's|-0-2||g' build.pri
 sed -i 's|lrelease|lrelease-qt5|g' app/translate_generation.sh
 sed -i 's|/usr/lib|%{_libexecdir}|' app/view/canvasgridview.cpp

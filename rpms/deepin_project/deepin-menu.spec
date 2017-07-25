@@ -1,13 +1,10 @@
-%global commit 3ab1c65cabf80cab3e8ae5d045500601b2bffcc9
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-menu
 Version:        3.1.5
 Release:        1%{?dist}
 Summary:        Deepin menu service
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-menu
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-tool-kit-devel
@@ -23,7 +20,7 @@ Requires:       python-qt5
 Deepin menu service for building beautiful menus.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 
 # Remove python shebang
 find -iname "*.py" | xargs sed -i '/env python/d'

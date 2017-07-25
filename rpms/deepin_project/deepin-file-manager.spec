@@ -1,16 +1,13 @@
 %global project dde-file-manager
 %global repo %{project}
 
-%global commit 9308953ef9b3f5ea42caebe3d191340d5392e750
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-file-manager
 Version:        4.1.8
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
-Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  atk-devel
 BuildRequires:  deepin-gettext-tools
@@ -57,7 +54,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}.
 
 %prep
-%setup -q -n %{repo}-%{commit}
+%setup -q -n %{repo}-%{version}
 sed -i 's|-0-2||g' %{repo}*/*.pro usb-device-formatter/usb-device-formatter.pro
 sed -i 's|lrelease|lrelease-qt5|' %{repo}*/generate_translations.sh \
   usb-device-formatter/generate_translations.sh \
