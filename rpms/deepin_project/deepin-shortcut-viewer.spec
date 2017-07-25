@@ -11,6 +11,7 @@ Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  deepin-tool-kit-devel
+Provides:       bundled(CuteLogger)
 
 %description
 Deepin Shortcut Viewer
@@ -26,6 +27,8 @@ Deepin Shortcut Viewer
 %make_install INSTALL_ROOT="%{buildroot}"
 
 %files
+%doc README.md
+%license LICENSE
 %{_bindir}/%{name}
 
 %changelog
