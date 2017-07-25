@@ -60,19 +60,27 @@ fi
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.0.8-1.gitb7483cf
 - Update to 4.0.8
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.0-1.gitcb50df2
 - Update to 4.0.0
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.1.10-1.gitb0cc9f8
 - Update to 3.1.10
+
 * Fri Jul  3 2015 mosquito <sensor.wen@gmail.com> - 3.0.2-1.git753410c
 - Update version to 3.0.2-1.git753410c
+
 * Wed Dec 31 2014 mosquito <sensor.wen@gmail.com> - 2.1git20141231-1
 - Update version to 2.1git20141231
+
 * Mon Dec 15 2014 mosquito <sensor.wen@gmail.com> - 2.1git20141212-1
 - Update version to 2.1git20141212
+
 * Tue Nov  4 2014 mosquito <sensor.wen@gmail.com> - 2.1git20141104-1
 - Update version to 2.1git20141104
+
 * Mon Oct  6 2014 mosquito <sensor.wen@gmail.com> - 2.1git20140926-2
 - Fixed depends
+
 * Sun Oct  5 2014 mosquito <sensor.wen@gmail.com> - 2.1git20140926-1
 - Initial build

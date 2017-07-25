@@ -46,15 +46,21 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 4.1.4-1.gitbe7e408
 - Update to 4.1.4
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.1.3-1.git1cc701f
 - Update to 4.1.3
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.11-1.git67081d3
 - Update to 4.0.11
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.7-1.gitf2df6ea
 - Update to 4.0.7
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.4-1.git8b1a2dd
 - Update to 4.0.4
+
 * Sun Dec 04 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.3-1
 - Updated to version 4.0.3
+
 * Sat Oct 01 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.2-1
 - Initial package build

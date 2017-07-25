@@ -68,13 +68,18 @@ make install-qml DESTDIR=%{buildroot} QT5_LIBDIR=%{_qt5_prefix} -C old
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.6-1.git0ef9267
 - Update to 3.1.6
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.4-1.git2308ee3
 - Update to 3.1.4
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.0-1.git1fb380c
 - Update to 3.1.0
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.9-1.git247464a
 - Update to 3.0.9
+
 * Sun Jul  5 2015 mosquito <sensor.wen@gmail.com> - 2.90.0-1.git402c0f2
 - Update version to 2.90.0-1.git402c0f2
+
 * Mon Sep 29 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20140928-1
 - Initial build

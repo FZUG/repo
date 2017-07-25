@@ -50,5 +50,6 @@ libtool --mode=install /bin/install -c %{name} deepin-open-chooser %{buildroot}%
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.14.3-1.git859b113
 - Update to 3.14.3
+
 * Sun Oct 02 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.14.3-1
 - Initial package build

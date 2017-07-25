@@ -37,15 +37,21 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.11-1.gitd2c7b9e
 - Update to 1.0.11
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.0.7-1.gita8a4f5b
 - Update to 1.0.7
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 1.0.4-1.gitb59053f
 - Update to 1.0.4
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.3-1.gitd7e42a1
 - Update to 1.0.3
+
 * Mon Dec 19 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.3-1
 - Update to version 1.0.3
+
 * Fri Dec 09 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.2-2
 - Rebuild with newer deepin-tool-kit
+
 * Sun Oct 09 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.2-1
 - Initial package build

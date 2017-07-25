@@ -58,7 +58,9 @@ rm -rf %{buildroot}%{_libdir}/qt5/tests
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.1.20160329-1-1
 - Update to 0.1.20160329
+
 * Tue Jan 03 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 0.1.20160329-2
 - Major rewrite of SPEC file
+
 * Sun Oct 02 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.1.20160329-1
 - Initial package build

@@ -57,7 +57,9 @@ make USE_GCCGO=0
 %changelog
 * Fri Feb 3 2017 mosquito <sensor.wen@gmail.com> - 0.1.16-2.git2032d5a
 - Fix not work wallpaper choose
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.1.16-1.git2032d5a
 - Update to 0.1.16
+
 * Sat Oct 01 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.1.16-1
 - Initial package build

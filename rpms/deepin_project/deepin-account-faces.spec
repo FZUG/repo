@@ -27,5 +27,6 @@ Account faces for Linux Deepin
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.10-1.git799e6aa
 - Update to 1.0.10
+
 * Sun Oct 09 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.10-1
 - Initial package build

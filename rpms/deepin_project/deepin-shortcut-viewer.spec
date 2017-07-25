@@ -31,9 +31,12 @@ Deepin Shortcut Viewer
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git729e82d
 - Update to 1.3.1
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.2-1.git760b082
 - Update to 1.0.2
+
 * Sun Dec 04 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.02-1
 - Updated to version 1.02-1
+
 * Mon Oct 10 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.01-1
 - Initial package build

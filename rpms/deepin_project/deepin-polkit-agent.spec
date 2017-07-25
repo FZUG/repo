@@ -39,5 +39,6 @@ sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.d
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.0.10-1.git680c12f
 - Update to 0.0.10
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 0.0.8-1.git7e0fcbc
 - Initial package build

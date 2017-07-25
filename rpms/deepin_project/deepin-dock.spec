@@ -68,19 +68,27 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.3.3-1.gitbf79f1c
 - Update to 4.3.3
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.2.1-1.git42610ae
 - Update to 4.2.1
+
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 4.1.4-1.gitd772fe2
 - Update to 4.1.4
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.1.3-1.git26f189d
 - Update to 4.1.3
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.8-1.gita882590
 - Update to 4.0.8
+
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.7-1
 - Update to version 4.0.7 and renamed to deepin-dock
+
 * Mon Dec 19 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.6-1
 - Update to version 4.0.6
+
 * Sun Dec 04 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.5-2
 - Rebuild with newer deepin-tool-kit
+
 * Sun Oct 02 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.5-1
 - Initial package build

@@ -76,17 +76,24 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.22.10-1.gite9af397
 - Update to 3.22.10
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.22.8-1.gitcb3e4c5
 - Update to 3.22.8
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.22.3-1.git4a90335
 - Update to 3.22.3
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.22.0-1.gitb633b85
 - Update to 3.22.0
+
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.22.0-1
 - Update to version 3.22.0
+
 * Thu Jan 05 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.20.6-2
 - Split the package to main and devel
+
 * Fri Dec 16 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.20.6-1
 - Update to version 3.20.6
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.20.5-1
 - Initial package build

@@ -52,7 +52,9 @@ fi
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 1.3.1-1.git6cf1cb9
 - Update to 1.3.1
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.3-1.git6c05bf1
 - Update to 1.3
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.2-1.git2a95a46
 - Initial build

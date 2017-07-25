@@ -40,19 +40,27 @@ make test
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1.giteeea1d4
 - Update to 3.1.14
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git95af7cd
 - Update to 3.1.13
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.6-1.gita41ca06
 - Update to 3.1.6
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.1-1.gitf6ffe70
 - Update to 3.1.1
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.13-1.git10efc5e
 - Update to 3.0.13
+
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.13-1
 - Update to version 3.0.13
+
 * Sat Dec 10 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.12-1
 - Update to version 3.0.12
+
 * Thu Oct 27 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.11-1
 - Update to version 3.0.11
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.10-1
 - Initial package build

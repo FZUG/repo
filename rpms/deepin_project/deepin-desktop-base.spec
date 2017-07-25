@@ -46,13 +46,18 @@ rm -r %{buildroot}%{_datadir}/python-apt
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2016.12.6-1.git94a22cf
 - Update to 2016.12.6
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2016.11.30-1.gita0f52f3
 - Update to 2016.11.30
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2016.11.29-1.git477c9a7
 - Update to 2016.11.29
+
 * Fri Dec 16 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 2016.11.28-1
 - Update package to version 2016.11.28
+
 * Sat Dec 03 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 2016.02.03-1
 - Update package to version 2016.02.03
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 2016.02.02-1
 - Initial package build

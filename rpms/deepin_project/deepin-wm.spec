@@ -80,15 +80,21 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.9.14-1.git90453e3
 - Update to 1.9.14
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.9.12-1.git42cd230
 - Update to 1.9.12
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 1.9.5-1.git3d3e077
 - Update to 1.9.5
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.9.2-1.git4cb2f7e
 - Update to 1.9.2
+
 * Wed Jan 04 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 1.2.0-2
 - Split the package to main and devel
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.2.0-1
 - Update to version 1.2.0
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.1.2-1
 - Initial package build

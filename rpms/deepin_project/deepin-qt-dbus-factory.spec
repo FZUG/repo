@@ -52,11 +52,15 @@ Header files and libraries for %{name}.
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1.gitbecf852
 - Update to 0.2.1
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.2.0-1.git98d9901
 - Update to 0.2.0
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 0.1.0-1.git9adc304
 - Update to 0.1.0
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.0.4-1.gitefa4f7f
 - Update to 0.0.4
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.0.3-1.gitffda1af
 - Initial build

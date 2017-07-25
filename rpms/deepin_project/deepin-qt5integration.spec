@@ -67,13 +67,18 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1.git2cd7432
 - Update to 0.2.1
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 0.1.8-1.gitb03be20
 - Update to 0.1.8
+
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 0.1.2-1.gitecde076
 - Update to 0.1.2
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.1.1-1.gitaa563fd
 - Update to 0.1.1
+
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 0.0.6-1.git40401af
 - Update to 0.0.6
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.0.5-1.gitc0dc3cf
 - Initial build

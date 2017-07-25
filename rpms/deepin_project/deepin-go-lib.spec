@@ -35,13 +35,18 @@ rm -rf %{buildroot}%{gopath}/src/pkg.deepin.io/lib/debian
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.5-1.git3c9791f
 - Update to 1.0.5
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.0.3-1.gitb084e27
 - Update to 1.0.3
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.5.5-1.git01150d5
 - Update to 0.5.5
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.5.3-1.git44767e8
 - Update to 0.5.3
+
 * Sun Jul 12 2015 mosquito <sensor.wen@gmail.com> - 0.3.0-1.git98ac007
 - Update to 0.3.0-1.git98ac007
+
 * Mon Sep 29 2014 mosquito <sensor.wen@gmail.com> - 0.0.4git20140928-1
 - Initial build

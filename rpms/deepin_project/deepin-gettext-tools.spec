@@ -62,9 +62,12 @@ install -m755 src/update_pot.py %{buildroot}%{_bindir}/deepin-update-pot
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.6-1.git8f4a8ab
 - Update to 1.0.6
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.4-1.git4303c4a
 - Rebuild
+
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.4-1
 - Update to version 1.0.4
+
 * Wed Oct 12 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.3-1
 - Initial package build

@@ -58,29 +58,42 @@ popd
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.3.5-1.git3813576
 - Update to 2.3.5
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.3.4-1.gitef84331
 - Update to 2.3.4
+
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 2.3.0-1.gita864d6f
 - Update version to 2.3.0-1.gita864d6f
+
 * Wed Dec 31 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141231-1
 - Update version to 0.0.2git20141231
+
 * Tue Dec 23 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141216-1
 - Update version to 0.0.2git20141216
+
 * Mon Dec 15 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141214-1
 - Update version to 0.0.2git20141214
+
 * Mon Dec 08 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141205-1
 - Update version to 0.0.2git20141205
+
 * Thu Dec 04 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141204-1
 - Update version to 0.0.2git20141204
+
 * Wed Dec 03 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141202-1
 - Update version to 0.0.2git20141202
+
 * Tue Dec 02 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141201-1
 - Update version to 0.0.2git20141201
+
 * Tue Nov 18 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141117-1
 - Update version to 0.0.2git20141117
+
 * Wed Nov 12 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141112-1
 - Update version to 0.0.2git20141112
+
 * Tue Nov 4 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20141104-1
 - Update version to 0.0.2git20141104
+
 * Mon Sep 29 2014 mosquito <sensor.wen@gmail.com> - 0.0.2git20140925-1
 - Initial build

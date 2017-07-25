@@ -50,5 +50,6 @@ rmdir %{buildroot}/etc{/xdg/autostart,/xdg,}
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.6-1.git3ae465e
 - Update to 1.0.6
+
 * Wed Dec 21 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.0.5-1
 - Initial package build

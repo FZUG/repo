@@ -29,5 +29,6 @@ Deepin sound theme
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 15.10.1-1.git0045de4
 - Update to 15.10.1
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek
 - Initial package build

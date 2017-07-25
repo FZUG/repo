@@ -105,25 +105,36 @@ sed -i 's|lib/gvfs|libexec|' dde-file-manager-lib/gvfs/networkmanager.cpp
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.1.8-1.git9308953
 - Update to 4.1.8
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.1.5-1.git99d7597
 - Update to 4.1.5
+
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 1.4.1-1.gite303113
 - Update to 1.4.1
+
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 1.3.8-1.git207000d
 - Update to 1.3.8
+
 * Sun Jan 22 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-2.gitf1915f8
 - Add Req for run command
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-1.gitf1915f8
 - Update to 1.3.7
+
 * Thu Jan 12 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 1.3.6-3
 - Fixed broken icon link noticed by Brenton Horne <brentonhorne77@gmail.com>
+
 * Fri Jan 06 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 1.3.6-2
 - Fixed build dependecies
+
 * Fri Dec 30 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.3.6-1
 - Update package to 1.3.6 and rename to deepin-file-manager
+
 * Mon Dec 19 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.3.4-1
 - Update package to 1.3.4
+
 * Mon Oct 10 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.3.3-1
 - Update package to 1.3.3
+
 * Mon Oct 10 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.2.3-1
 - Initial package build

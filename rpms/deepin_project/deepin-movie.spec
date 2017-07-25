@@ -92,14 +92,19 @@ fi
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.2.14-1.git69123ed
 - Update to 2.2.14
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 2.2.13-1.gita1ba8c3
 - Update to 2.2.13
+
 * Sat Jan 28 2017 mosquito <sensor.wen@gmail.com> - 2.2.11-2.git7896696
 - Fix cannot register existing type 'GdkDisplayManager'
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.2.11-1.git7896696
 - Update to 2.2.11
+
 * Thu Jul 16 2015 mosquito <sensor.wen@gmail.com> - 2.2.2-2.git53adfc6
 - python-peewee(>=2.3.0,<=2.4.4)
 - remove some depends
+
 * Sat Jul  4 2015 mosquito <sensor.wen@gmail.com> - 2.2.2-1.git53adfc6
 - Initial build

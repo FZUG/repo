@@ -57,21 +57,30 @@ sed -i -E '/test|examples/d' dtk.pro
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.3.1-1.gite867696
 - Update to 0.3.1
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 0.2.9-1.git8850f8d
 - Update to 0.2.9
+
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 0.2.5-1.gitcc5757f
 - Update to 0.2.5
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 0.2.4-1.git2c1f4ec
 - Update to 0.2.4
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1.git20e3672
 - Update to 0.2.1
+
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 0.2.1-1
 - Updated package to 0.2.1
+
 * Thu Jan 05 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 0.2.0-2
 - Split the package to main and devel
+
 * Sun Dec 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.2.0-1
 - Updated package to 1.7
+
 * Sat Dec 03 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.1.7-1
 - Updated package to 1.7
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.1.6-1
 - Initial package build

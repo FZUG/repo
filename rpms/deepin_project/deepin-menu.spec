@@ -63,25 +63,36 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.5-1.git3ab1c65
 - Update to 3.1.5
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.4-1.gita4c0bf8
 - Update to 3.1.4
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.git3aee346
 - Update to 3.1.2
+
 * Tue Feb 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.10-1.git3750b2f
 - Update to 3.0.10
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.7-1.git6038c51
 - Update to 3.0.7
+
 * Wed Jul 01 2015 mosquito <sensor.wen@gmail.com> - 2.90.0-1.git7557d46
 - Update version to 2.90.0-1.git7557d46
+
 * Wed Dec 03 2014 mosquito <sensor.wen@gmail.com> - 1.1git20141202-1
 - Update version to 1.1git20141202
+
 * Mon Dec 01 2014 mosquito <sensor.wen@gmail.com> - 1.1git20141124-1
 - Update version to 1.1git20141124
+
 * Tue Nov 18 2014 mosquito <sensor.wen@gmail.com> - 1.1git20141113-1
 - Update version to 1.1git20141113
+
 * Tue Nov 4 2014 mosquito <sensor.wen@gmail.com> - 1.1git20141028-1
 - Update version to 1.1git20141028
+
 * Thu Oct 9 2014 mosquito <sensor.wen@gmail.com> - 1.1git20140923-2
 - Fixed depends
+
 * Mon Sep 29 2014 mosquito <sensor.wen@gmail.com> - 1.1git20140923-1
 - Initial build

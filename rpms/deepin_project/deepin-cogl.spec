@@ -83,11 +83,15 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %changelog
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.22.5-1.git1e1e1b8
 - Update to 1.22.5
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.22.3-1.git9ee8ef2
 - Update to 1.22.3
+
 * Sat Dec 17 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.22.3-3
 - Redone package in a newer format
+
 * Sat Dec 17 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.22.3-2
 - Added conflict and obsolete for cogl library
+
 * Fri Dec 16 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 1.22.3-1
 - Initial package build

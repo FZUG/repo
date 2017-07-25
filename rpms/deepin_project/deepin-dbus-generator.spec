@@ -41,9 +41,12 @@ export GOPATH="%{gopath}"
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.6.6-1.gitace6ac0
 - Update to 0.6.6
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.6.5-1.git9f8b51d
 - Update to 0.6.5
+
 * Sun Jul 12 2015 mosquito <sensor.wen@gmail.com> - 0.0.3-1.git84ee26c
 - Update to 0.0.3-1.git84ee26c
+
 * Mon Sep 29 2014 mosquito <sensor.wen@gmail.com> - 0.0.3git20140924-1
 - Initial build

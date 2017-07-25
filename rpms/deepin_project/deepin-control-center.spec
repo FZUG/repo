@@ -69,23 +69,33 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.4-1.git21d68b6
 - Update to 4.2.4
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.2.3-1.git2f420f2
 - Update to 4.2.3
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.1.2-1.git4d3827b
 - Update to 4.1.2
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.7-1.git10c3be2
 - Update to 4.0.7
+
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.0.24-1.git481255b
 - Downgrade to 3.0.24 for end user
+
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-2.git8b1a736
 - Fix can not start
+
 * Thu Jan 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-1.git8b1a736
 - Update to 4.0.2
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-1.gitd1c1c9a
 - Update to 4.0.1
+
 * Tue Dec 27 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.24-2
 - Bump to newer release because of copr signature
+
 * Fri Dec 09 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.24-1
 - Upgrade to 3.0.24
+
 * Sun Oct 09 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.21-1
 - Initial package build

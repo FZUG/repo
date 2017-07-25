@@ -134,21 +134,30 @@ rm -f /var/cache/deepin/mark-setup-network-services
 %changelog
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1.git0f8418a
 - Update to 3.1.14
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git03541ad
 - Update to 3.1.13
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.9-1.git82313d2
 - Update to 3.1.9
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.3-1.git87df955
 - Update to 3.1.3
+
 * Fri Jan 20 2017 mosquito <sensor.wen@gmail.com> - 3.0.25.2-1.gitcfbe9c8
 - Update to 3.0.25.2
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.25.1-1.gitde04735
 - Update to 3.0.25.1
+
 * Sun Dec 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.24-2
 - Changed GOLANG dependencies
+
 * Sun Dec 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.24-1
 - Upgrade to version 3.0.24
+
 * Mon Oct 31 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.23-1
 - Upgrade to version 3.0.23
+
 * Sun Sep 25 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.22-1
 - Initial package build

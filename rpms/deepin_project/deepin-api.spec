@@ -84,17 +84,24 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.10-1.git79125e7
 - Update to 3.1.10
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.7-1.git4c8e030
 - Update to 3.1.7
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitf93dbd7
 - Update to 3.1.2
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.16.1-1.gitcfdb295
 - Update to 3.0.16.1
+
 * Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.16-1
 - Update to version 3.0.16
+
 * Sun Dec 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.15-1
 - Update to version 3.0.15
+
 * Wed Dec 07 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.14-2
 - Changed compilation procedure
+
 * Wed Sep 28 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.14-1
 - Initial package build

@@ -31,9 +31,12 @@ cp -r image-blur %{buildroot}/%{_var}/cache/
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.6-1.git3e5c89d
 - Update to 1.6
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.4-1.gita54c282
 - Update to 1.4
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.3-1.gitdbc981b
 - Update to 1.3
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek
 - Initial package build

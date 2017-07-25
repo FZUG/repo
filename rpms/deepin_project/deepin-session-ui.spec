@@ -81,11 +81,15 @@ EOF
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.0.13-1.git4cadab1
 - Update to 4.0.13
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 4.0.6-1.git1511ccf
 - Update to 4.0.6
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.0.27-1.git6a09cb4
 - Update to 3.0.27
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.23-1.git9db2f1d
 - Update to 3.0.23
+
 * Sun Dec 11 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.22-1
 - Initial package build

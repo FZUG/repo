@@ -54,18 +54,25 @@ export GOPATH="%{gopath}"
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git08de5b9
 - Update to 3.1.13
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.1.8-1.gita9130d0
 - Update to 3.1.8
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1.gitd7c1216
 - Update to 3.1.2
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.0.14.1-1.gitd3ba123
 - Update to 3.0.14.1
+
 * Wed Dec 28 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.13-2
 - Updated GO dependencies
 - Fixed wrong system path for dde-readahead
+
 * Sun Dec 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.13-1
 - Update to package 3.0.13
+
 * Sat Oct 01 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.12-1
 - Update to package 3.0.12
+
 * Sat Oct 01 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.11-1
 - Initial package build

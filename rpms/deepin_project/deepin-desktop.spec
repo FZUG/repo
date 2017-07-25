@@ -53,15 +53,21 @@ sed -i 's|/usr/lib|%{_libexecdir}|' app/view/canvasgridview.cpp
 %changelog
 * Tue Mar  7 2017 mosquito <sensor.wen@gmail.com> - 4.0.4-1.gita9a4c9e
 - Update to 4.0.4
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 4.0.2-1.git5dbbc8b
 - Update to 4.0.2
+
 * Fri Feb  3 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-2.git6468342
 - Fix not work wallpaper choose
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 4.0.1-1.git6468342
 - Update to 4.0.1
+
 * Mon Dec 19 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 4.0.0-1
 - Update to version 4.0.0
+
 * Sun Dec 04 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.15-2
 - Rebuild with newer deepin-tool-kit
+
 * Sun Oct 02 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.0.15-1
 - Initial package build

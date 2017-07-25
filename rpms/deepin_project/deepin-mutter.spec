@@ -97,15 +97,21 @@ fi
 %changelog
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.20.20-1.git0b40582
 - Update to 3.20.20
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 3.20.17-1.git6b2b181
 - Update to 3.20.17
+
 * Sun Feb 26 2017 mosquito <sensor.wen@gmail.com> - 3.20.11-1.git3834231
 - Update to 3.20.11
+
 * Sat Jan 21 2017 mosquito <sensor.wen@gmail.com> - 3.20.8-1.git3c2a807
 - Update to 3.20.8
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 3.20.7-1.gitc86611b
 - Update to 3.20.7
+
 * Fri Dec 16 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.20.6-1
 - Update to version 3.20.6
+
 * Sun Sep 18 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 3.20.5-1
 - Initial package build
