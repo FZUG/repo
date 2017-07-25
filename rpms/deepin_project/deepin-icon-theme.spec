@@ -3,7 +3,7 @@
 
 Name:           deepin-icon-theme
 Version:        15.12.46
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin Icons
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-icon-theme

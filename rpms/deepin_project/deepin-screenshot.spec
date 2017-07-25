@@ -3,7 +3,7 @@
 
 Name:           deepin-screenshot
 Version:        4.0.8
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
 

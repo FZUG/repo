@@ -5,7 +5,7 @@
 
 Name:           deepin-terminal
 Version:        2.5.1
-Release:        2.git%{shortcommit}%{?dist}
+Release:        2%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-terminal

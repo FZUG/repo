@@ -6,7 +6,7 @@
 
 Name:           deepin-qml-widgets
 Version:        2.3.5
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin QML widgets
 Summary(zh_CN): 深度 QML 部件库
 

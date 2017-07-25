@@ -3,7 +3,7 @@
 
 Name:           deepin-gtk-theme
 Version:        17.10.3
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin GTK Theme
 License:        LGPLv3
 URL:            https://github.com/linuxdeepin/deepin-gtk-theme

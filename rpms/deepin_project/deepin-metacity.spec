@@ -3,7 +3,7 @@
 
 Name:           deepin-metacity
 Version:        3.22.10
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        2D window manager for Deepin
 License:        GPL
 URL:            https://github.com/linuxdeepin/deepin-metacity

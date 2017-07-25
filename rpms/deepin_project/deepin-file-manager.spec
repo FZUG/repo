@@ -6,7 +6,7 @@
 
 Name:           deepin-file-manager
 Version:        4.1.8
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager

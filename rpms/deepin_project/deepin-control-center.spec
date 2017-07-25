@@ -6,7 +6,7 @@
 
 Name:           deepin-control-center
 Version:        4.2.4
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        New control center for linux deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-control-center

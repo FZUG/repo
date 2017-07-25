@@ -3,7 +3,7 @@
 
 Name:           deepin-artwork-themes
 Version:        15.12.4
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin artwork themes
 License:        LGPL3
 URL:            https://github.com/linuxdeepin/deepin-artwork-themes

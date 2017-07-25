@@ -3,7 +3,7 @@
 
 Name:           deepin-desktop-schemas
 Version:        3.1.14
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        GSettings deepin desktop-wide schemas
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-desktop-schemas

@@ -6,7 +6,7 @@
 
 Name:           python2-%{repo}
 Version:        0.0.1
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        An incomplete xcb-util port plus some extras
 
 Group:          Development/Libraries

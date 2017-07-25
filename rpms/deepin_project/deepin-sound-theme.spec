@@ -3,7 +3,7 @@
 
 Name:           deepin-sound-theme
 Version:        15.10.1
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin sound theme
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-sound-theme

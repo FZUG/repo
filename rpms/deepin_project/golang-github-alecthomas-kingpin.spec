@@ -12,7 +12,7 @@
 
 Name:       golang-%{provider}-%{project}-%{repo}
 Version:    2.2.3
-Release:    1.git%{shortcommit}%{?dist}
+Release:    1%{?dist}
 Summary:    A Go command line and flag parser
 
 License:    MIT

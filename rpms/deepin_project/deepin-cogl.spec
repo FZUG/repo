@@ -3,7 +3,7 @@
 
 Name:           deepin-cogl
 Version:        1.22.5
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        An object oriented GL/GLES Abstraction/Utility Layer for Deepin
 License:        GPLv2
 URL:            https://github.com/linuxdeepin/deepin-cogl

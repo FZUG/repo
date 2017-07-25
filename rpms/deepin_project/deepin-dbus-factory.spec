@@ -13,7 +13,7 @@
 
 Name:           deepin-%{repo}
 Version:        3.1.6
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Golang and QML DBus factory for DDE
 
 Group:          Development/Libraries

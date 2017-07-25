@@ -6,7 +6,7 @@
 
 Name:           deepin-daemon
 Version:        3.1.14
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 
 License:        GPLv3

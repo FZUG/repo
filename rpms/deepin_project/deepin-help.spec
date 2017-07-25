@@ -6,7 +6,7 @@
 
 Name:           deepin-help
 Version:        15.4.8
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Help files for DDE
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-help

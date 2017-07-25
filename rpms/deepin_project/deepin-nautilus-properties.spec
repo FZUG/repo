@@ -4,7 +4,7 @@
 
 Name:           deepin-nautilus-properties
 Version:        3.14.3
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Provide file property dialog for Deepin desktop environment
 License:        GPL
 URL:            https://github.com/linuxdeepin/deepin-nautilus-properties

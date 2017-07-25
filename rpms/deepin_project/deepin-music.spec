@@ -3,7 +3,7 @@
 
 Name:           deepin-music
 Version:        3.1.4
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
 License:        GPLv3

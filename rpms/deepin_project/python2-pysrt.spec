@@ -13,7 +13,7 @@
 
 Name:           python2-%{repo}
 Version:        1.1.1
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        pysrt is a Python library used to edit or create SubRip files.
 License:        GPLv3
 URL:            https://github.com/byroot/pysrt

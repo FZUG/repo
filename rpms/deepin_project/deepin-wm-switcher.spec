@@ -3,7 +3,7 @@
 
 Name:           deepin-wm-switcher
 Version:        1.1.2
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Window manager switcher for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wm-switcher

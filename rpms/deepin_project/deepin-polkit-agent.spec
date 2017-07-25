@@ -6,7 +6,7 @@
 
 Name:           deepin-polkit-agent
 Version:        0.0.10
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin Polkit Agent
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-polkit-agent

@@ -6,7 +6,7 @@
 
 Name:           deepin-session-ui
 Version:        4.0.13
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-session-ui

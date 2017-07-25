@@ -7,7 +7,7 @@
 
 Name:           python2-ass
 Version:        0.4.2
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Advanced SubStation Alpha subtitle files
 
 License:        MIT

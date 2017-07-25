@@ -3,7 +3,7 @@
 
 Name:           deepin-grub2-themes
 Version:        1.0.0
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin grub2 themes
 License:        LGPLv3
 URL:            https://github.com/linuxdeepin/deepin-grub2-themes

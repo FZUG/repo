@@ -6,7 +6,7 @@
 
 Name:           deepin-%{repo}
 Version:        1.0.5
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 
 Group:          Development/Libraries

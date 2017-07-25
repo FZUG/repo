@@ -14,7 +14,7 @@
 
 Name:       golang-%{provider}-%{project}-%{repo}
 Version:    0.9.0
-Release:    0.1.git%{shortcommit}%{?dist}
+Release:    0.1%{?dist}
 Summary:    File change notification Go language Binding.
 
 License:    fsnotify Authors

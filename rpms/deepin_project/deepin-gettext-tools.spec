@@ -3,7 +3,7 @@
 
 Name:           deepin-gettext-tools
 Version:        1.0.6
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin Gettext Tools
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-gettext-tools

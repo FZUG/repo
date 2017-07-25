@@ -3,7 +3,7 @@
 
 Name:           deepin-voice-recorder
 Version:        1.3.1
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin Voice Recorder
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-voice-recorder

@@ -4,7 +4,7 @@
 
 Name:           deepin-file-manager-backend
 Version:        0.1.16
-Release:        2.git%{shortcommit}%{?dist}
+Release:        2%{?dist}
 Summary:        Deepin file manager backend
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-file-manager-backend

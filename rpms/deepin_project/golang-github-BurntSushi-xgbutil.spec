@@ -12,7 +12,7 @@
 
 Name:       golang-%{provider}-%{project}-%{repo}
 Version:    0
-Release:    0.1.git%{shortcommit}%{?dist}
+Release:    0.1%{?dist}
 Summary:    XGB is the X protocol Go language Binding.
 
 License:    XGB Authors
