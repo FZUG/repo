@@ -48,7 +48,7 @@ install -d %{buildroot}%{_datadir}/applications/
 install -m644 %{name}.desktop %{buildroot}%{_datadir}/applications/
 
 install -d %{buildroot}/etc/xdg/autostart/
-ln -sfv %{_datadir}/applications/%{name}.desktop \
+ln -sfv ../../..%{_datadir}/applications/%{name}.desktop \
     %{buildroot}%{_sysconfdir}/xdg/autostart/
 
 %files
@@ -61,6 +61,9 @@ ln -sfv %{_datadir}/applications/%{name}.desktop \
 %{_datadir}/dbus-1/services/com.deepin.menu.service
 
 %changelog
+* Wed Jul 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.5-1
+- Update to 3.1.5
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.5-1.git3ab1c65
 - Update to 3.1.5
 
