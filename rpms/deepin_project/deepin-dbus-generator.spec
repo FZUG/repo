@@ -34,8 +34,8 @@ export GOPATH="%{gopath}"
 %make_install GOPATH="%{gopath}"
 
 %files
-%defattr(-,root,root,-)
 %doc README.md
+%license LICENSE
 %{_bindir}/dbus-generator
 
 %changelog
