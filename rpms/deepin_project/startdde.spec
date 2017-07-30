@@ -1,3 +1,5 @@
+%global debug_package %{nil}
+
 Name:           startdde
 Version:        3.1.13
 Release:        1%{?dist}
