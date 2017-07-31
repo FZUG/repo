@@ -11,7 +11,7 @@ BuildRequires:  deepin-tool-kit-devel
 Provides:       bundled(CuteLogger)
 
 %description
-Deepin Shortcut Viewer
+The program displays a shortcut key window when a JSON data is passed.
 
 %prep
 %setup -q
