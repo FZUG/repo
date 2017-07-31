@@ -2,7 +2,7 @@ Name:           deepin-menu
 Version:        3.1.5
 Release:        1%{?dist}
 Summary:        Deepin menu service
-License:        GPLv3
+License:        GPLv3+
 URL:            https://github.com/linuxdeepin/deepin-menu
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
