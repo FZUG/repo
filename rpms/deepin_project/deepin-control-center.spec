@@ -2,9 +2,9 @@
 %global repo %{project}
 
 Name:           deepin-control-center
-Version:        4.2.4
+Version:        4.2.5
 Release:        1%{?dist}
-Summary:        New control center for linux deepin
+Summary:        New control center for Linux Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-control-center
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
@@ -29,7 +29,7 @@ Requires:       startdde
 Requires:       gtk-murrine-engine
 
 %description
-New control center for linux deepin.
+New control center for Linux Deepin.
 
 %prep
 %setup -q -n %{repo}-%{version}
@@ -67,6 +67,9 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 %{_datadir}/%{repo}/
 
 %changelog
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 4.2.5-1
+- Update to 4.2.5
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.4-1.git21d68b6
 - Update to 4.2.4
 
