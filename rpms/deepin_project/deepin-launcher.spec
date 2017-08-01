@@ -2,7 +2,7 @@
 %global repo %{project}
 
 Name:           deepin-launcher
-Version:        4.1.4
+Version:        4.1.6
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
@@ -44,6 +44,9 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 4.1.6-1
+- Update to 4.1.6
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 4.1.4-1.gitbe7e408
 - Update to 4.1.4
 
