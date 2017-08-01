@@ -1,0 +1,22 @@
+commit fba6ea12ec4d7f9c547d61fb76bc48710fc98f55
+Author: Felix Yan <felixonmars@archlinux.org>
+Date:   Mon Jul 31 13:06:16 2017 +0800
+
+    Remove unimplemented slots
+    
+    The names are not used, and defining them in the headers will break
+    plugin loading with CXXFLAGS -fno-plt and LDFLAGS -z,now enabled,
+    causing a symbol not found error.
+    
+    Change-Id: I23c0cddbb856f645008c0306bf3ecefd27cae61f
+
+--- a/dde-dock-plugins/disk-mount/diskcontrolwidget.h
++++ b/dde-dock-plugins/disk-mount/diskcontrolwidget.h
+@@ -31,7 +31,6 @@ private slots:
+     void onVolume_removed(const QDiskInfo &diskInfo);
+     void onVolume_changed(const QDiskInfo &diskInfo);
+     void unmountDisk(const QString &diskId) const;
+-    void addMountDiskInfo(const QDiskInfo &diskInfo);
+ 
+ private:
+     QVBoxLayout *m_centralLayout;
