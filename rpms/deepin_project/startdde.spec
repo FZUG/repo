@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           startdde
-Version:        3.1.13
+Version:        3.1.14
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -54,6 +54,9 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1
+- Update to 3.1.14
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1.git08de5b9
 - Update to 3.1.13
 
