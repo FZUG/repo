@@ -1,14 +1,12 @@
 Name:           deepin-system-monitor
-Version:        0.0.9
+Version:        1.0.2
 Release:        1%{?dist}
 Summary:        A more user-friendly system monitor
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-system-monitor
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  pkgconfig(dtkbase)
-BuildRequires:  pkgconfig(dtkutil)
-BuildRequires:  pkgconfig(dtkwidget)
+BuildRequires:  dtkwidget-devel
 BuildRequires:  pkgconfig(libprocps)
 BuildRequires:  pkgconfig(xcb)
 BuildRequires:  pkgconfig(xcb-util)
@@ -60,7 +58,11 @@ fi
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/%{name}/translations/*.qm
+%{_datadir}/dman/%{name}/
 
 %changelog
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 1.0.2-1
+- Update to 1.0.2
+
 * Sat Jul 15 2017 mosquito <sensor.wen@gmail.com> - 0.0.4-1.gita73357d
 - Initial build
