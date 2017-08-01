@@ -2,7 +2,7 @@
 %global repo %{project}
 
 Name:           deepin-api
-Version:        3.1.10
+Version:        3.1.11
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3
@@ -70,6 +70,8 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %make_install SYSTEMD_LIB_DIR="/usr/lib" LIBDIR="/libexec"
 
 %files
+%doc README.md
+%license LICENSE
 %{_libexecdir}/%{name}/
 %{_unitdir}/*.service
 %{_datadir}/dbus-1/services/*.service
@@ -82,6 +84,9 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{gopath}/src/pkg.deepin.io/dde/api/
 
 %changelog
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 3.1.11-1
+- Update to 3.1.11
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.10-1.git79125e7
 - Update to 3.1.10
 
