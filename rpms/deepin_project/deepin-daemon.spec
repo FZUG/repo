@@ -2,7 +2,7 @@
 %global repo %{project}
 
 Name:           deepin-daemon
-Version:        3.1.14
+Version:        3.1.16.1
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -66,6 +66,8 @@ Recommends:     NetworkManager-openvpn-gnome
 Recommends:     NetworkManager-openconnect-gnome
 Recommends:     iso-codes
 Recommends:     mobile-broadband-provider-info
+Recommends:     google-noto-mono-fonts
+Recommends:     google-noto-sans-fonts
 
 %description
 Daemon handling the DDE session settings
@@ -101,6 +103,7 @@ go get gopkg.in/alecthomas/kingpin.v2 \
     github.com/fsnotify/fsnotify \
     github.com/axgle/mahonia \
     github.com/msteinert/pam \
+    github.com/nfnt/resize \
     golang.org/x/sys/unix \
     gopkg.in/yaml.v2
 %make_build
@@ -110,19 +113,41 @@ go get gopkg.in/alecthomas/kingpin.v2 \
 
 install -Dm644 %{S:1} %{buildroot}/usr/lib/sysusers.d/deepin-daemon.conf
 
+# fix systemd/logind config
+install -d %{buildroot}/usr/lib/systemd/logind.conf.d/
+cat > %{buildroot}/usr/lib/systemd/logind.conf.d/10-%{name}.conf <<EOF
+[Login]
+HandlePowerKey=ignore
+HandleSuspendKey=ignore
+EOF
+
 %find_lang %{repo}
 
 %post
-systemd-sysusers deepin-daemon.conf
+if [ $1 -ge 1 ]; then
+  systemd-sysusers deepin-daemon.conf
+  %{_sbindir}/alternatives --install %{_bindir}/x-terminal-emulator \
+    x-terminal-emulator %{_libexecdir}/%{name}/default-terminal 30
+fi
 
 %preun
-rm -f /var/cache/deepin/mark-setup-network-services
+if [ $1 -eq 0 ]; then
+  %{_sbindir}/alternatives --remove x-terminal-emulator \
+    %{_libexecdir}/%{name}/default-terminal
+fi
+
+%postun
+if [ $1 -eq 0 ]; then
+  rm -f /var/cache/deepin/mark-setup-network-services
+  rm -f /var/log/deepin.log 
+fi
 
 %files -f %{repo}.lang
 %doc README.md
 %license LICENSE
 %{_libexecdir}/%{name}/
 %{_prefix}/lib/sysusers.d/%{name}.conf
+%{_prefix}/lib/systemd/logind.conf.d/10-%{name}.conf
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/dbus-1/system.d/*.conf
@@ -132,6 +157,9 @@ rm -f /var/cache/deepin/mark-setup-network-services
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 3.1.16.1-1
+- Update to 3.1.16.1
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1.git0f8418a
 - Update to 3.1.14
 
