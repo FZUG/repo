@@ -14,6 +14,7 @@ BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  startup-notification-devel
+BuildRequires:  systemd-devel
 BuildRequires:  xcb-util-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
