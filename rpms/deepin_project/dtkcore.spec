@@ -37,7 +37,7 @@ Header files and libraries for %{name}.
 %{_libdir}/lib*.so.*
 
 %files devel
-%doc src/Specification.md
+%doc doc/Specification.md
 %{_includedir}/libdtk-*/
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib*.so
