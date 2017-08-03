@@ -2,7 +2,7 @@
 %global repo %{project}
 
 Name:           deepin-daemon
-Version:        3.1.16.1
+Version:        3.1.17
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -93,6 +93,9 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
 sed -i '/ScriptFile/s|grub/|grub2/|' grub2/log.go
 sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
+# https://github.com/niemeyer/gopkg/issues/50
+git config --global http.https://gopkg.in.followRedirects true
+
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
 go get gopkg.in/alecthomas/kingpin.v2 \
@@ -157,6 +160,9 @@ fi
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Wed Aug  2 2017 mosquito <sensor.wen@gmail.com> - 3.1.17-1
+- Update to 3.1.17
+
 * Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 3.1.16.1-1
 - Update to 3.1.16.1
 
