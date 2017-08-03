@@ -3,11 +3,12 @@
 
 Name:           deepin-gir-generator
 Version:        1.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Generate static golang bindings for GObject
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/go-gir-generator
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
+Patch0:         SettingsBackendLike.patch
 
 BuildRequires:  gcc-go
 BuildRequires:  gobject-introspection-devel
@@ -19,6 +20,13 @@ Generate static golang bindings for GObject
 %prep
 %setup -q -n %{repo}-%{version}
 
+GIO_VER=$(v=$(rpm -q --qf %{RPMTAG_VERSION} gobject-introspection); echo ${v//./})
+if [ $GIO_VER -ge 1521 ]; then
+# Our gobject-introspection is too new
+# https://cr.deepin.io/#/c/16880/
+%patch0 -p1
+fi
+
 %build
 export GOPATH="%{gopath}"
 %make_build
@@ -27,10 +35,15 @@ export GOPATH="%{gopath}"
 %make_install
 
 %files
+%doc README.md
+%license LICENSE
 %{_bindir}/gir-generator
 %{gopath}/src/gir/
 
 %changelog
+* Thu Aug  3 2017 mosquito <sensor.wen@gmail.com> - 1.0.1-2
+- Fix undefined type SettingsBackendLike
+
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.0.1-1.git9ee7058
 - Update to 1.0.1
 
