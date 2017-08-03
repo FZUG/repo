@@ -47,6 +47,11 @@ QML DBus factory for DDE.
 %setup -q -a1 -n %{repo}-%{commit}
 mv %{repo}-%{old_commit} old
 
+%if 0%fedora > 25
+rm old/xml/nm-manager.xml
+rm old/in.json/org.freedesktop.NetworkManager.in.json
+%endif
+
 %build
 %make_build
 %make_build build-qml -C old
