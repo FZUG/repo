@@ -61,7 +61,7 @@ export GOPATH="$(pwd)/build:%{gopath}"
 #make build-dep
 go get github.com/disintegration/imaging \
     github.com/howeyc/fsnotify \
-    launchpad.net/gocheck \
+    gopkg.in/check.v1 \
     gopkg.in/alecthomas/kingpin.v2
 make
 
