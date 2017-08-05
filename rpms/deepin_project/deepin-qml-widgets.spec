@@ -1,6 +1,3 @@
-# for fedora 24
-%global _qt5_qmldir %{_qt5_archdatadir}/qml
-
 Name:           deepin-qml-widgets
 Version:        2.3.5
 Release:        1%{?dist}
@@ -11,38 +8,35 @@ URL:            https://github.com/linuxdeepin/deepin-qml-widgets
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  pkgconfig
-BuildRequires:  gettext
 BuildRequires:  desktop-file-utils
+BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtwebkit-devel
 BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  qt5-qtquick1-devel
 BuildRequires:  libXcomposite-devel
 BuildRequires:  libxcb-devel
+Requires:       qt5-qtgraphicaleffects(?%_isa)
+Requires:       qt5-qtquickcontrols(?%_isa)
 
 %description
-Deepin QML widgets
+Extends QML by providing widgets that is used by Deepin applications.
 
 %prep
 %setup -q
 
 %build
+deepin-generate-mo locale/locale_config.ini
 %qmake_qt5
 %make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
-pushd locale
-for i in `ls *.po`
- do
-    install -d %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/
-    msgfmt $i -o %{buildroot}%{_datadir}/locale/${i%.*}/LC_MESSAGES/%{name}.mo
- done
-popd
+install -d %{buildroot}%{_datadir}/locale/
+cp -r locale/mo/* %{buildroot}%{_datadir}/locale/
 
 %find_lang %{name}
 
@@ -56,6 +50,10 @@ popd
 %{_datadir}/dbus-1/services/com.deepin.dialog.service
 
 %changelog
+* Sat Aug  5 2017 mosquito <sensor.wen@gmail.com> - 2.3.5-1
+- Add Req qt5-qtgraphicaleffects, qt5-qtquickcontrols
+- Remove BReq qt5-qtquick1
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.3.5-1.git3813576
 - Update to 2.3.5
 
