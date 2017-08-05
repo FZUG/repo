@@ -2,7 +2,7 @@ Name:           deepin-metacity
 Version:        3.22.10
 Release:        1%{?dist}
 Summary:        2D window manager for Deepin
-License:        GPL
+License:        GPLv2+
 URL:            https://github.com/linuxdeepin/deepin-metacity
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
@@ -46,13 +46,15 @@ Header files and libraries for %{name}.
 %install
 %make_install PREFIX=%{_prefix}
 #Remove libtool archives.
-find %{buildroot} -name '*.la' -exec rm -f {} ';'
+find %{buildroot} -name '*.la' -delete
+
+%find_lang %{name}
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
-%files
+%files -f %{name}.lang
 %doc README
 %license COPYING
 %{_bindir}/%{name}*
@@ -64,7 +66,6 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/gnome-control-center/keybindings/50-%{name}-*.xml
 %{_datadir}/gnome/wm-properties/%{name}-wm.desktop
 %{_datadir}/help/
-%{_datadir}/locale/
 %{_datadir}/themes/
 %{_mandir}/man1/%{name}*
 
@@ -74,6 +75,9 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/lib%{name}*.so
 
 %changelog
+* Sat Aug  5 2017 mosquito <sensor.wen@gmail.com> - 3.22.10-1
+- Fix license
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.22.10-1.gite9af397
 - Update to 3.22.10
 
