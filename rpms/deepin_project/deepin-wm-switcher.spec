@@ -17,7 +17,12 @@ Requires:       deepin-wm
 Requires:       deepin-metacity
 
 %description
-Window manager switcher for Deepin
+Deepin Window Manager monitoring and auto-switching service.
+
+It is capable of:
+
+- monitoring health of 3d wm and falling back to 2d if bad things happened.
+- detecting platform capability and choose 2d/3d wm accordingly.
 
 %prep
 %setup -q
@@ -35,6 +40,9 @@ Window manager switcher for Deepin
 %{_bindir}/%{name}
 
 %changelog
+* Sat Aug  5 2017 mosquito <sensor.wen@gmail.com> - 1.1.2-1
+- Update description
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 1.1.2-1.gita28aecc
 - Update to 1.1.2
 
