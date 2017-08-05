@@ -5,7 +5,7 @@ Name:           deepin-qt-dbus-factory
 Version:        0.2.1
 Release:        1%{?dist}
 Summary:        A repository stores auto-generated Qt5 dbus code
-License:        GPLv3
+License:        GPLv3+ and LGPLv2+
 URL:            https://github.com/linuxdeepin/dde-qt-dbus-factory
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
@@ -45,11 +45,23 @@ Header files and libraries for %{name}.
 %{_libdir}/libdframeworkdbus.so.*
 
 %files devel
-%{_includedir}/libdframeworkdbus-1.0/
+# LGPLv2+
+%{_includedir}/libdframeworkdbus-1.0/dbusextended.h
+%{_includedir}/libdframeworkdbus-1.0/dbusextendedabstractinterface.h
+%{_includedir}/libdframeworkdbus-1.0/dbusextendedpendingcallwatcher_p.h
+# GPLv3+
+%{_includedir}/libdframeworkdbus-1.0/DBusExtended
+%{_includedir}/libdframeworkdbus-1.0/DBusExtendedAbstractInterface
+%{_includedir}/libdframeworkdbus-1.0/com_deepin*.h
+%{_includedir}/libdframeworkdbus-1.0/org_freedesktop*.h
+%{_includedir}/libdframeworkdbus-1.0/types/*.h
 %{_libdir}/pkgconfig/dframeworkdbus.pc
 %{_libdir}/libdframeworkdbus.so
 
 %changelog
+* Sat Aug  5 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1
+- Fix license
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1.gitbecf852
 - Update to 0.2.1
 
