@@ -1,15 +1,14 @@
 Name:           deepin-movie
 Version:        2.2.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Deepin Movie based on QtAV
 Summary(zh_CN): 深度影音
 License:        GPLv3
-Group:          Applications/Multimedia
 URL:            https://github.com/linuxdeepin/deepin-movie
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 BuildRequires:  gettext
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  desktop-file-utils
@@ -36,19 +35,29 @@ Requires:       deepin-qt5integration
 Recommends:     deepin-manual
 
 %description
-Deepin movie with linuxdeepin desktop environment.
+Deepin movie for deepin desktop environment.
 
 %description -l zh_CN
 深度影音播放器, 后端基于QtAV, 支持解码大多数视频格式.
 
 %prep
 %setup -q
-# fix python version
-find -iname "*.py" | xargs sed -i '1s|python$|python2|'
 
 %build
 %{__python2} configure.py
 deepin-generate-mo locale/locale_config.ini
+chmod 0755 src/main.py
+
+# Make python shebang uniq
+find -iname "*.py" | xargs sed -i '1s@^#!/usr/bin/python@#!/usr/bin/python2@'
+find -iname "*.py" | xargs sed -i '1s@^#!/usr/bin/env python@#!/usr/bin/python2@'
+sed -i '1s@^#! /usr/bin/env python@#!/usr/bin/python2@' src/utils/misc.py
+
+for lib in $(find -iname "*.py" -perm 644) ; do
+ sed '1{\@^#!/usr/bin/python2@d}' $lib > $lib.new &&
+ touch -r $lib $lib.new &&
+ mv $lib.new $lib
+done
 
 %install
 %make_install PREFIX="%{_prefix}"
@@ -90,6 +99,10 @@ fi
 %{_datadir}/icons/hicolor/*
 
 %changelog
+* Sun Aug 06 2017 Zamir SUN <sztsian@gmail.com> - 2.2.14-2
+- Remove group tag
+- Fix rpmlint shebang error
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2.2.14-1.git69123ed
 - Update to 2.2.14
 
