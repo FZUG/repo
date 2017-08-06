@@ -1,22 +1,25 @@
+%global commit d2d7974839fdaaca38bdd06dfaa24ca3a1a8bde3
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Name:           deepin-sound-theme
 Version:        15.10.1
-Release:        1%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Deepin sound theme
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-sound-theme
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 %description
-Deepin sound theme
+Sound files for the Deeping Desktop Environment.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{commit}
 
 %build
 
 %install
-%make_install PREFIX=%{_prefix}
+%make_install
 
 %files
 %doc README.md
@@ -27,6 +30,9 @@ Deepin sound theme
 %{_datadir}/sounds/deepin/stereo/*.ogg
 
 %changelog
+* Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 15.10.1-1.gitd2d7974
+- Rebuild
+
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 15.10.1-1.git0045de4
 - Update to 15.10.1
 
