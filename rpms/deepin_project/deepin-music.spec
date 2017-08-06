@@ -1,10 +1,9 @@
 Name:           deepin-music
 Version:        3.1.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
 License:        GPLv3
-Group:          Applications/Multimedia
 Url:            https://github.com/linuxdeepin/deepin-music
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
@@ -24,6 +23,7 @@ BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  qt5-qtmultimedia-devel
 BuildRequires:  taglib-devel
 BuildRequires:  desktop-file-utils
+BuildRequires:  gcc-c++
 Provides:       deepin-music-player%{?_isa} = %{version}-%{release}
 
 %description
@@ -96,6 +96,9 @@ fi
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Sun Aug 6 2017 Zamir SUN <sztsian@gmail.com> - 3.1.4-2
+- Remove group tag
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.4-1.git7c31a72
 - Update to 3.1.4
 
