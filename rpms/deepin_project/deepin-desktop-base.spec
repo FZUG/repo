@@ -6,44 +6,55 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-desktop-base
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
-Requires:       deepin-wallpapers
+Recommends:     deepin-wallpapers
 
 %description
-Base component for Deepin
+This package provides some components for Deepin desktop environment.
+
+- deepin logo
+- deepin desktop version
+- login screen background image
+- language information
 
 %prep
 %setup -q
+
+# Remove Deepin distro's lsb-release
+# Don't override systemd timeouts
+# Remove apt-specific templates
+sed -i -E '/lsb-release|systemd|apt/d' Makefile
+
+# Fix data path
+sed -i 's|/usr/lib|%{_datadir}|' Makefile
 
 %build
 %make_build
 
 %install
-%make_install PREFIX=%{_prefix}
-
-# Remove Deepin distro's lsb-release
-rm %{buildroot}/etc/lsb-release
-
-# Don't override systemd timeouts
-rm -r %{buildroot}/etc/systemd
+%make_install
 
 # Make a symlink for deepin-version
-ln -s /usr/lib/deepin/desktop-version %{buildroot}/etc/deepin-version
-
-# Remove apt-specific templates
-rm -r %{buildroot}%{_datadir}/python-apt
+ln -sfv %{_datadir}/deepin/desktop-version %{buildroot}/etc/deepin-version
 
 %files
 %license LICENSE
-%{_sysconfdir}/appstore.json
+%config(noreplace) %{_sysconfdir}/appstore.json
 %{_sysconfdir}/deepin-version
-%{_usr}/lib/deepin/desktop-version
+%dir %{_datadir}/backgrounds/deepin/
 %{_datadir}/backgrounds/deepin/desktop.jpg
+%dir %{_datadir}/deepin/
+%{_datadir}/deepin/desktop-version
+%dir %{_datadir}/distro-info/
 %{_datadir}/distro-info/deepin.csv
-%{_datadir}/i18n/*.json
+%{_datadir}/i18n/i18n_dependent.json
+%{_datadir}/i18n/language_info.json
 %{_datadir}/plymouth/deepin-logo.png
-%{_var}/cache/image-blur/
+%{_var}/cache/image-blur/*.jpg
 
 %changelog
+* Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 2016.12.6-1
+- Rebuild
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 2016.12.6-1.git94a22cf
 - Update to 2016.12.6
 
