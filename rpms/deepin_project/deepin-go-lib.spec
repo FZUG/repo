@@ -1,38 +1,69 @@
-%global project go-lib
-%global repo %{project}
+%global debug_package  %{nil}
+%global project        go-lib
+%global repo           %{project}
+%global import_path    pkg.deepin.io/lib
 
-Name:           deepin-%{repo}
+Name:           golang-deepin-go-lib
 Version:        1.0.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
-Group:          Development/Libraries
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/go-lib
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-BuildArch:      noarch
 BuildRequires:  golang
 
 %description
 DLib is a set of Go bindings/libraries for DDE development.
 Containing dbus (forking from guelfey), glib, gdkpixbuf, pulse and more.
 
+%package devel
+Summary:        %{summary}
+BuildArch:      noarch
+Requires:       golang(github.com/BurntSushi/xgb)
+Requires:       golang(github.com/fsnotify/fsnotify)
+Requires:       golang(github.com/smartystreets/goconvey/convey)
+Requires:       golang(gopkg.in/check.v1)
+Provides:       golang(%{import_path}) = %{version}-%{release}
+Provides:       deepin-%{repo} = %{version}-%{release}
+Obsoletes:      deepin-%{repo} < %{version}-%{release}
+
+%description devel
+%{summary}
+
+This package contains library source intended for
+building other packages which use import path with
+%{import_path} prefix.
+
 %prep
 %setup -q -n %{repo}-%{version}
+sed -i 's|howeyc|fsnotify|' utils/watch_proxy.go
 
 %build
 
 %install
-install -d %{buildroot}%{gopath}/src/pkg.deepin.io/lib/
-cp -r * %{buildroot}%{gopath}/src/pkg.deepin.io/lib/
-rm -rf %{buildroot}%{gopath}/src/pkg.deepin.io/lib/debian
+# source codes for building projects
+install -d %{buildroot}%{gopath}/src/%{import_path}/
+echo "%%dir %%{gopath}/src/%%{import_path}/." >> devel.file-list
 
-%files
-%defattr(-,root,root,-)
+# find all *.go but no *_test.go files and generate devel.file-list
+for file in $(find . -iname "*.[h|c]" -or -iname "*.go" \! -iname "*_test.go"); do
+    echo "%%dir %%{gopath}/src/%%{import_path}/$(dirname $file)" >> devel.file-list
+    install -d %{buildroot}/%{gopath}/src/%{import_path}/$(dirname $file)
+    cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
+    echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
+done
+
+sort -u -o devel.file-list devel.file-list
+
+%files devel -f devel.file-list
 %doc README.md
 %license LICENSE
-%{gopath}/src/pkg.deepin.io/lib/
+%dir %{gopath}/src/%{import_path}/
 
 %changelog
+* Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 1.0.5-2
+- Rename to golang-deepin-go-lib
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.5-1.git3c9791f
 - Update to 1.0.5
 

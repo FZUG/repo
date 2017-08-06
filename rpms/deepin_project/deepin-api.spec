@@ -23,8 +23,8 @@ BuildRequires:  libgudev-devel
 BuildRequires:  poppler-glib-devel
 BuildRequires:  polkit-qt5-1-devel
 BuildRequires:  deepin-gir-generator
-BuildRequires:  deepin-go-lib
 BuildRequires:  deepin-go-dbus-factory
+BuildRequires:  golang-deepin-go-lib-devel
 BuildRequires:  golang-github-BurntSushi-xgb-devel
 BuildRequires:  golang-github-BurntSushi-xgbutil-devel
 BuildRequires:  golang-github-go-fsnotify-fsnotify-devel

@@ -14,10 +14,10 @@ BuildRequires:  libgo-devel
 BuildRequires:  coffee-script
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
-BuildRequires:  deepin-go-lib
 BuildRequires:  deepin-api-devel
 BuildRequires:  webkitgtk-devel
 BuildRequires:  libcanberra-devel
+BuildRequires:  golang-deepin-go-lib-devel
 BuildRequires:  golang-github-BurntSushi-xgb-devel
 BuildRequires:  golang-github-BurntSushi-xgbutil-devel
 BuildRequires:  golang-github-howeyc-fsnotify-devel

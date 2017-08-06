@@ -12,7 +12,7 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  gcc-go
 BuildRequires:  golang-gopkg-check-devel
-BuildRequires:  deepin-go-lib
+BuildRequires:  golang-deepin-go-lib-devel
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  qt5-qtbase-devel

@@ -23,7 +23,7 @@ Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 Source1:        %{url}/archive/%{old_commit}/%{repo}-%{old_scommit}.tar.gz
 
 BuildRequires:  gcc-go
-BuildRequires:  deepin-go-lib
+BuildRequires:  golang-deepin-go-lib-devel
 BuildRequires:  deepin-dbus-generator
 # For dbus-factory 3.0.6
 BuildRequires:  qt5-qtbase-devel

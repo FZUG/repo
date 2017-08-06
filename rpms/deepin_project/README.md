@@ -21,7 +21,7 @@ This repository contains the following .specs for integrating the deepin desktop
 * deepin-music
 * python2-xpybutil
 * deepin-screenshot
-* deepin-go-lib
+* golang-deepin-go-lib-devel
 * deepin-dbus-generator
 * deepin-dbus-factory
 * deepin-movie
