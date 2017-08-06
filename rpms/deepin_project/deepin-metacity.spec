@@ -6,6 +6,7 @@ License:        GPLv2+
 URL:            https://github.com/linuxdeepin/deepin-metacity
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
+BuildRequires:  desktop-file-utils
 BuildRequires:  intltool
 BuildRequires:  itstool
 BuildRequires:  libtool
@@ -22,6 +23,7 @@ BuildRequires:  startup-notification-devel
 BuildRequires:  zenity
 Requires:       dconf
 Requires:       deepin-desktop-schemas
+Requires:       control-center-filesystem
 
 %description
 2D window manager for Deepin.
@@ -45,20 +47,36 @@ Header files and libraries for %{name}.
 
 %install
 %make_install PREFIX=%{_prefix}
-#Remove libtool archives.
+# Remove libtool archives
 find %{buildroot} -name '*.la' -delete
 
 %find_lang %{name}
 
-%post -p /sbin/ldconfig
+%check
+desktop-file-validate %{_datadir}/gnome/applications/%{name}.desktop \
+  %{_datadir}/gnome/wm-properties/%{name}-wm.desktop
 
-%postun -p /sbin/ldconfig
+%post
+/sbin/ldconfig
+/usr/bin/update-desktop-database -q ||:
+
+%postun
+/sbin/ldconfig
+/usr/bin/update-desktop-database -q ||:
+if [ $1 -eq 0 ]; then
+    /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null ||:
+fi
+
+%posttrans
+/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null ||:
 
 %files -f %{name}.lang
 %doc README
 %license COPYING
 %{_bindir}/%{name}*
 %{_libdir}/lib%{name}*.so.*
+%dir %{_datadir}/GConf/
+%dir %{_datadir}/GConf/gsettings/
 %{_datadir}/GConf/gsettings/%{name}-schemas.convert
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/%{name}/
