@@ -9,29 +9,37 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-session-ui
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  deepin-qt-dbus-factory-devel
 BuildRequires:  deepin-gettext-tools
-BuildRequires:  gsettings-qt-devel
-BuildRequires:  gtk2-devel
-BuildRequires:  lightdm-qt5-devel
-BuildRequires:  libXtst-devel
+BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(gsettings-qt)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(liblightdm-qt5-3)
+BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pam-devel
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  qt5-qtmultimedia-devel
-BuildRequires:  systemd-devel
 Requires:       deepin-control-center
 Requires:       deepin-daemon
 Requires:       startdde
 Requires:       lightdm
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
 Provides:       lightdm-deepin-greeter%{?_isa} = %{version}-%{release}
 
 %description
-Deepin desktop-environment - Session UI module
+This project include those sub-project:
+
+- dde-shutdown: User interface of shutdown.
+- dde-lock: User interface of lock screen.
+- dde-lockservice: The back-end service of locking screen.
+- lightdm-deepin-greeter: The user interface when you login in.
+- dde-switchtogreeter: The tools to switch the user to login in.
+- dde-lowpower: The user interface of reminding low power.
+- dde-osd: User interface of on-screen display.
+- dde-hotzone: User interface of setting hot zone.
 
 %prep
 %setup -q -n %{repo}-%{version}
@@ -64,6 +72,20 @@ cat > %{buildroot}%{_sysconfdir}/lightdm/lightdm.conf.d/deepin.conf <<EOF
 greeter-session=lightdm-deepin-greeter
 EOF
 
+%post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+
 %files
 %doc README.md
 %license LICENSE
@@ -79,6 +101,9 @@ EOF
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 4.0.13-1
+- Rebuild
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.0.13-1.git4cadab1
 - Update to 4.0.13
 
