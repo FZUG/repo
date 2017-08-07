@@ -59,7 +59,7 @@ Features include:
   * Video eq(software and OpenGL): brightness, contrast, saturation, hue.
   * QML support as a plugin. Most playback APIs are compatible with
     QtMultiMedia module.
-  * Compatiblity: QtAV can be built with both Qt4 and Qt5, FFmpeg(>=1.0)
+  * Compatibility: QtAV can be built with both Qt4 and Qt5, FFmpeg(>=1.0)
     and Libav (>=9.0). Latest FFmpeg release is recommended.
 
 %description -l zh_CN
