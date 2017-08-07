@@ -63,12 +63,6 @@ desktop-file-validate %{_datadir}/gnome/applications/%{name}.desktop \
 %postun
 /sbin/ldconfig
 /usr/bin/update-desktop-database -q ||:
-if [ $1 -eq 0 ]; then
-    /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null ||:
-fi
-
-%posttrans
-/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null ||:
 
 %files -f %{name}.lang
 %doc README
