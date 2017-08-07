@@ -33,14 +33,6 @@ sed -i '/picture-uri/s|default_background.jpg|default.png|' \
 %check
 make test
 
-%postun
-if [ $1 -eq 0 ]; then
-    /usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null ||:
-fi
-
-%posttrans
-/usr/bin/glib-compile-schemas /usr/share/glib-2.0/schemas &>/dev/null ||:
-
 %files
 %doc README.md
 %license LICENSE
