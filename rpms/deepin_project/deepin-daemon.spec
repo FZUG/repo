@@ -41,8 +41,11 @@ BuildRequires:  pkgconfig(xkbfile)
 BuildRequires:  golang-github-BurntSushi-xgb-devel
 BuildRequires:  golang-github-BurntSushi-xgbutil-devel
 BuildRequires:  golang-github-howeyc-fsnotify-devel
-BuildRequires:  golang-github-mattn-go-sqlite3-devel
 BuildRequires:  golang-github-alecthomas-kingpin-devel
+BuildRequires:  golang-github-axgle-mahonia-devel
+BuildRequires:  golang-github-msteinert-pam-devel
+BuildRequires:  golang-github-nfnt-resize-devel
+BuildRequires:  golang-gopkg-yaml-devel-v2
 
 Requires:       deepin-desktop-base
 Requires:       deepin-desktop-schemas
@@ -98,17 +101,6 @@ git config --global http.https://gopkg.in.followRedirects true
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
-go get gopkg.in/alecthomas/kingpin.v2 \
-    github.com/disintegration/imaging \
-    github.com/BurntSushi/freetype-go/freetype \
-    github.com/BurntSushi/freetype-go/freetype/truetype \
-    github.com/BurntSushi/graphics-go/graphics \
-    github.com/fsnotify/fsnotify \
-    github.com/axgle/mahonia \
-    github.com/msteinert/pam \
-    github.com/nfnt/resize \
-    golang.org/x/sys/unix \
-    gopkg.in/yaml.v2
 %make_build
 
 %install
