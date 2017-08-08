@@ -16,7 +16,7 @@ BuildRequires:  golang
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
 BuildRequires:  golang-deepin-go-lib-devel
-BuildRequires:  deepin-api-devel
+BuildRequires:  golang-deepin-api-devel
 BuildRequires:  libgnome-keyring-devel
 BuildRequires:  systemd-devel
 BuildRequires:  poppler-glib-devel

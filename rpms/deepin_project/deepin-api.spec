@@ -1,9 +1,10 @@
 %global project dde-api
 %global repo %{project}
+%global import_path pkg.deepin.io/dde/api
 
 Name:           deepin-api
 Version:        3.1.11
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-api
@@ -37,11 +38,19 @@ Obsoletes:      %{repo}%{?_isa} < %{version}-%{release}
 %description
 Go-lang bingding for dde-daemon
 
-%package devel
-Summary:        Development package for %{name}
+%package -n golang-%{name}-devel
+Summary:        %{summary}
+BuildArch:      noarch
+Provides:       golang(%{import_path}) = %{version}-%{release}
+Provides:       %{name}-devel = %{version}-%{release}
+Obsoletes:      %{name}-devel < %{version}-%{release}
 
-%description devel
-Header files and libraries for %{name}
+%description -n golang-%{name}-devel
+%{summary}.
+
+This package contains library source intended for
+building other packages which use import path with
+%{import_path} prefix.
 
 %prep
 %setup -q -n %{repo}-%{version}
@@ -73,10 +82,13 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{_datadir}/icons/hicolor/*/actions/*
 %{_polkit_qt_policydir}/com.deepin.api.locale-helper.policy
 
-%files devel
-%{gopath}/src/pkg.deepin.io/dde/api/
+%files -n golang-%{name}-devel
+%{gopath}/src/%{import_path}/
 
 %changelog
+* Tue Aug  8 2017 mosquito <sensor.wen@gmail.com> - 3.1.11-2
+- Rename deepin-api-devel to golang-deepin-api-devel
+
 * Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 3.1.11-1
 - Update to 3.1.11
 

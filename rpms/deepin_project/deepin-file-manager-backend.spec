@@ -19,7 +19,7 @@ BuildRequires:  deepin-metacity-devel
 BuildRequires:  deepin-dbus-generator
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
-BuildRequires:  deepin-api-devel
+BuildRequires:  golang-deepin-api-devel
 BuildRequires:  golang-deepin-go-lib-devel
 BuildRequires:  golang-github-mattn-go-sqlite3-devel
 BuildRequires:  golang-github-howeyc-fsnotify-devel
