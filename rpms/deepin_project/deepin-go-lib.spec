@@ -20,15 +20,17 @@ Containing dbus (forking from guelfey), glib, gdkpixbuf, pulse and more.
 Summary:        %{summary}
 BuildArch:      noarch
 Requires:       golang(github.com/BurntSushi/xgb)
-Requires:       golang(github.com/fsnotify/fsnotify)
+Requires:       golang(github.com/howeyc/fsnotify)
 Requires:       golang(github.com/smartystreets/goconvey/convey)
 Requires:       golang(gopkg.in/check.v1)
+Requires:       golang(golang.org/x/image/bmp)
+Requires:       golang(golang.org/x/image/tiff)
 Provides:       golang(%{import_path}) = %{version}-%{release}
 Provides:       deepin-%{repo} = %{version}-%{release}
 Obsoletes:      deepin-%{repo} < %{version}-%{release}
 
 %description devel
-%{summary}
+%{summary}.
 
 This package contains library source intended for
 building other packages which use import path with
@@ -36,7 +38,6 @@ building other packages which use import path with
 
 %prep
 %setup -q -n %{repo}-%{version}
-sed -i 's|howeyc|fsnotify|' utils/watch_proxy.go
 
 %build
 
@@ -48,8 +49,8 @@ echo "%%dir %%{gopath}/src/%%{import_path}/." >> devel.file-list
 # find all *.go but no *_test.go files and generate devel.file-list
 for file in $(find . -iname "*.[h|c]" -or -iname "*.go" \! -iname "*_test.go"); do
     echo "%%dir %%{gopath}/src/%%{import_path}/$(dirname $file)" >> devel.file-list
-    install -d %{buildroot}/%{gopath}/src/%{import_path}/$(dirname $file)
-    cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
+    install -d %{buildroot}%{gopath}/src/%{import_path}/$(dirname $file)
+    cp -pav $file %{buildroot}%{gopath}/src/%{import_path}/$file
     echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
 done
 
