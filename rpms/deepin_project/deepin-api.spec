@@ -30,6 +30,8 @@ BuildRequires:  golang-github-BurntSushi-xgb-devel
 BuildRequires:  golang-github-BurntSushi-xgbutil-devel
 BuildRequires:  golang-github-alecthomas-kingpin-devel
 BuildRequires:  golang-github-disintegration-imaging-devel
+BuildRequires:  systemd
+%{?systemd_requires}
 Requires:       deepin-desktop-base
 Requires:       rfkill
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
@@ -70,6 +72,23 @@ make
 %install
 export GOPATH="$(pwd)/build:%{gopath}"
 %make_install SYSTEMD_LIB_DIR="/usr/lib" LIBDIR="/libexec"
+
+%post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+%systemd_post deepin-shutdown-sound.service
+
+%preun
+%systemd_preun deepin-shutdown-sound.service
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
+    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
+fi
+%systemd_postun_with_restart deepin-shutdown-sound.service
+
+%posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
 %files
 %doc README.md
