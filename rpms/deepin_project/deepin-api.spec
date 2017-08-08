@@ -27,8 +27,8 @@ BuildRequires:  deepin-go-dbus-factory
 BuildRequires:  golang-deepin-go-lib-devel
 BuildRequires:  golang-github-BurntSushi-xgb-devel
 BuildRequires:  golang-github-BurntSushi-xgbutil-devel
-BuildRequires:  golang-github-go-fsnotify-fsnotify-devel
 BuildRequires:  golang-github-alecthomas-kingpin-devel
+BuildRequires:  golang-github-disintegration-imaging-devel
 Requires:       deepin-desktop-base
 Requires:       rfkill
 Provides:       %{repo}%{?_isa} = %{version}-%{release}
@@ -53,16 +53,9 @@ sed -i 's|/usr/lib|%{_libexecdir}|' misc/*services/*.service \
 
 sed -i 's|libdir|LIBDIR|g' Makefile
 
-install -d %{buildroot}%{gopath}/src/pkg.deepin.io/dde/api
-cp -r * %{buildroot}%{gopath}/src/pkg.deepin.io/dde/api/
-
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
 #make build-dep
-go get github.com/disintegration/imaging \
-    github.com/howeyc/fsnotify \
-    gopkg.in/check.v1 \
-    gopkg.in/alecthomas/kingpin.v2
 make
 
 %install
