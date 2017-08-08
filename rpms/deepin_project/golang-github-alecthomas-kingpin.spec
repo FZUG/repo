@@ -22,23 +22,21 @@ Source0:    %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 %package devel
 Summary:    %{summary}
 BuildArch:  noarch
-
 Requires:   golang(golang.org/x/net/context)
-
+Requires:   golang(github.com/alecthomas/template)
+Requires:   golang(github.com/alecthomas/units)
 Provides:   golang(%{import_path}) = %{version}-%{release}
-Provides:   golang(%{import_path}/should) = %{version}-%{release}
 Provides:   golang(%{import_path2}) = %{version}-%{release}
-Provides:   golang(%{import_path2}/should) = %{version}-%{release}
 
 %description devel
-%{summary}
+%{summary}.
 
 This package contains library source intended for
 building other packages which use import path with
 %{import_path} prefix.
 
 %description
-%{summary}
+%{summary}.
 
 
 %prep
@@ -58,10 +56,11 @@ for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
     echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
 done
 
-install -d -p %{buildroot}%{gopath}/src/%{import_path2}/
-echo "%%dir %%{gopath}/src/%%{import_path2}/." >> devel.file-list
-cp -r %{buildroot}%{gopath}/src/%{import_path}/* %{buildroot}/%{gopath}/src/%{import_path2}/
-find %{buildroot}%{gopath}/src/%{import_path2}/ | sed 's|%{buildroot}||' >> devel.file-list
+# Add symlink to older name
+install -d -p %{buildroot}%{gopath}/src/gopkg.in/alecthomas/
+echo "%%dir %%{gopath}/src/gopkg.in/alecthomas/." >> devel.file-list
+ln -s %{gopath}/src/%{import_path}/ %{buildroot}%{gopath}/src/%{import_path2}
+echo "%%{gopath}/src/%{import_path2}" >> devel.file-list
 
 sort -u -o devel.file-list devel.file-list
 
@@ -69,7 +68,7 @@ sort -u -o devel.file-list devel.file-list
 %doc README.md
 %license COPYING
 %dir %{gopath}/src/%{import_path}
-%dir %{gopath}/src/%{import_path2}
+%{gopath}/src/%{import_path2}
 
 %changelog
 * Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 2.2.5-1

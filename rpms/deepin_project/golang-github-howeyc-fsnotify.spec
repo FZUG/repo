@@ -30,14 +30,14 @@ Provides: golang(%{import_path}) = %{version}-%{release}
 Provides: golang(%{import_path}/should) = %{version}-%{release}
 
 %description devel
-%{summary}
+%{summary}.
 
 This package contains library source intended for
 building other packages which use import path with
 %{import_path} prefix.
 
 %description
-%{summary}
+%{summary}.
 
 %prep
 %setup -q -n %{repo}-%{commit}
@@ -46,20 +46,17 @@ building other packages which use import path with
 
 %install
 # source codes for building projects
-install -d -p %{buildroot}/%{gopath}/src/%{import_path}/
+install -d -p %{buildroot}%{gopath}/src/%{import_path}/
 echo "%%dir %%{gopath}/src/%%{import_path}/." >> devel.file-list
 # find all *.go but no *_test.go files and generate devel.file-list
 for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
     echo "%%dir %%{gopath}/src/%%{import_path}/$(dirname $file)" >> devel.file-list
-    install -d -p %{buildroot}/%{gopath}/src/%{import_path}/$(dirname $file)
-    cp -pav $file %{buildroot}/%{gopath}/src/%{import_path}/$file
+    install -d -p %{buildroot}%{gopath}/src/%{import_path}/$(dirname $file)
+    cp -pav $file %{buildroot}%{gopath}/src/%{import_path}/$file
     echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
 done
 
 sort -u -o devel.file-list devel.file-list
-
-%clean
-rm -rf %{buildroot}
 
 %files devel -f devel.file-list
 %dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
