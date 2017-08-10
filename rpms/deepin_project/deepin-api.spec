@@ -10,27 +10,32 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-api
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  bzr
-BuildRequires:  git
-BuildRequires:  gcc-go
-BuildRequires:  gtk3-devel
-BuildRequires:  gdk-pixbuf2-xlib-devel
-BuildRequires:  cairo-devel
-BuildRequires:  libXi-devel
-BuildRequires:  libcroco-devel
-BuildRequires:  libcanberra-devel
-BuildRequires:  librsvg2-devel
-BuildRequires:  libgudev-devel
-BuildRequires:  poppler-glib-devel
-BuildRequires:  polkit-qt5-1-devel
+# e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
+ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
+# If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
+BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
+
+BuildRequires:  pkgconfig(cairo-ft)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
+BuildRequires:  pkgconfig(gudev-1.0)
+BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(librsvg-2.0)
+BuildRequires:  pkgconfig(poppler-glib)
+BuildRequires:  pkgconfig(polkit-qt5-1)
+BuildRequires:  pkgconfig(systemd)
+BuildRequires:  pkgconfig(xfixes)
+BuildRequires:  pkgconfig(xcursor)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xi)
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
-BuildRequires:  golang-deepin-go-lib-devel
-BuildRequires:  golang-github-BurntSushi-xgb-devel
-BuildRequires:  golang-github-BurntSushi-xgbutil-devel
-BuildRequires:  golang-github-alecthomas-kingpin-devel
-BuildRequires:  golang-github-disintegration-imaging-devel
-BuildRequires:  systemd
+BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(github.com/BurntSushi/xgb)
+BuildRequires:  golang(github.com/BurntSushi/xgbutil)
+BuildRequires:  golang(github.com/disintegration/imaging)
+BuildRequires:  golang(gopkg.in/alecthomas/kingpin.v2)
 %{?systemd_requires}
 Requires:       deepin-desktop-base
 Requires:       rfkill
@@ -43,6 +48,7 @@ Go-lang bingding for dde-daemon
 %package -n golang-%{name}-devel
 Summary:        %{summary}
 BuildArch:      noarch
+ExclusiveArch:  %{go_arches} noarch
 Provides:       golang(%{import_path}) = %{version}-%{release}
 Provides:       %{name}-devel = %{version}-%{release}
 Obsoletes:      %{name}-devel < %{version}-%{release}
@@ -62,16 +68,16 @@ sed -i 's|/usr/lib|%{_libexecdir}|' misc/*services/*.service \
     lunar-calendar/main.go \
     thumbnails/gtk/gtk.go
 
-sed -i 's|libdir|LIBDIR|g' Makefile
+sed -i 's|PREFIX}${libdir|LIBDIR|; s|libdir|LIBDIR|' Makefile
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
-#make build-dep
-make
+BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
+make GOBUILD="go build -compiler gc -ldflags \"${LDFLAGS} -B $BUILD_ID\" -a -v -x"
 
 %install
 export GOPATH="$(pwd)/build:%{gopath}"
-%make_install SYSTEMD_LIB_DIR="/usr/lib" LIBDIR="/libexec"
+%make_install SYSTEMD_SERVICE_DIR="%{_unitdir}" LIBDIR="%{_libexecdir}"
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
