@@ -19,11 +19,11 @@ BuildRequires:  deepin-metacity-devel
 BuildRequires:  deepin-dbus-generator
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
-BuildRequires:  golang-deepin-api-devel
-BuildRequires:  golang-deepin-go-lib-devel
-BuildRequires:  golang-github-mattn-go-sqlite3-devel
-BuildRequires:  golang-github-howeyc-fsnotify-devel
-BuildRequires:  golang-github-alecthomas-kingpin-devel
+BuildRequires:  golang(pkg.deepin.io/dde/api)
+BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(github.com/mattn/go-sqlite3)
+BuildRequires:  golang(github.com/howeyc/fsnotify)
+BuildRequires:  golang(github.com/alecthomas/kingpin)
 
 %description
 Deepin file manager backend

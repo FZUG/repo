@@ -16,11 +16,11 @@ BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
 BuildRequires:  webkitgtk-devel
 BuildRequires:  libcanberra-devel
-BuildRequires:  golang-deepin-api-devel
-BuildRequires:  golang-deepin-go-lib-devel
-BuildRequires:  golang-github-BurntSushi-xgb-devel
-BuildRequires:  golang-github-BurntSushi-xgbutil-devel
-BuildRequires:  golang-github-howeyc-fsnotify-devel
+BuildRequires:  golang(pkg.deepin.io/dde/api)
+BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(github.com/BurntSushi/xgb)
+BuildRequires:  golang(github.com/BurntSushi/xgbutil)
+BuildRequires:  golang(github.com/howeyc/fsnotify)
 Requires:       deepin-daemon
 Requires:       deepin-wm-switcher
 

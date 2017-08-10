@@ -11,12 +11,12 @@ URL:            https://github.com/linuxdeepin/go-dbus-generator
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  gcc-go
-BuildRequires:  golang-gopkg-check-devel
-BuildRequires:  golang-deepin-go-lib-devel
+BuildRequires:  golang(gopkg.in/check.v1)
+BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gobject-2.0)
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtdeclarative-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Quick)
 
 %description
 Static dbus binding generator for dlib.

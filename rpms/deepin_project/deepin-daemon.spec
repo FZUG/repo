@@ -10,13 +10,10 @@ URL:            https://github.com/linuxdeepin/dde-daemon
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Source1:        deepin-daemon.sysusers
 
-BuildRequires:  git
 BuildRequires:  gettext
 BuildRequires:  golang
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
-BuildRequires:  golang-deepin-go-lib-devel
-BuildRequires:  golang-deepin-api-devel
 BuildRequires:  libgnome-keyring-devel
 BuildRequires:  systemd-devel
 BuildRequires:  poppler-glib-devel
@@ -38,14 +35,16 @@ BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(xfixes)
 BuildRequires:  pkgconfig(xkbfile)
-BuildRequires:  golang-github-BurntSushi-xgb-devel
-BuildRequires:  golang-github-BurntSushi-xgbutil-devel
-BuildRequires:  golang-github-howeyc-fsnotify-devel
-BuildRequires:  golang-github-alecthomas-kingpin-devel
-BuildRequires:  golang-github-axgle-mahonia-devel
-BuildRequires:  golang-github-msteinert-pam-devel
-BuildRequires:  golang-github-nfnt-resize-devel
-BuildRequires:  golang-gopkg-yaml-devel-v2
+BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(pkg.deepin.io/dde/api)
+BuildRequires:  golang(github.com/BurntSushi/xgb)
+BuildRequires:  golang(github.com/BurntSushi/xgbutil)
+BuildRequires:  golang(github.com/howeyc/fsnotify)
+BuildRequires:  golang(github.com/axgle/mahonia)
+BuildRequires:  golang(github.com/msteinert/pam)
+BuildRequires:  golang(github.com/nfnt/resize)
+BuildRequires:  golang(gopkg.in/alecthomas/kingpin.v2)
+BuildRequires:  golang(gopkg.in/yaml.v2)
 
 Requires:       deepin-desktop-base
 Requires:       deepin-desktop-schemas
@@ -95,9 +94,6 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
 # Fix grub.cfg path
 sed -i '/ScriptFile/s|grub/|grub2/|' grub2/log.go
 sed -i 's|default_background.jpg|default.png|' accounts/user.go
-
-# https://github.com/niemeyer/gopkg/issues/50
-git config --global http.https://gopkg.in.followRedirects true
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
