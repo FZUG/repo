@@ -105,5 +105,5 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
-* Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 0-0.1.gita0175ee
-- Initial package build
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+- Initial package
