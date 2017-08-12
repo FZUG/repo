@@ -10,18 +10,23 @@
 %global   commit          c528b747d92d41ca581a7acf3e604c396fc7c034
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
-Name:       golang-%{provider}-%{project}-%{repo}
-Version:    0
-Release:    0.1%{?dist}
-Summary:    Character-set conversion library implemented in Go
-License:    MIT
-URL:        https://%{provider_prefix}
-Source0:    %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Name:           golang-%{provider}-%{project}-%{repo}
+Version:        0
+Release:        0.1%{?dist}
+Summary:        Character-set conversion library implemented in Go
+License:        MIT
+URL:            https://%{provider_prefix}
+Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+
+# e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
+ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
+# If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
+BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 
 %package devel
-Summary:    %{summary}
-BuildArch:  noarch
-Provides:   golang(%{import_path}) = %{version}-%{release}
+Summary:        %{summary}
+BuildArch:      noarch
+Provides:       golang(%{import_path}) = %{version}-%{release}
 
 %description devel
 %{summary}.
@@ -54,6 +59,16 @@ for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
 done
 
 sort -u -o devel.file-list devel.file-list
+
+%check
+export GOPATH=%{buildroot}%{gopath}:%{gopath}
+
+%if ! 0%{?gotest:1}
+%global gotest go test
+%endif
+
+%gotest %{import_path}
+%gotest %{import_path}/mahoniconv
 
 %files devel -f devel.file-list
 %doc README.md
