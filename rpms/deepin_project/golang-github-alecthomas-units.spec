@@ -69,21 +69,9 @@ for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
 done
 
 # testing files for this project
-install -d %{buildroot}%{gopath}/src/%{import_path}/
-# find all *_test.go files and generate unit-test.file-list
-for file in $(find . -iname "*_test.go"); do
-    dirprefix=$(dirname $file)
-    install -d -p %{buildroot}%{gopath}/src/%{import_path}/$dirprefix
-    cp -pav $file %{buildroot}%{gopath}/src/%{import_path}/$file
-    echo "%%{gopath}/src/%%{import_path}/$file" >> unit-test-devel.file-list
-    while [ "$dirprefix" != "." ]; do
-        echo "%%dir %%{gopath}/src/%%{import_path}/$dirprefix" >> devel.file-list
-        dirprefix=$(dirname $dirprefix)
-    done
-done
+install -m644 bytes_test.go %{buildroot}%{gopath}/src/%{import_path}/
 
 sort -u -o devel.file-list devel.file-list
-sort -u -o unit-test-devel.file-list unit-test-devel.file-list
 
 %check
 export GOPATH=%{buildroot}%{gopath}:%{gopath}
@@ -99,10 +87,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license COPYING
 %dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
 
-%files unit-test-devel -f unit-test-devel.file-list
-%doc README.md
-%license COPYING
+%files unit-test-devel
+%{gopath}/src/%{import_path}/bytes_test.go 
 
 %changelog
-* Mon Jan 16 2017 Jaroslav <cz.guardian@gmail.com> Stepanek 0-0.1.git2efee85
-- Initial package build
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+- Initial package
