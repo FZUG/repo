@@ -16,7 +16,7 @@ Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0.9.0
 Release:        0.1%{?dist}
 Summary:        File change notification Go language Binding.
-License:        fsnotify Authors
+License:        BSD 3-clause
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
