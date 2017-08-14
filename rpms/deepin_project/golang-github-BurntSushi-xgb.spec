@@ -1,20 +1,20 @@
-%global 	debug_package   %{nil}
+%global         debug_package   %{nil}
 
-%global 	provider        github
-%global 	provider_tld    com
-%global 	project         BurntSushi
-%global 	repo            xgb
+%global         provider        github
+%global         provider_tld    com
+%global         project         BurntSushi
+%global         repo            xgb
 # https://github.com/BurntSushi/xgb
-%global 	provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
-%global 	import_path     %{provider_prefix}
-%global 	commit          27f122750802c950b2c869a5b63dafcf590ced95
-%global 	shortcommit     %(c=%{commit}; echo ${c:0:7})
+%global         provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
+%global         import_path     %{provider_prefix}
+%global         commit          27f122750802c950b2c869a5b63dafcf590ced95
+%global         shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
 Release:        0.1%{?dist}
-Summary:        XGB is the X protocol Go language Binding.
-License:        XGB Authors
+Summary:        XGB is the X protocol Go language Binding
+License:        WTFPL
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
@@ -24,7 +24,7 @@ ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 
 %description
-%{summary}
+%{summary}.
 
 %package devel
 Summary:        %{summary}
@@ -58,7 +58,7 @@ Provides:       golang(%{import_path}/xv) = %{version}-%{release}
 Provides:       golang(%{import_path}/xvmc) = %{version}-%{release}
 
 %description devel
-%{summary}
+%{summary}.
 
 This package contains library source intended for
 building other packages which use import path with
