@@ -122,6 +122,7 @@ which use the supplementary Go text libraries with golang.org/x/ imports.
 
 %package unit-test-devel
 Summary:        Unit tests for %{name} package
+BuildArch:      noarch
 # test subpackage tests code from devel subpackage
 Requires:       %{name}-devel = %{version}-%{release}
 
@@ -133,6 +134,7 @@ providing packages with %{import_path} prefix.
 
 %package -n %{x_name}-unit-test-devel
 Summary:        Unit tests for %{name} package
+BuildArch:      noarch
 # test subpackage tests code from devel subpackage
 Requires:       %{name}-devel = %{version}-%{release}
 

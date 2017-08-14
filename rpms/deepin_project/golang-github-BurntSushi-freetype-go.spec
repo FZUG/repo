@@ -42,6 +42,7 @@ building other packages which use import path with
 
 %package unit-test-devel
 Summary:        Unit tests for %{name} package
+BuildArch:      noarch
 # test subpackage tests code from devel subpackage
 Requires:       %{name}-devel = %{version}-%{release}
 
