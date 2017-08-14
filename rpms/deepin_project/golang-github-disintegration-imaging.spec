@@ -12,7 +12,7 @@
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        1.2.1
-Release:        1%{?dist}
+Release:        1.git%{shortcommit}%{?dist}
 Summary:        Simple Go image processing package
 License:        MIT
 URL:            https://%{provider_prefix}

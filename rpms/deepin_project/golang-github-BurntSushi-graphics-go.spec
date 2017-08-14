@@ -12,7 +12,7 @@
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        Graphics library for the Go programming language
 License:        BSD
 URL:            https://%{provider_prefix}

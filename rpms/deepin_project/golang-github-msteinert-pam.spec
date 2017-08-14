@@ -12,7 +12,7 @@
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        Go wrapper module for the Pluggable Authentication Modules(PAM) API
 License:        BSD
 URL:            https://%{provider_prefix}

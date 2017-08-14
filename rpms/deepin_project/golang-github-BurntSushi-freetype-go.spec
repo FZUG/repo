@@ -12,7 +12,7 @@
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        A fork of freetype-go with bounding box calculations
 License:        GPLv2+
 URL:            https://%{provider_prefix}

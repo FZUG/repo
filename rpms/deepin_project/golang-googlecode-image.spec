@@ -21,7 +21,7 @@
 
 Name:           golang-googlecode-image
 Version:        0
-Release:        0.1%{?dist}
+Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        Supplementary Go image libraries
 License:        BSD
 URL:            https://%{provider_prefix}
