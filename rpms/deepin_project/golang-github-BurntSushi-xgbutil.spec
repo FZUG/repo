@@ -13,7 +13,7 @@
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
 Release:        0.1.git%{shortcommit}%{?dist}
-Summary:        XGB is the X protocol Go language Binding.
+Summary:        XGB is the X protocol Go language Binding
 License:        WTFPL
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
@@ -61,6 +61,12 @@ Provides:       golang(%{import_path}/xwindow) = %{version}-%{release}
 %description devel
 %{summary}.
 
+xgbutil is a utility library designed to work with the X Go Binding. This
+project's main goal is to make various X related tasks easier. For example,
+binding keys, using the EWMH or ICCCM specs with the window manager,
+moving/resizing windows, assigning function callbacks to particular events,
+drawing images to a window, etc.
+
 This package contains library source intended for
 building other packages which use import path with
 %{import_path} prefix.
@@ -91,5 +97,8 @@ sort -u -o devel.file-list devel.file-list
 %dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
 
 %changelog
+* Tue Aug 15 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.gitf7c97ce
+- Add description
+
 * Wed Dec 28 2016 Jaroslav <cz.guardian@gmail.com> Stepanek 0.0.1.gitf7c97ce
 - Initial package build
