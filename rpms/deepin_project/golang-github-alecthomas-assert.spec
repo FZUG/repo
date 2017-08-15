@@ -32,6 +32,7 @@ BuildArch:      noarch
 BuildRequires:  golang(github.com/alecthomas/colour)
 BuildRequires:  golang(github.com/alecthomas/repr)
 BuildRequires:  golang(github.com/sergi/go-diff/diffmatchpatch)
+BuildRequires:  golang(github.com/stretchr/testify/require)
 Requires:       golang(github.com/alecthomas/colour)
 Requires:       golang(github.com/alecthomas/repr)
 Requires:       golang(github.com/sergi/go-diff/diffmatchpatch)
@@ -43,6 +44,18 @@ Provides:       golang(%{import_path}) = %{version}-%{release}
 This package contains library source intended for
 building other packages which use import path with
 %{import_path} prefix.
+
+%package unit-test-devel
+Summary:        Unit tests for %{name} package
+BuildArch:      noarch
+# test subpackage tests code from devel subpackage
+Requires:       %{name}-devel = %{version}-%{release}
+
+%description unit-test-devel
+%{summary}.
+
+This package contains unit tests for project
+providing packages with %{import_path} prefix.
 
 
 %prep
@@ -62,6 +75,20 @@ for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
     echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
 done
 
+# testing files for this project
+install -d %{buildroot}%{gopath}/src/%{import_path}/
+# find all *_test.go files and generate unit-test.file-list
+for file in $(find . -iname "*_test.go"); do
+    dirprefix=$(dirname $file)
+    install -d -p %{buildroot}%{gopath}/src/%{import_path}/$dirprefix
+    cp -pav $file %{buildroot}%{gopath}/src/%{import_path}/$file
+    echo "%%{gopath}/src/%%{import_path}/$file" >> unit-test-devel.file-list
+    while [ "$dirprefix" != "." ]; do
+        echo "%%dir %%{gopath}/src/%%{import_path}/$dirprefix" >> devel.file-list
+        dirprefix=$(dirname $dirprefix)
+    done
+done
+
 sort -u -o devel.file-list devel.file-list
 
 %check
@@ -71,12 +98,14 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %global gotest go test
 %endif
 
-%gotest %{import_path}
+%gotest %{import_path}/_example ||:
 
 %files devel -f devel.file-list
 %doc README.md
 %license LICENCE.txt
 %dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
+
+%files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
 * Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
