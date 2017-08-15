@@ -14,7 +14,7 @@ Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
 Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        XGB is the X protocol Go language Binding
-License:        WTFPL
+License:        BSD
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
@@ -79,6 +79,7 @@ providing packages with %{import_path} prefix.
 
 %prep
 %setup -q -n %{repo}-%{commit}
+find -type f -exec chmod 644 {} ';'
 
 %build
 
@@ -94,7 +95,19 @@ for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
     echo "%%{gopath}/src/%%{import_path}/$file" >> devel.file-list
 done
 
-install xproto/xproto_test.go %{buildroot}%{gopath}/src/%{import_path}/xproto/
+# testing files for this project
+install -d -p %{buildroot}%{gopath}/src/%{import_path}/
+# find all *_test.go files and generate unit-test.file-list
+for file in $(find . -iname "*_test.go"); do
+    dirprefix=$(dirname $file)
+    install -d -p %{buildroot}%{gopath}/src/%{import_path}/$dirprefix
+    cp -pav $file %{buildroot}%{gopath}/src/%{import_path}/$file
+    echo "%%{gopath}/src/%%{import_path}/$file" >> unit-test-devel.file-list
+    while [ "$dirprefix" != "." ]; do
+        echo "%%dir %%{gopath}/src/%%{import_path}/$dirprefix" >> devel.file-list
+        dirprefix=$(dirname $dirprefix)
+    done
+done
 
 sort -u -o devel.file-list devel.file-list
 
@@ -105,41 +118,15 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %global gotest go test
 %endif
 
-%gotest %{import_path}
-%gotest %{import_path}/bigreq
-%gotest %{import_path}/composite
-%gotest %{import_path}/damage
-%gotest %{import_path}/dpms
-%gotest %{import_path}/dri2
-%gotest %{import_path}/ge
-%gotest %{import_path}/glx
-%gotest %{import_path}/randr
-%gotest %{import_path}/record
-%gotest %{import_path}/render
-%gotest %{import_path}/res
-%gotest %{import_path}/screensaver
-%gotest %{import_path}/shape
-%gotest %{import_path}/shm
-%gotest %{import_path}/xcmisc
-%gotest %{import_path}/xevie
-%gotest %{import_path}/xf86dri
-%gotest %{import_path}/xf86vidmode
-%gotest %{import_path}/xfixes
-%gotest %{import_path}/xinerama
-%gotest %{import_path}/xprint
+# we're in a chroot and do not have access to the display
 #%%gotest %%{import_path}/xproto
-%gotest %{import_path}/xselinux
-%gotest %{import_path}/xtest
-%gotest %{import_path}/xv
-%gotest %{import_path}/xvmc
 
 %files devel -f devel.file-list
 %doc README
 %license LICENSE
 %dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
 
-%files unit-test-devel
-%{gopath}/src/%{import_path}/xproto/xproto_test.go 
+%files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
 * Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git27f1227
