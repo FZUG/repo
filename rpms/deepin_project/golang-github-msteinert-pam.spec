@@ -99,10 +99,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files devel -f devel.file-list
 %doc README.md
 %license LICENSE
-%dir %{gopath}/src/%{import_path}
 
 %files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
-* Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 0.1-1
+* Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git2c288b3
 - Initial package build
