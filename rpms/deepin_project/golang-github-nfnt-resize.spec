@@ -14,7 +14,7 @@ Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
 Release:        0.1.git%{shortcommit}%{?dist}
 Summary:        Pure golang image resize
-License:        MIT
+License:        ISC
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
@@ -97,10 +97,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files devel -f devel.file-list
 %doc README.md
 %license LICENSE
-%dir %{gopath}/src/%{import_path}
 
 %files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
-* Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 0.1-1
+* Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git891127d
 - Initial package build
