@@ -254,5 +254,5 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files -n %{x_name}-unit-test-devel -f x_unit-test-devel.file-list
 
 %changelog
-* Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+* Mon Aug  7 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git426cfd8
 - Initial package

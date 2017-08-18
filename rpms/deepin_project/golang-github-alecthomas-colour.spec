@@ -83,5 +83,5 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %{gopath}/src/%{import_path}/colour_test.go
 
 %changelog
-* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git60882d9
 - Initial package build

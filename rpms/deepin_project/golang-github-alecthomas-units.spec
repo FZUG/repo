@@ -92,5 +92,5 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %{gopath}/src/%{import_path}/bytes_test.go 
 
 %changelog
-* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git2efee85
 - Initial package

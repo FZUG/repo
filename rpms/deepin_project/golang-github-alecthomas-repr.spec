@@ -82,5 +82,5 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %{gopath}/src/%{import_path}/repr_test.go
 
 %changelog
-* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.gitd44565c
 - Initial package build
