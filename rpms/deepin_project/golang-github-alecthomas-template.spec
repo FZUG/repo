@@ -13,8 +13,8 @@
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
 Release:        0.1.git%{shortcommit}%{?dist}
-Summary:        Go's text/template package with newline elisio
-License:        MIT
+Summary:        Go's text/template package with newline elision
+License:        BSD
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
@@ -106,5 +106,5 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
-* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.gita0175ee
 - Initial package
