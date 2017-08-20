@@ -1,32 +1,28 @@
-%global project dde-dock
-%global repo %{project}
+%global repo dde-dock
 
 Name:           deepin-dock
-Version:        4.3.3
+Version:        4.3.4
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-dock
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  deepin-qt-dbus-factory-devel
-BuildRequires:  gsettings-qt-devel
-BuildRequires:  gtk2-devel
-BuildRequires:  libXtst-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(gsettings-qt)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(xtst)
+BuildRequires:  pkgconfig(xcb-composite)
+BuildRequires:  pkgconfig(xcb-ewmh)
+BuildRequires:  pkgconfig(xcb-icccm)
+BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  xcb-util-wm-devel
-BuildRequires:  xcb-util-image-devel
-#Requires:       deepin-daemon
-#Requires:       deepin-menu
-#Requires:       deepin-qt-dbus-factory
-#Requires:       deepin-qt5integration
-
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
-Obsoletes:      %{repo}%{?_isa} < %{version}-%{release}
+Requires:       deepin-menu
 
 %description
 Deepin desktop-environment - Dock module.
@@ -66,6 +62,9 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 4.3.4-1
+- Update to 4.3.4
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.3.3-1.gitbf79f1c
 - Update to 4.3.3
 
