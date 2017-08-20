@@ -1,15 +1,15 @@
 Name:           deepin-notifications
-Version:        3.0.6
+Version:        3.0.7
 Release:        1%{?dist}
 Summary:        System notifications for linuxdeepin desktop environment
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-notifications
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtdeclarative-devel
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  gtk2-devel
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Qml)
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(gtk+-2.0)
 
 %description
 System notifications for linuxdeepin desktop environment.
@@ -33,6 +33,9 @@ sed -i 's|lib|libexec|' deepin-notifications.pro \
 %{_datadir}/dbus-1/services/com.deepin.Notifications.service
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 3.0.7-1
+- Update to 3.0.7
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.0.6-1.git0033758
 - Update to 3.0.6
 
