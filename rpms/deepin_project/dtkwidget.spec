@@ -7,14 +7,15 @@ URL:            https://github.com/linuxdeepin/dtkwidget
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  dtkcore-devel
-BuildRequires:  gsettings-qt-devel
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-static
-BuildRequires:  qt5-qtmultimedia-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  libXrender-devel
-BuildRequires:  startup-notification-devel
-BuildRequires:  xcb-util-devel
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(gsettings-qt)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(xrender)
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 %description
