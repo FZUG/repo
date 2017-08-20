@@ -2,16 +2,16 @@
 %global reponame %{project}
 
 Name:           deepin-calendar
-Version:        1.0.11
-Release:        2%{?dist}
+Version:        1.0.12
+Release:        1%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dde-calendar
 Source0:        %{url}/archive/%{version}/%{reponame}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  desktop-file-utils
 Requires:       hicolor-icon-theme
@@ -42,6 +42,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{reponame}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{reponame}.svg
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 1.0.12-1
+- Update to 1.0.12
+
 * Sun Aug 06 2017 Zamir SUN <sztsian@gmail.com> - 1.0.11-2
 - Add check for desktop file
 
