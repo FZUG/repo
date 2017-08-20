@@ -1,5 +1,5 @@
 Name:           deepin-qml-widgets
-Version:        2.3.5
+Version:        2.3.6
 Release:        1%{?dist}
 Summary:        Deepin QML widgets
 Group:          Development/Libraries
@@ -7,17 +7,16 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-qml-widgets
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  pkgconfig
 BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-gettext-tools
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  gtk2-devel
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtdeclarative-devel
-BuildRequires:  qt5-qtwebkit-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  libXcomposite-devel
-BuildRequires:  libxcb-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Qml)
+BuildRequires:  pkgconfig(Qt5WebKit)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(xcomposite)
+BuildRequires:  pkgconfig(xcb)
 Requires:       qt5-qtgraphicaleffects(?%_isa)
 Requires:       qt5-qtquickcontrols(?%_isa)
 
@@ -50,6 +49,9 @@ cp -r locale/mo/* %{buildroot}%{_datadir}/locale/
 %{_datadir}/dbus-1/services/com.deepin.dialog.service
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 2.3.6-1
+- Update to 2.3.6
+
 * Sat Aug  5 2017 mosquito <sensor.wen@gmail.com> - 2.3.5-1
 - Add Req qt5-qtgraphicaleffects, qt5-qtquickcontrols
 - Remove BReq qt5-qtquick1
