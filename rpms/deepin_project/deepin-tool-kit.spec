@@ -1,5 +1,5 @@
 Name:           deepin-tool-kit
-Version:        0.3.3
+Version:        1.0.0
 Release:        1%{?dist}
 Summary:        Base development tool of all C++/Qt Developer work on Deepin
 License:        GPLv3
@@ -48,7 +48,7 @@ sed -i -E '/test|examples/d' dtk.pro
 %doc README.md Specification.md
 %license LICENSE
 %{_libdir}/lib*.so.*
-%{_datadir}/dtkwidget/translations/*.qm
+%{_datadir}/dtkwidget1/translations/*.qm
 
 %files devel
 %{_includedir}/libdtk-*/
@@ -56,7 +56,10 @@ sed -i -E '/test|examples/d' dtk.pro
 %{_libdir}/lib*.so
 
 %changelog
-* Tue Jul 31 2017 mosquito <sensor.wen@gmail.com> - 0.3.3-1
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 1.0.0-1
+- Update to 1.0.0
+
+* Mon Jul 31 2017 mosquito <sensor.wen@gmail.com> - 0.3.3-1
 - Update to 0.3.3
 
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.3.1-1.gite867696
