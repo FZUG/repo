@@ -1,32 +1,31 @@
-%global project dde-control-center
-%global repo %{project}
+%global repo dde-control-center
 
 Name:           deepin-control-center
-Version:        4.2.5
+Version:        4.2.5.4
 Release:        1%{?dist}
 Summary:        New control center for Linux Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-control-center
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  deepin-dock-devel
-BuildRequires:  deepin-qt-dbus-factory-devel
-BuildRequires:  gsettings-qt-devel
-BuildRequires:  GeoIP-devel
-BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtmultimedia-devel
-BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  desktop-file-utils
+BuildRequires:  deepin-dock-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(gsettings-qt)
+BuildRequires:  pkgconfig(geoip)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  qt5-linguist
 Requires:       deepin-account-faces
 Requires:       deepin-api
 Requires:       deepin-daemon
 Requires:       GeoIP-GeoLite-data
 Requires:       GeoIP-GeoLite-data-extra
-Requires:       startdde
 Requires:       gtk-murrine-engine
+Requires:       startdde
 
 %description
 New control center for Linux Deepin.
@@ -52,6 +51,9 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop ||:
+
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -67,6 +69,9 @@ sed -i -E '/QProcess|target.path/s|lib|libexec|' modules/update/updatemodule.cpp
 %{_datadir}/%{repo}/
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.5.4-1
+- Update to 4.2.5.4
+
 * Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 4.2.5-1
 - Update to 4.2.5
 
