@@ -1,8 +1,7 @@
-%global project dde-session-ui
-%global repo %{project}
+%global repo dde-session-ui
 
 Name:           deepin-session-ui
-Version:        4.0.13
+Version:        4.0.13.1
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -10,7 +9,7 @@ URL:            https://github.com/linuxdeepin/dde-session-ui
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  deepin-gettext-tools
-BuildRequires:  deepin-tool-kit-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(gtk+-2.0)
@@ -101,6 +100,9 @@ fi
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 4.0.13.1-1
+- Update to 4.0.13.1
+
 * Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 4.0.13-1
 - Rebuild
 
