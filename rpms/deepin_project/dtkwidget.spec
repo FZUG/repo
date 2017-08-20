@@ -1,5 +1,5 @@
 Name:           dtkwidget
-Version:        0.3.3
+Version:        2.0.0
 Release:        1%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
@@ -54,5 +54,8 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 %{_libdir}/lib*.so
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 2.0.0-1
+- Update to 2.0.0
+
 * Sat Jul 29 2017 mosquito <sensor.wen@gmail.com> - 0.3.3-1
 - Initial package build
