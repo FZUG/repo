@@ -1,5 +1,5 @@
 Name:           deepin-menu
-Version:        3.1.5
+Version:        3.1.6
 Release:        1%{?dist}
 Summary:        Deepin menu service
 License:        GPLv3+
@@ -7,13 +7,13 @@ URL:            https://github.com/linuxdeepin/deepin-menu
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  desktop-file-utils
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  deepin-qt-dbus-factory-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Qml)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  python2-devel
 BuildRequires:  python2-setuptools
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtdeclarative-devel
-BuildRequires:  qt5-qtx11extras-devel
 Requires:       python-qt5
 
 %description
@@ -61,6 +61,9 @@ ln -sfv ../../..%{_datadir}/applications/%{name}.desktop \
 %{_datadir}/dbus-1/services/com.deepin.menu.service
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.6-1
+- Update to 3.1.6
+
 * Wed Jul 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.5-1
 - Update to 3.1.5
 
