@@ -2,7 +2,7 @@
 %global repo %{project}
 
 Name:           deepin-file-manager
-Version:        4.2.3
+Version:        4.2.4
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
@@ -11,11 +11,10 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-dock-devel
-BuildRequires:  dtksettings-devel
 BuildRequires:  file-devel
 BuildRequires:  mpv-libs-devel
 BuildRequires:  pkgconfig(atk)
-BuildRequires:  pkgconfig(dtkwidget1) == 1.1
+BuildRequires:  pkgconfig(dtkwidget) == 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(gsettings-qt)
@@ -28,11 +27,10 @@ BuildRequires:  pkgconfig(Qt5)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(taglib)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  qt5-linguist
-BuildRequires:  taglib-devel
-BuildRequires:  treefrog-framework-devel
 
 # run command by QProcess
 Requires:       deepin-shortcut-viewer
@@ -64,15 +62,6 @@ Deepin desktop environment - desktop module.
 
 %prep
 %setup -q -n %{repo}-%{version}
-sed 's/dtkbase/dtkbase1/; s/dtkwidget/dtkwidget1/; s/dtkutil/dtkutil1/' -i \
-  %{repo}/%{repo}.pro \
-  %{repo}-lib/%{repo}-lib.pro \
-  %{repo}-daemon/%{repo}-daemon.pro \
-  %{repo}-plugins/pluginPreview/dde-image-preview-plugin/dde-image-preview-plugin.pro \
-  dde-desktop/dde-desktop-build.pri \
-  dde-dock-plugins/disk-mount/disk-mount.pro \
-  dde-dock-plugins/trash/trash.pro \
-  usb-device-formatter/usb-device-formatter.pro
 
 # fix file permissions
 find -type f -perm 775 -exec chmod 644 {} \;
@@ -162,6 +151,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 4.2.4-1
+- Update to 4.2.4
+
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.3-1
 - Update to 4.2.3
 
