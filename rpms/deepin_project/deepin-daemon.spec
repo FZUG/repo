@@ -2,7 +2,7 @@
 %global repo %{project}
 
 Name:           deepin-daemon
-Version:        3.1.17
+Version:        3.1.18
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -148,6 +148,9 @@ fi
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.18-1
+- Update to 3.1.18
+
 * Wed Aug  2 2017 mosquito <sensor.wen@gmail.com> - 3.1.17-1
 - Update to 3.1.17
 
