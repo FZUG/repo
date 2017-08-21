@@ -1,29 +1,27 @@
 Name:           deepin-music
-Version:        3.1.4
-Release:        2%{?dist}
+Version:        3.1.5
+Release:        1%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
 License:        GPLv3
 Url:            https://github.com/linuxdeepin/deepin-music
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  git
 BuildRequires:  python
-BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  dtksettings-devel
-BuildRequires:  ffmpeg-devel
-BuildRequires:  libcue-devel
-BuildRequires:  libicu-devel
-BuildRequires:  libX11-devel
-BuildRequires:  libXext-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libcue)
+BuildRequires:  pkgconfig(icu-uc)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(taglib)
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  qt5-qtmultimedia-devel
-BuildRequires:  taglib-devel
 BuildRequires:  desktop-file-utils
-BuildRequires:  gcc-c++
 Provides:       deepin-music-player%{?_isa} = %{version}-%{release}
 
 %description
@@ -96,6 +94,9 @@ fi
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.5-1
+- Update to 3.1.5
+
 * Sun Aug 6 2017 Zamir SUN <sztsian@gmail.com> - 3.1.4-2
 - Remove group tag
 
