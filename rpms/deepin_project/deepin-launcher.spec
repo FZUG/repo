@@ -2,22 +2,21 @@
 %global repo %{project}
 
 Name:           deepin-launcher
-Version:        4.1.6
+Version:        4.1.7
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-launcher
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  deepin-qt-dbus-factory-devel
-BuildRequires:  gsettings-qt-devel
-BuildRequires:  gtk2-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(gsettings-qt)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  xcb-util-wm-devel
 Requires:       deepin-menu
 Requires:       deepin-daemon
 Requires:       startdde
@@ -44,6 +43,9 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 4.1.7-1
+- Update to 4.1.7
+
 * Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 4.1.6-1
 - Update to 4.1.6
 
