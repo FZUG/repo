@@ -1,15 +1,16 @@
 Name:           deepin-screen-recorder
-Version:        2.4
+Version:        2.6
 Release:        1%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-screen-recorder
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtx11extras-devel
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwm)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xtst)
@@ -56,6 +57,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 2.6-1
+- Update to 2.6
+
 * Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 2.4-1.gitbacac81
 - Update to 2.4
 
