@@ -1,21 +1,21 @@
 Name:           deepin-image-viewer
-Version:        1.2.14
+Version:        1.2.15
 Release:        1%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-image-viewer
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  freeimage-devel
-BuildRequires:  LibRaw-devel
-BuildRequires:  libexif-devel
-BuildRequires:  startup-notification-devel
-BuildRequires:  xcb-util-devel
+BuildRequires:  qt5-linguist
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(libraw)
+BuildRequires:  pkgconfig(libexif)
+BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(xcb-util)
 
 %description
 Deepin Image Viewer
@@ -58,6 +58,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 1.2.15-1
+- Update to 1.2.15
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.2.14-1.gite77fde5
 - Update to 1.2.14
 
