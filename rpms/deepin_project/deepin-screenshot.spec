@@ -1,5 +1,5 @@
 Name:           deepin-screenshot
-Version:        4.0.8
+Version:        4.0.9
 Release:        1%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
@@ -8,12 +8,12 @@ Group:          Applications/Internet
 Url:            https://github.com/linuxdeepin/deepin-screenshot
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  libXtst-devel
-BuildRequires:  xcb-util-devel
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtx11extras-devel
-#Requires:       deepin-daemon
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(xtst)
+BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+Recommends:     deepin-shortcut-viewer
 
 %description
 Provide a quite easy-to-use screenshot tool. Features:
@@ -58,6 +58,9 @@ fi
 %{_datadir}/icons/deepin/apps/scalable/%{name}.svg
 
 %changelog
+* Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 4.0.9-1
+- Update to 4.0.9
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 4.0.8-1.gitb7483cf
 - Update to 4.0.8
 
