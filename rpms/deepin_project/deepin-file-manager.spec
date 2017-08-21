@@ -2,39 +2,37 @@
 %global repo %{project}
 
 Name:           deepin-file-manager
-Version:        4.2.2
+Version:        4.2.3
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-Patch0:         remove-unimplemented-slots.patch
 
-BuildRequires:  atk-devel
-BuildRequires:  chrpath
 BuildRequires:  deepin-gettext-tools
-BuildRequires:  deepin-tool-kit-devel
 BuildRequires:  deepin-dock-devel
-BuildRequires:  deepin-qt-dbus-factory-devel
 BuildRequires:  dtksettings-devel
-BuildRequires:  ffmpegthumbnailer-devel
 BuildRequires:  file-devel
-BuildRequires:  gtk2-devel
-BuildRequires:  gsettings-qt-devel
-BuildRequires:  libsecret-devel
 BuildRequires:  mpv-libs-devel
-BuildRequires:  poppler-cpp-devel
-BuildRequires:  polkit-devel
-BuildRequires:  polkit-qt5-1-devel
+BuildRequires:  pkgconfig(atk)
+BuildRequires:  pkgconfig(dtkwidget1) == 1.1
+BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(gsettings-qt)
+BuildRequires:  pkgconfig(libffmpegthumbnailer)
+BuildRequires:  pkgconfig(libsecret-1)
+BuildRequires:  pkgconfig(poppler-cpp)
+BuildRequires:  pkgconfig(polkit-agent-1)
+BuildRequires:  pkgconfig(polkit-qt5-1)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  qt5-linguist
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtmultimedia-devel
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtx11extras-devel
 BuildRequires:  taglib-devel
 BuildRequires:  treefrog-framework-devel
-BuildRequires:  xcb-util-devel
-BuildRequires:  xcb-util-wm-devel
 
 # run command by QProcess
 Requires:       deepin-shortcut-viewer
@@ -66,7 +64,15 @@ Deepin desktop environment - desktop module.
 
 %prep
 %setup -q -n %{repo}-%{version}
-%patch0 -p1
+sed 's/dtkbase/dtkbase1/; s/dtkwidget/dtkwidget1/; s/dtkutil/dtkutil1/' -i \
+  %{repo}/%{repo}.pro \
+  %{repo}-lib/%{repo}-lib.pro \
+  %{repo}-daemon/%{repo}-daemon.pro \
+  %{repo}-plugins/pluginPreview/dde-image-preview-plugin/dde-image-preview-plugin.pro \
+  dde-desktop/dde-desktop-build.pri \
+  dde-dock-plugins/disk-mount/disk-mount.pro \
+  dde-dock-plugins/trash/trash.pro \
+  usb-device-formatter/usb-device-formatter.pro
 
 # fix file permissions
 find -type f -perm 775 -exec chmod 644 {} \;
@@ -84,9 +90,6 @@ sed -i 's|%{_datadir}|%{_libdir}|' dde-sharefiles/appbase.pri
 %build
 %qmake_qt5 PREFIX=%{_prefix} QMAKE_CFLAGS_ISYSTEM=
 %make_build
-
-# remove rpath
-chrpath -d dde-sharefiles/lib/lib*
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
@@ -129,7 +132,6 @@ fi
 %{_libdir}/lib%{repo}.so.*
 %{_libdir}/dde-dock/plugins/*.so
 %{_libdir}/%{repo}/plugins/previews/*.so
-%{_libdir}/%{repo}/sharefiles/lib/*.so.*
 %{_datadir}/%{repo}/
 %{_datadir}/dman/%{repo}/
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
@@ -151,7 +153,6 @@ fi
 %{_includedir}/%{repo}/private/*.h
 %{_libdir}/pkgconfig/%{repo}.pc
 %{_libdir}/lib%{repo}.so
-%{_libdir}/%{repo}/sharefiles/lib/*.so
 
 %files -n deepin-desktop
 %{_bindir}/dde-desktop
@@ -161,6 +162,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.3-1
+- Update to 4.2.3
+
 * Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 4.2.2-1
 - Update to 4.2.2
 
