@@ -6,8 +6,9 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtkwm
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  dtkcore-devel
 BuildRequires:  qt5-qtbase-static
+BuildRequires:  pkgconfig(dtkcore)
+BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5DBus)
