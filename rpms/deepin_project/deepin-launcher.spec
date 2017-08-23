@@ -1,5 +1,4 @@
-%global project dde-launcher
-%global repo %{project}
+%global repo dde-launcher
 
 Name:           deepin-launcher
 Version:        4.1.7
@@ -20,6 +19,7 @@ BuildRequires:  qt5-linguist
 Requires:       deepin-menu
 Requires:       deepin-daemon
 Requires:       startdde
+Requires:       hicolor-icon-theme
 
 %description
 Deepin desktop-environment - Launcher module
@@ -34,6 +34,18 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+
+%post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %license LICENSE
