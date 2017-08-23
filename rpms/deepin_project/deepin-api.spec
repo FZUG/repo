@@ -49,7 +49,35 @@ Go-lang bingding for dde-daemon
 Summary:        %{summary}
 BuildArch:      noarch
 ExclusiveArch:  %{go_arches} noarch
-Provides:       golang(%{import_path}) = %{version}-%{release}
+BuildRequires:  golang(github.com/BurntSushi/xgb)
+BuildRequires:  golang(github.com/BurntSushi/xgb/randr)
+BuildRequires:  golang(github.com/BurntSushi/xgb/xproto)
+BuildRequires:  golang(github.com/disintegration/imaging)
+Requires:       golang(github.com/BurntSushi/xgb)
+Requires:       golang(github.com/BurntSushi/xgb/randr)
+Requires:       golang(github.com/BurntSushi/xgb/xproto)
+Requires:       golang(github.com/disintegration/imaging)
+Provides:       golang(%{import_path}/blurimage) = %{version}-%{release}
+Provides:       golang(%{import_path}/drandr) = %{version}-%{release}
+Provides:       golang(%{import_path}/dxinput) = %{version}-%{release}
+Provides:       golang(%{import_path}/dxinput/utils) = %{version}-%{release}
+Provides:       golang(%{import_path}/i18n_dependent) = %{version}-%{release}
+Provides:       golang(%{import_path}/lang_info) = %{version}-%{release}
+Provides:       golang(%{import_path}/powersupply) = %{version}-%{release}
+Provides:       golang(%{import_path}/powersupply/battery) = %{version}-%{release}
+Provides:       golang(%{import_path}/session) = %{version}-%{release}
+Provides:       golang(%{import_path}/soundutils) = %{version}-%{release}
+Provides:       golang(%{import_path}/themes) = %{version}-%{release}
+Provides:       golang(%{import_path}/themes/scanner) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/cursor) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/font) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/gtk) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/icon) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/images) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/loader) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/pdf) = %{version}-%{release}
+Provides:       golang(%{import_path}/thumbnails/text) = %{version}-%{release}
 Provides:       %{name}-devel = %{version}-%{release}
 Obsoletes:      %{name}-devel < %{version}-%{release}
 
