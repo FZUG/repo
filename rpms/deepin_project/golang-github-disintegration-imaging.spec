@@ -88,6 +88,7 @@ done
 
 sort -u -o devel.file-list devel.file-list
 sort -u -o unit-test-devel.file-list unit-test-devel.file-list
+sed -i 's|\r||g' README.md
 
 %check
 export GOPATH=%{buildroot}%{gopath}:%{gopath}
@@ -101,7 +102,6 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files devel -f devel.file-list
 %doc README.md
 %license LICENSE
-%dir %{gopath}/src/%{import_path}
 
 %files unit-test-devel -f unit-test-devel.file-list
 
