@@ -1,5 +1,4 @@
-%global project dde-daemon
-%global repo %{project}
+%global repo dde-daemon
 
 Name:           deepin-daemon
 Version:        3.1.18
@@ -10,25 +9,26 @@ URL:            https://github.com/linuxdeepin/dde-daemon
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Source1:        deepin-daemon.sysusers
 
+ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
+BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  gettext
-BuildRequires:  golang
 BuildRequires:  deepin-gir-generator
 BuildRequires:  deepin-go-dbus-factory
-BuildRequires:  libgnome-keyring-devel
-BuildRequires:  systemd-devel
-BuildRequires:  poppler-glib-devel
 BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(gnome-keyring-1)
 BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(libbamf3)
 BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(libinput)
+BuildRequires:  pkgconfig(poppler-glib)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(xtst)
