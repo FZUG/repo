@@ -1,79 +1,52 @@
 Name:           deepin-movie
-Version:        2.2.14
-Release:        2%{?dist}
-Summary:        Deepin Movie based on QtAV
+Version:        2.9.10
+Release:        1%{?dist}
+Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
 License:        GPLv3
-URL:            https://github.com/linuxdeepin/deepin-movie
+URL:            https://github.com/linuxdeepin/deepin-movie-reborn
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildArch:      noarch
-BuildRequires:  python2-devel
-BuildRequires:  gettext
-BuildRequires:  deepin-gettext-tools
-BuildRequires:  desktop-file-utils
-
-Requires:       dbus-python
-Requires:       mediainfo
-Requires:       python-qt5
-Requires:       python-xpyb
-Requires:       python-magic
-Requires:       python2-ass
-Requires:       python2-pysrt
-Requires:       python2-peewee
-Requires:       python2-requests
-Requires:       python2-bottle
-Requires:       python2-pyopengl
-Requires:       qtav-qml-module
-
-Requires:       python2-xpybutil
-Requires:       python2-deepin-utils
-Requires:       deepin-menu
-Requires:       deepin-qml-widgets
-Requires:       deepin-qml-dbus-factory
-Requires:       deepin-qt5integration
-Recommends:     deepin-manual
+BuildRequires:  cmake(Qt5Concurrent)
+BuildRequires:  cmake(Qt5DBus)
+BuildRequires:  cmake(Qt5LinguistTools)
+BuildRequires:  cmake(Qt5Network)
+BuildRequires:  cmake(Qt5Widgets)
+BuildRequires:  cmake(Qt5X11Extras)
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(libffmpegthumbnailer)
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libavutil)
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavresample)
+BuildRequires:  pkgconfig(libpulse)
+BuildRequires:  pkgconfig(libpulse-simple)
+BuildRequires:  pkgconfig(mpv)
+BuildRequires:  pkgconfig(openssl)
+BuildRequires:  pkgconfig(xtst)
+BuildRequires:  pkgconfig(xcb-aux)
+BuildRequires:  pkgconfig(xcb-ewmh)
+BuildRequires:  pkgconfig(xcb-proto)
+BuildRequires:  pkgconfig(xcb-shape)
 
 %description
 Deepin movie for deepin desktop environment.
 
 %description -l zh_CN
-深度影音播放器, 后端基于QtAV, 支持解码大多数视频格式.
+深度影音播放器, 后端基于MPV, 支持解码大多数视频格式.
 
 %prep
-%setup -q
+%setup -q -n %{name}-reborn-%{version}
+sed -i '/dtk2/s|lib|libexec|' src/CMakeLists.txt
 
 %build
-%{__python2} configure.py
-deepin-generate-mo locale/locale_config.ini
-chmod 0755 src/main.py
-
-# Make python shebang uniq
-find -iname "*.py" | xargs sed -i '1s@^#!/usr/bin/python@#!/usr/bin/python2@'
-find -iname "*.py" | xargs sed -i '1s@^#!/usr/bin/env python@#!/usr/bin/python2@'
-sed -i '1s@^#! /usr/bin/env python@#!/usr/bin/python2@' src/utils/misc.py
-
-for lib in $(find -iname "*.py" -perm 644) ; do
- sed '1{\@^#!/usr/bin/python2@d}' $lib > $lib.new &&
- touch -r $lib $lib.new &&
- mv $lib.new $lib
-done
+%cmake -DCMAKE_BUILD_TYPE=Release
+%make_build
 
 %install
-%make_install PREFIX="%{_prefix}"
+%make_install
 
-# Fix cannot register existing type 'GdkDisplayManager'
-# https://bbs.archlinux.org/viewtopic.php?id=214147&p=2
-rm -f %{buildroot}%{_bindir}/%{name}
-cat > %{buildroot}%{_bindir}/%{name} << EOF
-#!/bin/bash
-QT_QPA_PLATFORMTHEME=deepin %{_datadir}/%{name}/main.py
-EOF
-
-chmod 0755 %{buildroot}%{_bindir}/%{name} \
-    %{buildroot}%{_datadir}/%{name}/main.py
-
-%find_lang %{name}
+%find_lang %{name} --with-qt
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -93,12 +66,14 @@ fi
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
-%{_datadir}/%{name}/
-%{_datadir}/dman/%{name}/
-%{_datadir}/applications/*
-%{_datadir}/icons/hicolor/*
+%{_datadir}/%{name}/translations/%{name}.qm
+%{_datadir}/applications/%{name}.desktop
+%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Thu Aug 24 2017 mosquito <sensor.wen@gmail.com> - 2.9.10-1
+- Update to 2.9.10
+
 * Sun Aug 06 2017 Zamir SUN <sztsian@gmail.com> - 2.2.14-2
 - Remove group tag
 - Fix rpmlint shebang error
