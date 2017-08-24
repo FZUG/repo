@@ -1,5 +1,4 @@
-%global project go-gir-generator
-%global repo %{project}
+%global repo go-gir-generator
 
 Name:           deepin-gir-generator
 Version:        1.0.1
@@ -10,9 +9,12 @@ URL:            https://github.com/linuxdeepin/go-gir-generator
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Patch0:         SettingsBackendLike.patch
 
-BuildRequires:  gcc-go
-BuildRequires:  gobject-introspection-devel
-BuildRequires:  libgudev-devel
+# e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
+ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
+# If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
+BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(gudev-1.0)
 
 %description
 Generate static golang bindings for GObject
