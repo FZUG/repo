@@ -1,6 +1,6 @@
 Name:           dtkwidget
 Version:        2.0.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtkwidget
@@ -16,7 +16,6 @@ BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xrender)
-%{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 %description
 DtkWidget is Deepin graphical user interface for deepin desktop development.
@@ -57,6 +56,9 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 %{_libdir}/lib*.so
 
 %changelog
+* Thu Aug 24 2017 mosquito <sensor.wen@gmail.com> - 2.0.0-2
+- Dont depend a specific version of Qt
+
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 2.0.0-1
 - Update to 2.0.0
 
