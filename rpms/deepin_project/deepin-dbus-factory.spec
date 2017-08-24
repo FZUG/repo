@@ -6,7 +6,7 @@ Name:           golang-deepin-%{repo}
 Version:        3.1.7
 Release:        2%{?dist}
 Summary:        Golang DBus factory for Deepin Desktop Environment
-License:        GPLv3
+License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dbus-factory
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
