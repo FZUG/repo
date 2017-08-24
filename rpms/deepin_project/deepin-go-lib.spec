@@ -7,12 +7,12 @@
 # https://github.com/linuxdeepin/go-lib
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     pkg.deepin.io/lib
-%global   commit          3c9791f1a391d7de7d50ee4e308da669143e2060
+%global   commit          70367c8d6653a07b6c09bb5a65f24e795e3161b9
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-deepin-go-lib
-Version:        1.0.5
-Release:        2%{?dist}
+Version:        1.1.0
+Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 License:        GPLv3
 URL:            https://%{provider_prefix}
@@ -40,10 +40,9 @@ BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil/xevent)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil/xprop)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil/xwindow)
-BuildRequires:  golang(github.com/howeyc/fsnotify)
 BuildRequires:  golang(golang.org/x/image/bmp)
 BuildRequires:  golang(golang.org/x/image/tiff)
-BuildRequires:  golang(launchpad.net/gocheck)
+BuildRequires:  golang(gopkg.in/check.v1)
 BuildRequires:  golang(gopkg.in/alecthomas/kingpin.v2)
 BuildRequires:  golang(github.com/smartystreets/goconvey/convey)
 BuildRequires:  pkgconfig(gobject-2.0)
@@ -60,7 +59,6 @@ Requires:       golang(github.com/BurntSushi/xgbutil)
 Requires:       golang(github.com/BurntSushi/xgbutil/xevent)
 Requires:       golang(github.com/BurntSushi/xgbutil/xprop)
 Requires:       golang(github.com/BurntSushi/xgbutil/xwindow)
-Requires:       golang(github.com/howeyc/fsnotify)
 Requires:       golang(golang.org/x/image/bmp)
 Requires:       golang(golang.org/x/image/tiff)
 
@@ -84,6 +82,7 @@ Provides:       golang(%{import_path}/dbus/introspect) = %{version}-%{release}
 Provides:       golang(%{import_path}/dbus/property) = %{version}-%{release}
 Provides:       golang(%{import_path}/encoding/kv) = %{version}-%{release}
 Provides:       golang(%{import_path}/event) = %{version}-%{release}
+Provides:       golang(%{import_path}/fsnotify) = %{version}-%{release}
 Provides:       golang(%{import_path}/gdkpixbuf) = %{version}-%{release}
 Provides:       golang(%{import_path}/gettext) = %{version}-%{release}
 Provides:       golang(%{import_path}/graphic) = %{version}-%{release}
@@ -236,6 +235,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
+* Thu Aug 24 2017 mosquito <sensor.wen@gmail.com> - 1.1.0-1
+- Update to 1.1.0
+
 * Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 1.0.5-2
 - Rename to golang-deepin-go-lib
 
