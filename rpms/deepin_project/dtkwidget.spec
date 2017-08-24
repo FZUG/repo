@@ -47,7 +47,9 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 %doc README.md
 %license LICENSE
 %{_libdir}/lib*.so.*
-%{_datadir}/dtkwidget/translations/*.qm
+%dir %{_datadir}/%{name}
+%dir %{_datadir}/%{name}/translations
+%{_datadir}/%{name}/translations/*.qm
 
 %files devel
 %{_includedir}/libdtk-*/
