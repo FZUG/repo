@@ -18,7 +18,7 @@ BuildRequires:  poppler-glib-devel
 BuildRequires:  deepin-metacity-devel
 BuildRequires:  deepin-dbus-generator
 BuildRequires:  deepin-gir-generator
-BuildRequires:  deepin-go-dbus-factory
+BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/dde/api)
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/mattn/go-sqlite3)

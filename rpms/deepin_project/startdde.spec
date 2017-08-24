@@ -13,7 +13,7 @@ BuildRequires:  golang
 BuildRequires:  libgo-devel
 BuildRequires:  coffee-script
 BuildRequires:  deepin-gir-generator
-BuildRequires:  deepin-go-dbus-factory
+BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  webkitgtk-devel
 BuildRequires:  libcanberra-devel
 BuildRequires:  golang(pkg.deepin.io/dde/api)

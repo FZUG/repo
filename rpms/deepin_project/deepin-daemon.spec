@@ -13,7 +13,7 @@ ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  gettext
 BuildRequires:  deepin-gir-generator
-BuildRequires:  deepin-go-dbus-factory
+BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gnome-keyring-1)

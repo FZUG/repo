@@ -30,7 +30,7 @@ BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  deepin-gir-generator
-BuildRequires:  deepin-go-dbus-factory
+BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
