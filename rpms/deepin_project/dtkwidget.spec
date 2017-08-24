@@ -6,9 +6,9 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtkwidget
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  dtkcore-devel
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-static
+BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(gsettings-qt)
