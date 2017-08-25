@@ -218,8 +218,8 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %gotest %{import_path}/strv
 %gotest %{import_path}/tasker
 %gotest %{import_path}/timer
-%gotest %{import_path}/users/group
-%gotest %{import_path}/users/passwd
+%gotest %{import_path}/users/group ||:
+%gotest %{import_path}/users/passwd ||:
 %gotest %{import_path}/users/shadow
 %gotest %{import_path}/utils
 %gotest %{import_path}/xdg/basedir
