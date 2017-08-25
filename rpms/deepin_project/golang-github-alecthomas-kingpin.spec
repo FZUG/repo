@@ -68,7 +68,7 @@ providing packages with %{import_path} prefix.
 install -d -p %{buildroot}%{gopath}/src/%{import_path}/
 echo "%%dir %%{gopath}/src/%%{import_path}/." >> devel.file-list
 # find all *.go but no *_test.go files and generate devel.file-list
-for file in $(find . -iname "*.go" \! -iname "*_test.go") ; do
+for file in $(find . -iname "*.go" \! -iname "*_test.go" \! -path "./_examples/*") ; do
     echo "%%dir %%{gopath}/src/%%{import_path}/$(dirname $file)" >> devel.file-list
     install -d -p %{buildroot}%{gopath}/src/%{import_path}/$(dirname $file)
     cp -pav $file %{buildroot}%{gopath}/src/%{import_path}/$file
@@ -108,10 +108,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %gotest %{import_path}
 
 %files devel -f devel.file-list
-%doc README.md
+%doc README.md _examples
 %license COPYING
-%dir %{gopath}/src/%{import_path}
-%{gopath}/src/%{import_path2}
+%dir %{gopath}/src/%{import_path}/cmd
 
 %files unit-test-devel -f unit-test-devel.file-list
 %doc README.md
