@@ -1,17 +1,20 @@
+%global commit 704a515cfa304dcda37e42b5aa0330e02c1da54f
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Name:           deepin-wallpapers
 Version:        1.6
 Release:        1%{?dist}
 Summary:        Deepin Wallpapers provides wallpapers of dde
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wallpapers
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 %description
 Deepin Wallpapers provides wallpapers of dde
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{commit}
 
 %build
 
@@ -29,7 +32,7 @@ cp -r image-blur %{buildroot}/%{_var}/cache/
 %{_var}/cache/image-blur/
 
 %changelog
-* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.6-1.git3e5c89d
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.6-1
 - Update to 1.6
 
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.4-1.gita54c282
