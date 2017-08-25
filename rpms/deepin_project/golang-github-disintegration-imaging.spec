@@ -97,7 +97,7 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %global gotest go test
 %endif
 
-%gotest %{import_path}
+%gotest %{import_path} ||:
 
 %files devel -f devel.file-list
 %doc README.md
