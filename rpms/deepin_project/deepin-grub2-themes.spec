@@ -17,7 +17,7 @@ Deepin grub2 themes
 
 %files
 %license LICENSE
-/boot/grub/themes/deepin/
+/boot/grub2/themes/deepin/
 
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.0.0-1.git5d65132
