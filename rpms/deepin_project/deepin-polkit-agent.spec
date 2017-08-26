@@ -1,5 +1,4 @@
-%global project dde-polkit-agent
-%global repo %{project}
+%global repo dde-polkit-agent
 
 Name:           deepin-polkit-agent
 Version:        0.1.0
@@ -9,14 +8,14 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-polkit-agent
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(polkit-qt5-1)
 BuildRequires:  pkgconfig(Qt5)
 BuildRequires:  qt5-linguist
 
 %description
-Deepin Polkit Agent
+DDE Polkit Agent is the polkit agent used in Deepin Desktop Environment.
 
 %prep
 %setup -q -n %{repo}-%{version}
@@ -34,6 +33,7 @@ sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.d
 %doc README.md
 %license LICENSE
 %{_sysconfdir}/xdg/autostart/*.desktop
+%dir %{_libexecdir}/polkit-1-dde
 %{_libexecdir}/polkit-1-dde/%{repo}
 %{_datadir}/%{repo}/
 
