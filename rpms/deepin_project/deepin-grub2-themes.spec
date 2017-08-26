@@ -8,6 +8,7 @@ License:        CC-BY-SA
 URL:            https://github.com/linuxdeepin/deepin-grub2-themes
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
+BuildArch:      noarch
 # matches grub2 pkg archs
 ExcludeArch:    s390 s390x %{arm}
 %ifnarch aarch64
