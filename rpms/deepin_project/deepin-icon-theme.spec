@@ -1,7 +1,7 @@
 Name:           deepin-icon-theme
 Version:        15.12.46
 Release:        1%{?dist}
-Summary:        Deepin Icons
+Summary:        Icons for the Deepin Desktop Environment
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-icon-theme
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
@@ -9,7 +9,7 @@ BuildArch:      noarch
 BuildRequires:  python-devel
 
 %description
-Deepin Icons
+Icons for the Deepin Desktop Environment.
 
 %prep
 %setup -q
@@ -17,7 +17,23 @@ Deepin Icons
 %build
 
 %install
-%{make_install} PREFIX=%{_prefix}
+%make_install PREFIX=%{_prefix}
+
+%post
+touch --no-create %{_datadir}/icons/deepin &>/dev/null || :
+touch --no-create %{_datadir}/icons/Sea &>/dev/null || :
+
+%postun
+if [ $1 -eq 0 ] ; then
+  touch --no-create %{_datadir}/icons/deepin &>/dev/null
+  /usr/bin/gtk-update-icon-cache %{_datadir}/icons/deepin &>/dev/null || :
+  touch --no-create %{_datadir}/icons/Sea &>/dev/null
+  /usr/bin/gtk-update-icon-cache %{_datadir}/icons/Sea &>/dev/null || :
+fi
+
+%posttrans
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/deepin &>/dev/null || :
+/usr/bin/gtk-update-icon-cache %{_datadir}/icons/Sea &>/dev/null || :
 
 %files
 %doc README.md
@@ -26,7 +42,7 @@ Deepin Icons
 %{_datadir}/icons/Sea/
 
 %changelog
-* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 15.12.46-1.git10ccdc2
+* Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 15.12.46-1
 - Update to 15.12.46
 
 * Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 15.12.42-1.git59ca728
