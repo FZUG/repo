@@ -1,8 +1,7 @@
-%global project dde-file-manager
-%global repo %{project}
+%global repo dde-file-manager
 
 Name:           deepin-file-manager
-Version:        4.2.4
+Version:        4.2.5
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
@@ -151,6 +150,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 4.2.5-1
+- Update to 4.2.5
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 4.2.4-1
 - Update to 4.2.4
 
