@@ -20,10 +20,10 @@ Deepin Wallpapers provides wallpapers of dde
 
 %install
 install -d %{buildroot}/%{_datadir}/wallpapers/
-cp -r deepin %{buildroot}/%{_datadir}/wallpapers/
+cp -ar deepin %{buildroot}/%{_datadir}/wallpapers/
 
 install -d %{buildroot}/%{_var}/cache/
-cp -r image-blur %{buildroot}/%{_var}/cache/
+cp -ar image-blur %{buildroot}/%{_var}/cache/
 
 %files
 %doc README.md
