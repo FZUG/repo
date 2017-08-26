@@ -1,17 +1,17 @@
 Name:           deepin-wm-switcher
-Version:        1.1.2
+Version:        1.1.3
 Release:        1%{?dist}
 Summary:        Window manager switcher for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wm-switcher
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  cmake
-BuildRequires:  glib2-devel
-BuildRequires:  libX11-devel
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  xcb-util-keysyms-devel
+BuildRequires:  cmake(Qt5)
+BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(xcb-keysyms)
+BuildRequires:  pkgconfig(x11)
 Requires:       deepin-daemon
 Requires:       deepin-wm
 Requires:       deepin-metacity
@@ -40,6 +40,9 @@ It is capable of:
 %{_bindir}/%{name}
 
 %changelog
+* Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 1.1.3-1
+- Update to 1.1.3
+
 * Sat Aug  5 2017 mosquito <sensor.wen@gmail.com> - 1.1.2-1
 - Update description
 
