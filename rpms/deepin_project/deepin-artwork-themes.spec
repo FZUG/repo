@@ -1,13 +1,11 @@
-%global commit c4c7727893ba10dc83872e6237eb0783b664e626
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           deepin-artwork-themes
 Version:        15.12.4
-Release:        1.git%{shortcommit}%{?dist}
+Release:        1%{?dist}
 Summary:        Deepin artwork themes
-License:        LGPL3
+License:        GPL3
 URL:            https://github.com/linuxdeepin/deepin-artwork-themes
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        https://raw.github.com/linuxdeepin/%{name}/master/LICENSE
 
 BuildArch:      noarch
 BuildRequires:  python-devel
@@ -18,10 +16,11 @@ Requires:       deepin-icon-theme
 Deepin artwork themes
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
+cp -a %{SOURCE1} .
 
 %build
-make build
+%make_build build
 
 %install
 %make_install PREFIX=%{_prefix}
@@ -29,10 +28,11 @@ make build
 %files
 %doc README.md
 %license LICENSE
+%dir %{_datadir}/personalization
 %{_datadir}/personalization/*
 
 %changelog
-* Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 15.12.4-1.gitc4c7727
+* Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 15.12.4-1
 - Rebuild
 
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 15.12.4-1.git276dd32
