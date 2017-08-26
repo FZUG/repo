@@ -44,7 +44,6 @@ ln -sfv %{_datadir}/deepin/desktop-version %{buildroot}/etc/deepin-version
 %{_datadir}/backgrounds/deepin/desktop.jpg
 %dir %{_datadir}/deepin/
 %{_datadir}/deepin/desktop-version
-%dir %{_datadir}/distro-info/
 %{_datadir}/distro-info/deepin.csv
 %{_datadir}/i18n/i18n_dependent.json
 %{_datadir}/i18n/language_info.json
