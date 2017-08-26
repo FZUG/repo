@@ -1,7 +1,7 @@
 %global repo dde-daemon
 
 Name:           deepin-daemon
-Version:        3.1.18
+Version:        3.1.19
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -13,7 +13,6 @@ ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  gettext
 BuildRequires:  deepin-gir-generator
-BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gnome-keyring-1)
@@ -35,11 +34,13 @@ BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(xfixes)
 BuildRequires:  pkgconfig(xkbfile)
+BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/lib)
-BuildRequires:  golang(pkg.deepin.io/dde/api)
+BuildRequires:  golang(pkg.deepin.io/lib/fsnotify)
+BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
+BuildRequires:  golang(github.com/linuxdeepin/go-x11-client)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
-BuildRequires:  golang(github.com/howeyc/fsnotify)
 BuildRequires:  golang(github.com/axgle/mahonia)
 BuildRequires:  golang(github.com/msteinert/pam)
 BuildRequires:  golang(github.com/nfnt/resize)
@@ -92,7 +93,7 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
     accounts/user.go
 
 # Fix grub.cfg path
-sed -i '/ScriptFile/s|grub/|grub2/|' grub2/log.go
+sed -i 's|boot/grub|boot/grub2|' grub2/{theme,log,entry,config}.go
 sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
 %build
@@ -148,6 +149,9 @@ fi
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.19-1
+- Update to 3.1.19
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.18-1
 - Update to 3.1.18
 
