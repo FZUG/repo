@@ -6,7 +6,7 @@ Name:           deepin-api
 Version:        3.1.11
 Release:        2%{?dist}
 Summary:        Go-lang bingding for dde-daemon
-License:        GPLv3
+License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dde-api
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
@@ -47,8 +47,6 @@ Go-lang bingding for dde-daemon
 
 %package -n golang-%{name}-devel
 Summary:        %{summary}
-BuildArch:      noarch
-ExclusiveArch:  %{go_arches} noarch
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgb/randr)
 BuildRequires:  golang(github.com/BurntSushi/xgb/xproto)
@@ -101,7 +99,7 @@ sed -i 's|PREFIX}${libdir|LIBDIR|; s|libdir|LIBDIR|' Makefile
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
 BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
-make GOBUILD="go build -compiler gc -ldflags \"${LDFLAGS} -B $BUILD_ID\" -a -v -x"
+%make_build GOBUILD="go build -compiler gc -ldflags \"${LDFLAGS} -B $BUILD_ID\" -a -v -x"
 
 %install
 export GOPATH="$(pwd)/build:%{gopath}"
