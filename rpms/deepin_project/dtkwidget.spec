@@ -16,6 +16,8 @@ BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xrender)
+Provides:       deepin-tool-kit%{_isa} = %{version}-%{release}
+Obsoletes:      deepin-tool-kit%{_isa} < %{version}-%{release}
 
 %description
 DtkWidget is Deepin graphical user interface for deepin desktop development.
