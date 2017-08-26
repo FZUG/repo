@@ -1,5 +1,3 @@
-%global debug_package %{nil}
-
 Name:           startdde
 Version:        3.1.14
 Release:        1%{?dist}
@@ -8,24 +6,22 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/startdde
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  cmake
-BuildRequires:  golang
-BuildRequires:  libgo-devel
+ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
+BuildRequires:  gcc-go
 BuildRequires:  coffee-script
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
-BuildRequires:  webkitgtk-devel
-BuildRequires:  libcanberra-devel
 BuildRequires:  golang(pkg.deepin.io/dde/api)
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/howeyc/fsnotify)
+BuildRequires:  pkgconfig(libcanberra)
 Requires:       deepin-daemon
 Requires:       deepin-wm-switcher
 
 %description
-Starter of deepin desktop environment
+Starter of deepin desktop environment.
 
 %prep
 %setup -q
