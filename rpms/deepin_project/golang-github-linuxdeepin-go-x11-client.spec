@@ -13,7 +13,7 @@
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
 Release:        0.1.git%{shortcommit}%{?dist}
-Summary:        A fork
+Summary:        A X11 client Go bindings for Deepin Desktop Environment
 License:        GPLv3
 URL:            https://%{provider_prefix}
 Source0:        %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
