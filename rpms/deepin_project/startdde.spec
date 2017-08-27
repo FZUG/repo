@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.14
+Version:        3.1.15
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -11,17 +11,20 @@ BuildRequires:  gcc-go
 BuildRequires:  coffee-script
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
-BuildRequires:  golang(pkg.deepin.io/dde/api)
+BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/howeyc/fsnotify)
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(systemd)
+%{?systemd_requires}
 Requires:       deepin-daemon
 Requires:       deepin-wm-switcher
 
 %description
-Starter of deepin desktop environment.
+Startdde is used for launching DDE components and invoking user's
+custom applications which compliant with xdg autostart specification.
 
 %prep
 %setup -q
@@ -40,6 +43,15 @@ export GOPATH="%{gopath}"
 %install
 %make_install
 
+%post
+%systemd_post dde-readahead.service
+
+%preun
+%systemd_preun dde-readahead.service
+
+%postun
+%systemd_postun_with_restart dde-readahead.service
+
 %files
 %doc README.md
 %license LICENSE
@@ -50,6 +62,9 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.15-1
+- Update to 3.1.15
+
 * Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1
 - Update to 3.1.14
 
