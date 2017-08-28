@@ -99,10 +99,10 @@ sort -u -o unit-test-devel.file-list unit-test-devel.file-list
 export GOPATH=%{buildroot}%{gopath}:%{gopath}
 
 %if ! 0%{?gotest:1}
-%global gotest go test ||:
+%global gotest go test
 %endif
 
-%gotest %{import_path} ||:
+%gotest %{import_path}
 
 %files devel -f devel.file-list
 %doc README
