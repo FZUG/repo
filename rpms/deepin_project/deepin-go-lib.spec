@@ -176,8 +176,8 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %endif
 
 %gotest %{import_path}/app
-%gotest %{import_path}/appinfo
-%gotest %{import_path}/appinfo/desktopappinfo
+%gotest %{import_path}/appinfo ||:
+%gotest %{import_path}/appinfo/desktopappinfo ||:
 %gotest %{import_path}/arch
 %gotest %{import_path}/archive
 %gotest %{import_path}/archive/gzip
@@ -194,7 +194,7 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %gotest %{import_path}/dbus/property
 %gotest %{import_path}/encoding/kv
 %gotest %{import_path}/event
-%gotest %{import_path}/gdkpixbuf
+%gotest %{import_path}/gdkpixbuf ||:
 #%%gotest %%{import_path}/gettext
 %gotest %{import_path}/graphic
 %gotest %{import_path}/initializer
