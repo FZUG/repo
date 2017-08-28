@@ -7,7 +7,7 @@
 # https://github.com/linuxdeepin/go-x11-client
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     %{provider_prefix}
-%global   commit          67aca0bbaac689754f2b0d161fac6ae1e1c71a12
+%global   commit          7a984cd0f8308a969222a7cb1899e06d01f5840f
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
@@ -105,6 +105,11 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %gotest %{import_path} ||:
 
 %files devel -f devel.file-list
+%doc README
+%license LICENSE
+%dir %{gopath}/src/%{import_path}/ext
+%dir %{gopath}/src/%{import_path}/util
+%dir %{gopath}/src/%{import_path}/util/wm
 
 %files unit-test-devel -f unit-test-devel.file-list
 
