@@ -5,6 +5,7 @@ Summary:        Deepin Image Viewer
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-image-viewer
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        %{name}-appdata.xml
 
 BuildRequires:  freeimage-devel
 BuildRequires:  qt5-linguist
@@ -16,6 +17,9 @@ BuildRequires:  pkgconfig(libraw)
 BuildRequires:  pkgconfig(libexif)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
 BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
+Requires:       hicolor-icon-theme
 
 %description
 Deepin Image Viewer
@@ -30,6 +34,11 @@ sed -i 's|lrelease|lrelease-qt5|g' viewer/generate_translations.sh
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+install -Dm644 %SOURCE1 %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml
+
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -54,6 +63,7 @@ fi
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/%{name}/
 %{_datadir}/dman/%{name}/
+%{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/icons/deepin/apps/scalable/%{name}.svg
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 

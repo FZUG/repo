@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 mosquito -->
+<component type="desktop">
+  <id>deepin-image-viewer.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Deepin Image Viewer</name>
+  <name xml:lang="zh_CN">深度看图</name>
+  <name xml:lang="zh_TW">深度看图</name>
+  <summary>Deepin Image Viewer is Deepin Desktop Environment image viewer</summary>
+  <summary xml:lang="zh_CN">深度看图是一个免费开源的跨平台看图软件</summary>
+  <summary xml:lang="zh_TW">深度看图是一个免费开源的跨平台看图软件</summary>
+  <description>
+    <p>
+      Deepin Image Viewer is a free and open source cross-platform image viewer.
+    </p>
+    <p xml:lang="zh_CN">
+      深度看图是一个免费开源的跨平台看图软件。
+    </p>
+  </description>
+  <url type="homepage">https://github.com/linuxdeepin/deepin-image-viewer/</url>
+  <url type="bugtracker">https://github.com/linuxdeepin/deepin-image-viewer/issues/</url>
+  <releases>
+    <release version="1.2.15" date="2017-08-18"></release>
+  </releases>
+  <project_license>GPL-3.0</project_license>
+  <developer_name>Linux Deepin</developer_name>
+  <screenshots>
+    <screenshot type="default">https://www.deepin.org/wp-content/uploads/2016/12/deepin-imageviewer-1.png</screenshot>
+    <screenshot type="default">https://www.deepin.org/wp-content/uploads/2016/12/deepin-imageviewer-2.png</screenshot>
+    <screenshot type="default">https://www.deepin.org/wp-content/uploads/2016/12/deepin-imageviewer-3.png</screenshot>
+  </screenshots>
+</component>
