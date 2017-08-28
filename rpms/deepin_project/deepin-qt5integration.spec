@@ -1,54 +1,62 @@
-%global project qt5integration
-%global repo %{project}
+%global repo qt5integration
 
 Name:           deepin-qt5integration
-Version:        0.2.1
+Version:        0.2.3
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/qt5integration
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
+Source1:        https://download.qt.io/official_releases/qt/5.7/5.7.1/submodules/qtbase-opensource-src-5.7.1.tar.xz
 
 # full build requires
-BuildRequires:  git
-BuildRequires:  dbus-devel
-BuildRequires:  deepin-tool-kit-devel
-BuildRequires:  mesa-libEGL-devel
-BuildRequires:  mesa-libGL-devel
+BuildRequires:  pkgconfig(atk)
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  pkgconfig(dde-file-manager)
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(freetype2)
+BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(gtk+-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(ice)
+BuildRequires:  pkgconfig(libinput)
+BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(mtdev)
+BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Xdg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(sm)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(xi)
+BuildRequires:  pkgconfig(xrender)
+BuildRequires:  pkgconfig(xcb-ewmh)
+BuildRequires:  pkgconfig(xcb-image)
+BuildRequires:  pkgconfig(xcb-keysyms)
+BuildRequires:  pkgconfig(xcb-renderutil)
+BuildRequires:  pkgconfig(xcb)
+BuildRequires:  pkgconfig(xkbcommon-x11)
+BuildRequires:  pkgconfig(xkbcommon)
+BuildRequires:  qt5-qtbase-common
 BuildRequires:  qt5-qtbase-static
-BuildRequires:  qt5-qtsvg-devel
-BuildRequires:  qt5-qtx11extras-devel
-BuildRequires:  libqtxdg-devel
-BuildRequires:  libICE-devel
-BuildRequires:  libSM-devel
-BuildRequires:  libX11-devel
-BuildRequires:  libXext-devel
-BuildRequires:  libXi-devel
-BuildRequires:  libXrender-devel
-BuildRequires:  atk-devel
-BuildRequires:  cairo-devel
-BuildRequires:  fontconfig-devel
-BuildRequires:  freetype-devel
-BuildRequires:  gtk2-devel
-BuildRequires:  glib2-devel
-BuildRequires:  gdk-pixbuf2-devel
-BuildRequires:  libinput-devel
-BuildRequires:  mtdev-devel
-BuildRequires:  pango-devel
-BuildRequires:  xcb-util-wm-devel
-BuildRequires:  xcb-util-image-devel
-BuildRequires:  xcb-util-keysyms-devel
-BuildRequires:  xcb-util-renderutil-devel
-BuildRequires:  libxcb-devel
-BuildRequires:  libxkbcommon-x11-devel
-BuildRequires:  libxkbcommon-devel
-Recommends:     deepin-file-manager
+BuildRequires:  qt5-qtstyleplugins
 
 %description
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 
 %prep
-%setup -q -n %{repo}-%{version}
+%setup -q -a1 -n %{repo}-%{version}
+
+# qtxcb private header files
+sed -i '/exist/,$d' platformplugin/linux.pri
+install -d platformplugin/libqt5xcbqpa-dev/
+cp qtbase-opensource-src-%{_qt5_version}/src/plugins/platforms/xcb/*.h \
+  platformplugin/libqt5xcbqpa-dev/
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -65,6 +73,12 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %{_qt5_plugindir}/styles/libdstyleplugin.so
 
 %changelog
+* Tue Aug 22 2017 mosquito <sensor.wen@gmail.com> - 0.2.3-1
+- Update to 0.2.3
+
+* Tue Aug  1 2017 mosquito <sensor.wen@gmail.com> - 0.2.2-1
+- Update to 0.2.2
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.2.1-1.git2cd7432
 - Update to 0.2.1
 
