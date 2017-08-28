@@ -11,7 +11,6 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-dock-devel
 BuildRequires:  file-devel
-BuildRequires:  mpv-libs-devel
 BuildRequires:  pkgconfig(atk)
 BuildRequires:  pkgconfig(dtkwidget) == 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
