@@ -6,25 +6,27 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wm
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
+BuildRequires:  desktop-file-utils
 BuildRequires:  intltool
 BuildRequires:  gnome-common
-BuildRequires:  gnome-desktop3-devel
-BuildRequires:  granite-devel
-BuildRequires:  vala
+BuildRequires:  pkgconfig(clutter-gtk-1.0)
+BuildRequires:  pkgconfig(gnome-desktop-3.0)
+BuildRequires:  pkgconfig(granite)
+BuildRequires:  pkgconfig(gee-0.8)
+BuildRequires:  pkgconfig(gudev-1.0)
+BuildRequires:  pkgconfig(libbamf3)
+BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libdeepin-mutter)
+BuildRequires:  pkgconfig(libwnck-3.0)
+BuildRequires:  pkgconfig(upower-glib)
+BuildRequires:  pkgconfig(vapigen)
+BuildRequires:  pkgconfig(xkbcommon-x11)
+BuildRequires:  pkgconfig(xkbfile)
 BuildRequires:  vala-tools
-BuildRequires:  bamf-devel
-BuildRequires:  clutter-gtk-devel
-BuildRequires:  deepin-mutter-devel
-BuildRequires:  upower-devel
-BuildRequires:  libgee-devel
-BuildRequires:  libgudev-devel
-BuildRequires:  libwnck3-devel
-BuildRequires:  libcanberra-devel
-BuildRequires:  libxkbcommon-x11-devel
-BuildRequires:  libxkbfile-devel
 Requires:       deepin-desktop-schemas
 Requires:       gnome-desktop
 Requires:       libcanberra-gtk3
+Requires:       hicolor-icon-theme
 
 %description
 Deepin Window Manager
@@ -56,9 +58,24 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 
 %find_lang %{name}
 
-%post -p /sbin/ldconfig
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/*.desktop ||:
 
-%postun -p /sbin/ldconfig
+%post
+/sbin/ldconfig
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
+
+%postun
+/sbin/ldconfig
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files -f %{name}.lang
 %doc README.md
