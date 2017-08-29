@@ -4,7 +4,9 @@ Name:           deepin-qt5integration
 Version:        0.2.3
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
-License:        GPLv3
+# The entire source code is GPLv3+ except styles/ which is BSD,
+# dstyleplugin/ platformplugin/ which is GPLv3, dstyleplugin/dstyleanimation* which is LGPL
+License:        GPLv3 and BSD and LGPLv2+
 URL:            https://github.com/linuxdeepin/qt5integration
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Source1:        https://download.qt.io/official_releases/qt/5.7/5.7.1/submodules/qtbase-opensource-src-5.7.1.tar.xz
