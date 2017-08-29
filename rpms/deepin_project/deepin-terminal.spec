@@ -1,7 +1,7 @@
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
-Version:        2.5.3
+Version:        2.5.5
 Release:        1%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPLv3
@@ -9,16 +9,15 @@ URL:            https://github.com/linuxdeepin/deepin-terminal
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
-BuildRequires:  vala
-BuildRequires:  fontconfig-devel
 BuildRequires:  gettext
-BuildRequires:  glib2-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  json-glib-devel
-BuildRequires:  libgee-devel
-BuildRequires:  libsecret-devel
-BuildRequires:  libwnck3-devel
-BuildRequires:  vte291-devel
+BuildRequires:  vala-devel
+BuildRequires:  pkgconfig(fontconfig)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gee-0.8)
+BuildRequires:  pkgconfig(json-glib-1.0)
+BuildRequires:  pkgconfig(libsecret-1)
+BuildRequires:  pkgconfig(libwnck-3.0)
+BuildRequires:  pkgconfig(vte-2.91)
 # right-click menu style
 Requires:       deepin-menu
 # run command by create_from_commandline
@@ -102,6 +101,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Tue Aug 29 2017 mosquito <sensor.wen@gmail.com> - 2.5.5-1
+- Update to 2.5.5
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 2.5.3-1
 - Update to 2.5.3
 
