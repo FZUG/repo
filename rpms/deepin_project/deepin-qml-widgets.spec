@@ -1,6 +1,6 @@
 Name:           deepin-qml-widgets
 Version:        2.3.6
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Deepin QML widgets
 Group:          Development/Libraries
 License:        GPLv3
@@ -17,8 +17,8 @@ BuildRequires:  pkgconfig(Qt5WebKit)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(xcomposite)
 BuildRequires:  pkgconfig(xcb)
-Requires:       qt5-qtgraphicaleffects(?%_isa)
-Requires:       qt5-qtquickcontrols(?%_isa)
+Requires:       qt5-qtgraphicaleffects%{?_isa}
+Requires:       qt5-qtquickcontrols%{?_isa}
 
 %description
 Extends QML by providing widgets that is used by Deepin applications.
@@ -49,6 +49,9 @@ cp -r locale/mo/* %{buildroot}%{_datadir}/locale/
 %{_datadir}/dbus-1/services/com.deepin.dialog.service
 
 %changelog
+* Tue Aug 29 2017 mosquito <sensor.wen@gmail.com> - 2.3.6-2
+- Fix spell mistake
+
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 2.3.6-1
 - Update to 2.3.6
 
