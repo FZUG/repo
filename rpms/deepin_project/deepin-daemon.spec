@@ -1,18 +1,21 @@
 %global repo dde-daemon
+%global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
 Version:        3.1.19
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-Source1:        deepin-daemon.sysusers
+Source1:        %{ds_url}/archive/2016.9.8/default-settings-2016.9.8.tar.gz
+Source2:        deepin-daemon.sysusers
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  gettext
 BuildRequires:  deepin-gir-generator
+BuildRequires:  fontpackages-devel
 BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gnome-keyring-1)
@@ -76,7 +79,7 @@ Recommends:     google-noto-sans-fonts
 Daemon handling the DDE session settings
 
 %prep
-%setup -q -n %{repo}-%{version}
+%setup -q -a1 -n %{repo}-%{version}
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile
@@ -103,7 +106,7 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %install
 %make_install
 
-install -Dm644 %{S:1} %{buildroot}/usr/lib/sysusers.d/deepin-daemon.conf
+install -Dm644 %{S:2} %{buildroot}/usr/lib/sysusers.d/deepin-daemon.conf
 
 # fix systemd/logind config
 install -d %{buildroot}/usr/lib/systemd/logind.conf.d/
@@ -112,6 +115,18 @@ cat > %{buildroot}/usr/lib/systemd/logind.conf.d/10-%{name}.conf <<EOF
 HandlePowerKey=ignore
 HandleSuspendKey=ignore
 EOF
+
+# install default settings
+pushd default-settings-2016.9.8
+install -Dm644 usr.share.d/deepin-default-settings/fontconfig.json \
+    %{buildroot}%{_datadir}/deepin-default-settings/fontconfig.json
+
+install -d %{buildroot}%{_fontconfig_templatedir} %{buildroot}%{_fontconfig_confdir}
+cp usr.share.d/fontconfig/conf.avail/*.conf %{buildroot}%{_fontconfig_templatedir}/
+for i in $(ls %{buildroot}%{_fontconfig_templatedir} | grep conf$); do
+  ln -sf %{_fontconfig_templatedir}/$i %{buildroot}%{_fontconfig_confdir}/$i
+done
+popd
 
 %find_lang %{repo}
 
@@ -146,9 +161,15 @@ fi
 %{_datadir}/%{repo}/
 %{_datadir}/dde/data/
 %{_datadir}/polkit-1/actions/*.policy
+%{_datadir}/deepin-default-settings/fontconfig.json
+%{_fontconfig_templatedir}/*.conf
+%{_fontconfig_confdir}/*.conf
 %{_var}/cache/appearance/thumbnail/
 
 %changelog
+* Wed Aug 30 2017 mosquito <sensor.wen@gmail.com> - 3.1.19-2
+- Add fontconfig settings
+
 * Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.19-1
 - Update to 3.1.19
 
