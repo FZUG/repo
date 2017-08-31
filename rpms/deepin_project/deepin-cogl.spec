@@ -1,43 +1,40 @@
 Name:           deepin-cogl
 Version:        1.22.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        An object oriented GL/GLES Abstraction/Utility Layer for Deepin
 License:        GPLv2
 URL:            https://github.com/linuxdeepin/deepin-cogl
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  intltool libtool
-BuildRequires:  glib2-devel gtk-doc
 BuildRequires:  mesa-libGLES-devel
-BuildRequires:  mesa-libGL-devel
-BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libgbm-devel
-BuildRequires:  mesa-libwayland-egl-devel
 BuildRequires:  libwayland-client-devel
 BuildRequires:  libwayland-server-devel
-BuildRequires:  libXrandr-devel
-BuildRequires:  libXcomposite-devel
-BuildRequires:  libXdamage-devel
-BuildRequires:  libXfixes-devel
-BuildRequires:  libXext-devel
-BuildRequires:  libX11-devel
-BuildRequires:  cairo-devel
-BuildRequires:  pango-devel
-BuildRequires:  gdk-pixbuf2-devel
-BuildRequires:  gobject-introspection-devel
-
+BuildRequires:  pkgconfig(cairo)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gtk-doc)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(xrandr)
+BuildRequires:  pkgconfig(xcomposite)
+BuildRequires:  pkgconfig(xdamage)
+BuildRequires:  pkgconfig(xfixes)
+BuildRequires:  pkgconfig(xext)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
 Provides:       cogl%{?_isa} = %{version}-%{release}
-Obsoletes:      cogl%{?_isa} < %{version}-%{release}
-Conflicts:      cogl%{?_isa} < %{version}-%{release}
 
 %description
-An object oriented GL/GLES Abstraction/Utility Layer for Deepin
+An object oriented GL/GLES Abstraction/Utility Layer for Deepin.
 
 %package devel
 Summary:        Header and development files
 Requires:       %{name} = %{version}-%{release}
 Provides:       cogl-devel = %{version}-%{release}
-Obsoletes:      cogl-devel < %{version}-%{release}
 
 %description devel
 Header files and libraries for building and developing apps with %{name}.
@@ -81,7 +78,10 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_datadir}/locale/
 
 %changelog
-* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.22.5-1.git1e1e1b8
+* Thu Aug 31 2017 mosquito <sensor.wen@gmail.com> - 1.22.5-2
+- Rewrite dependencies
+
+* Fri May 19 2017 mosquito <sensor.wen@gmail.com> - 1.22.5-1
 - Update to 1.22.5
 
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.22.3-1.git9ee8ef2
