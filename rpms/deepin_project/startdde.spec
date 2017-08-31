@@ -15,7 +15,6 @@ BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
-BuildRequires:  golang(github.com/howeyc/fsnotify)
 BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  pkgconfig(systemd)
 %{?systemd_requires}
