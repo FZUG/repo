@@ -22,7 +22,10 @@ BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  pkgconfig(xcb-icccm)
 BuildRequires:  pkgconfig(xcb-image)
 BuildRequires:  qt5-linguist
+Requires:       deepin-daemon
+Requires:       deepin-launcher
 Requires:       deepin-menu
+Requires:       deepin-qt5integration
 
 %description
 Deepin desktop-environment - Dock module.

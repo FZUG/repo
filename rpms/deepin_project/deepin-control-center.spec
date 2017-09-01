@@ -22,6 +22,7 @@ BuildRequires:  qt5-linguist
 Requires:       deepin-account-faces
 Requires:       deepin-api
 Requires:       deepin-daemon
+Requires:       deepin-qt5integration
 Requires:       GeoIP-GeoLite-data
 Requires:       GeoIP-GeoLite-data-extra
 Requires:       gtk-murrine-engine

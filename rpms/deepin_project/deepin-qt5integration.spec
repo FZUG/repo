@@ -15,7 +15,6 @@ Source1:        https://download.qt.io/official_releases/qt/5.7/5.7.1/submodules
 BuildRequires:  pkgconfig(atk)
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(dbus-1)
-BuildRequires:  pkgconfig(dde-file-manager)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(freetype2)
