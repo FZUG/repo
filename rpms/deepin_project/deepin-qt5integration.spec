@@ -9,7 +9,7 @@ Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3 and BSD and LGPLv2+
 URL:            https://github.com/linuxdeepin/qt5integration
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-Source1:        https://download.qt.io/official_releases/qt/5.7/5.7.1/submodules/qtbase-opensource-src-5.7.1.tar.xz
+Source1:        https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtbase-opensource-src-5.9.1.tar.xz
 
 # full build requires
 BuildRequires:  pkgconfig(atk)
@@ -56,7 +56,7 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 # qtxcb private header files
 sed -i '/exist/,$d' platformplugin/linux.pri
 install -d platformplugin/libqt5xcbqpa-dev/
-cp qtbase-opensource-src-%{_qt5_version}/src/plugins/platforms/xcb/*.h \
+cp qtbase-opensource-src-5.9.1/src/plugins/platforms/xcb/*.h \
   platformplugin/libqt5xcbqpa-dev/
 
 %build
