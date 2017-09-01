@@ -34,6 +34,7 @@ BuildRequires:  qt5-linguist
 Requires:       deepin-shortcut-viewer
 Requires:       deepin-manual
 Requires:       deepin-terminal
+Requires:       deepin-desktop
 Requires:       file-roller
 Requires:       gvfs-client
 Requires:       samba
