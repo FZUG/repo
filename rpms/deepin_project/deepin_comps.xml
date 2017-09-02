@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps PUBLIC "-//Red Hat, Inc.//DTD Comps info//EN" "comps.dtd">
+<comps>
+
+  <group>
+    <id>deepin-apps</id>
+    <_name>Applications for the Deepin Desktop</_name>
+    <_description>A set of commonly used applications for the Deepin Desktop</_description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq>deepin-boot-maker</packagereq>
+      <packagereq>deepin-calendar</packagereq>
+      <packagereq>deepin-image-viewer</packagereq>
+      <packagereq>deepin-screen-recorder</packagereq>
+      <packagereq>deepin-screenshot</packagereq>
+      <packagereq>deepin-system-monitor</packagereq>
+      <packagereq>deepin-terminal</packagereq>
+      <packagereq>deepin-voice-recorder</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>deepin-desktop</id>
+    <_name>Deepin</_name>
+    <_description>Deepin is a lightweight X11 desktop environment designed for computers with low hardware specifications like netbooks, mobile devices or older computers.</_description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq>clipit</packagereq>
+      <packagereq>dnfdragora-gui</packagereq>
+      <packagereq>fedora-icon-theme</packagereq>
+      <packagereq>firewall-config</packagereq>
+      <packagereq>galculator</packagereq>
+      <packagereq>initial-setup-gui</packagereq>
+      <packagereq>leafpad</packagereq>
+      <packagereq>network-manager-applet</packagereq>
+      <packagereq>nm-connection-editor</packagereq>
+      <packagereq>openssh-askpass</packagereq>
+      <packagereq>xcompmgr</packagereq>
+      <packagereq>xdg-user-dirs-gtk</packagereq>
+      <packagereq>deepin-account-faces</packagereq>
+      <packagereq>deepin-artwork-themes</packagereq>
+      <packagereq>deepin-grub2-themes</packagereq>
+      <packagereq>deepin-gtk-theme</packagereq>
+      <packagereq>deepin-icon-theme</packagereq>
+      <packagereq>deepin-sound-theme</packagereq>
+      <packagereq>deepin-wallpapers</packagereq>
+      <packagereq>deepin-desktop</packagereq>
+      <packagereq>deepin-desktop-base</packagereq>
+      <packagereq>deepin-desktop-schemas</packagereq>
+      <packagereq>deepin-help</packagereq>
+      <packagereq>deepin-manual</packagereq>
+      <packagereq>deepin-api</packagereq>
+      <packagereq>deepin-cogl</packagereq>
+      <packagereq>deepin-control-center</packagereq>
+      <packagereq>deepin-daemon</packagereq>
+      <packagereq>deepin-dock</packagereq>
+      <packagereq>deepin-file-manager</packagereq>
+      <packagereq>deepin-launcher</packagereq>
+      <packagereq>deepin-menu</packagereq>
+      <packagereq>deepin-metacity</packagereq>
+      <packagereq>deepin-mutter</packagereq>
+      <packagereq>deepin-nautilus-properties</packagereq>
+      <packagereq>deepin-notifications</packagereq>
+      <packagereq>deepin-polkit-agent</packagereq>
+      <packagereq>deepin-qml-widgets</packagereq>
+      <packagereq>deepin-qt-dbus-factory</packagereq>
+      <packagereq>deepin-qt5integration</packagereq>
+      <packagereq>deepin-session-ui</packagereq>
+      <packagereq>deepin-shortcut-viewer</packagereq>
+      <packagereq>deepin-wm</packagereq>
+      <packagereq>deepin-wm-switcher</packagereq>
+      <packagereq>dtkcore</packagereq>
+      <packagereq>dtkwidget</packagereq>
+      <packagereq>dtkwm</packagereq>
+      <packagereq>startdde</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>deepin-media</id>
+    <_name>Multimedia support for Deepin</_name>
+    <_description>Multimedia support for Deepin</_description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq>gnomebaker</packagereq>
+      <packagereq>pavucontrol</packagereq>
+      <packagereq>pnmixer</packagereq>
+      <packagereq>deepin-movie</packagereq>
+      <packagereq>deepin-music</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>deepin-office</id>
+    <_name>Deepin Office</_name>
+    <_description>Office suite for Deepin</_description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq>abiword</packagereq>
+      <packagereq>gnumeric</packagereq>
+      <packagereq>osmo</packagereq>
+      <packagereq>libreoffice</packagereq>
+    </packagelist>
+  </group>
+
+  <group>
+    <id>deepin-develop</id>
+    <_name>Deepin Develop</_name>
+    <_description>Develop suite for Deepin</_description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <packagelist>
+      <packagereq>deepin-gettext-tools</packagereq>
+      <packagereq>deepin-gir-generator</packagereq>
+      <packagereq>deepin-dbus-generator</packagereq>
+      <packagereq>deepin-cogl-devel</packagereq>
+      <packagereq>deepin-dock-devel</packagereq>
+      <packagereq>deepin-file-manager-devel</packagereq>
+      <packagereq>deepin-metacity-devel</packagereq>
+      <packagereq>deepin-mutter-devel</packagereq>
+      <packagereq>deepin-qt-dbus-factory-devel</packagereq>
+      <packagereq>deepin-wm-devel</packagereq>
+      <packagereq>dtkcore-devel</packagereq>
+      <packagereq>dtkwidget-devel</packagereq>
+      <packagereq>dtkwm-devel</packagereq>
+      <packagereq>golang-deepin-api-devel</packagereq>
+      <packagereq>golang-deepin-dbus-factory-devel</packagereq>
+      <packagereq>golang-deepin-go-lib-devel</packagereq>
+      <packagereq>gsettings-qt-devel</packagereq>
+      <packagereq>golang-github-alecthomas-assert-devel</packagereq>
+      <packagereq>golang-github-alecthomas-colour-devel</packagereq>
+      <packagereq>golang-github-alecthomas-kingpin-devel</packagereq>
+      <packagereq>golang-github-alecthomas-repr-devel</packagereq>
+      <packagereq>golang-github-alecthomas-template-devel</packagereq>
+      <packagereq>golang-github-alecthomas-units-devel</packagereq>
+      <packagereq>golang-github-axgle-mahonia-devel</packagereq>
+      <packagereq>golang-github-BurntSushi-freetype-go-devel</packagereq>
+      <packagereq>golang-github-BurntSushi-graphics-go-devel</packagereq>
+      <packagereq>golang-github-BurntSushi-xgb-devel</packagereq>
+      <packagereq>golang-github-BurntSushi-xgbutil-devel</packagereq>
+      <packagereq>golang-github-disintegration-imaging-devel</packagereq>
+      <packagereq>golang-github-linuxdeepin-go-x11-client-devel</packagereq>
+      <packagereq>golang-github-mattn-go-isatty-devel</packagereq>
+      <packagereq>golang-github-msteinert-pam-devel</packagereq>
+      <packagereq>golang-github-nfnt-resize-devel</packagereq>
+      <packagereq>golang-github-sergi-go-diff-devel</packagereq>
+      <packagereq>golang-googlecode-image-devel</packagereq>
+    </packagelist>
+  </group>
+
+  <environment>
+    <id>deepin-desktop-environment</id>
+    <_name>Deepin Desktop</_name>
+    <_description>Deepin is a lightweight X11 desktop environment designed for computers with low hardware specifications like netbooks, mobile devices or older computers.</_description>
+    <display_order>1024</display_order>
+    <grouplist>
+      <groupid>base-x</groupid>
+      <groupid>standard</groupid>
+      <groupid>core</groupid>
+      <groupid>admin-tools</groupid>
+      <groupid>dial-up</groupid>
+      <groupid>fonts</groupid>
+      <groupid>input-methods</groupid>
+      <groupid>multimedia</groupid>
+      <groupid>networkmanager-submodules</groupid>
+      <groupid>hardware-support</groupid>
+      <groupid>printing</groupid>
+      <groupid>guest-desktop-agents</groupid>
+      <groupid>deepin-desktop</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>deepin-apps</groupid>
+      <groupid>deepin-media</groupid>
+      <groupid>deepin-office</groupid>
+      <groupid>3d-printing</groupid>
+      <groupid>cloud-management</groupid>
+    </optionlist>
+  </environment>
+
+  <category>
+    <id>deepin-desktop-environment</id>
+    <_name>Deepin Desktop</_name>
+    <_description>Deepin is a lightweight X11 desktop environment designed for computers with low hardware specifications like netbooks, mobile devices or older computers.</_description>
+    <display_order>1024</display_order>
+    <grouplist>
+      <groupid>deepin-apps</groupid>
+      <groupid>deepin-desktop</groupid>
+      <groupid>deepin-media</groupid>
+      <groupid>deepin-office</groupid>
+    </grouplist>
+  </category>
+
+</comps>
