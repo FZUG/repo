@@ -7,8 +7,9 @@ Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-Patch0:         %{name}-diable_ffmpeg.patch
+Patch0:         %{name}-disable_ffmpeg.patch
 
+BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-dock-devel
 BuildRequires:  file-devel
@@ -32,7 +33,6 @@ BuildRequires:  qt5-linguist
 
 # run command by QProcess
 Requires:       deepin-shortcut-viewer
-Requires:       deepin-manual
 Requires:       deepin-terminal
 Requires:       deepin-desktop
 Requires:       file-roller
@@ -40,6 +40,7 @@ Requires:       gvfs-client
 Requires:       samba
 Requires:       xdg-user-dirs
 Requires:       gstreamer-plugins-good
+Recommends:     deepin-manual
 
 %description
 File manager front end of Deepin OS.
@@ -83,6 +84,11 @@ sed -i 's|%{_datadir}|%{_libdir}|' dde-sharefiles/appbase.pri
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop
+desktop-file-validate %{buildroot}/%{_datadir}/applications/dde-computer.desktop ||:
+desktop-file-validate %{buildroot}/%{_datadir}/applications/dde-trash.desktop ||:
+
 %post
 /sbin/ldconfig
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -119,9 +125,15 @@ fi
 %{_bindir}/usb-device-formatter
 %{_bindir}/usb-device-formatter-pkexec
 %{_libdir}/lib%{repo}.so.*
+%dir %{_libdir}/dde-dock
+%dir %{_libdir}/dde-dock/plugins
 %{_libdir}/dde-dock/plugins/*.so
 %{_libdir}/%{repo}/plugins/previews/*.so
+%dir %{_datadir}/%{repo}
+%dir %{_datadir}/%{repo}/plugins
+%dir %{_datadir}/%{repo}/plugins/previews
 %{_datadir}/%{repo}/
+%dir %{_datadir}/dman/%{repo}
 %{_datadir}/dman/%{repo}/
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/applications/%{repo}.desktop
@@ -130,15 +142,21 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.filemanager.filedialog.service
 %{_datadir}/dbus-1/services/org.freedesktop.FileManager.service
 %{_datadir}/dbus-1/system-services/com.deepin.filemanager.daemon.service
+%dir %{_datadir}/usb-device-formatter
+%dir %{_datadir}/usb-device-formatter/translations
 %{_datadir}/usb-device-formatter/translations/*.qm
 %{_polkit_qt_policydir}/com.deepin.filemanager.daemon.policy
 %{_polkit_qt_policydir}/com.deepin.pkexec.dde-file-manager.policy
 %{_polkit_qt_policydir}/com.deepin.pkexec.usb-device-formatter.policy
 
 %files devel
+%dir %{_includedir}/%{repo}
 %{_includedir}/%{repo}/*.h
+%dir %{_includedir}/%{repo}/gvfs
 %{_includedir}/%{repo}/gvfs/*.h
+%dir %{_includedir}/%{repo}/%{repo}-plugins
 %{_includedir}/%{repo}/%{repo}-plugins/*.h
+%dir %{_includedir}/%{repo}/private
 %{_includedir}/%{repo}/private/*.h
 %{_libdir}/pkgconfig/%{repo}.pc
 %{_libdir}/lib%{repo}.so
@@ -147,6 +165,8 @@ fi
 %{_bindir}/dde-desktop
 %{_datadir}/applications/dde-computer.desktop
 %{_datadir}/applications/dde-trash.desktop
+%dir %{_datadir}/dde-desktop
+%dir %{_datadir}/dde-desktop/translations
 %{_datadir}/dde-desktop/translations/*.qm
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 

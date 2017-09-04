@@ -220,7 +220,7 @@ index 0000000..4b7fbd0
 +isEqual(IS_PLATFORM_FEDORA, YES){
 +
 +}else{
-+    DEFINES += SUPPORT_FFMEPG
++    DEFINES += SUPPORT_FFMPEG
 +    LIBS += -lffmpegthumbnailer
 +}
  
@@ -232,7 +232,7 @@ index 0000000..4b7fbd0
      //load temlate
      m_settings = Dtk::Core::DSettings::fromJsonFile(":/configure/global-setting-template-pro.json").data();
  #else
-+#ifndef SUPPORT_FFMEPG
++#ifndef SUPPORT_FFMPEG
 +    m_settings = Dtk::Core::DSettings::fromJsonFile(":/configure/global-setting-template-fedora.json").data();
 +#else
      m_settings = Dtk::Core::DSettings::fromJsonFile(":/configure/global-setting-template.json").data();
@@ -247,7 +247,7 @@ index 0000000..4b7fbd0
  #include <poppler-page-renderer.h>
  
  // ffmpeg
-+#ifdef SUPPORT_FFMEPG
++#ifdef SUPPORT_FFMPEG
  #include <libffmpegthumbnailer/videothumbnailer.h>
 +#endif
  
@@ -259,7 +259,7 @@ index 0000000..4b7fbd0
          *image = img.scaled(QSize(size,size), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 -    } else if (mime.name().startsWith("video/")) {
 +    }
-+#ifdef SUPPORT_FFMEPG
++#ifdef SUPPORT_FFMPEG
 +    else if (mime.name().startsWith("video/")) {
          //video
          //FIXME(zccrs): This should be done using the image plugin?
@@ -281,7 +281,7 @@ index 0000000..4b7fbd0
  #include <poppler-page-renderer.h>
  
  // ffmpeg
-+#ifdef SUPPORT_FFMEPG
++#ifdef SUPPORT_FFMPEG
  #include "libffmpegthumbnailer/videothumbnailer.h"
 +using namespace ffmpegthumbnailer;
 +#endif
@@ -298,7 +298,7 @@ index 0000000..4b7fbd0
              pixmap = getTextplainThumbnail(fPath, size);
          if(isPDFFile(fPath))
              pixmap = getPDFThumbnail(fPath, size);
-+#ifdef SUPPORT_FFMEPG
++#ifdef SUPPORT_FFMPEG
          if(isVideoFile(fPath))
              pixmap = getVideoThumbnail(fPath, size);
 +#endif
