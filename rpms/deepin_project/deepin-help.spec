@@ -1,5 +1,4 @@
-%global project dde-help
-%global repo %{project}
+%global repo dde-help
 
 Name:           deepin-help
 Version:        15.4.8
@@ -12,7 +11,7 @@ BuildArch:      noarch
 Requires:       deepin-manual
 
 %description
-%{summary}
+%{summary}.
 
 %prep
 %setup -q -n %{repo}-%{version}
@@ -27,8 +26,8 @@ Requires:       deepin-manual
 %{_datadir}/dman/dde/
 
 %changelog
-* Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 15.4.8-1.git84f3f54
+* Thu Jul 20 2017 mosquito <sensor.wen@gmail.com> - 15.4.8-1
 - Update to 15.4.8
 
-* Sat Jul 15 2017 mosquito <sensor.wen@gmail.com> - 15.4.7-1.gitad0be94
+* Sat Jul 15 2017 mosquito <sensor.wen@gmail.com> - 15.4.7-1
 - Initial build
