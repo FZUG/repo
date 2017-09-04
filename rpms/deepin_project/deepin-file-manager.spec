@@ -7,6 +7,7 @@ Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
+Patch0:         %{name}-diable_ffmpeg.patch
 
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-dock-devel
@@ -16,7 +17,6 @@ BuildRequires:  pkgconfig(dtkwidget) == 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(gsettings-qt)
-BuildRequires:  pkgconfig(libffmpegthumbnailer)
 BuildRequires:  pkgconfig(libsecret-1)
 BuildRequires:  pkgconfig(poppler-cpp)
 BuildRequires:  pkgconfig(polkit-agent-1)
@@ -61,6 +61,7 @@ Deepin desktop environment - desktop module.
 
 %prep
 %setup -q -n %{repo}-%{version}
+%patch0 -p1 -b .disable_ffmpeg
 
 # fix file permissions
 find -type f -perm 775 -exec chmod 644 {} \;
@@ -76,7 +77,7 @@ sed -i '/PLUGINDIR/s|view|views|' \
 sed -i 's|%{_datadir}|%{_libdir}|' dde-sharefiles/appbase.pri
 
 %build
-%qmake_qt5 PREFIX=%{_prefix} QMAKE_CFLAGS_ISYSTEM=
+%qmake_qt5 PREFIX=%{_prefix} QMAKE_CFLAGS_ISYSTEM= IS_PLATFORM_FEDORA=YES
 %make_build
 
 %install
