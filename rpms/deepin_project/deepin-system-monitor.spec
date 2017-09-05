@@ -5,6 +5,7 @@ Summary:        A more user-friendly system monitor
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-system-monitor
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        %{name}-appdata.xml
 
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(dtkwm) = 2.0
@@ -24,6 +25,7 @@ BuildRequires:  libpcap-devel
 BuildRequires:  libcap-devel
 BuildRequires:  ncurses-devel
 BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
 Requires:       hicolor-icon-theme
 Recommends:     deepin-manual
 
@@ -40,9 +42,11 @@ sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' %{name}.pro
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+install -Dm644 %SOURCE1 %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
@@ -62,9 +66,10 @@ fi
 %doc README.md
 %license LICENSE
 %caps(cap_kill,cap_net_raw,cap_dac_read_search,cap_sys_ptrace=+ep) %{_bindir}/%{name}
+%{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/%{name}/translations/*.qm
+%{_datadir}/%{name}/
 %{_datadir}/dman/%{name}/
 
 %changelog
