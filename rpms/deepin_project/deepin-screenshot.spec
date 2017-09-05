@@ -4,7 +4,6 @@ Release:        1%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
 License:        GPLv3
-Group:          Applications/Internet
 Url:            https://github.com/linuxdeepin/deepin-screenshot
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
@@ -13,6 +12,9 @@ BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(Qt5)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  desktop-file-utils
+Requires:       desktop-file-utils
+Requires:       hicolor-icon-theme
 Recommends:     deepin-shortcut-viewer
 
 %description
@@ -37,16 +39,31 @@ Provide a quite easy-to-use screenshot tool. Features:
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
+
 %preun
 if [ $1 -eq 0 ]; then
   /usr/sbin/alternatives --remove x-window-screenshot %{_bindir}/%{name}
 fi
 
 %post
+/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+/usr/bin/update-desktop-database -q ||:
 if [ $1 -eq 1 ]; then
   /usr/sbin/alternatives --install %{_bindir}/x-window-screenshot \
     x-window-screenshot %{_bindir}/%{name} 20
 fi
+
+%postun
+if [ $1 -eq 0 ]; then
+    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
+    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+fi
+/usr/bin/update-desktop-database -q ||:
+
+%posttrans
+/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %doc README.md
