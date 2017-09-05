@@ -23,9 +23,12 @@ BuildRequires:  qt5-linguist
 BuildRequires:  libpcap-devel
 BuildRequires:  libcap-devel
 BuildRequires:  ncurses-devel
+BuildRequires:  desktop-file-utils
+Requires:       hicolor-icon-theme
+Recommends:     deepin-manual
 
 %description
-%{summary}
+%{summary}.
 
 %prep
 %setup -q
@@ -37,6 +40,9 @@ sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' %{name}.pro
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
