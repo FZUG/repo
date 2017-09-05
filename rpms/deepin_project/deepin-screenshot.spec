@@ -6,6 +6,7 @@ Summary(zh_CN): 深度截图工具
 License:        GPLv3
 Url:            https://github.com/linuxdeepin/deepin-screenshot
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1:        %{name}-appdata.xml
 
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(xtst)
@@ -13,6 +14,7 @@ BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(Qt5)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  desktop-file-utils
+BuildRequires:  libappstream-glib
 Requires:       desktop-file-utils
 Requires:       hicolor-icon-theme
 Recommends:     deepin-shortcut-viewer
@@ -38,9 +40,11 @@ Provide a quite easy-to-use screenshot tool. Features:
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+install -Dm644 %SOURCE1 %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
 %preun
 if [ $1 -eq 0 ]; then
@@ -70,6 +74,7 @@ fi
 %license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/dman/%{name}/
+%{_datadir}/appdata/%{name}.appdata.xml
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/deepin/apps/scalable/%{name}.svg

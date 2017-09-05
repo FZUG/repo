@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 mosquito -->
+<component type="desktop">
+  <id>deepin-screenshot.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Deepin Screenshot</name>
+  <name xml:lang="zh_CN">深度截图</name>
+  <name xml:lang="zh_TW">深度截图</name>
+  <summary>Deepin Screenshot is Deepin Desktop Environment screenshot tool</summary>
+  <summary xml:lang="zh_CN">深度截图是一个免费开源的跨平台截图软件</summary>
+  <summary xml:lang="zh_TW">深度截图是一个免费开源的跨平台截图软件</summary>
+  <description>
+    <p>
+      Deepin Screenshot is a free and open source cross-platform screenshot tool.
+    </p>
+    <p xml:lang="zh_CN">
+      深度截图是一个免费开源的跨平台截图软件。
+    </p>
+  </description>
+  <url type="homepage">https://github.com/linuxdeepin/deepin-screenshot/</url>
+  <url type="bugtracker">https://github.com/linuxdeepin/deepin-screenshot/issues/</url>
+  <releases>
+    <release version="4.0.9" date="2017-08-18"></release>
+  </releases>
+  <project_license>GPL-3.0</project_license>
+  <developer_name>Linux Deepin</developer_name>
+  <screenshots>
+    <screenshot type="default">http://api.lastore.deepin.org/static/deepin-screenshot/meta/screenshots/zh_CN/phpPz5DPq.jpg</screenshot>
+    <screenshot type="default">http://api.lastore.deepin.org/static/deepin-screenshot/meta/screenshots/zh_CN/php6aIjJo.jpg</screenshot>
+    <screenshot type="default">http://api.lastore.deepin.org/static/deepin-screenshot/meta/screenshots/zh_CN/phplSPFcv.jpg</screenshot>
+  </screenshots>
+</component>
