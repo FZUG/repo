@@ -125,15 +125,9 @@ fi
 %{_bindir}/usb-device-formatter
 %{_bindir}/usb-device-formatter-pkexec
 %{_libdir}/lib%{repo}.so.*
-%dir %{_libdir}/dde-dock
-%dir %{_libdir}/dde-dock/plugins
 %{_libdir}/dde-dock/plugins/*.so
-%{_libdir}/%{repo}/plugins/previews/*.so
-%dir %{_datadir}/%{repo}
-%dir %{_datadir}/%{repo}/plugins
-%dir %{_datadir}/%{repo}/plugins/previews
+%{_libdir}/%{repo}/
 %{_datadir}/%{repo}/
-%dir %{_datadir}/dman/%{repo}
 %{_datadir}/dman/%{repo}/
 %{_datadir}/icons/hicolor/scalable/apps/*.svg
 %{_datadir}/applications/%{repo}.desktop
