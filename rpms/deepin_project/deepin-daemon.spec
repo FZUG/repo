@@ -82,7 +82,7 @@ Daemon handling the DDE session settings
 %setup -q -a1 -n %{repo}-%{version}
 
 # Fix library exec path
-sed -i '/deepin/s|lib|libexec|' Makefile
+sed -i '/deepin/s|lib|libexec|; /ldflags/d' Makefile
 sed -i 's|lib/NetworkManager|libexec|' network/utils_test.go
 sed -i 's|/usr/lib|%{_libexecdir}|' \
     misc/*services/*.service \
@@ -153,18 +153,18 @@ fi
 %doc README.md
 %license LICENSE
 %{_libexecdir}/%{name}/
-%{_prefix}/lib/sysusers.d/%{name}.conf
+%{_sysusersdir}/%{name}.conf
 %{_prefix}/lib/systemd/logind.conf.d/10-%{name}.conf
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/dbus-1/system.d/*.conf
 %{_datadir}/%{repo}/
-%{_datadir}/dde/data/
+%{_datadir}/dde/
 %{_datadir}/polkit-1/actions/*.policy
-%{_datadir}/deepin-default-settings/fontconfig.json
+%{_datadir}/deepin-default-settings/
 %{_fontconfig_templatedir}/*.conf
 %{_fontconfig_confdir}/*.conf
-%{_var}/cache/appearance/thumbnail/
+%{_var}/cache/appearance/
 
 %changelog
 * Wed Aug 30 2017 mosquito <sensor.wen@gmail.com> - 3.1.19-2
