@@ -1,35 +1,41 @@
-%global debug_package %{nil}
-%global __os_install_post %{nil}
-%{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %global project FeelUOwn
 %global repo %{project}
 
-# commit
-%global _commit 698ed58c4ab33f78bd1a0700480a066f9c2fbe5b
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit d9e439a96fd9d2578bf52df48f9552674bf5b28e
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global c_commit e8af87411faacc554079d5718237fccab964fb21
+%global c_shortcommit %(c=%{c_commit}; echo ${c:0:7})
 
 Name:    feeluown
-Version: 9.3
-Release: 0.1.git%{_shortcommit}%{?dist}
+Version: 9.5
+Release: 0.1.git%{shortcommit}%{?dist}
 Summary: Net Ease Music for Linux
 Summary(zh_CN): 网易云音乐 for Linux
 
 Group:   Applications/Multimedia
 License: GPLv3
-URL:     https://github.com/cosven/FeelUOwn
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+URL:     https://github.com/cosven/feeluown
+Source0: %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
+Source1: %{url}-core/archive/%{c_commit}/%{name}-core-%{c_shortcommit}.tar.gz
 
 BuildArch: noarch
 BuildRequires: dos2unix
 BuildRequires: python3-devel
+BuildRequires: python3-setuptools
+BuildRequires: python3-pytest-runner
 BuildRequires: desktop-file-utils
 Requires(post): python3-pip
 Requires: hicolor-icon-theme
 Requires: python3-qt5
 Requires: python3-dbus
 Requires: python3-xlib
+Requires: python3-crypto
 Requires: python3-requests
 Requires: python3-beautifulsoup4
+Requires: python3-marshmallow
+Requires: python3-msgpack
+Requires: python3-mutagen
+Requires: python3-fuzzywuzzy
 Requires: python3-sqlalchemy
 Requires: python3-PyYAML
 Requires: gstreamer1-plugins-base
@@ -46,14 +52,23 @@ Net Ease Music for Linux
 网易云音乐 for Linux
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -a1 -n %{repo}-%{commit}
 dos2unix README.md
 
 %build
+%{__python3} setup.py build
+pushd %{name}-core-%{c_commit}
+sed -i 's|2.13|2.10|' setup.py
+%{__python3} setup.py build
 
 %install
-install -d %{buildroot}%{_datadir}
-cp -r %{name} %{buildroot}%{_datadir}/
+%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+pushd %{name}-core-%{c_commit}
+%{__python3} setup.py install -O1 --skip-build --root %{buildroot}
+popd
+
+# fix locale
+sed -i "2aimport os\nos.environ['LANG'] = 'C'" %{buildroot}%{_bindir}/%{name}
 
 # icon file
 install -Dm644 %{name}/%{name}.png \
@@ -75,23 +90,16 @@ desktop-file-install \
     --dir=%{buildroot}%{_datadir}/applications \
     %{name}.desktop
 
-# execution file
-install -d %{buildroot}%{_bindir}
-cat > %{buildroot}%{_bindir}/%{name} <<EOF
-#!/bin/bash
-python3 %{_datadir}/%{name}
-EOF
-
 %post
 if [ $1 -eq 1 ]; then
-    /usr/bin/pip3 install -U -q 'quamash==0.5.5' pycrypto &>/dev/null ||:
+    /usr/bin/pip3 install -U -q 'quamash>=0.5.5' 'python-Levenshtein>=0.12.0' 'april==0.0.1a4' aiozmq &>/dev/null ||:
 fi
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database -q ||:
 
 %postun
 if [ $1 -eq 0 ]; then
-    /usr/bin/pip3 uninstall -y -q quamash pycrypto &>/dev/null ||:
+    /usr/bin/pip3 uninstall -y -q quamash python-Levenshtein aiozmq april &>/dev/null ||:
     /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
@@ -101,15 +109,19 @@ fi
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
-%defattr(-,root,root,-)
 %doc README.md
 %license LICENSE
-%{_datadir}/%{name}
-%attr(0755,-,-) %{_bindir}/%{name}
+%{_bindir}/%{name}*
 %{_datadir}/icons/hicolor/*/apps/*.png
 %{_datadir}/applications/%{name}.desktop
+%{python3_sitelib}/%{name}*
+%{python3_sitelib}/fuocore*
+%{python3_sitelib}/mpv.py
+%{python3_sitelib}/__pycache__/*
 
 %changelog
+* Sat Sep  9 2017 mosquito <sensor.wen@gmail.com> - 9.5-0.1.gitd9e439a
+- Release 9.5
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 9.3-0.1.git698ed58
 - Release 9.3a
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 9.2-0.1.git8ccb1fe
