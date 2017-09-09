@@ -1,20 +1,16 @@
-%global debug_package %{nil}
-%global project moonplayer
-%global repo %{project}
-
-%global _commit 17140ab9fcb34a314042262acf59c73141eed33b
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit e730f1cddf5f97a0e5e122d648327572600bddf6
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:    moonplayer
-Version: 0.75
-Release: 1.git%{_shortcommit}%{?dist}
+Version: 1.1.7
+Release: 1.git%{shortcommit}%{?dist}
 Summary: Video player that can play online videos
 Summary(zh_CN): 一款可点播优酷, 土豆等网站在线视频的视频播放器
 
 Group:   Applications/Multimedia
 License: GPLv3
 URL:     https://github.com/coslyk/moonplayer
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 # https://code.google.com/p/moonplayer/wiki/PluginTutorial
 # http://forum.ubuntu.org.cn/viewtopic.php?f=74&t=456351
 Source1: plugin_56.py
@@ -22,9 +18,9 @@ Source2: plugin_funshion.py
 Source3: plugin_iqiyi.py
 Source4: plugin_sohu.py
 
-#BuildRequires: qt-devel
 BuildRequires: python-devel
-BuildRequires: qt5-qtbase-devel
+BuildRequires: pkgconfig(Qt5)
+BuildRequires: pkgconfig(qtermwidget5)
 BuildRequires: mpv-libs-devel
 Requires: mplayer
 Requires: mencoder
@@ -36,7 +32,7 @@ Video player that can play online videos from youku, tudou etc.
 一款可点播优酷, 土豆等网站在线视频的视频播放器.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 pushd src/
@@ -67,7 +63,6 @@ fi
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
-%defattr(-,root,root,-)
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
@@ -76,6 +71,9 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Sat Sep  9 2017 mosquito <sensor.wen@gmail.com> - 1.1.7-1.gite730f1c
+- Update to 1.1.7
+
 * Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 0.75-1.git17140ab
 - Update to 0.75
 
