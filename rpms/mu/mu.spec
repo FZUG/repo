@@ -4,18 +4,18 @@
 %global repo %{project}
 
 # commit
-%global _commit e9c1a948b31841998bf94155cecc6ab74a2a30d0
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 20cf3436950fc5a13d531241d0de642ba255ca0d
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:    mu
-Version: 0.9.287
-Release: 1.git%{_shortcommit}%{?dist}
+Version: 0.9.459
+Release: 1.git%{shortcommit}%{?dist}
 Summary: Incredible music manager
 Summary(zh_CN): 为音乐而生的播放器
 Group:   Applications/Multimedia
 License: GPLv2
 Url:     https://kreogist.github.io/Mu
-Source0: https://github.com/Kreogist/Mu/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: https://github.com/Kreogist/Mu/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires: qt5-qtbase-devel
 BuildRequires: qt5-qttools-devel
@@ -59,7 +59,7 @@ Kreogist Mu 是一款跨平台媒体管理器, 基于 Qt 开发.
 更多功能期待您的发现.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{commit}
 sed -i 's|lrelease|lrelease-qt5|' src/src.pro
 
 %build
@@ -67,14 +67,12 @@ export CPATH="`pkg-config --variable=includedir libavformat`"
 mkdir build
 pushd build
 CONFIG+="release linux" \
-%{qmake_qt5} ..
-make %{?_smp_mflags}
+%qmake_qt5 ..
+%make_build
 lrelease-qt5 ../src/src.pro
 popd
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 install -Dm 0755 build/bin/%{name} %{buildroot}%{_bindir}/%{name}
 
 install -Dm 0644 src/resource/icon/%{name}.png \
@@ -119,7 +117,6 @@ fi
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
-%defattr(-,root,root,-)
 %doc AUTHOR NEWS Readme.md
 %license LICENSE
 %{_datadir}/applications/%{name}.desktop
@@ -128,6 +125,8 @@ fi
 %{_bindir}/%{name}
 
 %changelog
+* Sat Sep  9 2017 mosquito <sensor.wen@gmail.com> - 0.9.459-1.git20cf343
+- Update to 0.9.459
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 0.9.287-1.gite9c1a94
 - Update to 0.9.287-1.gite9c1a94
 * Tue Mar 22 2016 mosquito <sensor.wen@gmail.com> - 0.9.245-1.git3aae86e
