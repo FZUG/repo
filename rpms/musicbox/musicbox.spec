@@ -1,20 +1,17 @@
 %global debug_package %{nil}
-%global project musicbox
-%global repo %{project}
-
-%global _commit 4048068c4861472b8562fbcd0786d9f1db3d1cc6
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 7dfd3fe1bd109e92d4270e37353c73dc64e1e167
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:    musicbox
-Version: 0.2.3.9
-Release: 1.git%{_shortcommit}%{?dist}
+Version: 0.2.4.1
+Release: 1.git%{shortcommit}%{?dist}
 Summary: A sexy command line interface musicbox
 Summary(zh_CN): 命令行版的网易云音乐
 
 Group:   Applications/Multimedia
 License: MIT
 URL:     https://github.com/darknessomi/musicbox
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source1: musicbox_logo.png
 
 BuildArch: noarch
@@ -38,7 +35,7 @@ A sexy command line interface musicbox.
 命令行版的网易云音乐.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{name}-%{commit}
 
 %build
 
@@ -84,7 +81,6 @@ fi
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
-%defattr(-,root,root,-)
 %doc README.md
 %license LICENSE.txt
 %{_bindir}/%{name}
@@ -94,6 +90,8 @@ fi
 %{_datadir}/icons/%{name}.png
 
 %changelog
+* Sat Sep  9 2017 mosquito <sensor.wen@gmail.com> - 0.2.4.1-1.git7dfd3fe
+- Update to 0.2.4.1
 * Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 0.2.3.9-1.git4048068
 - Update to 0.2.3.9
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 0.2.3.7-1.git58f13a4
