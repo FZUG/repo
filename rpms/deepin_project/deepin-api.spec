@@ -1,5 +1,4 @@
-%global project dde-api
-%global repo %{project}
+%global repo dde-api
 %global import_path pkg.deepin.io/dde/api
 
 Name:           deepin-api
@@ -10,11 +9,8 @@ License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dde-api
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-# e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
-# If go_compiler is not set to 1, there is no virtual provide. Use golang instead.
-BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
-
+BuildRequires:  gcc-go
 BuildRequires:  pkgconfig(cairo-ft)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
@@ -39,8 +35,6 @@ BuildRequires:  golang(gopkg.in/alecthomas/kingpin.v2)
 %{?systemd_requires}
 Requires:       deepin-desktop-base
 Requires:       rfkill
-Provides:       %{repo}%{?_isa} = %{version}-%{release}
-Obsoletes:      %{repo}%{?_isa} < %{version}-%{release}
 
 %description
 Go-lang bingding for dde-daemon
@@ -98,8 +92,7 @@ sed -i 's|PREFIX}${libdir|LIBDIR|; s|libdir|LIBDIR|' Makefile
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
-BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
-%make_build GOBUILD="go build -compiler gc -ldflags \"${LDFLAGS} -B $BUILD_ID\" -a -v -x"
+%make_build
 
 %install
 export GOPATH="$(pwd)/build:%{gopath}"
