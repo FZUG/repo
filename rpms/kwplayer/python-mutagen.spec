@@ -8,15 +8,13 @@
 %endif
 
 Name:           python-%{realname}
-Version:        1.35.1
+Version:        1.38
 Release:        1%{?dist}
 Summary:        Mutagen is a Python module to handle audio metadata
 Summary(zh_CN): 一个处理音频元数据的Python模块
-
-Group:          Development/Languages
 License:        GPLv2
-URL:            https://bitbucket.org/lazka/mutagen
-Source0:        %{url}/downloads/%{realname}-%{version}.tar.gz
+URL:            https://github.com/quodlibet/mutagen
+Source0:        %{url}/archive/release-%{version}/%{realname}-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -47,7 +45,7 @@ includes a module to handle generic Ogg bit-streams.
 %endif # with_python3
 
 %prep
-%setup -q -n %{realname}-%{version}
+%setup -q -n %{realname}-release-%{version}
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
@@ -87,7 +85,6 @@ pushd %{py3dir}
 %endif # with_python3
 
 %files
-%defattr(-,root,root,-)
 %doc NEWS README.rst
 %license COPYING
 %if ! 0%{?with_python3}
@@ -99,7 +96,6 @@ pushd %{py3dir}
 
 %if 0%{?with_python3}
 %files -n python3-mutagen
-%defattr(-,root,root,-)
 %doc NEWS README.rst
 %license COPYING
 %{_bindir}/m*
@@ -109,6 +105,9 @@ pushd %{py3dir}
 %endif # with_python3
 
 %changelog
+* Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 1.38-1
+- Update to 1.38
+
 * Thu Dec 01 2016 mosquito <sensor.wen@gmail.com> - 1.35.1-1
 - Update to 1.35.1
 
