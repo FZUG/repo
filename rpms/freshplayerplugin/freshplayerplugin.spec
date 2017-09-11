@@ -1,22 +1,19 @@
-%global debug_package %{nil}
 %global project freshplayerplugin
 %global repo %{project}
 
-# commit
-%global _commit 333df0b4667ce3d6a10c33f38cbb43f8dbffc8c0
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 8debda7f3a03bedfface616fe459d70e6f58e37a
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:    freshplayerplugin
-Version: 0.3.6
-Release: 1.git%{_shortcommit}%{?dist}
+Version: 0.3.7
+Release: 1.git%{shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
 
 Group:   System Environment/Libraries
-# https://github.com/i-rinat/freshplayerplugin/raw/master/LICENSE
 License: MIT
 URL:     https://github.com/i-rinat/freshplayerplugin
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires: cmake >= 2.8.8
 BuildRequires: pkgconfig chrpath
@@ -53,12 +50,12 @@ BuildRequires: libicu-devel
 通过封装, 以 PPAPI/NPAPI 插件的形式工作在 Firefox.
 
 %prep
-%setup -q -n %repo-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 %build
 mkdir build && pushd build
-%{cmake} -DCMAKE_BUILD_TYPE=Release ..
-%{make_build}
+%cmake -DCMAKE_BUILD_TYPE=Release ..
+%make_build
 
 %install
 # library file
@@ -77,13 +74,14 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %doc README.md data/freshwrapper.conf.example doc/*.md
 %license LICENSE
 %config(noreplace) %{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 0.3.7-1.git8debda7
+- Update to 0.3.7
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 0.3.6-1.git333df0b
 - Update to 0.3.6
 * Fri Jul 15 2016 mosquito <sensor.wen@gmail.com> - 0.3.5-2.git51946f8
