@@ -1,19 +1,18 @@
 %global debug_package %{nil}
-%global project screenFetch
-%global repo %{project}
+%global repo screenFetch
 
-%global _commit 36518ac06dc5cef4ab5fcf998bf5e09e3f570722
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 5f39bd3f5ff2ee768f18e76917b81db43a460052
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           screenfetch
 Version:        3.8.0
-Release:        1.git%{_shortcommit}%{?dist}
+Release:        2.git%{shortcommit}%{?dist}
 Summary:        Fetches system/theme information in terminal
 Summary(zh_CN): 终端查询系统/主题信息
 
 License:        GPLv3
 URL:            https://github.com/KittyKatt/screenFetch
-Source:         %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source:         %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
 %description
@@ -23,7 +22,7 @@ Fetches system/theme information in terminal for Linux desktop screenshots.
 终端查询系统/主题信息.
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
 
 %build
 
@@ -38,6 +37,8 @@ install -Dm 0644 %{name}.1   %{buildroot}%{_mandir}/man1/%{name}.1
 %{_mandir}/man1/%{name}.1.*
 
 %changelog
+* Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 3.8.0-2.git5f39bd3
+- Update to 5f39bd3
 * Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 3.8.0-1.git36518ac
 - Update to 3.8.0
 * Sat Dec 12 2015 mosquito <sensor.wen@gmail.com> - 3.7.0-3.git22e5bee
