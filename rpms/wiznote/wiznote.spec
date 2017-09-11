@@ -1,45 +1,35 @@
 # https://github.com/WizTeam/WizQTClient/blob/master/src/WizDef.h
 %global __strip_shared %(test $(rpm -E%?fedora) -ge 23 && echo "/usr/lib/rpm/brp-strip-shared %{__strip}" ||:)
 %global debug_package %{nil}
-%global project WizQTClient
-%global repo %{project}
+%global repo WizQTClient
 
-# commit
-%global _commit f1b53cba980d7c2428123e63c5bdbf5634fc2604
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global commit 10a9fe20b49cfc4b3d14177806d265ad001d6fb9
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %global with_llvm 0
 
 Name:    wiznote
-Version: 2.5.1
-Release: 1.git%{_shortcommit}%{?dist}
+Version: 2.5.6
+Release: 1.git%{shortcommit}%{?dist}
 Summary: Cross platform cloud based note-taking application
 Summary(zh_CN): 为知笔记 Qt 客户端
-
 Group:   Applications/Editors
-# https://raw.githubusercontent.com/WizTeam/WizQTClient/master/LICENSE
 License: GPLv3
 URL:     https://github.com/WizTeam/WizQTClient
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
-BuildRequires: cmake >= 2.8.4
-BuildRequires: qt5-qtbase-devel
-BuildRequires: qt5-qttools-devel
-BuildRequires: qt5-qtwebengine-devel
-BuildRequires: qt5-qtwebsockets-devel
-BuildRequires: qt5-qtwebchannel-devel
-BuildRequires: boost-devel
-BuildRequires: cryptopp-devel
-BuildRequires: quazip-devel
-BuildRequires: zlib-devel
 %if 0%{?with_llvm}
 BuildRequires: clang
 %endif
-Obsoletes: wiz-note <= 2.1.13git20140926
-
-# qt4 build requires
-#BuildRequires: qt-devel
-#BuildRequires: qtwebkit-devel
+BuildRequires: cmake(Qt5)
+BuildRequires: cmake(Qt5LinguistTools)
+BuildRequires: pkgconfig(Qt5WebEngine)
+BuildRequires: pkgconfig(Qt5WebSockets)
+BuildRequires: pkgconfig(Qt5WebChannel)
+BuildRequires: pkgconfig(cryptopp)
+BuildRequires: pkgconfig(zlib)
+BuildRequires: boost-devel
+BuildRequires: quazip-devel
 
 %description
 WizNote is an opensource cross-platform cloud based note-taking client.
@@ -61,11 +51,14 @@ Please refer to WizNote home for more detailed info:
 此包为稳定版.
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n %{repo}-%{commit}
+
+# fix missing head
+sed -i '8a#include <QMutex>' src/sync/WizKMSync.h
 
 # dynamic library (crypt|zip|json)
-sed -i -r '/crypt/d' lib/CMakeLists.txt
-sed -i -e '/cryptlib/az' -e 's|cryptlib|cryptopp|' src/CMakeLists.txt
+sed -i 's|add_subdirectory|find_package|' lib/CMakeLists.txt
+sed -i 's|cryptlib|cryptopp|' src/CMakeLists.txt
 
 # GCC version
 gcc_version=$((LANG=c;gcc --version)|awk 'gsub(/\./,""){print $3;exit}')
@@ -86,11 +79,9 @@ sed -i 's|lib/wiznote/plugins|lib64/%{name}/plugins|' \
 %endif
 
 %build
-mkdir dist
-pushd dist
 # fixed "/usr/lib64/lib64/libboost_date_time.a" but this file does not exist.
 # BOOL Boost_NO_BOOST_CMAKE "Enable fix for FindBoost.cmake"
-%{cmake} .. \
+%{cmake} \
 %if 0%{?rhel} == 6
     -DBoost_NO_BOOST_CMAKE=ON \
 %endif
@@ -99,12 +90,11 @@ pushd dist
     -DCMAKE_CXX_COMPILER=clang++ \
 %endif
     -DCMAKE_INSTALL_PREFIX=%{_prefix} \
-    -DWIZNOTE_USE_QT5=ON \
     -DCMAKE_BUILD_TYPE=Release
 %make_build
 
 %install
-%make_install -C dist
+%make_install
 
 # change exec filename
 mv %{buildroot}%{_bindir}/{WizNote,%{name}}
@@ -122,7 +112,6 @@ rm -rf %{buildroot}%{_datadir}/icons/hicolor/8x8
 %post
 /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 /usr/bin/update-desktop-database &>/dev/null ||:
-/sbin/ldconfig
 
 %postun
 if [ $1 -eq 0 ]; then
@@ -130,13 +119,11 @@ if [ $1 -eq 0 ]; then
     /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 fi
 /usr/bin/update-desktop-database &>/dev/null ||:
-/sbin/ldconfig
 
 %posttrans
 /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
-%defattr(-,root,root,-)
 %doc README.md CHANGELOG.md
 %license LICENSE
 %{_bindir}/%{name}
@@ -145,6 +132,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 2.5.6-1.git10a9fe2
+- Update to 2.5.6
 * Fri May 26 2017 mosquito <sensor.wen@gmail.com> - 2.5.1-1.gitf1b53cb
 - Update to 2.5.1
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 2.4.2-1.git812ec4b
