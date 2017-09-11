@@ -29,16 +29,16 @@
 %endif # with_selinux
 
 Name:       sogoupinyin
-Version:    2.1.0.0082
-Release:    2%{?dist}
+Version:    2.1.0.0086
+Release:    1%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
 License:    Proprietary and GPLv2
 URL:        http://pinyin.sogou.com/linux
 Group:      Applications/System
-Source0:    http://cdn2.ime.sogou.com/dl/index/1475147394/%{name}_%{version}_amd64.deb
-Source1:    http://cdn2.ime.sogou.com/dl/index/1475146281/%{name}_%{version}_i386.deb
+Source0:    http://cdn2.ime.sogou.com/dl/index/1491565850/%{name}_%{version}_amd64.deb
+Source1:    http://cdn2.ime.sogou.com/dl/index/1491566555/%{name}_%{version}_i386.deb
 Source11:   %{name}.te
 Source12:   %{name}.fc
 Source13:   %{name}.if
@@ -399,7 +399,6 @@ fi
 /usr/bin/update-mime-database %{?fedora:-n} %{_datadir}/mime &>/dev/null ||:
 
 %files
-%defattr(-,root,root,-)
 %doc %{name}-%{version}/changelog.gz
 %license %{name}-%{version}/{copyright,license*}
 %attr(755,root,root) %{_xinitrcdir}/55-%{name}.sh
@@ -419,11 +418,12 @@ fi
 
 %if 0%{?with_selinux}
 %files selinux
-%defattr(-,root,root,-)
 %{_datadir}/selinux/*
 %endif # with_selinux
 
 %changelog
+* Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 2.1.0.0086-1
+- Update version 2.1.0.0086
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-2
 - Dont rename skin files, fixed #177, #179
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-1
