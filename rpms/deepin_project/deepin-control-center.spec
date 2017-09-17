@@ -63,8 +63,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop ||:
 %doc README.md
 %license LICENSE
 %{_bindir}/%{repo}
-%{_libdir}/%{repo}/plugins/
-%{_libexecdir}/%{repo}/reboot-reminder-dialog
+%{_libdir}/%{repo}/
+%{_libexecdir}/%{repo}/
 %{_datadir}/applications/%{repo}.desktop
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/%{repo}/
