@@ -1,7 +1,7 @@
 %global repo dde-session-ui
 
 Name:           deepin-session-ui
-Version:        4.0.13.1
+Version:        4.0.14
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -100,6 +100,9 @@ fi
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Thu Sep 21 2017 mosquito <sensor.wen@gmail.com> - 4.0.14-1
+- Update to 4.0.14
+
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 4.0.13.1-1
 - Update to 4.0.13.1
 
