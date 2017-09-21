@@ -1,5 +1,5 @@
 Name:           deepin-music
-Version:        3.1.5
+Version:        3.1.6
 Release:        1%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
@@ -48,7 +48,9 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.*
 
 sed -i '/%1/s|lib|%{_lib}|' music-player/core/pluginmanager.cpp
 sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
-    plugin/netease-meta-search/netease-meta-search.pro
+    plugin/netease-meta-search/netease-meta-search.pro \
+    vendor/src/dbusextended-qt/src/src.pro \
+    vendor/src/mpris-qt/src/src.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -86,14 +88,17 @@ fi
 %{_datadir}/dbus-1/services/*.service
 
 %files devel
-%{_qt5_headerdir}/DBusExtended/
-%{_qt5_headerdir}/MprisQt/
+%{_includedir}/DBusExtended/
+%{_includedir}/MprisQt/
 %{_qt5_archdatadir}/mkspecs/features/*-qt5.prf
 %{_libdir}/lib*.so
 %{_libdir}/%{name}/plugins/lib*.so
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Thu Sep 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.6-1
+- Update to 3.1.6
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.5-1
 - Update to 3.1.5
 
