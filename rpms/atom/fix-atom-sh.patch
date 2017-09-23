@@ -21,8 +21,8 @@
  export ATOM_DISABLE_SHELLING_OUT_FOR_ENVIRONMENT=true
  
  while getopts ":wtfvh-:" opt; do
-@@ -54,79 +39,21 @@
-   export ELECTRON_ENABLE_LOGGING=1
+@@ -53,79 +38,21 @@
+   exec 2> /dev/null
  fi
  
 -if [ $OS == 'Mac' ]; then

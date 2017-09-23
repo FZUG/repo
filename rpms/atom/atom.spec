@@ -12,22 +12,22 @@
 
 %global project atom
 %global repo %{project}
-%global electron_ver 1.3.13
+%global electron_ver 1.6.9
 %global node_ver 6
 
 # commit
-%global _commit 2791572cd20b1d8c84a100e8308dcce57d1853d7
+%global _commit 966dfccbde9ff17c772642ebcc56d702dd8ffb0c
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:    atom
-Version: 1.17.0
+Version: 1.20.1
 Release: 1.git%{_shortcommit}%{?dist}
 Summary: A hack-able text editor for the 21st century
 
 Group:   Applications/Editors
 License: MIT
-URL:     https://atom.io/
-Source0: https://github.com/atom/atom/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+URL:     https://github.com/atom/atom
+Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
 Source1: use-system-ctags.patch
 
 Patch0:  fix-atom-sh.patch
@@ -43,7 +43,8 @@ BuildRequires: /usr/bin/npm
 BuildRequires: node-gyp
 BuildRequires: nodejs-packaging
 BuildRequires: nodejs-atom-package-manager
-BuildRequires: libxkbfile-devel
+BuildRequires: pkgconfig(xkbfile)
+BuildRequires: pkgconfig(libsecret-1)
 Requires: nodejs-atom-package-manager
 Requires: electron = %{electron_ver}
 Requires: desktop-file-utils
@@ -189,6 +190,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sat Sep 23 2017 mosquito <sensor.wen@gmail.com> - 1.20.1-1.git966dfcc
+- Release 1.20.1
 * Tue May 23 2017 mosquito <sensor.wen@gmail.com> - 1.17.0-1.git2791572
 - Release 1.17.0
 * Sat Mar 11 2017 mosquito <sensor.wen@gmail.com> - 1.15.0-1.git3e457f3

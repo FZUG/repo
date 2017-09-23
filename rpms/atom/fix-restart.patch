@@ -1,6 +1,6 @@
 --- a/src/main-process/atom-application.coffee
 +++ b/src/main-process/atom-application.coffee
-@@ -821,7 +821,7 @@
+@@ -829,7 +829,7 @@
        @restart()
  
    restart: ->
