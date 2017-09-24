@@ -6,11 +6,11 @@
 
 %global project vscode
 %global repo %{project}
-%global electron_ver 1.3.13
+%global electron_ver 1.6.9
 %global node_ver 6
 
 # commit
-%global _commit 19222cdc84ce72202478ba1cec5cb557b71163de
+%global _commit 27492b6bf3acb0775d82d2f87b25a93490673c6d
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 # compute checksum for file
@@ -18,15 +18,16 @@
 %global hash MD5() { openssl md5 -binary $1 |openssl base64 |cut -d= -f1; }
 %global line_num LN() { wc -l $1 |cut -d" " -f1; }
 %global _files files=(\
-  "vs/workbench/electron-browser/workbench.main.js"\
-  "vs/workbench/electron-browser/workbench.main.css"\
+  "vs/workbench/workbench.main.js"\
+  "vs/workbench/workbench.main.css"\
   "vs/workbench/electron-browser/bootstrap/index.html"\
   "vs/workbench/electron-browser/bootstrap/index.js"\
+  "vs/workbench/electron-browser/bootstrap/preload.js"\
 )
 %{nil}
 
 Name:    vscode
-Version: 1.12.2
+Version: 1.16.1
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 
@@ -42,8 +43,9 @@ BuildRequires: openssl
 BuildRequires: /usr/bin/npm
 BuildRequires: node-gyp, git
 BuildRequires: python
-BuildRequires: libX11-devel
-BuildRequires: libxkbfile-devel
+BuildRequires: pkgconfig(x11)
+BuildRequires: pkgconfig(xkbfile)
+BuildRequires: pkgconfig(libsecret-1)
 BuildRequires: desktop-file-utils
 # sysctl_apply macro
 BuildRequires: systemd
@@ -219,6 +221,8 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Sun Sep 24 2017 mosquito <sensor.wen@gmail.com> - 1.16.1-1
+- Release 1.16.1
 * Wed May 24 2017 mosquito <sensor.wen@gmail.com> - 1.12.2-1
 - Release 1.12.2
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.9.1-1

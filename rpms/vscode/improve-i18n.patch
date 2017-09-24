@@ -1,6 +1,6 @@
 --- a/i18n/chs/src/vs/workbench/browser/parts/editor/editorStatus.i18n.json
 +++ b/i18n/chs/src/vs/workbench/browser/parts/editor/editorStatus.i18n.json
-@@ -19,7 +19,7 @@
+@@ -21,7 +21,7 @@
  	"selectLanguageMode": "选择语言模式",
  	"fileInfo": "文件信息",
  	"spacesSize": "空格: {0}",
@@ -9,14 +9,3 @@
  	"showLanguageExtensions": "搜索“{0}”的应用市场扩展程序...",
  	"changeMode": "更改语言模式",
  	"noEditor": "此时没有处于活动状态的文本编辑器",
---- a/i18n/chs/src/vs/code/electron-main/menus.i18n.json
-+++ b/i18n/chs/src/vs/code/electron-main/menus.i18n.json
-@@ -155,6 +155,6 @@
- 	"miDownloadingUpdate": "正在下载更新...",
- 	"miInstallingUpdate": "正在安装更新...",
- 	"miCheckForUpdates": "检查更新...",
--	"aboutDetail": "\n版本 {0}\n提交  {1}\n日期 {2}\nShell {3}\n呈现器 {4}\nNode {5}",
-+	"aboutDetail": "\n版本 {0}\n提交  {1}\n日期 {2}\nShell {3}\n渲染器 {4}\nNode {5}",
- 	"okButton": "确定"
- }
-\ No newline at end of file
