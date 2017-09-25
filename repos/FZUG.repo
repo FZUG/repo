@@ -22,14 +22,6 @@ metadata_expire=1d
 gpgcheck=0
 enabled=1
 
-[fzug-rpmfusion]
-name=FZUG fc$releasever - Rpmfusion
-baseurl=https://repo.fdzh.org/FZUG/rpmfusion/$releasever/$basearch/
-skip_if_unavailable=True
-metadata_expire=1d
-gpgcheck=0
-enabled=1
-
 [fzug-free-source]
 name=FZUG fc$releasever - Free - Source
 baseurl=https://repo.fdzh.org/FZUG/free/$releasever/source/SRPMS/
