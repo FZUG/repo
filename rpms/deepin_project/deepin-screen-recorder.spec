@@ -9,7 +9,11 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  qt5-linguist
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(dtkwm)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
