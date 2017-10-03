@@ -22,7 +22,10 @@ BuildRequires:  pkgconfig(libsecret-1)
 BuildRequires:  pkgconfig(poppler-cpp)
 BuildRequires:  pkgconfig(polkit-agent-1)
 BuildRequires:  pkgconfig(polkit-qt5-1)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5X11Extras)
@@ -137,21 +140,16 @@ fi
 %{_datadir}/dbus-1/services/org.freedesktop.FileManager.service
 %{_datadir}/dbus-1/system-services/com.deepin.filemanager.daemon.service
 %dir %{_datadir}/usb-device-formatter
-%dir %{_datadir}/usb-device-formatter/translations
-%{_datadir}/usb-device-formatter/translations/*.qm
+%{_datadir}/usb-device-formatter/translations/
 %{_polkit_qt_policydir}/com.deepin.filemanager.daemon.policy
 %{_polkit_qt_policydir}/com.deepin.pkexec.dde-file-manager.policy
 %{_polkit_qt_policydir}/com.deepin.pkexec.usb-device-formatter.policy
 
 %files devel
-%dir %{_includedir}/%{repo}
-%{_includedir}/%{repo}/*.h
-%dir %{_includedir}/%{repo}/gvfs
-%{_includedir}/%{repo}/gvfs/*.h
-%dir %{_includedir}/%{repo}/%{repo}-plugins
-%{_includedir}/%{repo}/%{repo}-plugins/*.h
-%dir %{_includedir}/%{repo}/private
-%{_includedir}/%{repo}/private/*.h
+%{_includedir}/%{repo}/
+%{_includedir}/%{repo}/gvfs/
+%{_includedir}/%{repo}/%{repo}-plugins/
+%{_includedir}/%{repo}/private/
 %{_libdir}/pkgconfig/%{repo}.pc
 %{_libdir}/lib%{repo}.so
 
@@ -160,8 +158,7 @@ fi
 %{_datadir}/applications/dde-computer.desktop
 %{_datadir}/applications/dde-trash.desktop
 %dir %{_datadir}/dde-desktop
-%dir %{_datadir}/dde-desktop/translations
-%{_datadir}/dde-desktop/translations/*.qm
+%{_datadir}/dde-desktop/translations/
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
