@@ -1,5 +1,5 @@
-%global project dde-qt-dbus-factory
-%global repo %{project}
+%global soname dframeworkdbus
+%global repo   dde-qt-dbus-factory
 
 Name:           deepin-qt-dbus-factory
 Version:        0.3.0
@@ -44,12 +44,12 @@ Header files and libraries for %{name}.
 %files
 %doc README
 %license LICENSE
-%{_libdir}/libdframeworkdbus.so.*
+%{_libdir}/lib%{soname}.so.*
 
 %files devel
-%{_includedir}/libdframeworkdbus-1.0/
-%{_libdir}/pkgconfig/dframeworkdbus.pc
-%{_libdir}/libdframeworkdbus.so
+%{_includedir}/lib%{soname}-1.0/
+%{_libdir}/pkgconfig/%{soname}.pc
+%{_libdir}/lib%{soname}.so
 
 %changelog
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 0.3.0-1
