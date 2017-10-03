@@ -6,11 +6,14 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-voice-recorder
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  qt5-linguist
-BuildRequires:  ffmpeg-devel
 
 %description
 Deepin Voice Recorder
