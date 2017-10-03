@@ -11,10 +11,10 @@ URL:            https://github.com/linuxdeepin/qt5integration
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Source1:        https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtbase-opensource-src-5.9.1.tar.xz
 
-# full build requires
 BuildRequires:  pkgconfig(atk)
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(dbus-1)
+BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(freetype2)
@@ -28,6 +28,8 @@ BuildRequires:  pkgconfig(libinput)
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(mtdev)
 BuildRequires:  pkgconfig(pango)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5OpenGL)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Xdg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
@@ -45,7 +47,6 @@ BuildRequires:  pkgconfig(xkbcommon-x11)
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  qt5-qtbase-common
 BuildRequires:  qt5-qtbase-static
-BuildRequires:  qt5-qtstyleplugins
 
 %description
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
