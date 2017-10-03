@@ -10,6 +10,7 @@ BuildRequires:  desktop-file-utils
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Qml)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  python2-devel
@@ -33,13 +34,13 @@ sed -i 's|/usr/bin|%{_libexecdir}|' data/com.deepin.menu.service \
 sed -i '/data_files/s|list_files.*)|"")|' setup.py
 
 %build
-%{__python2} setup.py build
-%{qmake_qt5} DEFINES+=QT_NO_DEBUG_OUTPUT
-%{make_build}
+%__python2 setup.py build
+%qmake_qt5 DEFINES+=QT_NO_DEBUG_OUTPUT
+%make_build
 
 %install
-%{__python2} setup.py install -O1 --skip-build --prefix=%{_prefix} --root=%{buildroot}
-%{make_install} INSTALL_ROOT="%{buildroot}"
+%__python2 setup.py install -O1 --skip-build --prefix=%{_prefix} --root=%{buildroot}
+%make_install INSTALL_ROOT="%{buildroot}"
 
 install -d %{buildroot}%{_datadir}/dbus-1/services/
 install -m644 data/*.service %{buildroot}%{_datadir}/dbus-1/services/
