@@ -7,7 +7,8 @@ URL:            https://github.com/linuxdeepin/deepin-wm-switcher
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake(Qt5)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(xcb-keysyms)
