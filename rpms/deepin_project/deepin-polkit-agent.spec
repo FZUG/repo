@@ -12,6 +12,8 @@ BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(polkit-qt5-1)
 BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  qt5-linguist
 
 %description
