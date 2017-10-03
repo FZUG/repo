@@ -1,5 +1,4 @@
-%global project dde-calendar
-%global reponame %{project}
+%global repo dde-calendar
 
 Name:           deepin-calendar
 Version:        1.0.12
@@ -7,20 +6,23 @@ Release:        1%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dde-calendar
-Source0:        %{url}/archive/%{version}/%{reponame}-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  qt5-linguist
-BuildRequires:  pkgconfig(Qt5)
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  desktop-file-utils
+BuildRequires:  qt5-linguist
+BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Widgets)
 Requires:       hicolor-icon-theme
 
 %description
 Calendar for Deepin Desktop Environment.
 
 %prep
-%setup -q -n %{reponame}-%{version}
+%setup -q -n %{repo}-%{version}
 sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 
 %build
@@ -31,15 +33,15 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %make_install INSTALL_ROOT=%{buildroot}
 
 %check
-desktop-file-validate %{buildroot}%{_datadir}/applications/%{reponame}.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{repo}.desktop
 
 %files
 %doc README.md
 %license LICENSE
-%{_bindir}/%{reponame}
-%{_datadir}/%{reponame}/
-%{_datadir}/applications/%{reponame}.desktop
-%{_datadir}/icons/hicolor/scalable/apps/%{reponame}.svg
+%{_bindir}/%{repo}
+%{_datadir}/%{repo}/
+%{_datadir}/applications/%{repo}.desktop
+%{_datadir}/icons/hicolor/scalable/apps/%{repo}.svg
 
 %changelog
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 1.0.12-1
