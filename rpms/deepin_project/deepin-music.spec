@@ -8,20 +8,24 @@ Url:            https://github.com/linuxdeepin/deepin-music
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  python
-BuildRequires:  dtksettings-devel
+BuildRequires:  desktop-file-utils
+BuildRequires:  qt5-linguist
+BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
-BuildRequires:  pkgconfig(libavcodec)
-BuildRequires:  pkgconfig(libcue)
 BuildRequires:  pkgconfig(icu-uc)
+BuildRequires:  pkgconfig(libavcodec)
+BuildRequires:  pkgconfig(libavformat)
+BuildRequires:  pkgconfig(libcue)
+BuildRequires:  pkgconfig(taglib)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Sql)
+BuildRequires:  pkgconfig(Qt5Xml)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(Qt5Multimedia)
-BuildRequires:  pkgconfig(taglib)
-BuildRequires:  qt5-linguist
-BuildRequires:  desktop-file-utils
 Provides:       deepin-music-player%{?_isa} = %{version}-%{release}
 
 %description
@@ -43,9 +47,7 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q
-sed -i 's|-0-2||g' music-player/music-player.pro
 sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.*
-
 sed -i '/%1/s|lib|%{_lib}|' music-player/core/pluginmanager.cpp
 sed -i '/target.path/s|lib|%{_lib}|' libdmusic/libdmusic.pro \
     plugin/netease-meta-search/netease-meta-search.pro \
