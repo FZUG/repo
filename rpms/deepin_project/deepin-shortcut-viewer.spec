@@ -6,7 +6,9 @@ License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-shortcut-viewer
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Widgets)
+BuildRequires:  pkgconfig(Qt5Network)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 Provides:       bundled(CuteLogger)
 
