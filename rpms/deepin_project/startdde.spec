@@ -8,7 +8,6 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
 BuildRequires:  gcc-go
-BuildRequires:  coffee-script
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
@@ -16,10 +15,17 @@ BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(gobject-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gdk-3.0)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(systemd)
 %{?systemd_requires}
 Requires:       deepin-daemon
 Requires:       deepin-wm-switcher
+Requires:       deepin-wm
+Requires:       deepin-metacity
 
 %description
 Startdde is used for launching DDE components and invoking user's
