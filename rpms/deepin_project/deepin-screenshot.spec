@@ -11,7 +11,11 @@ Source1:        %{name}-appdata.xml
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb-util)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib
