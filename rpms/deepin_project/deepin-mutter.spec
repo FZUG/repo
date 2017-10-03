@@ -7,27 +7,31 @@ URL:            https://github.com/linuxdeepin/deepin-mutter
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  intltool
-BuildRequires:  gnome-common
-BuildRequires:  gnome-doc-utils
-BuildRequires:  gobject-introspection-devel
-BuildRequires:  gtk-doc
-BuildRequires:  gtk3-devel
-BuildRequires:  gsettings-desktop-schemas-devel
-BuildRequires:  gnome-desktop3-devel
-BuildRequires:  clutter-devel
-BuildRequires:  upower-devel
-BuildRequires:  libxkbfile-devel
-BuildRequires:  libxkbcommon-x11-devel
-BuildRequires:  xkeyboard-config-devel
-BuildRequires:  libgudev-devel
-BuildRequires:  zenity
-BuildRequires:  deepin-cogl-devel
 BuildRequires:  desktop-file-utils
+BuildRequires:  gnome-common
+BuildRequires:  deepin-cogl-devel
+BuildRequires:  pkgconfig(clutter-1.0)
+BuildRequires:  pkgconfig(gtk-doc)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gobject-introspection-1.0)
+BuildRequires:  pkgconfig(gsettings-desktop-schemas)
+BuildRequires:  pkgconfig(gnome-doc-utils)
+BuildRequires:  pkgconfig(gnome-desktop-3.0)
+BuildRequires:  pkgconfig(gudev-1.0)
+BuildRequires:  pkgconfig(ice)
+BuildRequires:  pkgconfig(sm)
+BuildRequires:  pkgconfig(libcanberra-gtk)
+BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(libsystemd)
+BuildRequires:  pkgconfig(libinput)
+BuildRequires:  pkgconfig(upower-glib)
+BuildRequires:  pkgconfig(xkbfile)
+BuildRequires:  pkgconfig(xkbcommon-x11)
+BuildRequires:  pkgconfig(xkeyboard-config)
+BuildRequires:  zenity
 Requires:       dconf
 Requires:       deepin-desktop-schemas
 Requires:       zenity
-#libcanberra
-#startup-notification
 
 %description
 Base window manager for deepin, fork of gnome mutter.
