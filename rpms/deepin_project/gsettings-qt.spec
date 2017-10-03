@@ -1,5 +1,5 @@
 %global project ~system-settings-touch
-%global _revision 82
+%global revision 82
 
 # for fedora 24
 %global _qt5_qmldir %{_qt5_archdatadir}/qml
@@ -10,11 +10,13 @@ Release:        1%{?dist}
 Summary:        Qml bindings for GSettings
 License:        GPL
 URL:            https://launchpad.net/gsettings-qt
-Source0:        http://bazaar.launchpad.net/%{project}/%{name}/trunk/tarball/%{_revision}
+Source0:        http://bazaar.launchpad.net/%{project}/%{name}/trunk/tarball/%{revision}
 
-BuildRequires:  qt5-qtbase-devel
-BuildRequires:  qt5-qtdeclarative-devel
-BuildRequires:  glib2-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Gui)
+BuildRequires:  pkgconfig(Qt5Qml)
+BuildRequires:  pkgconfig(gio-2.0)
+BuildRequires:  pkgconfig(glib-2.0)
 
 %description
 Qml bindings for GSettings.
@@ -28,6 +30,7 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{project}/%{name}/trunk
+sed -i 's|test.*||' %{name}.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -36,24 +39,22 @@ Header files and libraries for %{name}.
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
-# remove test
-rm -rf %{buildroot}%{_libdir}/qt5/tests
-
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
+%license COPYING
 %{_libdir}/lib%{name}.so.*
-
-%files devel
-%{_qt5_headerdir}/QGSettings/*
-%{_libdir}/pkgconfig/%{name}.pc
-%{_libdir}/lib%{name}.so
 %dir %{_qt5_qmldir}/GSettings.1.0/
 %{_qt5_qmldir}/GSettings.1.0/libGSettingsQmlPlugin.so
 %{_qt5_qmldir}/GSettings.1.0/plugins.qmltypes
 %{_qt5_qmldir}/GSettings.1.0/qmldir
+
+%files devel
+%{_qt5_headerdir}/QGSettings/
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/lib%{name}.so
 
 %changelog
 * Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 0.1.20160329-1-1
