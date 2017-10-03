@@ -12,14 +12,17 @@ BuildRequires:  itstool
 BuildRequires:  libtool
 BuildRequires:  yelp-tools
 BuildRequires:  autoconf-archive
-BuildRequires:  bamf-devel
-BuildRequires:  glib2-devel
-BuildRequires:  gtk3-devel
-BuildRequires:  gsettings-desktop-schemas-devel
-BuildRequires:  json-glib-devel
-BuildRequires:  libcanberra-devel
-BuildRequires:  libgtop2-devel
-BuildRequires:  startup-notification-devel
+BuildRequires:  pkgconfig(libbamf3)
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  pkgconfig(gtk+-3.0)
+BuildRequires:  pkgconfig(gsettings-desktop-schemas)
+BuildRequires:  pkgconfig(json-glib-1.0)
+BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libcanberra-gtk3)
+BuildRequires:  pkgconfig(libgtop-2.0)
+BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(sm)
+BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  zenity
 Requires:       dconf
 Requires:       deepin-desktop-schemas
@@ -53,8 +56,8 @@ find %{buildroot} -name '*.la' -delete
 %find_lang %{name}
 
 %check
-desktop-file-validate %{_datadir}/gnome/applications/%{name}.desktop \
-  %{_datadir}/gnome/wm-properties/%{name}-wm.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop \
+  %{buildroot}%{_datadir}/gnome/wm-properties/%{name}-wm.desktop
 
 %post
 /sbin/ldconfig
