@@ -16,13 +16,13 @@ BuildRequires:  pkgconfig(gee-0.8)
 BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  pkgconfig(libbamf3)
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libcanberra-gtk3)
 BuildRequires:  pkgconfig(libdeepin-mutter)
 BuildRequires:  pkgconfig(libwnck-3.0)
 BuildRequires:  pkgconfig(upower-glib)
 BuildRequires:  pkgconfig(vapigen)
 BuildRequires:  pkgconfig(xkbcommon-x11)
 BuildRequires:  pkgconfig(xkbfile)
-BuildRequires:  vala-tools
 Requires:       deepin-desktop-schemas
 Requires:       gnome-desktop
 Requires:       libcanberra-gtk3
@@ -53,8 +53,8 @@ sed -i 's|default_background.jpg|default.png|' \
 %install
 %make_install PREFIX="%{_prefix}"
 
-#Remove libtool archives.
-find %{buildroot} -name '*.la' -exec rm -f {} ';'
+# Remove libtool archives
+find %{buildroot} -name '*.la' -delete
 
 %find_lang %{name}
 
