@@ -8,13 +8,22 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-static
-BuildRequires:  pkgconfig(dtkcore)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(x11)
+BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  pkgconfig(xrender)
 Provides:       deepin-tool-kit%{_isa} = %{version}-%{release}
 Obsoletes:      deepin-tool-kit%{_isa} < %{version}-%{release}
@@ -47,15 +56,14 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 %files
 %doc README.md
 %license LICENSE
-%{_libdir}/lib*.so.*
+%{_libdir}/lib%{name}.so.*
 %dir %{_datadir}/%{name}
-%dir %{_datadir}/%{name}/translations
-%{_datadir}/%{name}/translations/*.qm
+%{_datadir}/%{name}/translations/
 
 %files devel
 %{_includedir}/libdtk-*/
-%{_libdir}/pkgconfig/*.pc
-%{_libdir}/lib*.so
+%{_libdir}/pkgconfig/%{name}.pc
+%{_libdir}/lib%{name}.so
 
 %changelog
 * Thu Aug 24 2017 mosquito <sensor.wen@gmail.com> - 2.0.0-2
