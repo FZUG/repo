@@ -14,9 +14,13 @@ BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(geoip)
-BuildRequires:  pkgconfig(Qt5)
-BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5Concurrent)
+BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5Sql)
+BuildRequires:  pkgconfig(Qt5Xml)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  qt5-linguist
 Requires:       deepin-account-faces
