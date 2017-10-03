@@ -12,10 +12,11 @@ BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gsettings-qt)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(xcb-ewmh)
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  qt5-linguist
 Requires:       deepin-menu
 Requires:       deepin-daemon
