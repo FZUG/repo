@@ -9,8 +9,14 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  intltool
 BuildRequires:  desktop-file-utils
 BuildRequires:  gnome-common
+%if 0%{?fedora} > 26
+BuildRequires:  cogl-devel >= 1.22.2-7
+%else
 BuildRequires:  deepin-cogl-devel
+%endif
 BuildRequires:  pkgconfig(clutter-1.0)
+BuildRequires:  pkgconfig(clutter-wayland-1.0)
+BuildRequires:  pkgconfig(gl)
 BuildRequires:  pkgconfig(gtk-doc)
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
@@ -46,7 +52,16 @@ Header files and libraries for base window manager for deepin, fork of gnome mut
 %prep
 %setup -q
 
+# Starting from GLib 2.49, the gdbus-codegen tool automatically generates
+# the auto cleanup symbols for the GDBus proxy and skeleton interfaces.
+# https://github.com/GNOME/mutter/commit/aeda556
+%if 0%{?fedora} > 26
+sed -i '/G_DEFINE_AUTOPTR_CLEANUP_FUNC.*GUdev/d' src/backends/native/meta-launcher.c
+%endif
+
 %build
+# https://github.com/linuxdeepin/deepin-mutter/issues/1
+export CFLAGS="%optflags -std=gnu99"
 ./autogen.sh
 %configure \
     --libexecdir=%{_libexecdir}/%{name} \
@@ -61,8 +76,8 @@ Header files and libraries for base window manager for deepin, fork of gnome mut
 %install
 %make_install PREFIX=%{_prefix}
 
-#Remove libtool archives.
-find %{buildroot} -name '*.la' -exec rm -f {} ';'
+# Remove libtool archives
+find %{buildroot} -name '*.la' -delete
 
 %find_lang %{name}
 
