@@ -47,7 +47,8 @@ Summary:        Development package for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Header files and libraries for base window manager for deepin, fork of gnome mutter.
+Header files and libraries for base window manager for deepin,
+fork of gnome mutter.
 
 %prep
 %setup -q
@@ -58,6 +59,10 @@ Header files and libraries for base window manager for deepin, fork of gnome mut
 %if 0%{?fedora} > 26
 sed -i '/G_DEFINE_AUTOPTR_CLEANUP_FUNC.*GUdev/d' src/backends/native/meta-launcher.c
 %endif
+
+# Fix fsf address
+find -type f -print0 | xargs -0 sed -i \
+  's|59 Temple Place - Suite 330|51 Franklin Street, Fifth Floor|; s|02111-1307|02110-1301|'
 
 %build
 # https://github.com/linuxdeepin/deepin-mutter/issues/1
@@ -86,14 +91,7 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{name}.desktop
 
 %post -p /sbin/ldconfig
 
-%postun
-/sbin/ldconfig
-if [ $1 -eq 0 ]; then
-    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null ||:
-fi
-
-%posttrans
-/usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null ||:
+%postun -p /sbin/ldconfig
 
 %files -f %{name}.lang
 %doc README.md
@@ -101,6 +99,7 @@ fi
 %{_bindir}/%{name}
 %{_libdir}/lib%{name}.so.*
 %{_libdir}/%{name}/
+%exclude %{_libdir}/%{name}/Meta-3.0.gir
 %{_libexecdir}/%{name}/mutter-restart-helper
 %{_datadir}/GConf/gsettings/%{name}-schemas.convert
 %{_datadir}/applications/%{name}.desktop
@@ -110,6 +109,7 @@ fi
 
 %files devel
 %{_includedir}/%{name}/
+%{_libdir}/%{name}/Meta-3.0.gir
 %{_libdir}/pkgconfig/lib%{name}.pc
 %{_libdir}/lib%{name}.so
 
