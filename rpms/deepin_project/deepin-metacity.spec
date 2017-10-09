@@ -40,6 +40,7 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q
+sed -i '/Window/s|Win|X-Win|' src/metacity-wm.desktop.in
 
 %build
 ./autogen.sh
