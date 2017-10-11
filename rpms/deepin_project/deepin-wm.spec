@@ -90,6 +90,7 @@ fi
 %{_datadir}/vala/vapi/%{name}*
 
 %files devel
+%dir %{_includedir}/%{name}
 %{_includedir}/%{name}/%{name}.h
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/lib%{name}.so
