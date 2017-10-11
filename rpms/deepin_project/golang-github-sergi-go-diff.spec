@@ -12,7 +12,7 @@
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1.git%{shortcommit}%{?dist}
+Release:        0.2.git%{shortcommit}%{?dist}
 Summary:        Diff, match and patch text in Go
 License:        MIT
 URL:            https://%{provider_prefix}
@@ -30,6 +30,7 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 Summary:        %{summary}
 BuildArch:      noarch
 BuildRequires:  golang(github.com/stretchr/testify/assert)
+Provides:       golang(%{import_path}) = %{version}-%{release}
 Provides:       golang(%{import_path}/diffmatchpatch) = %{version}-%{release}
 
 %description devel
@@ -103,5 +104,8 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
+* Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.2.gitfeef008
+- Add golang(%%{import_path}) provide
+
 * Fri Aug 11 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.gitfeef008
 - Initial package
