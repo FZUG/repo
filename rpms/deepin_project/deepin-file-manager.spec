@@ -1,13 +1,12 @@
 %global repo dde-file-manager
 
 Name:           deepin-file-manager
-Version:        4.2.5
+Version:        4.3.2
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-Patch0:         %{name}-disable_ffmpeg.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-gettext-tools
@@ -65,7 +64,6 @@ Deepin desktop environment - desktop module.
 
 %prep
 %setup -q -n %{repo}-%{version}
-%patch0 -p1 -b .disable_ffmpeg
 
 # fix file permissions
 find -type f -perm 775 -exec chmod 644 {} \;
@@ -88,9 +86,9 @@ sed -i 's|%{_datadir}|%{_libdir}|' dde-sharefiles/appbase.pri
 %make_install INSTALL_ROOT=%{buildroot}
 
 %check
-desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop
-desktop-file-validate %{buildroot}/%{_datadir}/applications/dde-computer.desktop ||:
-desktop-file-validate %{buildroot}/%{_datadir}/applications/dde-trash.desktop ||:
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{repo}.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/dde-computer.desktop ||:
+desktop-file-validate %{buildroot}%{_datadir}/applications/dde-trash.desktop ||:
 
 %post
 /sbin/ldconfig
@@ -162,6 +160,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Fri Oct 13 2017 mosquito <sensor.wen@gmail.com> - 4.3.2-1
+- Update to 4.3.2
+
 * Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 4.2.5-1
 - Update to 4.2.5
 
