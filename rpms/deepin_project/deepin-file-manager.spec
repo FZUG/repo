@@ -28,6 +28,8 @@ BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5X11Extras)
+BuildRequires:  qt5-qtbase-private-devel
+%{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 BuildRequires:  pkgconfig(taglib)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xcb-ewmh)
@@ -162,6 +164,11 @@ fi
 %changelog
 * Fri Oct 13 2017 mosquito <sensor.wen@gmail.com> - 4.3.2-1
 - Update to 4.3.2
+- Remove ffmpeg patch file
+- BR: Qt5Concurrent Qt5DBus Qt5Gui
+
+* Wed Oct 11 2017 Rex Dieter <rdieter@fedoraproject.org> - 4.2.5-2
+- BR: qt5-qtbase-private-devel
 
 * Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 4.2.5-1
 - Update to 4.2.5
