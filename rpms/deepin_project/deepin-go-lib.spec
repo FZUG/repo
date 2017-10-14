@@ -7,11 +7,11 @@
 # https://github.com/linuxdeepin/go-lib
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     pkg.deepin.io/lib
-%global   commit          70367c8d6653a07b6c09bb5a65f24e795e3161b9
+%global   commit          1986cd005cf07a67d528f6cd70bfc008a5afb94c
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-deepin-go-lib
-Version:        1.1.0
+Version:        1.2.0
 Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 License:        GPLv3
@@ -235,6 +235,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
+* Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 1.2.0-1
+- Update to 1.2.0
+
 * Thu Aug 24 2017 mosquito <sensor.wen@gmail.com> - 1.1.0-1
 - Update to 1.1.0
 
