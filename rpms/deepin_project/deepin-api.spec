@@ -2,7 +2,7 @@
 %global import_path pkg.deepin.io/dde/api
 
 Name:           deepin-api
-Version:        3.1.13
+Version:        3.1.14
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
@@ -130,6 +130,9 @@ fi
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1
+- Update to 3.1.14
+
 * Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 3.1.13-1
 - Update to 3.1.13
 
