@@ -7,12 +7,12 @@
 # https://github.com/linuxdeepin/go-x11-client
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     %{provider_prefix}
-%global   commit          7a984cd0f8308a969222a7cb1899e06d01f5840f
+%global   commit          a10a839c0f79ea80d2b4309c6f2d120f98664c5a
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1.git%{shortcommit}%{?dist}
+Release:        0.2.git%{shortcommit}%{?dist}
 Summary:        A X11 client Go bindings for Deepin Desktop Environment
 License:        GPLv3
 URL:            https://%{provider_prefix}
@@ -30,6 +30,8 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 Summary:        %{summary}
 BuildArch:      noarch
 BuildRequires:  golang(gopkg.in/check.v1)
+BuildRequires:  golang(golang.org/x/text/encoding/charmap)
+Requires:       golang(golang.org/x/text/encoding/charmap)
 Provides:       golang(%{import_path}) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/composite) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/damage) = %{version}-%{release}
@@ -39,6 +41,12 @@ Provides:       golang(%{import_path}/ext/screensaver) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/shape) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/test) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/xfixes) = %{version}-%{release}
+Provides:       golang(%{import_path}/util/atom) = %{version}-%{release}
+Provides:       golang(%{import_path}/util/keybind) = %{version}-%{release}
+Provides:       golang(%{import_path}/util/keysyms) = %{version}-%{release}
+Provides:       golang(%{import_path}/util/mousebind) = %{version}-%{release}
+Provides:       golang(%{import_path}/util/wm/ewmh) = %{version}-%{release}
+Provides:       golang(%{import_path}/util/wm/icccm) = %{version}-%{release}
 
 %description devel
 %{summary}.
@@ -62,7 +70,6 @@ providing packages with %{import_path} prefix.
 
 %prep
 %setup -q -n %{repo}-%{commit}
-sed -i 's|monotime.Now()|time.Duration(time.Nanosecond)|; s|github.com/gavv/mono||' help.go
 
 %build
 
@@ -114,5 +121,8 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
+* Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 0-0.2.gita10a839
+- Update to a10a839
+
 * Sun Aug 27 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git67aca0b
 - Initial package build
