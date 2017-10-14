@@ -1,8 +1,8 @@
 %global repo go-gir-generator
 
 Name:           deepin-gir-generator
-Version:        1.0.1
-Release:        2%{?dist}
+Version:        1.0.2
+Release:        1%{?dist}
 Summary:        Generate static golang bindings for GObject
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/go-gir-generator
@@ -43,6 +43,9 @@ export GOPATH="%{gopath}"
 %{gopath}/src/gir/
 
 %changelog
+* Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.2-1
+- Update to 1.0.2
+
 * Thu Aug  3 2017 mosquito <sensor.wen@gmail.com> - 1.0.1-2
 - Fix undefined type SettingsBackendLike
 
