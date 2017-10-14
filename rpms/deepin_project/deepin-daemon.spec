@@ -2,8 +2,8 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.1.19
-Release:        2%{?dist}
+Version:        3.2.0
+Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
@@ -167,6 +167,9 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 3.2.0-1
+- Update to 3.2.0
+
 * Wed Aug 30 2017 mosquito <sensor.wen@gmail.com> - 3.1.19-2
 - Add fontconfig settings
 
