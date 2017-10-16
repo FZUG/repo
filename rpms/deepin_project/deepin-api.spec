@@ -1,9 +1,14 @@
 %global repo dde-api
 %global import_path pkg.deepin.io/dde/api
 
+# out of memory on armv7hl
+%ifarch %{arm}
+%global _smp_mflags -j1
+%endif
+
 Name:           deepin-api
 Version:        3.1.14
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dde-api
@@ -130,6 +135,9 @@ fi
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Mon Oct 16 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-2
+- Fix out of memory on armv7hl
+
 * Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-1
 - Update to 3.1.14
 
