@@ -1,12 +1,13 @@
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
-Version:        2.6.1
+Version:        2.6.4
 Release:        1%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-terminal
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Patch0:         %{name}_unbundle_vte.patch
 
 BuildRequires:  cmake
 BuildRequires:  gettext
@@ -40,11 +41,8 @@ The %{name}-data package provides shared data for Deepin Terminal.
 
 %prep
 %setup -q
+%patch0 -p1 -b .unbundle_vte
 sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' project_path.c
-
-# fixes build fail for vala 0.36.3
-# https://github.com/linuxdeepin/deepin-terminal/issues/8
-rm vapi/gee-0.8.vapi
 
 # remove es_419 locale
 rm -rf po/es_419/
@@ -101,6 +99,10 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Mon Oct 16 2017 mosquito <sensor.wen@gmail.com> - 2.6.4-1
+- Update to 2.6.4
+- Unbundle vte
+
 * Thu Sep 21 2017 mosquito <sensor.wen@gmail.com> - 2.6.1-1
 - Update to 2.6.1
 

@@ -1,0 +1,73 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -4,7 +4,6 @@
+ 
+ cmake_minimum_required(VERSION 2.6)
+ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+-include(ExternalProject)
+ include(ValaPrecompile)
+ include(ValaVersion)
+ find_package(Vala)
+@@ -18,20 +17,13 @@
+ find_package(Gettext)
+ 
+ pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
++pkg_check_modules(VTE REQUIRED vte-2.91)
+ pkg_check_modules(GEE REQUIRED gee-0.8)
+ pkg_check_modules(GIO REQUIRED gio-unix-2.0)
+ pkg_check_modules(WNCK REQUIRED libwnck-3.0)
+ pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
+ pkg_check_modules(GLIB REQUIRED glib-2.0)
+ 
+-ExternalProject_Add(Vte-0.29
+-	SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rdparty/vte-0.50.1
+-	CONFIGURE_COMMAND ./configure --enable-static
+-	BUILD_COMMAND make
+-	INSTALL_COMMAND ""
+-	BUILD_IN_SOURCE 1
+-	)
+-
+ set(CFLAGS
+ 	${GIO_CFLAGS}
+ 	${GTK3_CFLAGS} ${GTK3_CFLAGS_OTHER}
+@@ -50,10 +42,8 @@
+ 	${WNCK_INCLUDE_DIRS}
+ 	${JsonGlib_INCLUDE_DIRS}
+ 	${LIBSECRET_INCLUDE_DIRS}
++	${VTE_INCLUDE_DIRS}
+-	${CMAKE_SOURCE_DIR}/3rdparty/vte-0.50.1/src
+-	#$${VTE_INCLUDE_DIRS}
+ )
+-find_library(VTE_LIB NAMES libvte-2.91.a tcmalloc_minimal)
+ include_directories(${INCLUDE_PATHS})
+ set(LIBS
+ 	${GIO_LIBRARIES}
+@@ -62,17 +52,12 @@
+ 	${WNCK_LIBRARIES}
+ 	${JsonGlib_LIBRARIES}
+ 	${LIBSECRET_LIBRARIES}
++	${VTE_LIBRARIES}
+-	${ZLIB_LIBRARIES}
+ 	${X11_LIBRARIES}
+ 	${XTST_LIBRARIES}
+ 	${FONTCONFIG_LIBRARY}
+ 	${M_LIBRARIES}
+-	stdc++
+ 	m
+-	z
+-	pthread
+-	gnutls
+-	pcre2-8
+ )
+ vala_precompile(VALA_C
+ 	./lib/animation.vala
+@@ -153,8 +138,7 @@
+ 	glib-2.0
+ )
+ add_executable(${target} ${VALA_C} ${CMAKE_SOURCE_DIR}/project_path.c ${CMAKE_SOURCE_DIR}/lib/font.c)
+-target_link_libraries(${target} ${LIBS} ${CMAKE_SOURCE_DIR}/3rdparty/vte-0.50.1/src/.libs/libvte-2.91.a)
+-add_dependencies(${target} Vte-0.29)
++target_link_libraries(${target} ${LIBS})
+ 
+ FILE(GLOB children LIST_DIRECTORIES true po/*)
+ SET(dirlist "")
