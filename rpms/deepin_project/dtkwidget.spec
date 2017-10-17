@@ -1,6 +1,6 @@
 Name:           dtkwidget
-Version:        2.0.0
-Release:        2%{?dist}
+Version:        2.0.1
+Release:        1%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtkwidget
@@ -14,11 +14,14 @@ BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Multimedia)
 BuildRequires:  pkgconfig(Qt5Network)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(dtkcore)
+BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(libudev)
+BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
@@ -40,7 +43,8 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q
-sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
+sed -i 's|lrelease|lrelease-qt5|g' tools/translate_generation.sh
+sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}
@@ -57,6 +61,7 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 %doc README.md
 %license LICENSE
 %{_libdir}/lib%{name}.so.*
+%{_libexecdir}/dtk2/dtk-svgc
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/translations/
 
@@ -66,6 +71,9 @@ sed -i 's|lrelease|lrelease-qt5|g' tool/translate_generation.sh
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Tue Oct 17 2017 mosquito <sensor.wen@gmail.com> - 2.0.1-1
+- Update to 2.0.1
+
 * Thu Aug 24 2017 mosquito <sensor.wen@gmail.com> - 2.0.0-2
 - Dont depend a specific version of Qt
 
