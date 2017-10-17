@@ -1,5 +1,5 @@
 Name:           dtkcore
-Version:        2.0.0
+Version:        2.0.1
 Release:        1%{?dist}
 Summary:        Deepin tool kit core modules
 License:        GPLv3
@@ -20,7 +20,7 @@ Header files and libraries for %{name}.
 %prep
 %setup -q
 sed -i 's|tests|tool|' dtkcore.pro
-sed -i 's|/lib|/libexec|' tool/tool.pro
+sed -i 's|/lib|/libexec|' tool/settings/settings.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}
@@ -46,6 +46,9 @@ sed -i 's|/lib|/libexec|' tool/tool.pro
 %{_libdir}/lib*.so
 
 %changelog
+* Tue Oct 17 2017 mosquito <sensor.wen@gmail.com> - 2.0.1-1
+- Update to 2.0.1
+
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 2.0.0-1
 - Update to 2.0.0
 
