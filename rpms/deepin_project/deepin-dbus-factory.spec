@@ -4,7 +4,7 @@
 
 Name:           golang-deepin-%{repo}
 Version:        3.1.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Golang DBus factory for Deepin Desktop Environment
 License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dbus-factory
@@ -18,6 +18,7 @@ BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  deepin-dbus-generator
 BuildRequires:  jq
+BuildRequires:  libxml2
 Provides:       deepin-go-%{repo} = %{version}-%{release}
 Obsoletes:      deepin-go-%{repo} < %{version}-%{release}
 
@@ -50,6 +51,9 @@ building other packages which use import path with
 %{gopath}/src/dbus/
 
 %changelog
+* Tue Oct 17 2017 mosquito <sensor.wen@gmail.com> - 3.1.8-2
+- BR: libxml2
+
 * Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 3.1.8-1
 - Update to 3.1.8
 
