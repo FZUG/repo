@@ -10,7 +10,7 @@
 
 Name:    wiznote
 Version: 2.5.6
-Release: 1.git%{shortcommit}%{?dist}
+Release: 2.git%{shortcommit}%{?dist}
 Summary: Cross platform cloud based note-taking application
 Summary(zh_CN): 为知笔记 Qt 客户端
 Group:   Applications/Editors
@@ -132,6 +132,8 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Oct 19 2017 Zamir SUN <sztsian@gmail.com> - 2.5.6-2.git10a9fe2
+- Bump version to force rebuild
 * Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 2.5.6-1.git10a9fe2
 - Update to 2.5.6
 * Fri May 26 2017 mosquito <sensor.wen@gmail.com> - 2.5.1-1.gitf1b53cb
