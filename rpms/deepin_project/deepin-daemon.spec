@@ -12,6 +12,8 @@ Source1:        %{ds_url}/archive/2016.9.8/default-settings-2016.9.8.tar.gz
 Source2:        deepin-daemon.sysusers
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
+# https://github.com/golang/go/issues/21947
+ExcludeArch:    ppc64le
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  gettext
 BuildRequires:  deepin-gir-generator
