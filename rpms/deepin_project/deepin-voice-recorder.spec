@@ -1,5 +1,5 @@
 Name:           deepin-voice-recorder
-Version:        1.3.3
+Version:        1.3.5
 Release:        1%{?dist}
 Summary:        Deepin Voice Recorder
 License:        GPLv3
@@ -53,6 +53,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 1.3.5-1
+- Update to 1.3.5
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 1.3.3-1
 - Update to 1.3.3
 
