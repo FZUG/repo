@@ -1,5 +1,5 @@
 Name:           deepin-picker
-Version:        1.0
+Version:        1.1
 Release:        1%{?dist}
 Summary:        Color picker tool for deepin
 License:        GPLv3
@@ -62,6 +62,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 1.1-1
+- Update to 1.1
+
 * Tue Oct 17 2017 mosquito <sensor.wen@gmail.com> - 1.0-1
 - Update to 1.0
 
