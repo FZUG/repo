@@ -1,7 +1,7 @@
 %global repo qt5integration
 
 Name:           deepin-qt5integration
-Version:        0.2.3
+Version:        0.2.4
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 # The entire source code is GPLv3+ except styles/ which is BSD,
@@ -9,7 +9,6 @@ Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3 and BSD and LGPLv2+
 URL:            https://github.com/linuxdeepin/qt5integration
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-Source1:        https://download.qt.io/official_releases/qt/5.9/5.9.1/submodules/qtbase-opensource-src-5.9.1.tar.xz
 
 BuildRequires:  pkgconfig(atk)
 BuildRequires:  pkgconfig(cairo)
@@ -52,13 +51,7 @@ BuildRequires:  qt5-qtbase-static
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 
 %prep
-%setup -q -a1 -n %{repo}-%{version}
-
-# qtxcb private header files
-sed -i '/exist/,$d' platformplugin/linux.pri
-install -d platformplugin/libqt5xcbqpa-dev/
-cp qtbase-opensource-src-5.9.1/src/plugins/platforms/xcb/*.h \
-  platformplugin/libqt5xcbqpa-dev/
+%setup -q -n %{repo}-%{version}
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -73,8 +66,14 @@ cp qtbase-opensource-src-5.9.1/src/plugins/platforms/xcb/*.h \
 %{_qt5_plugindir}/platforms/libdxcb.so
 %{_qt5_plugindir}/platformthemes/libqdeepin.so
 %{_qt5_plugindir}/styles/libdstyleplugin.so
+%{_qt5_plugindir}/iconengines/libdsvgicon.so
+%{_qt5_plugindir}/imageformats/libdsvg.so
 
 %changelog
+* Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 0.2.4-1
+- Update to 0.2.4
+- Included qt5xcbqpa private header files in the project
+
 * Tue Aug 22 2017 mosquito <sensor.wen@gmail.com> - 0.2.3-1
 - Update to 0.2.3
 
