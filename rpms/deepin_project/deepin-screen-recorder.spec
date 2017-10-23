@@ -1,5 +1,5 @@
 Name:           deepin-screen-recorder
-Version:        2.6.1
+Version:        2.6.3
 Release:        1%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
@@ -61,6 +61,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 2.6.3-1
+- Update to 2.6.3
+
 * Tue Oct 17 2017 mosquito <sensor.wen@gmail.com> - 2.6.1-1
 - Update to 2.6.1
 
