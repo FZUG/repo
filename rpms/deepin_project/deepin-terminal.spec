@@ -1,7 +1,7 @@
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
-Version:        2.7
+Version:        2.7.2
 Release:        1%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPLv3
@@ -18,6 +18,7 @@ BuildRequires:  pkgconfig(gee-0.8)
 BuildRequires:  pkgconfig(json-glib-1.0)
 BuildRequires:  pkgconfig(libsecret-1)
 BuildRequires:  pkgconfig(libwnck-3.0)
+BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(vte-2.91)
 # right-click menu style
 Requires:       deepin-menu
@@ -99,6 +100,9 @@ fi
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 2.7.2-1
+- Update to 2.7.2
+
 * Tue Oct 17 2017 mosquito <sensor.wen@gmail.com> - 2.7-1
 - Update to 2.7
 
