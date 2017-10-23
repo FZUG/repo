@@ -1,5 +1,5 @@
 Name:           deepin-wm-switcher
-Version:        1.1.4
+Version:        1.1.5
 Release:        1%{?dist}
 Summary:        Window manager switcher for Deepin
 License:        GPLv3
@@ -41,6 +41,9 @@ It is capable of:
 %{_bindir}/%{name}
 
 %changelog
+* Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 1.1.5-1
+- Update to 1.1.5
+
 * Tue Aug 29 2017 mosquito <sensor.wen@gmail.com> - 1.1.4-1
 - Update to 1.1.4
 
