@@ -1,5 +1,5 @@
 Name:           deepin-wm
-Version:        1.9.16
+Version:        1.9.17
 Release:        1%{?dist}
 Summary:        Deepin Window Manager
 License:        GPLv3
@@ -96,6 +96,9 @@ fi
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 1.9.17-1
+- Update to 1.9.17
+
 * Sat Aug 26 2017 mosquito <sensor.wen@gmail.com> - 1.9.16-1
 - Update to 1.9.16
 
