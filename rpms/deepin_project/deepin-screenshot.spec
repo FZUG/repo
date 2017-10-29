@@ -1,5 +1,5 @@
 Name:           deepin-screenshot
-Version:        4.0.9
+Version:        4.0.10
 Release:        1%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
@@ -9,6 +9,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}-appdata.xml
 
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwm)
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(Qt5Core)
@@ -79,11 +80,15 @@ fi
 %{_bindir}/%{name}
 %{_datadir}/dman/%{name}/
 %{_datadir}/appdata/%{name}.appdata.xml
+%{_datadir}/dbus-1/services/com.deepin.Screenshot.service
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 %{_datadir}/icons/deepin/apps/scalable/%{name}.svg
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 4.0.10-1
+- Update to 4.0.10
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 4.0.9-1
 - Update to 4.0.9
 
