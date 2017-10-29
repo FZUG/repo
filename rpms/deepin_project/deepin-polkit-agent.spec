@@ -1,7 +1,7 @@
 %global repo dde-polkit-agent
 
 Name:           deepin-polkit-agent
-Version:        0.1.0
+Version:        0.1.1
 Release:        1%{?dist}
 Summary:        Deepin Polkit Agent
 License:        GPLv3
@@ -40,6 +40,9 @@ sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.d
 %{_datadir}/%{repo}/
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 0.1.1-1
+- Update to 0.1.1
+
 * Mon Aug 21 2017 mosquito <sensor.wen@gmail.com> - 0.1.0-1
 - Update to 0.1.0
 
