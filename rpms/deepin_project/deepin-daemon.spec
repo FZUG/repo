@@ -2,7 +2,7 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.2.0
+Version:        3.2.2
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -15,9 +15,10 @@ ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %
 # https://github.com/golang/go/issues/21947
 ExcludeArch:    ppc64le
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
-BuildRequires:  gettext
+BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-gir-generator
 BuildRequires:  fontpackages-devel
+BuildRequires:  librsvg2-tools
 BuildRequires:  pam-devel
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gnome-keyring-1)
@@ -26,6 +27,8 @@ BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(libbamf3)
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libnl-3.0)
+BuildRequires:  pkgconfig(libnl-genl-3.0)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libudev)
@@ -160,6 +163,7 @@ fi
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/dbus-1/system.d/*.conf
+%{_datadir}/icons/hicolor/*/status/*
 %{_datadir}/%{repo}/
 %{_datadir}/dde/
 %{_datadir}/polkit-1/actions/*.policy
@@ -169,6 +173,9 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.2.2-1
+- Update to 3.2.2
+
 * Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 3.2.0-1
 - Update to 3.2.0
 
