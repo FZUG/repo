@@ -2,7 +2,7 @@
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           deepin-wallpapers
-Version:        1.6
+Version:        1.7
 Release:        1%{?dist}
 Summary:        Deepin Wallpapers provides wallpapers of dde
 License:        GPLv3
@@ -32,6 +32,9 @@ cp -ar image-blur %{buildroot}/%{_var}/cache/
 %{_var}/cache/image-blur/
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 1.7-1
+- Update to 1.7
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.6-1
 - Update to 1.6
 
