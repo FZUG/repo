@@ -1,5 +1,5 @@
 Name:           deepin-music
-Version:        3.1.6
+Version:        3.1.6.2
 Release:        1%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
@@ -98,6 +98,9 @@ fi
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.6.2-1
+- Update to 3.1.6.2
+
 * Thu Sep 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.6-1
 - Update to 3.1.6
 
