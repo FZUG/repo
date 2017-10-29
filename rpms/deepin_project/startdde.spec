@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.16
+Version:        3.1.17
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -67,6 +67,9 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.17-1
+- Update to 3.1.17
+
 * Fri Oct 13 2017 mosquito <sensor.wen@gmail.com> - 3.1.16-1
 - Update to 3.1.16
 
