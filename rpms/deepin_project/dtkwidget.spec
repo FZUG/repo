@@ -1,13 +1,10 @@
-%global commit      79e81f94df4cdce27cc76872e54dbd4d66cc76b2
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
 Name:           dtkwidget
-Version:        2.0.1
-Release:        2%{?dist}
+Version:        2.0.4.1
+Release:        1%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtkwidget
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
 BuildRequires:  qt5-qtbase-static
@@ -45,7 +42,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Header files and libraries for %{name}.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q
 sed -i 's|lrelease|lrelease-qt5|g' tools/translate_generation.sh
 sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 
@@ -74,6 +71,9 @@ sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 2.0.4.1-1
+- Update to 2.0.4.1
+
 * Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 2.0.1-2
 - Fix DAboutDialog icon not supporting hidpi
 
