@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        2.9.16
+Version:        2.9.94
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -16,6 +16,7 @@ BuildRequires:  cmake(Qt5Widgets)
 BuildRequires:  cmake(Qt5X11Extras)
 BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dvdnav)
 BuildRequires:  pkgconfig(libffmpegthumbnailer)
 BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libavutil)
@@ -68,11 +69,15 @@ fi
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
-%{_datadir}/%{name}/translations/%{name}.qm
+%{_datadir}/dman/%{name}/
+%{_datadir}/%{name}/translations/%{name}*.qm
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 2.9.94-1
+- Update to 2.9.94
+
 * Fri Oct 13 2017 mosquito <sensor.wen@gmail.com> - 2.9.16-1
 - Update to 2.9.16
 
