@@ -30,7 +30,7 @@
 
 Name:       sogoupinyin
 Version:    2.1.0.0086
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
 
@@ -149,6 +149,7 @@ pushd %{_builddir}/%{name}-%{version}
 
 %if 0%{?with_selinux}
 pushd %{_builddir}/%{name}-%{version}
+rm -rf selinux
 mkdir selinux
 cp %{S:11} %{S:12} %{S:13} %{S:14} selinux/
 %endif # with_selinux
@@ -422,6 +423,8 @@ fi
 %endif # with_selinux
 
 %changelog
+* Sun Oct 29 2017 Zamir SUN <sztsian@gmail.com> - 2.1.0.0086-2
+- Fix rebuild error for selinux directory existing
 * Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 2.1.0.0086-1
 - Update version 2.1.0.0086
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-2
