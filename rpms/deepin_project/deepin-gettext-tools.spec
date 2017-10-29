@@ -1,5 +1,5 @@
 Name:           deepin-gettext-tools
-Version:        1.0.6
+Version:        1.0.7
 Release:        1%{?dist}
 Summary:        Deepin Gettext Tools
 License:        GPLv3
@@ -32,7 +32,7 @@ generate-mo - scan po files and generate mo files according to the ini file.
 
 # fix shebang
 find -iname "*.py" | xargs sed -i '1s|.*|#!%{__python3}|'
-sed -i '1s|.*|#!%{__perl}|' desktop_ts/src/desktop_ts_convert.pl
+sed -i '1s|.*|#!%{__perl}|' src/desktop_ts_convert.pl
 
 sed -i 's|sudo cp|cp|' src/generate_mo.py
 sed -i 's|lconvert|lconvert-qt5|; s|deepin-lupdate|lupdate-qt5|' src/update_pot.py
@@ -41,13 +41,13 @@ sed -i 's|lconvert|lconvert-qt5|; s|deepin-lupdate|lupdate-qt5|' src/update_pot.
 
 %install
 install -d %{buildroot}%{_bindir}
-install -m755 desktop_ts/src/desktop_ts_convert.pl %{buildroot}%{_bindir}/deepin-desktop-ts-convert
-install -m755 policy_ts/src/policy_ts_convert.py %{buildroot}%{_bindir}/deepin-policy-ts-convert
+install -m755 src/desktop_ts_convert.pl %{buildroot}%{_bindir}/deepin-desktop-ts-convert
+install -m755 src/policy_ts_convert.py %{buildroot}%{_bindir}/deepin-policy-ts-convert
 install -m755 src/generate_mo.py %{buildroot}%{_bindir}/deepin-generate-mo
 install -m755 src/update_pot.py %{buildroot}%{_bindir}/deepin-update-pot
 
 %check
-/bin/perl desktop_ts/src/desktop_ts_convert.pl --help
+/bin/perl src/desktop_ts_convert.pl --help
 /bin/python3 src/generate_mo.py --help
 /bin/python3 src/update_pot.py --help
 
@@ -60,6 +60,9 @@ install -m755 src/update_pot.py %{buildroot}%{_bindir}/deepin-update-pot
 %{_bindir}/deepin-generate-mo
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 1.0.7-1
+- Update to 1.0.7
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 1.0.6-1.git8f4a8ab
 - Update to 1.0.6
 
