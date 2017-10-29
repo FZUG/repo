@@ -1,5 +1,5 @@
 Name:           deepin-boot-maker
-Version:        2.0.3
+Version:        2.0.3.1
 Release:        1%{?dist}
 Summary:        Tool to create a bootable usb stick quick and easy
 License:        GPLv3
@@ -10,6 +10,7 @@ BuildRequires:  python3
 BuildRequires:  qt5-linguist
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
+BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
@@ -69,5 +70,8 @@ fi
 %{_datadir}/dbus-1/system.d/com.deepin.bootmaker.conf
 
 %changelog
+* Thu Aug 31 2017 mosquito <sensor.wen@gmail.com> - 2.0.3.1-1
+- Update to 2.0.3.1
+
 * Thu Aug 31 2017 mosquito <sensor.wen@gmail.com> - 2.0.3-1
 - Initial package build
