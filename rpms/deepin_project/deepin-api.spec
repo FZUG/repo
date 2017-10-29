@@ -7,8 +7,8 @@
 %endif
 
 Name:           deepin-api
-Version:        3.1.14
-Release:        2%{?dist}
+Version:        3.1.15
+Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
 URL:            https://github.com/linuxdeepin/dde-api
@@ -30,6 +30,7 @@ BuildRequires:  pkgconfig(xfixes)
 BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xi)
+BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/lib)
@@ -50,10 +51,12 @@ BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgb/randr)
 BuildRequires:  golang(github.com/BurntSushi/xgb/xproto)
 BuildRequires:  golang(github.com/disintegration/imaging)
+BuildRequires:  golang(github.com/nfnt/resize)
 Requires:       golang(github.com/BurntSushi/xgb)
 Requires:       golang(github.com/BurntSushi/xgb/randr)
 Requires:       golang(github.com/BurntSushi/xgb/xproto)
 Requires:       golang(github.com/disintegration/imaging)
+Requires:       golang(github.com/nfnt/resize)
 Provides:       golang(%{import_path}/blurimage) = %{version}-%{release}
 Provides:       golang(%{import_path}/drandr) = %{version}-%{release}
 Provides:       golang(%{import_path}/dxinput) = %{version}-%{release}
@@ -66,6 +69,11 @@ Provides:       golang(%{import_path}/session) = %{version}-%{release}
 Provides:       golang(%{import_path}/soundutils) = %{version}-%{release}
 Provides:       golang(%{import_path}/themes) = %{version}-%{release}
 Provides:       golang(%{import_path}/themes/scanner) = %{version}-%{release}
+Provides:       golang(%{import_path}/theme_thumb) = %{version}-%{release}
+Provides:       golang(%{import_path}/theme_thumb/common) = %{version}-%{release}
+Provides:       golang(%{import_path}/theme_thumb/cursor) = %{version}-%{release}
+Provides:       golang(%{import_path}/theme_thumb/gtk) = %{version}-%{release}
+Provides:       golang(%{import_path}/theme_thumb/icon) = %{version}-%{release}
 Provides:       golang(%{import_path}/thumbnails) = %{version}-%{release}
 Provides:       golang(%{import_path}/thumbnails/cursor) = %{version}-%{release}
 Provides:       golang(%{import_path}/thumbnails/font) = %{version}-%{release}
@@ -135,6 +143,9 @@ fi
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.15-1
+- Update to 3.1.15
+
 * Mon Oct 16 2017 mosquito <sensor.wen@gmail.com> - 3.1.14-2
 - Fix out of memory on armv7hl
 
