@@ -1,7 +1,7 @@
 %global repo dde-file-manager
 
 Name:           deepin-file-manager
-Version:        4.3.2
+Version:        4.3.4
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
@@ -31,6 +31,7 @@ BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  qt5-qtbase-private-devel
 %{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 BuildRequires:  pkgconfig(taglib)
+BuildRequires:  pkgconfig(uchardet)
 BuildRequires:  pkgconfig(xcb-util)
 BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  qt5-linguist
@@ -162,6 +163,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 4.3.4-1
+- Update to 4.3.4
+
 * Fri Oct 13 2017 mosquito <sensor.wen@gmail.com> - 4.3.2-1
 - Update to 4.3.2
 - Remove ffmpeg patch file
