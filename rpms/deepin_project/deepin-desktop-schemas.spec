@@ -1,5 +1,5 @@
 Name:           deepin-desktop-schemas
-Version:        3.1.19
+Version:        3.2.3
 Release:        1%{?dist}
 Summary:        GSettings deepin desktop-wide schemas
 License:        GPLv3
@@ -39,6 +39,9 @@ make test
 %{_datadir}/glib-2.0/schemas/*
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.2.3-1
+- Update to 3.2.3
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.19-1
 - Update to 3.1.19
 
