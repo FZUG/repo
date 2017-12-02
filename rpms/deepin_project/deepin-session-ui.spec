@@ -1,7 +1,7 @@
 %global repo dde-session-ui
 
 Name:           deepin-session-ui
-Version:        4.0.17
+Version:        4.1.7
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -51,13 +51,16 @@ sed -i 's|lib|libexec|' \
     misc/applications/deepin-toggle-desktop.desktop* \
     dde-osd/dde-osd_autostart.desktop \
     dde-osd/com.deepin.dde.osd.service \
+    dde-osd/dde-osd.pro \
     dde-welcome/com.deepin.dde.welcome.service \
+    dde-welcome/dde-welcome.pro \
+    dde-dman-portal/com.deepin.dman.service \
+    dde-dman-portal/dde-dman-portal.pro \
+    dde-warning-dialog/com.deepin.dde.WarningDialog.service \
+    dde-warning-dialog/dde-warning-dialog.pro \
     dde-offline-upgrader/dde-offline-upgrader.pro \
     dde-suspend-dialog/dde-suspend-dialog.pro \
-    dde-warning-dialog/dde-warning-dialog.pro \
-    dde-lowpower/dde-lowpower.pro \
-    dde-welcome/dde-welcome.pro \
-    dde-osd/dde-osd.pro
+    dde-lowpower/dde-lowpower.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -103,6 +106,9 @@ fi
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 4.1.7-1
+- Update to 4.1.7
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 4.0.17-1
 - Update to 4.0.17
 
