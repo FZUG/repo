@@ -1,12 +1,10 @@
 Name:           deepin-sound-theme
-Version:        15.10.1
+Version:        15.10.2
 Release:        1%{?dist}
 Summary:        Deepin sound theme
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-sound-theme
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-Source1:        https://raw.github.com/linuxdeepin/%{name}/master/README.md
-Source2:        https://raw.github.com/linuxdeepin/%{name}/master/LICENSE
 BuildArch:      noarch
 
 %description
@@ -14,7 +12,6 @@ Sound files for the Deeping Desktop Environment.
 
 %prep
 %setup -q
-cp -a %{S:1} %{S:2} .
 
 %build
 
@@ -30,6 +27,9 @@ cp -a %{S:1} %{S:2} .
 %{_datadir}/sounds/deepin/stereo/*.ogg
 
 %changelog
+* Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 15.10.2-1
+- Update to 15.10.2
+
 * Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 15.10.1-1
 - Rebuild
 
