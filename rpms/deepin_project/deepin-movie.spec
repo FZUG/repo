@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        2.9.94
+Version:        3.0.1
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -75,6 +75,12 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.0.1-1
+- Update to 3.0.1
+
+* Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 2.9.96-1
+- Update to 2.9.96
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 2.9.94-1
 - Update to 2.9.94
 
