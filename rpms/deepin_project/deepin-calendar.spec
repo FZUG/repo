@@ -1,7 +1,7 @@
 %global repo dde-calendar
 
 Name:           deepin-calendar
-Version:        1.0.13
+Version:        1.1.1
 Release:        1%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3+
@@ -45,6 +45,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{repo}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{repo}.svg
 
 %changelog
+* Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 1.1.1-1
+- Update to 1.1.1
+
 * Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 1.0.13-1
 - Update to 1.0.13
 
