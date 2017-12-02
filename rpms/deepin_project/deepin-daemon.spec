@@ -2,7 +2,7 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.2.2
+Version:        3.2.7
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -10,6 +10,7 @@ URL:            https://github.com/linuxdeepin/dde-daemon
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 Source1:        %{ds_url}/archive/2016.9.8/default-settings-2016.9.8.tar.gz
 Source2:        deepin-daemon.sysusers
+Patch0:         https://raw.github.com/jouyouyun/tap-gesture-patches/master/patches/dde-daemon_3.2.3.patch
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
 # https://github.com/golang/go/issues/21947
@@ -85,6 +86,7 @@ Daemon handling the DDE session settings
 
 %prep
 %setup -q -a1 -n %{repo}-%{version}
+%patch0 -p1 -b dde-daemon-3.2.3
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|; /ldflags/d' Makefile
@@ -173,6 +175,9 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.2.7-1
+- Update to 3.2.7
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.2.2-1
 - Update to 3.2.2
 
