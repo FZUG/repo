@@ -1,5 +1,5 @@
 Name:           deepin-desktop-base
-Version:        2016.13.1
+Version:        2017.11.1
 Release:        1%{?dist}
 Summary:        Base component for Deepin
 License:        GPLv3
@@ -51,6 +51,9 @@ ln -sfv %{_datadir}/deepin/desktop-version %{buildroot}/etc/deepin-version
 %{_var}/cache/image-blur/*.jpg
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 2017.11.1-1
+- Update to 2017.11.1
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 2016.13.1-1
 - Update to 2016.13.1
 
