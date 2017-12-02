@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.17
+Version:        3.1.22
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -15,6 +15,7 @@ BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gdk-3.0)
@@ -67,6 +68,9 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 3.1.22-1
+- Update to 3.1.22
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.17-1
 - Update to 3.1.17
 
