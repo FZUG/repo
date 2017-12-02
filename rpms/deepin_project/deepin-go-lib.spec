@@ -11,7 +11,7 @@
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-deepin-go-lib
-Version:        1.2.0
+Version:        1.2.2
 Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 License:        GPLv3
@@ -235,6 +235,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.2.2-1
+- Update to 1.2.2
+
 * Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 1.2.0-1
 - Update to 1.2.0
 
