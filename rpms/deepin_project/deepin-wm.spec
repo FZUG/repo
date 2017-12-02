@@ -1,5 +1,5 @@
 Name:           deepin-wm
-Version:        1.9.17
+Version:        1.9.21
 Release:        1%{?dist}
 Summary:        Deepin Window Manager
 License:        GPLv3
@@ -46,6 +46,7 @@ sed -i 's|default_background.jpg|default.png|' \
     src/Background/BackgroundSource.vala
 
 %build
+export CXXFLAGS="$CXXFLAGS -DWNCK_I_KNOW_THIS_IS_UNSTABLE"
 ./autogen.sh
 %configure --disable-schemas-compile
 %make_build
@@ -96,6 +97,9 @@ fi
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 1.9.21-1
+- Update to 1.9.21
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 1.9.17-1
 - Update to 1.9.17
 
