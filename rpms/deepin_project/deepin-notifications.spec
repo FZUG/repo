@@ -1,5 +1,5 @@
 Name:           deepin-notifications
-Version:        3.0.9
+Version:        3.1.2
 Release:        1%{?dist}
 Summary:        System notifications for linuxdeepin desktop environment
 License:        GPLv3
@@ -35,6 +35,9 @@ sed -i 's|lib|libexec|' deepin-notifications.pro \
 %{_datadir}/dbus-1/services/com.deepin.Notifications.service
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1
+- Update to 3.1.2
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 3.0.9-1
 - Update to 3.0.9
 
