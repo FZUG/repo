@@ -1,9 +1,9 @@
 Name:           deepin-picker
-Version:        1.1
+Version:        1.6.1
 Release:        1%{?dist}
 Summary:        Color picker tool for deepin
 License:        GPLv3
-Url:            https://github.com/manateelazycat/deepin-picker
+Url:            https://github.com/linuxdeepin/deepin-picker
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  desktop-file-utils
@@ -60,8 +60,12 @@ fi
 %{_datadir}/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+%{_datadir}/dbus-1/services/com.deepin.Picker.service
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.6.1-1
+- Update to 1.6.1
+
 * Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 1.1-1
 - Update to 1.1
 
