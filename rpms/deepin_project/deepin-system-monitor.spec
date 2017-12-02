@@ -1,5 +1,5 @@
 Name:           deepin-system-monitor
-Version:        1.3.5
+Version:        1.3.7
 Release:        1%{?dist}
 Summary:        A more user-friendly system monitor
 License:        GPLv3
@@ -73,6 +73,9 @@ fi
 %{_datadir}/dman/%{name}/
 
 %changelog
+* Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-1
+- Update to 1.3.7
+
 * Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 1.3.5-1
 - Update to 1.3.5
 
