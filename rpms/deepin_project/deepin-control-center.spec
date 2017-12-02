@@ -1,7 +1,7 @@
 %global repo dde-control-center
 
 Name:           deepin-control-center
-Version:        4.3.0
+Version:        4.3.7
 Release:        1%{?dist}
 Summary:        New control center for Linux Deepin
 License:        GPLv3
@@ -30,6 +30,7 @@ Requires:       deepin-qt5integration
 Requires:       GeoIP-GeoLite-data
 Requires:       GeoIP-GeoLite-data-extra
 Requires:       gtk-murrine-engine
+Requires:       redshift
 Requires:       startdde
 
 %description
@@ -74,6 +75,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop ||:
 %{_datadir}/%{repo}/
 
 %changelog
+* Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 4.3.7-1
+- Update to 4.3.7
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 4.3.0-1
 - Update to 4.3.0
 
