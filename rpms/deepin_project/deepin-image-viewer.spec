@@ -1,5 +1,5 @@
 Name:           deepin-image-viewer
-Version:        1.2.16.4
+Version:        1.2.16.5
 Release:        1%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
@@ -74,6 +74,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 1.2.16.5-1
+- Update to 1.2.16.5
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.2.16.4-1
 - Update to 1.2.16.4
 
