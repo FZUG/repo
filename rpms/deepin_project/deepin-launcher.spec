@@ -1,7 +1,7 @@
 %global repo dde-launcher
 
 Name:           deepin-launcher
-Version:        4.2.6
+Version:        4.2.7
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
@@ -57,6 +57,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 4.2.7-1
+- Update to 4.2.7
+
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 4.2.6-1
 - Update to 4.2.6
 
