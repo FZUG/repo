@@ -1,14 +1,6 @@
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -4,7 +4,6 @@
- 
- cmake_minimum_required(VERSION 2.6)
- list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
--include(ExternalProject)
- include(ValaPrecompile)
- include(ValaVersion)
- find_package(Vala)
-@@ -18,6 +17,7 @@
+@@ -18,6 +18,7 @@
  find_package(Gettext)
  
  pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
@@ -16,7 +8,7 @@
  pkg_check_modules(GEE REQUIRED gee-0.8)
  pkg_check_modules(GIO REQUIRED gio-unix-2.0)
  pkg_check_modules(RSVG REQUIRED librsvg-2.0)
-@@ -25,14 +25,6 @@
+@@ -25,22 +26,6 @@
  pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
  pkg_check_modules(GLIB REQUIRED glib-2.0)
  
@@ -28,22 +20,29 @@
 -  BUILD_IN_SOURCE 1
 -  )
 -
+-ExternalProject_Add(zssh-1.5c
+-  SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rdparty/zssh-1.5c
+-  CONFIGURE_COMMAND ./configure
+-  BUILD_COMMAND make
+-  INSTALL_COMMAND ""
+-  BUILD_IN_SOURCE 1
+-  )
+-
  set(CFLAGS
  	${GIO_CFLAGS}
  	${GTK3_CFLAGS} ${GTK3_CFLAGS_OTHER}
-@@ -52,10 +44,8 @@
+@@ -60,9 +45,8 @@
  	${RSVG_INCLUDE_DIRS}
  	${JsonGlib_INCLUDE_DIRS}
  	${LIBSECRET_INCLUDE_DIRS}
 -	${CMAKE_SOURCE_DIR}/3rdparty/vte-0.50.1/src
--	#$${VTE_INCLUDE_DIRS}
 +	${VTE_INCLUDE_DIRS}
  )
 -find_library(VTE_LIB NAMES libvte-2.91.a tcmalloc_minimal)
  include_directories(${INCLUDE_PATHS})
  set(LIBS
  	${GIO_LIBRARIES}
-@@ -65,17 +55,12 @@
+@@ -72,17 +56,12 @@
  	${RSVG_LIBRARIES}
  	${JsonGlib_LIBRARIES}
  	${LIBSECRET_LIBRARIES}
@@ -62,7 +61,7 @@
  )
  vala_precompile(VALA_C
  	./lib/animation.vala
-@@ -157,8 +142,7 @@
+@@ -165,8 +144,7 @@
  	librsvg-2.0
  )
  add_executable(${target} ${VALA_C} ${CMAKE_SOURCE_DIR}/project_path.c ${CMAKE_SOURCE_DIR}/lib/font.c)
@@ -72,3 +71,12 @@
  
  FILE(GLOB children LIST_DIRECTORIES true po/*)
  SET(dirlist "")
+@@ -183,7 +161,7 @@
+ endforeach()
+ 
+ INSTALL (TARGETS ${target} DESTINATION bin)
+-INSTALL (PROGRAMS ssh_login.sh ${CMAKE_SOURCE_DIR}/3rdparty/zssh-1.5c/zssh DESTINATION lib/${target})
++INSTALL (PROGRAMS ssh_login.sh DESTINATION libexec/${target})
+ INSTALL (FILES hicolor/32x32/deepin-terminal.png DESTINATION share/icons/hicolor/32x32/apps)
+ INSTALL (FILES hicolor/48x48/deepin-terminal.png DESTINATION share/icons/hicolor/48x48/apps)
+ INSTALL (FILES hicolor/96x96/deepin-terminal.png DESTINATION share/icons/hicolor/96x96/apps)
