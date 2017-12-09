@@ -1,7 +1,7 @@
 %global repo qt5integration
 
 Name:           deepin-qt5integration
-Version:        0.2.8.1
+Version:        0.2.8.3
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 # The entire source code is GPLv3+ except styles/ which is BSD,
@@ -69,6 +69,9 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %{_qt5_plugindir}/imageformats/libdsvg.so
 
 %changelog
+* Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 0.2.8.3-1
+- Update to 0.2.8.3
+
 * Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 0.2.8.1-1
 - Update to 0.2.8.1
 
