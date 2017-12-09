@@ -5,7 +5,8 @@ Summary:        Deepin tool kit core modules
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dtkcore
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
-BuildRequires:  qt5-qtbase-devel
+BuildRequires:  pkgconfig(Qt5Core)
+BuildRequires:  pkgconfig(gsettings-qt)
 
 %description
 Deepin tool kit core modules.
