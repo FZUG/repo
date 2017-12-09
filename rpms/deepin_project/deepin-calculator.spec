@@ -1,5 +1,5 @@
 Name:           deepin-calculator
-Version:        1.0.0
+Version:        1.0.1
 Release:        1%{?dist}
 Summary:        An easy to use calculator for ordinary users
 License:        GPLv3
@@ -11,7 +11,7 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  desktop-file-utils
 
 %description
@@ -55,6 +55,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 1.0.1-1
+- Update to 1.0.1
+
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 1.0.0-1
 - Update to 1.0.0
 
