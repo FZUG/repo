@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        3.0.1
+Version:        3.1.1
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -38,6 +38,13 @@ Deepin movie for deepin desktop environment.
 %description -l zh_CN
 深度影音播放器, 后端基于MPV, 支持解码大多数视频格式.
 
+%package devel
+Summary:        Development package for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Header files and libraries for %{name}.
+
 %prep
 %setup -q -n %{name}-reborn-%{version}
 sed -i '/dtk2/s|lib|libexec|' src/CMakeLists.txt
@@ -69,12 +76,21 @@ fi
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
+%{_libdir}/libdmr.so.*
 %{_datadir}/dman/%{name}/
 %{_datadir}/%{name}/translations/%{name}*.qm
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
+%files devel
+%{_includedir}/libdmr/*.h
+%{_libdir}/pkgconfig/libdmr.pc
+%{_libdir}/libdmr.so
+
 %changelog
+* Wed Dec 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.1-1
+- Update to 3.1.1
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.0.1-1
 - Update to 3.0.1
 
