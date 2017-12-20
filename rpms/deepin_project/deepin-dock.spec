@@ -1,7 +1,7 @@
 %global repo dde-dock
 
 Name:           deepin-dock
-Version:        4.5.7.1
+Version:        4.5.9
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -68,6 +68,9 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Wed Dec 20 2017 mosquito <sensor.wen@gmail.com> - 4.5.9-1
+- Update to 4.5.9
+
 * Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 4.5.7.1-1
 - Update to 4.5.7.1
 
