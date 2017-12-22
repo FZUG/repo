@@ -7,7 +7,7 @@
 %endif
 
 Name:           deepin-api
-Version:        3.1.17
+Version:        3.1.18.1
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
@@ -16,12 +16,14 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
 BuildRequires:  gcc-go
+BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(cairo-ft)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gtk+-3.0)
 BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
 BuildRequires:  pkgconfig(gudev-1.0)
 BuildRequires:  pkgconfig(libcanberra)
+BuildRequires:  pkgconfig(libpulse-simple)
 BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(poppler-glib)
 BuildRequires:  pkgconfig(polkit-qt5-1)
@@ -37,6 +39,7 @@ BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/disintegration/imaging)
+BuildRequires:  golang(github.com/cryptix/wav)
 BuildRequires:  golang(gopkg.in/alecthomas/kingpin.v2)
 %{?systemd_requires}
 Requires:       deepin-desktop-base
@@ -143,6 +146,9 @@ fi
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.18.1-1
+- Update to 3.1.18.1
+
 * Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 3.1.17-1
 - Update to 3.1.17
 
