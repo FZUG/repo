@@ -2,7 +2,7 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.2.7
+Version:        3.2.8
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -21,6 +21,7 @@ BuildRequires:  deepin-gir-generator
 BuildRequires:  fontpackages-devel
 BuildRequires:  librsvg2-tools
 BuildRequires:  pam-devel
+BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gnome-keyring-1)
 BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
@@ -53,6 +54,7 @@ BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/axgle/mahonia)
 BuildRequires:  golang(github.com/msteinert/pam)
 BuildRequires:  golang(github.com/nfnt/resize)
+BuildRequires:  golang(github.com/cryptix/wav)
 BuildRequires:  golang(gopkg.in/alecthomas/kingpin.v2)
 BuildRequires:  golang(gopkg.in/yaml.v2)
 
@@ -89,7 +91,7 @@ Daemon handling the DDE session settings
 %patch0 -p1 -b dde-daemon-3.2.3
 
 # Fix library exec path
-sed -i '/deepin/s|lib|libexec|; /ldflags/d' Makefile
+sed -i '/deepin/s|lib|libexec|' Makefile
 sed -i 's|lib/NetworkManager|libexec|' network/utils_test.go
 sed -i 's|/usr/lib|%{_libexecdir}|' \
     misc/*services/*.service \
@@ -175,6 +177,9 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Fri Dec 22 2017 mosquito <sensor.wen@gmail.com> - 3.2.8-1
+- Update to 3.2.8
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.2.7-1
 - Update to 3.2.7
 
