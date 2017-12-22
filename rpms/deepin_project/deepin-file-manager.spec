@@ -166,6 +166,9 @@ fi
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 4.4.7-1
 - Update to 4.4.7
 
+* Mon Nov 27 2017 Rex Dieter <rdieter@fedoraproject.org> - 4.3.2-2
+- rebuild (qt5)
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 4.3.4-1
 - Update to 4.3.4
 

@@ -46,6 +46,8 @@ BuildRequires:  pkgconfig(xkbcommon-x11)
 BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  qt5-qtbase-common
 BuildRequires:  qt5-qtbase-static
+BuildRequires:  qt5-qtbase-private-devel
+%{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
 
 %description
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
@@ -72,6 +74,9 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 * Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 0.2.8.3-1
 - Update to 0.2.8.3
 
+* Mon Nov 27 2017 Rex Dieter <rdieter@fedoraproject.org> - 0.2.3-3
+- rebuild (qt5)
+
 * Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 0.2.8.1-1
 - Update to 0.2.8.1
 
@@ -81,6 +86,9 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 * Mon Oct 23 2017 mosquito <sensor.wen@gmail.com> - 0.2.4-1
 - Update to 0.2.4
 - Included qt5xcbqpa private header files in the project
+
+* Wed Oct 11 2017 Rex Dieter <rdieter@fedoraproject.org> - 0.2.3-2
+- BR: qt5-qtbase-private-devel
 
 * Tue Aug 22 2017 mosquito <sensor.wen@gmail.com> - 0.2.3-1
 - Update to 0.2.3

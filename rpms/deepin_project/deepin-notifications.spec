@@ -31,6 +31,7 @@ sed -i 's|lib|libexec|' deepin-notifications.pro \
 %files
 %doc README.md
 %license LICENSE
+%dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/%{name}
 %{_datadir}/dbus-1/services/com.deepin.Notifications.service
 
@@ -46,6 +47,9 @@ sed -i 's|lib|libexec|' deepin-notifications.pro \
 
 * Sun Aug 20 2017 mosquito <sensor.wen@gmail.com> - 3.0.7-1
 - Update to 3.0.7
+
+* Wed Aug 09 2017 Zamir SUN <sztsian@gmail.com> - 3.0.6-2
+- Add owner of dbus services
 
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 3.0.6-1.git0033758
 - Update to 3.0.6
