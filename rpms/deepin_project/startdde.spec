@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.22
+Version:        3.1.23
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -7,18 +7,21 @@ URL:            https://github.com/linuxdeepin/startdde
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
-BuildRequires:  gcc-go
+BuildRequires:  golang
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
 BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(github.com/cryptix/wav)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
+BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(libcanberra)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gdk-3.0)
+BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(systemd)
@@ -44,7 +47,8 @@ sed -i 's|/lib/systemd|/usr/lib/systemd|g' Makefile
 
 %build
 export GOPATH="%{gopath}"
-%make_build
+BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
+%make_build GOBUILD="go build -compiler gc -ldflags \"${LDFLAGS} -B $BUILD_ID\" -a -v -x"
 
 %install
 %make_install
@@ -68,6 +72,9 @@ export GOPATH="%{gopath}"
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.23-1
+- Update to 3.1.23
+
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 3.1.22-1
 - Update to 3.1.22
 
