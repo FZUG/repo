@@ -1,5 +1,5 @@
 Name:           dtkwidget
-Version:        2.0.5.2
+Version:        2.0.5.3
 Release:        1%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
@@ -47,7 +47,7 @@ sed -i 's|lrelease|lrelease-qt5|g' tools/translate_generation.sh
 sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 
 %build
-%qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}
+%qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir} DBUS_VERSION_0_4_2=YES
 %make_build
 
 %install
@@ -71,6 +71,9 @@ sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Thu Dec 28 2017 mosquito <sensor.wen@gmail.com> - 2.0.5.3-1
+- Update to 2.0.5.3
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 2.0.5.2-1
 - Update to 2.0.5.2
 
