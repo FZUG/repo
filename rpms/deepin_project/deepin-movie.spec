@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        3.1.1
+Version:        3.2.0
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -88,6 +88,10 @@ fi
 %{_libdir}/libdmr.so
 
 %changelog
+
+* Thu Dec 28 2017 Zamir SUN <sztsian@gmail.com> - 3.2.0-1
+- Update to 3.2.0
+
 * Wed Dec 20 2017 mosquito <sensor.wen@gmail.com> - 3.1.1-1
 - Update to 3.1.1
 
