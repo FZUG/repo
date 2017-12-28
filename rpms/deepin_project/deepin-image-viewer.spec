@@ -1,5 +1,5 @@
 Name:           deepin-image-viewer
-Version:        1.2.16.5
+Version:        1.2.16.7
 Release:        1%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
@@ -19,6 +19,7 @@ BuildRequires:  pkgconfig(Qt5Sql)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(gio-unix-2.0)
 BuildRequires:  pkgconfig(libraw)
 BuildRequires:  pkgconfig(libexif)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
@@ -74,6 +75,9 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Thu Dec 28 2017 mosquito <sensor.wen@gmail.com> - 1.2.16.7-1
+- Update to 1.2.16.7
+
 * Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 1.2.16.5-1
 - Update to 1.2.16.5
 
