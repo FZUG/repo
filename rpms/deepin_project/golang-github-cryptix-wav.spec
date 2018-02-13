@@ -9,10 +9,11 @@
 %global   import_path     %{provider_prefix}
 %global   commit          7b3d650b50a50a0137376e392770f372edc3d968
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
+%global   commitdate      20171018
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1.git%{shortcommit}%{?dist}
+Release:        0.1.%{commitdate}git%{shortcommit}%{?dist}
 Summary:        golang wav reader and writer
 License:        GPLv2
 URL:            https://%{provider_prefix}
@@ -41,6 +42,7 @@ building other packages which use import path with
 %package unit-test-devel
 Summary:        Unit tests for %{name} package
 BuildArch:      noarch
+BuildRequires:  golang(github.com/cheekybits/is)
 # test subpackage tests code from devel subpackage
 Requires:       %{name}-devel = %{version}-%{release}
 
@@ -94,12 +96,12 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %gotest %{import_path} ||:
 
 %files devel -f devel.file-list
-%doc README.md
+%doc README.md examples/
 %license LICENSE
 %dir %{gopath}/src/%{provider}.%{provider_tld}/%{project}
 
 %files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
-* Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.git7b3d650
+* Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 0-0.1.20171018git7b3d650
 - Initial package build
