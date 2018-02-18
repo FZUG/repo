@@ -1,5 +1,5 @@
 Name:           deepin-boot-maker
-Version:        2.0.4.2
+Version:        2.0.4.3
 Release:        1%{?dist}
 Summary:        Tool to create a bootable usb stick quick and easy
 License:        GPLv3
@@ -70,6 +70,9 @@ fi
 %{_datadir}/dbus-1/system.d/com.deepin.bootmaker.conf
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 2.0.4.3-1
+- Update to 2.0.4.3
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 2.0.4.2-1
 - Update to 2.0.4.2
 
