@@ -2,7 +2,7 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.2.8
+Version:        3.2.9
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -105,7 +105,7 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
     accounts/user.go
 
 # Fix grub.cfg path
-sed -i 's|boot/grub|boot/grub2|' grub2/{theme,log,entry,config}.go
+sed -i 's|boot/grub|boot/grub2|' grub2/{theme,log,entry,grub_params}.go
 sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
 %build
@@ -177,6 +177,9 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.2.9-1
+- Update to 3.2.9
+
 * Fri Dec 22 2017 mosquito <sensor.wen@gmail.com> - 3.2.8-1
 - Update to 3.2.8
 
