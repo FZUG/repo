@@ -1,5 +1,5 @@
 Name:           dtkcore
-Version:        2.0.5.3
+Version:        2.0.6
 Release:        1%{?dist}
 Summary:        Deepin tool kit core modules
 License:        GPLv3
@@ -43,10 +43,15 @@ sed -i 's|/lib|/libexec|' tool/settings/settings.pro
 %files devel
 %doc doc/Specification.md
 %{_includedir}/libdtk-*/
+%{_libdir}/cmake/Dtk/DtkConfig.cmake
+%{_libdir}/cmake/DtkCore/DtkCoreConfig.cmake
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib*.so
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 2.0.6-1
+- Update to 2.0.6
+
 * Thu Dec 28 2017 mosquito <sensor.wen@gmail.com> - 2.0.5.3-1
 - Update to 2.0.5.3
 
