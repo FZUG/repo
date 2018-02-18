@@ -1,5 +1,5 @@
 Name:           deepin-screen-recorder
-Version:        2.6.5.1
+Version:        2.7.3
 Release:        1%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
@@ -9,6 +9,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  qt5-linguist
 BuildRequires:  pkgconfig(dtkwidget) = 2.0
 BuildRequires:  pkgconfig(dtkwm)
+BuildRequires:  pkgconfig(libprocps)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Gui)
@@ -62,6 +63,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.ScreenRecorder.service
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 2.7.3-1
+- Update to 2.7.3
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 2.6.5.1-1
 - Update to 2.6.5.1
 
