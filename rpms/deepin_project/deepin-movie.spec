@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        3.2.0.2
+Version:        3.2.0.3
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -77,7 +77,6 @@ fi
 %license LICENSE
 %{_bindir}/%{name}
 %{_libdir}/libdmr.so.*
-%{_datadir}/dman/%{name}/
 %{_datadir}/%{name}/translations/%{name}*.qm
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
@@ -88,6 +87,9 @@ fi
 %{_libdir}/libdmr.so
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.2.0.3-1
+- Update to 3.2.0.3
+
 * Wed Jan 10 2018 mosquito <sensor.wen@gmail.com> - 3.2.0.2-1
 - Update to 3.2.0.2
 
