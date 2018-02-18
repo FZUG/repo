@@ -7,7 +7,7 @@
 %endif
 
 Name:           deepin-api
-Version:        3.1.18.1
+Version:        3.1.20
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
@@ -15,7 +15,7 @@ URL:            https://github.com/linuxdeepin/dde-api
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
-BuildRequires:  gcc-go
+BuildRequires:  golang
 BuildRequires:  pkgconfig(alsa)
 BuildRequires:  pkgconfig(cairo-ft)
 BuildRequires:  pkgconfig(gio-2.0)
@@ -108,7 +108,8 @@ sed -i 's|PREFIX}${libdir|LIBDIR|; s|libdir|LIBDIR|' Makefile
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
-%make_build
+BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
+%make_build GOBUILD="go build -compiler gc -ldflags \"${LDFLAGS} -B $BUILD_ID\" -a -v -x"
 
 %install
 export GOPATH="$(pwd)/build:%{gopath}"
@@ -140,12 +141,16 @@ fi
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/dbus-1/system.d/*.conf
 %{_datadir}/icons/hicolor/*/actions/*
+%{_datadir}/dde-api/data/pkg_depends
 %{_polkit_qt_policydir}/com.deepin.api.locale-helper.policy
 
 %files -n golang-%{name}-devel
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.1.20-1
+- Update to 3.1.20
+
 * Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.18.1-1
 - Update to 3.1.18.1
 
