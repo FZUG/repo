@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.23
+Version:        3.1.24
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -39,8 +39,7 @@ custom applications which compliant with xdg autostart specification.
 %setup -q
 
 sed -i '/polkit-1/s|lib|libexec|' watchdog/dde_polkit_agent.go
-sed -i '/deepin-daemon/s|lib|libexec|g' Makefile session.go \
-    dde-readahead/dde-readahead.service
+sed -i '/deepin-daemon/s|lib|libexec|g' Makefile session.go
 
 # Fix systemd path
 sed -i 's|/lib/systemd|/usr/lib/systemd|g' Makefile
@@ -66,12 +65,12 @@ BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
-%{_libexecdir}/deepin-daemon/dde-readahead
-%{_unitdir}/dde-readahead.service
-%{_unitdir}/multi-user.target.wants/dde-readahead.service
 %{_datadir}/xsessions/deepin.desktop
 
 %changelog
+* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.1.24-1
+- Update to 3.1.24
+
 * Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.23-1
 - Update to 3.1.23
 
