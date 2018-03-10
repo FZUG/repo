@@ -2,7 +2,7 @@
 
 Name:           deepin-file-manager
 Version:        4.4.7
-Release:        1%{?dist}
+Release:        6%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
@@ -60,7 +60,6 @@ Header files and libraries for %{name}.
 %package -n deepin-desktop
 Summary:        Deepin desktop environment - desktop module
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Obsoletes:      deepin-desktop%{?_isa} < %{version}-%{release}
 
 %description -n deepin-desktop
 Deepin desktop environment - desktop module.
@@ -93,27 +92,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{repo}.desktop
 desktop-file-validate %{buildroot}%{_datadir}/applications/dde-computer.desktop ||:
 desktop-file-validate %{buildroot}%{_datadir}/applications/dde-trash.desktop ||:
 
-%post
-/sbin/ldconfig
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
+%post -p /sbin/ldconfig
 
-%post -n deepin-desktop
-/usr/bin/update-desktop-database -q ||:
-
-%postun
-/sbin/ldconfig
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%postun -n deepin-desktop
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+%postun -p /sbin/ldconfig
 
 %files
 %doc README.md
@@ -163,6 +144,21 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Sat Mar 10 2018 mosquito <sensor.wen@gmail.com> - 4.4.7-6
+- Remove obsoletes statement (BZ#1537223)
+
+* Tue Feb 20 2018 Rex Dieter <rdieter@fedoraproject.org> - 4.4.7-5
+- rebuild (qt5)
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.4.7-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.4.7-3
+- Remove obsolete scriptlets
+
+* Mon Jan 01 2018 Rex Dieter <rdieter@fedoraproject.org> - 4.4.7-2
+- rebuild (qt5)
+
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 4.4.7-1
 - Update to 4.4.7
 
