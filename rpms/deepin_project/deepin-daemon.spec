@@ -3,7 +3,7 @@
 
 Name:           deepin-daemon
 Version:        3.2.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
@@ -14,7 +14,7 @@ Patch0:         https://raw.github.com/jouyouyun/tap-gesture-patches/master/patc
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
 # https://github.com/golang/go/issues/21947
-ExcludeArch:    ppc64le
+ExcludeArch:    ppc64le aarch64
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-gir-generator
@@ -60,9 +60,11 @@ BuildRequires:  golang(gopkg.in/yaml.v2)
 
 Requires:       deepin-desktop-base
 Requires:       deepin-desktop-schemas
-Requires:       deepin-grub2-themes
 Requires:       deepin-notifications
+%ifnarch s390 s390x %{arm}
+Requires:       deepin-grub2-themes
 Requires:       acpid
+%endif
 Requires:       bluez-libs
 Requires:       gvfs
 Requires:       iw
@@ -177,8 +179,17 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Mon Mar 19 2018 mosquito <sensor.wen@gmail.com> - 3.2.9-2
+- Nothing providers grub2 in s390x and armv7hl.
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.2.9-1
 - Update to 3.2.9
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.8-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Sat Jan 20 2018 Björn Esser <besser82@fedoraproject.org> - 3.2.8-2
+- Rebuilt for switch to libxcrypt
 
 * Fri Dec 22 2017 mosquito <sensor.wen@gmail.com> - 3.2.8-1
 - Update to 3.2.8
