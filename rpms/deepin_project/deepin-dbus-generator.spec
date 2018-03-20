@@ -2,7 +2,7 @@
 
 Name:           deepin-dbus-generator
 Version:        0.6.6
-Release:        1%{?dist}
+Release:        3%{?dist}
 Summary:        Convert dbus interfaces to go-lang or qml wrapper code
 License:        GPLv3+
 URL:            https://github.com/linuxdeepin/go-dbus-generator
@@ -10,7 +10,7 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 # e.g. el6 has ppc64 arch without gcc-go, so EA tag is required
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 aarch64 %{arm}}
-BuildRequires:  gcc-go
+BuildRequires:  golang
 BuildRequires:  golang(gopkg.in/check.v1)
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  pkgconfig(glib-2.0)
@@ -28,10 +28,12 @@ sed -i 's|qmake|qmake-qt5|' build_test.go template_qml.go
 
 %build
 export GOPATH="%{gopath}"
-%make_build
+BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
+function gobuild { go build -a -ldflags "-B $BUILD_ID" -v -x "$@"; }
+gobuild -o dbus-generator
 
 %install
-%make_install GOPATH="%{gopath}"
+install -Dm755 dbus-generator %{buildroot}%{_bindir}/dbus-generator
 
 %files
 %doc README.md
@@ -39,6 +41,12 @@ export GOPATH="%{gopath}"
 %{_bindir}/dbus-generator
 
 %changelog
+* Tue Mar 13 2018 mosquito <sensor.wen@gmail.com> - 0.6.6-3
+- Fix build failure
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.6.6-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Fri Jul 14 2017 mosquito <sensor.wen@gmail.com> - 0.6.6-1
 - Update to 0.6.6
 
