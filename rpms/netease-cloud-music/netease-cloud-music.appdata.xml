@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+  <id>netease-cloud-music.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Netease Cloud Music</name>
+  <name xml:lang="zh_CN">网易云音乐</name>
+  <name xml:lang="zh_TW">網易云音樂</name>
+  <summary>Netease Cloud Music</summary>
+  <summary xml:lang="zh_CN">网易云音乐</summary>
+  <summary xml:lang="zh_TW">網易云音樂</summary>
+  <summary xml:lang="zh_HK">網易云音樂</summary>
+  <description>
+    <p>
+This is a installer script for NetEase Cloud Music, it can help you to
+install NetEase Cloud Music in your openSUSE.
+
+NetEase Cloud Music is an app to stream music and download songs to your
+device's memory. The best thing about it is that it lets you do this with
+thousands of songs, all completely free.
+
+NetEase Cloud Music is something like a free Chinese Spotify that gives
+unlimited access to almost any song you can imagine. Even if the app is
+designed mainly for people in China, you can still use it to find almost
+all the big-name international musicians.
+    </p>
+    <p xml:lang="zh_CN">
+    网易云音乐是一款播放流音乐和下载音乐到你设备的应用，可以下载成千上万免费的正版音乐。
+    </p>
+    <p xml:lang="zh_TW">
+    網易云音樂是一款播放流音樂和下載音樂到你設備的應用，可以下載成千上萬免費的正版音樂。
+    </p>
+    <p xml:lang="zh_HK">
+    網易云音樂是一款播放流音樂和下載音樂到你設備的應用，可以下載成千上萬免費的正版音樂。
+    </p>
+  </description>
+  <url type="homepage">https://music.163.com/</url>
+  <url type="bugtracker">http://feedback.deepin.org/feedback</url>
+  <releases>
+    <release version="1.1.0" date="2017-11-20"></release>
+  </releases>
+  <project_license>EULA</project_license>
+  <developer_name>
+  NetEase, Inc.
+  Wuhan Deepin Technology Co., Ltd.
+ </developer_name>
+  <screenshots>
+    <screenshot type="default">https://www.deepin.org/wp-content/uploads/2016/12/netease-cloud-music-1.png</screenshot>
+    <screenshot type="default">https://www.deepin.org/wp-content/uploads/2016/12/netease-cloud-music-2.png</screenshot>
+    <screenshot type="default">https://www.deepin.org/wp-content/uploads/2016/12/netease-cloud-music-3.png</screenshot>
+  </screenshots>
+</component>
+

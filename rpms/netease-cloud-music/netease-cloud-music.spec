@@ -1,22 +1,19 @@
 %global debug_package %{nil}
-%global arch %(test $(rpm -E%?_arch) = x86_64 && echo "amd64" || echo "i386")
-%global __requires_exclude lib(cef|crypto|cue)
+%global arch x86_64
+%global __requires_exclude lib(qcef|cef|cue|evdevgamepad|qt*|Qt*)
 
 Name:    netease-cloud-music
-Version: 1.0.0
-Release: 2%{?dist}
+Version: 1.1.0
+Release: 1%{?dist}
 Summary: Netease Cloud Music, converted from .deb package
 
 Group:   Applications/Multimedia
 License: EULA
-URL:     http://music.163.com/
-Source0: http://s1.music.126.net/download/pc/%{name}_%{version}_amd64_ubuntu16.04.deb
-Source1: http://s1.music.126.net/download/pc/%{name}_%{version}_i386_ubuntu16.04.deb
-Source2: http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.5_amd64.deb
-Source3: http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.5_i386.deb
-Source4: http://archive.ubuntu.com/ubuntu/pool/universe/libc/libcue/libcue1_1.4.0-1_amd64.deb
-Source5: http://archive.ubuntu.com/ubuntu/pool/universe/libc/libcue/libcue1_1.4.0-1_i386.deb
+URL:     https://music.163.com/
+Source0: https://d1.music.126.net/dmusic/%{name}_%{version}_amd64_ubuntu.deb
+Source1: %{name}.appdata.xml
 
+ExclusiveArch:  %{ix86} x86_64 %{arm} aarch64 ppc64le
 BuildRequires: dpkg
 BuildRequires: desktop-file-utils
 Requires: desktop-file-utils
@@ -26,26 +23,23 @@ Requires: gstreamer1-plugins-ugly
 Netease Cloud Music, converted from .deb package
 
 %prep
-%ifarch x86_64
 dpkg-deb -X %{S:0} .
-dpkg-deb -X %{S:2} .
-dpkg-deb -X %{S:4} .
-%else
-dpkg-deb -X %{S:1} .
-dpkg-deb -X %{S:3} .
-dpkg-deb -X %{S:5} .
-%endif
 
 %build
 
 %install
 # main program
 install -d %{buildroot}{%{_libdir},%{_bindir}}
+cp usr/bin/%{name} %{buildroot}%{_bindir}/%{name}
 cp -r usr/lib/%{name} %{buildroot}%{_libdir}/
-ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}/%{name}
+sed -i 's/libjasper.so.1/libjasper.so.4/g' %{buildroot}/%{_libdir}/netease-cloud-music/plugins/imageformats/libqjp2.so
+mkdir -p %{buildroot}/usr/lib
+ln -s %{_libdir}/%{name}/ %{buildroot}/usr/lib/%{name}
+
+install -d %{buildroot}%{_datadir}/appdata
+cp %{SOURCE1} %{buildroot}%{_datadir}/appdata/
 
 # desktop entry
-sed -i '12d' usr/share/applications/%{name}.desktop
 install -D -m644 usr/share/applications/%{name}.desktop \
    %{buildroot}%{_datadir}/applications/%{name}.desktop
 
@@ -53,13 +47,6 @@ install -D -m644 usr/share/applications/%{name}.desktop \
 install -D -m644 usr/share/icons/hicolor/scalable/apps/%{name}.svg \
    %{buildroot}%{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
-# library files
-install -D -m644 lib/%{_arch}-linux-gnu/libcrypto.so.1.0.0 \
-   %{buildroot}%{_libdir}/%{name}/libcrypto.so.1.0.0
-install -D -m644 lib/%{_arch}-linux-gnu/libssl.so.1.0.0 \
-   %{buildroot}%{_libdir}/%{name}/libssl.so.1.0.0
-install -D -m644 usr/lib/libcue.so.1.0.4 \
-   %{buildroot}%{_libdir}/%{name}/libcue.so.1
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -80,13 +67,18 @@ fi
 
 %files
 %defattr(-,root,root,-)
-%doc usr/share/doc/%{name}/*
 %{_bindir}/%{name}
 %{_libdir}/%{name}/
+/usr/lib/%{name}
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
+%dir %{_datadir}/appdata
+%{_datadir}/appdata/%{name}.appdata.xml
 
 %changelog
+* Sun Mar 25 2018 robberphex <robberphex@gmail.com> - 1.1.0-1
+- Update to 1.1.0
+- Add appdata.xml
 * Mon Oct 03 2016 nrechn <nrechn@gmail.com> - 1.0.0-2
 - Fix source libssl not found
 - Update source libssl package
