@@ -1,5 +1,5 @@
 Name:           deepin-menu
-Version:        3.2.0
+Version:        3.3.2
 Release:        1%{?dist}
 Summary:        Deepin menu service
 License:        GPLv3+
@@ -7,15 +7,11 @@ URL:            https://github.com/linuxdeepin/deepin-menu
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  desktop-file-utils
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(dframeworkdbus)
-BuildRequires:  pkgconfig(Qt5)
+BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5DBus)
-BuildRequires:  pkgconfig(Qt5Qml)
-BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  python2-devel
-BuildRequires:  python2-setuptools
-Requires:       python-qt5
+BuildRequires:  pkgconfig(Qt5Widgets)
 
 %description
 Deepin menu service for building beautiful menus.
@@ -23,45 +19,30 @@ Deepin menu service for building beautiful menus.
 %prep
 %setup -q
 
-# Remove python shebang
-find -iname "*.py" | xargs sed -i '/env python/d'
-
 # Modify lib path to reflect the platform
 sed -i 's|/usr/bin|%{_libexecdir}|' data/com.deepin.menu.service \
     deepin-menu.desktop deepin-menu.pro
 
-# Fix setup.py install path
-sed -i '/data_files/s|list_files.*)|"")|' setup.py
-
 %build
-%__python2 setup.py build
 %qmake_qt5 DEFINES+=QT_NO_DEBUG_OUTPUT
 %make_build
 
 %install
-%__python2 setup.py install -O1 --skip-build --prefix=%{_prefix} --root=%{buildroot}
 %make_install INSTALL_ROOT="%{buildroot}"
-
-install -d %{buildroot}%{_datadir}/dbus-1/services/
-install -m644 data/*.service %{buildroot}%{_datadir}/dbus-1/services/
-
-install -d %{buildroot}%{_datadir}/applications/
-install -m644 %{name}.desktop %{buildroot}%{_datadir}/applications/
-
-install -d %{buildroot}/etc/xdg/autostart/
-ln -sfv ../../..%{_datadir}/applications/%{name}.desktop \
-    %{buildroot}%{_sysconfdir}/xdg/autostart/
 
 %files
 %doc README.md
 %license LICENSE
-%{_sysconfdir}/xdg/autostart/%{name}.desktop
 %{_libexecdir}/%{name}
-%{python_sitelib}/deepin_menu*
-%{_datadir}/applications/%{name}.desktop
 %{_datadir}/dbus-1/services/com.deepin.menu.service
 
 %changelog
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 3.3.2-1
+- Update to 3.3.2
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.2.0-1
 - Update to 3.2.0
 
