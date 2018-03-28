@@ -1,5 +1,5 @@
 Name:           deepin-voice-recorder
-Version:        1.3.6
+Version:        1.3.6.1
 Release:        1%{?dist}
 Summary:        Deepin Voice Recorder
 License:        GPLv3
@@ -9,7 +9,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Multimedia)
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(libavformat)
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libavutil)
@@ -53,6 +53,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.3.6.1-1
+- Update to 1.3.6.1
+
 * Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 1.3.6-1
 - Update to 1.3.6
 
