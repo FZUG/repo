@@ -1,7 +1,7 @@
 %global repo dde-control-center
 
 Name:           deepin-control-center
-Version:        4.3.7
+Version:        4.4.3
 Release:        1%{?dist}
 Summary:        New control center for Linux Deepin
 License:        GPLv3
@@ -10,8 +10,8 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-dock-devel
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
-BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
+BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(geoip)
 BuildRequires:  pkgconfig(Qt5Core)
@@ -75,6 +75,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop ||:
 %{_datadir}/%{repo}/
 
 %changelog
+* Mon Mar 26 2018 mosquito <sensor.wen@gmail.com> - 4.4.3-1
+- Update to 4.4.3
+
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 4.3.7-1
 - Update to 4.3.7
 
