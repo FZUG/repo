@@ -1,7 +1,7 @@
 %global repo qt5integration
 
 Name:           deepin-qt5integration
-Version:        0.2.8.3
+Version:        0.2.10
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 # The entire source code is GPLv3+ except styles/ which is BSD,
@@ -71,6 +71,18 @@ Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 %{_qt5_plugindir}/imageformats/libdsvg.so
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 0.2.10-1
+- Update to 0.2.10
+
+* Sun Feb 18 2018 Rex Dieter <rdieter@fedoraproject.org> - 0.2.8.3-4
+- rebuild (qt5)
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.2.8.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Mon Jan 01 2018 Rex Dieter <rdieter@fedoraproject.org> - 0.2.8.3-2
+- rebuild (qt5)
+
 * Sat Dec  9 2017 mosquito <sensor.wen@gmail.com> - 0.2.8.3-1
 - Update to 0.2.8.3
 
