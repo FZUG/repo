@@ -1,5 +1,5 @@
 Name:           deepin-gettext-tools
-Version:        1.0.7
+Version:        1.0.8
 Release:        1%{?dist}
 Summary:        Deepin Gettext Tools
 License:        GPLv3
@@ -60,6 +60,9 @@ install -m755 src/update_pot.py %{buildroot}%{_bindir}/deepin-update-pot
 %{_bindir}/deepin-generate-mo
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.0.8-1
+- Update to 1.0.8
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 1.0.7-1
 - Update to 1.0.7
 
