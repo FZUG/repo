@@ -1,5 +1,5 @@
 Name:           dtkcore
-Version:        2.0.6
+Version:        2.0.7.1
 Release:        1%{?dist}
 Summary:        Deepin tool kit core modules
 License:        GPLv3
@@ -20,8 +20,9 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q
-sed -i 's|tests|tool|' dtkcore.pro
-sed -i 's|/lib|/libexec|' tool/settings/settings.pro
+sed -i 's|qmake|qmake-qt5|' src/dtk_module.prf
+sed -i 's|tests|tools|' dtkcore.pro
+sed -i 's|/lib|/libexec|' tools/settings/settings.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}
@@ -38,19 +39,30 @@ sed -i 's|/lib|/libexec|' tool/settings/settings.pro
 %doc README.md
 %license LICENSE
 %{_libdir}/lib*.so.*
-%{_libexecdir}/dtk2/dtk-settings-tool
+%{_libexecdir}/dtk2/dtk-settings
+%{_libexecdir}/dtk2/dtk-license.py*
+%{_libexecdir}/dtk2/dtk-translate.py*
 
 %files devel
 %doc doc/Specification.md
 %{_includedir}/libdtk-*/
+%{_qt5_archdatadir}/mkspecs/features/*.prf
+%{_qt5_archdatadir}/mkspecs/modules/*.pri
 %{_libdir}/cmake/Dtk/DtkConfig.cmake
 %{_libdir}/cmake/DtkCore/DtkCoreConfig.cmake
+%{_libdir}/libdtk/modules/version.pri
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib*.so
 
 %changelog
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 2.0.7.1-1
+- Update to 2.0.7.1
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 2.0.6-1
 - Update to 2.0.6
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.5.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
 * Thu Dec 28 2017 mosquito <sensor.wen@gmail.com> - 2.0.5.3-1
 - Update to 2.0.5.3
