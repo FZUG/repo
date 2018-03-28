@@ -1,8 +1,8 @@
 %global repo dde-file-manager
 
 Name:           deepin-file-manager
-Version:        4.4.7
-Release:        6%{?dist}
+Version:        4.4.8.3
+Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
@@ -13,8 +13,8 @@ BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-dock-devel
 BuildRequires:  file-devel
 BuildRequires:  pkgconfig(atk)
-BuildRequires:  pkgconfig(dtkwidget) == 2.0
-BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
+BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(libsecret-1)
@@ -106,7 +106,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/dde-trash.desktop ||:
 %{_bindir}/%{repo}-daemon
 %{_bindir}/%{repo}-pkexec
 %{_bindir}/dde-property-dialog
-%attr(755,-,-) %{_bindir}/dde-xdg-user-dirs-update.sh
+%{_bindir}/dde-xdg-user-dirs-update
 %{_bindir}/usb-device-formatter
 %{_bindir}/usb-device-formatter-pkexec
 %{_libdir}/lib%{repo}.so.*
@@ -144,6 +144,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/dde-trash.desktop ||:
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 4.4.8.3-1
+- Update to 4.4.8.3
+
 * Sat Mar 10 2018 mosquito <sensor.wen@gmail.com> - 4.4.7-6
 - Remove obsoletes statement (BZ#1537223)
 
