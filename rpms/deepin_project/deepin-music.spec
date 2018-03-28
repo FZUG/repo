@@ -1,5 +1,5 @@
 Name:           deepin-music
-Version:        3.1.7.2
+Version:        3.1.8.1
 Release:        1%{?dist}
 Summary:        Deepin Music Player
 Summary(zh_CN): 深度音乐播放器
@@ -11,7 +11,7 @@ BuildRequires:  python
 BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-linguist
 BuildRequires:  pkgconfig(dtkcore)
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(icu-uc)
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libavformat)
@@ -87,7 +87,6 @@ fi
 %{_datadir}/dman/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/dbus-1/services/*.service
 
 %files devel
 %{_includedir}/DBusExtended/
@@ -98,6 +97,9 @@ fi
 %{_libdir}/pkgconfig/*-qt5.pc
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.8.1-1
+- Update to 3.1.8.1
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.7.2-1
 - Update to 3.1.7.2
 
