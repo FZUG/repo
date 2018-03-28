@@ -1,6 +1,6 @@
 Name:           deepin-wm-switcher
 Version:        1.1.9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Window manager switcher for Deepin
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wm-switcher
@@ -41,6 +41,9 @@ It is capable of:
 %{_bindir}/%{name}
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.1.9-1
 - Update to 1.1.9
 

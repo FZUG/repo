@@ -1,6 +1,6 @@
 Name:           deepin-qml-widgets
 Version:        2.3.6
-Release:        2%{?dist}
+Release:        4%{?dist}
 Summary:        Deepin QML widgets
 Group:          Development/Libraries
 License:        GPLv3
@@ -60,6 +60,12 @@ cp -r locale/mo/* %{buildroot}%{_datadir}/locale/
 %{_datadir}/dbus-1/services/com.deepin.dialog.service
 
 %changelog
+* Tue Mar 13 2018 mosquito <sensor.wen@gmail.com> - 2.3.6-4
+- Rewrite build requires
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.3.6-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Tue Aug 29 2017 mosquito <sensor.wen@gmail.com> - 2.3.6-2
 - Fix spell mistake
 

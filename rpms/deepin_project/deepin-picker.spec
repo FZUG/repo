@@ -41,18 +41,6 @@ sed -i 's|Picker;||' %{name}.desktop
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
 %files
 %doc README.md
 %license LICENSE
@@ -65,6 +53,12 @@ fi
 %changelog
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 1.6.2-1
 - Update to 1.6.2
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.6.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.6.1-2
+- Remove obsolete scriptlets
 
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.6.1-1
 - Update to 1.6.1

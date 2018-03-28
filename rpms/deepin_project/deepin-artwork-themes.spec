@@ -1,6 +1,6 @@
 Name:           deepin-artwork-themes
 Version:        15.12.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Deepin artwork themes
 License:        GPL3
 URL:            https://github.com/linuxdeepin/deepin-artwork-themes
@@ -32,6 +32,9 @@ cp -a %{SOURCE1} .
 %{_datadir}/personalization/*
 
 %changelog
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 15.12.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Sun Aug  6 2017 mosquito <sensor.wen@gmail.com> - 15.12.4-1
 - Rebuild
 
