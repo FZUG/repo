@@ -1,5 +1,5 @@
 Name:           deepin-notifications
-Version:        3.1.2
+Version:        3.2.1
 Release:        1%{?dist}
 Summary:        System notifications for linuxdeepin desktop environment
 License:        GPLv3
@@ -10,7 +10,7 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Sql)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(gtk+-2.0)
 
 %description
@@ -19,7 +19,7 @@ System notifications for linuxdeepin desktop environment.
 %prep
 %setup -q
 sed -i 's|lib|libexec|' deepin-notifications.pro \
-    files/com.deepin.Notifications.service.in
+    files/com.deepin.dde.Notification*.service.in
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -33,9 +33,15 @@ sed -i 's|lib|libexec|' deepin-notifications.pro \
 %license LICENSE
 %dir %{_libexecdir}/%{name}
 %{_libexecdir}/%{name}/%{name}
-%{_datadir}/dbus-1/services/com.deepin.Notifications.service
+%{_datadir}/dbus-1/services/*.service
 
 %changelog
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 3.2.1-1
+- Update to 3.2.1
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.1.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 3.1.2-1
 - Update to 3.1.2
 
