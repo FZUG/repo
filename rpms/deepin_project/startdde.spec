@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.24
+Version:        3.1.26
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -22,6 +22,7 @@ BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gdk-3.0)
 BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
+BuildRequires:  pkgconfig(gnome-keyring-1)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(systemd)
@@ -65,11 +66,20 @@ BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
 %doc README.md
 %license LICENSE
 %{_bindir}/%{name}
+%{_sbindir}/deepin-session
 %{_datadir}/xsessions/deepin.desktop
+%{_datadir}/lightdm/lightdm.conf.d/60-deepin.conf
+%{_datadir}/%{name}/auto_launch.json
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.26-1
+- Update to 3.1.26
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.1.24-1
 - Update to 3.1.24
+
+* Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.1.23-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
 * Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.23-1
 - Update to 3.1.23
