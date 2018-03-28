@@ -1,15 +1,16 @@
 %global repo dde-dock
 
 Name:           deepin-dock
-Version:        4.5.12
+Version:        4.6.2
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-dock
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
-BuildRequires:  pkgconfig(dframeworkdbus)
+BuildRequires:  cmake
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
+BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(Qt5Core)
@@ -42,12 +43,12 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{repo}-%{version}
-sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
-sed -i '/target.path/s|lib|%{_lib}|' plugins/*/*.pro
-sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
+sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
+sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt
+sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginloader.cpp
 
 %build
-%qmake_qt5 PREFIX=%{_prefix}
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} .
 %make_build
 
 %install
@@ -59,6 +60,7 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 
 %files
 %license LICENSE
+%{_sysconfdir}/%{name}/indicator/keybord_layout.json
 %{_bindir}/%{repo}
 %{_libdir}/%{repo}/
 %{_datadir}/%{repo}/
@@ -68,11 +70,17 @@ sed -i 's|lib|%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 4.6.2-1
+- Update to 4.6.2
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 4.5.12-1
 - Update to 4.5.12
 
-* Wed Jan 10 2018 mosquito <sensor.wen@gmail.com> - 4.5.9.1-1
+* Sat Feb 10 2018 mosquito <sensor.wen@gmail.com> - 4.5.9.1-1
 - Update to 4.5.9.1
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.5.9-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
 * Wed Dec 20 2017 mosquito <sensor.wen@gmail.com> - 4.5.9-1
 - Update to 4.5.9
