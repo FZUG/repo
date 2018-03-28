@@ -7,7 +7,7 @@
 %endif
 
 Name:           deepin-api
-Version:        3.1.20
+Version:        3.1.22
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
@@ -116,21 +116,13 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %make_install SYSTEMD_SERVICE_DIR="%{_unitdir}" LIBDIR="%{_libexecdir}"
 
 %post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
 %systemd_post deepin-shutdown-sound.service
 
 %preun
 %systemd_preun deepin-shutdown-sound.service
 
 %postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
-fi
 %systemd_postun_with_restart deepin-shutdown-sound.service
-
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 
 %files
 %doc README.md
@@ -148,8 +140,17 @@ fi
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.22-1
+- Update to 3.1.22
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 3.1.20-1
 - Update to 3.1.20
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 3.1.18.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 3.1.18.1-2
+- Remove obsolete scriptlets
 
 * Thu Dec 21 2017 mosquito <sensor.wen@gmail.com> - 3.1.18.1-1
 - Update to 3.1.18.1
