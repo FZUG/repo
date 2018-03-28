@@ -1,5 +1,5 @@
 Name:           dtkwidget
-Version:        2.0.6.1
+Version:        2.0.7.2
 Release:        1%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
@@ -67,13 +67,23 @@ sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 
 %files devel
 %{_includedir}/libdtk-*/
-%{_libdir}/cmake/DtkWidget/DtkWidgetConfig.cmake
+%{_qt5_archdatadir}/mkspecs/modules/*.pri
+%{_libdir}/cmake/DtkWidget/DtkWidgetConfig.cmake*
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/lib%{name}.so
 
 %changelog
-* Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 2.0.6.1-1
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 2.0.7.2-1
+- Update to 2.0.7.2
+
+* Tue Feb 20 2018 mosquito <sensor.wen@gmail.com> - 2.0.6.1-1
 - Update to 2.0.6.1
+
+* Mon Feb 19 2018 Rex Dieter <rdieter@fedoraproject.org> - 2.0.5.3-3
+- rebuild (qt5)
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.5.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
 * Thu Dec 28 2017 mosquito <sensor.wen@gmail.com> - 2.0.5.3-1
 - Update to 2.0.5.3
