@@ -1,5 +1,5 @@
 Name:           deepin-image-viewer
-Version:        1.2.16.8
+Version:        1.2.18
 Release:        1%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
@@ -18,7 +18,7 @@ BuildRequires:  pkgconfig(Qt5PrintSupport)
 BuildRequires:  pkgconfig(Qt5Sql)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(gio-unix-2.0)
 BuildRequires:  pkgconfig(libraw)
 BuildRequires:  pkgconfig(libexif)
@@ -47,20 +47,6 @@ install -Dm644 %SOURCE1 %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
 %files
 %doc README.md
 %license LICENSE
@@ -75,8 +61,17 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
-* Wed Jan 10 2018 mosquito <sensor.wen@gmail.com> - 1.2.16.8-1
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 1.2.18-1
+- Update to 1.2.18
+
+* Sat Feb 10 2018 mosquito <sensor.wen@gmail.com> - 1.2.16.8-1
 - Update to 1.2.16.8
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.16.7-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.2.16.7-2
+- Remove obsolete scriptlets
 
 * Thu Dec 28 2017 mosquito <sensor.wen@gmail.com> - 1.2.16.7-1
 - Update to 1.2.16.7
