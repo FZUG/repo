@@ -1,5 +1,5 @@
 Name:           deepin-screenshot
-Version:        4.0.10.4
+Version:        4.0.11
 Release:        1%{?dist}
 Summary:        Deepin Screenshot Tool
 Summary(zh_CN): 深度截图工具
@@ -57,22 +57,10 @@ if [ $1 -eq 0 ]; then
 fi
 
 %post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
 if [ $1 -eq 1 ]; then
   /usr/sbin/alternatives --install %{_bindir}/x-window-screenshot \
     x-window-screenshot %{_bindir}/%{name} 20
 fi
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
 %files
 %doc README.md
@@ -86,6 +74,15 @@ fi
 %{_datadir}/icons/deepin/apps/scalable/%{name}.svg
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 4.0.11-1
+- Update to 4.0.11
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.0.10.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.0.10.4-2
+- Remove obsolete scriptlets
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 4.0.10.4-1
 - Update to 4.0.10.4
 
