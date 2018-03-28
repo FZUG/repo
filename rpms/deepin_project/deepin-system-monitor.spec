@@ -1,5 +1,5 @@
 Name:           deepin-system-monitor
-Version:        1.3.7
+Version:        1.4.3
 Release:        1%{?dist}
 Summary:        A more user-friendly system monitor
 License:        GPLv3
@@ -34,7 +34,7 @@ Recommends:     deepin-manual
 
 %prep
 %setup -q
-sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' %{name}.pro
+sed -i 's|lrelease|lrelease-qt5|' translations/translate_generation.sh
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -48,20 +48,6 @@ install -Dm644 %SOURCE1 %{buildroot}%{_datadir}/appdata/%{name}.appdata.xml
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.xml
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
 %files
 %doc README.md
 %license LICENSE
@@ -73,6 +59,15 @@ fi
 %{_datadir}/dman/%{name}/
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.4.3-1
+- Update to 1.4.3
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.7-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 1.3.7-2
+- Remove obsolete scriptlets
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 1.3.7-1
 - Update to 1.3.7
 
