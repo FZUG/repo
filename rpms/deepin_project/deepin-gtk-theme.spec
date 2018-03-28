@@ -1,5 +1,5 @@
 Name:           deepin-gtk-theme
-Version:        17.10.5
+Version:        17.10.6
 Release:        1%{?dist}
 Summary:        Deepin GTK Theme
 License:        GPLv3
@@ -25,6 +25,12 @@ Deepin GTK Theme
 %{_datadir}/themes/deepin-dark/
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 17.10.6-1
+- Update to 17.10.6
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 17.10.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
 * Sat Dec  2 2017 mosquito <sensor.wen@gmail.com> - 17.10.5-1
 - Update to 17.10.5
 
