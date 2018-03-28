@@ -2,8 +2,8 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.2.9
-Release:        2%{?dist}
+Version:        3.2.12
+Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-daemon
@@ -94,6 +94,7 @@ Daemon handling the DDE session settings
 
 # Fix library exec path
 sed -i '/deepin/s|lib|libexec|' Makefile
+sed -i '/systemd/s|lib|usr/lib|' Makefile
 sed -i 's|lib/NetworkManager|libexec|' network/utils_test.go
 sed -i 's|/usr/lib|%{_libexecdir}|' \
     misc/*services/*.service \
@@ -102,6 +103,7 @@ sed -i 's|/usr/lib|%{_libexecdir}|' \
     keybinding/shortcuts/system_shortcut.go \
     session/power/constant.go \
     session/power/lid_switch.go \
+    service_trigger/manager.go \
     bin/dde-system-daemon/main.go \
     bin/search/main.go \
     accounts/user.go
@@ -112,7 +114,8 @@ sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
-%make_build
+BUILDID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
+%make_build GOBUILD="go build -compiler gc -ldflags \"-B $BUILDID\""
 
 %install
 %make_install
@@ -166,6 +169,7 @@ fi
 %{_libexecdir}/%{name}/
 %{_sysusersdir}/%{name}.conf
 %{_prefix}/lib/systemd/logind.conf.d/10-%{name}.conf
+%{_unitdir}/deepin-accounts-daemon.service
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_datadir}/dbus-1/system.d/*.conf
@@ -179,6 +183,12 @@ fi
 %{_var}/cache/appearance/
 
 %changelog
+* Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 3.2.12-1
+- Update to 3.2.12
+
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.2.11-1
+- Update to 3.2.11
+
 * Mon Mar 19 2018 mosquito <sensor.wen@gmail.com> - 3.2.9-2
 - Nothing providers grub2 in s390x and armv7hl.
 
