@@ -1,7 +1,7 @@
 %global repo dde-launcher
 
 Name:           deepin-launcher
-Version:        4.3.0
+Version:        4.3.2
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
@@ -37,18 +37,6 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
 %files
 %license LICENSE
 %{_bindir}/%{repo}
@@ -57,6 +45,15 @@ fi
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 4.3.2-1
+- Update to 4.3.2
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.3.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.3.0-2
+- Remove obsolete scriptlets
+
 * Wed Dec 20 2017 mosquito <sensor.wen@gmail.com> - 4.3.0-1
 - Update to 4.3.0
 
