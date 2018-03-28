@@ -7,12 +7,12 @@
 # https://github.com/linuxdeepin/go-lib
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     pkg.deepin.io/lib
-%global   commit          68eb6b8d87c2cd738e3bda0a2a779f1707e9c277
+%global   commit          cba7324e6dac0707c153f7444c808117de6d288a
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-deepin-go-lib
-Version:        1.2.4
-Release:        2%{?dist}
+Version:        1.2.6
+Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 License:        GPLv3
 URL:            https://%{provider_prefix}
@@ -235,6 +235,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
+* Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.2.6-1
+- Update to 1.2.6
+
 * Mon Mar 12 2018 mosquito <sensor.wen@gmail.com> - 1.2.4-2
 - Disable test suit
 
