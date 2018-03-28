@@ -1,7 +1,7 @@
 %global repo dde-session-ui
 
 Name:           deepin-session-ui
-Version:        4.2.0
+Version:        4.3.5
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -9,7 +9,7 @@ URL:            https://github.com/linuxdeepin/dde-session-ui
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  deepin-gettext-tools
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(dframeworkdbus)
 BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(gtk+-2.0)
@@ -54,8 +54,6 @@ sed -i 's|lib|libexec|' \
     dde-osd/dde-osd.pro \
     dde-welcome/com.deepin.dde.welcome.service \
     dde-welcome/dde-welcome.pro \
-    dde-dman-portal/com.deepin.dman.service \
-    dde-dman-portal/dde-dman-portal.pro \
     dde-warning-dialog/com.deepin.dde.WarningDialog.service \
     dde-warning-dialog/dde-warning-dialog.pro \
     dde-offline-upgrader/dde-offline-upgrader.pro \
@@ -77,26 +75,12 @@ cat > %{buildroot}%{_sysconfdir}/lightdm/lightdm.conf.d/deepin.conf <<EOF
 greeter-session=lightdm-deepin-greeter
 EOF
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
 %files
 %doc README.md
 %license LICENSE
 %config(noreplace) %{_sysconfdir}/lightdm/lightdm.conf.d/deepin.conf
-%{_sysconfdir}/xdg/autostart/dde-osd_autostart.desktop
 %{_bindir}/dde-*
+%{_bindir}/dmemory-warning-dialog
 %{_bindir}/lightdm-deepin-greeter
 %{_libexecdir}/deepin-daemon/dde-*
 %{_datadir}/%{repo}/
@@ -106,6 +90,15 @@ fi
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Mon Mar 26 2018 mosquito <sensor.wen@gmail.com> - 4.3.5-1
+- Update to 4.3.5
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 4.2.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Jan 11 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 4.2.0-2
+- Remove obsolete scriptlets
+
 * Wed Dec 20 2017 mosquito <sensor.wen@gmail.com> - 4.2.0-1
 - Update to 4.2.0
 
