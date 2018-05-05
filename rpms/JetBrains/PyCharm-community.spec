@@ -8,9 +8,9 @@
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global approot /opt/JetBrains/%{name}
 %global appfile %{name}-%{version}.tar.gz
-%global appurl  http://download.jetbrains.com/python/%{appfile}
+%global appurl  https://download.jetbrains.com/python/%{appfile}
 # http://download.jetbrains.com/python/Name-Version.tar.gz.sha256
-%global sha256  334eaa740d963cf12bf2e5c2107909d16238b739c2afa017dc4587103eb60176
+%global sha256  c37f6571f73ca792dfa5612253573e5391dea77c9ab139c102d35b2cbefe1dde
 
 # Usage: DownloadPkg appfile appurl
 %global DownloadPkg() \
@@ -24,35 +24,17 @@ Download\
 %{nil}
 
 Name:    pycharm-community
-Version: 2016.2
-Release: 1.net
+Version: 2018.1.2
+Release: 1.net%{?dist}
 Summary: Powerful Python and Django IDE. Community version
 Group:   Development/Tools
 License: Apache
-URL:     http://www.jetbrains.com/pycharm
+URL:     https://www.jetbrains.com/pycharm
 
 BuildRequires: axel
 BuildRequires: tar
 Requires: axel
 Requires: tar
-# oracle-jdk, or openjdk-devel, or jre
-Requires: jre
-# For enhanced interactive Python shell inside pycharm
-Recommends: python-ipython
-Recommends: python3-ipython
-# For deployment and remote connections
-Recommends: openssh
-# Packages manager for Python
-Recommends: python-setuptools
-Recommends: python3-setuptools
-# For support code coverage measurement
-Recommends: python-coverage
-Recommends: python3-coverage
-# For performance debugger
-Recommends: Cython
-Recommends: python3-Cython
-# For support virtualized development environments
-Recommends: vagrant
 
 %description
  Powerful Python and Django IDE. Community version.
@@ -183,6 +165,8 @@ fi
 %exclude %{approot}/license
 
 %changelog
+* Sat May  5 2018 Hui Tang <duriantang@gmail.com> 2018.1.2-1.net
+- Release 2018.1.2
 * Sat Aug 06 2016 nrechn <nrechn@gmail.com> - 2016.2-1
 - Release 2016.2
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 2016.1-1
