@@ -167,6 +167,7 @@ fi
 %changelog
 * Sat May  5 2018 Hui Tang <duriantang@gmail.com> 2018.1.2-1.net
 - Release 2018.1.2
+- Use Bundled JRE
 * Sat Aug 06 2016 nrechn <nrechn@gmail.com> - 2016.2-1
 - Release 2016.2
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 2016.1-1
