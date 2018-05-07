@@ -31,6 +31,7 @@ Group:   Development/Tools
 License: Proprietary
 URL:     http://www.jetbrains.com/pycharm
 
+Provides: bundled(jre) = 1.8.0_152-release
 BuildRequires: axel
 BuildRequires: tar
 Requires: axel
@@ -169,6 +170,7 @@ fi
 - Release 2018.1.2
 - Use Bundled JRE
 * Sat Aug 06 2016 nrechn <nrechn@gmail.com> - 2016.2-1
+Provides: bundled(jre) = 1.8.0_152-release
 - Release 2016.2
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 2016.1-1
 - Release 2016.1
