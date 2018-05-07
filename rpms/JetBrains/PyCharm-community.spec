@@ -31,6 +31,7 @@ Group:   Development/Tools
 License: Apache
 URL:     https://www.jetbrains.com/pycharm
 
+Provides: bundled(jre) = 1.8.0_152-release
 BuildRequires: axel
 BuildRequires: tar
 Requires: axel
