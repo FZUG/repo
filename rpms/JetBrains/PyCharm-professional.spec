@@ -8,9 +8,9 @@
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
 %global approot /opt/JetBrains/%{name}
 %global appfile %{name}-%{version}.tar.gz
-%global appurl  http://download.jetbrains.com/python/%{appfile}
+%global appurl  https://download.jetbrains.com/python/%{appfile}
 # http://download.jetbrains.com/python/Name-Version.tar.gz.sha256
-%global sha256  8ac7bdb58af1d3fec7b850fc158b4da72d33d140ad01daca0d3f0afac1c7aa14
+%global sha256  6557e3d9309d4c84501ddba11345b6103cfbad074c6e160c6bc7e85e73ae8e21
 
 # Usage: DownloadPkg appfile appurl
 %global DownloadPkg() \
@@ -24,35 +24,18 @@ Download\
 %{nil}
 
 Name:    pycharm-professional
-Version: 2016.2
+Version: 2018.1.2
 Release: 1.net
 Summary: Powerful Python and Django IDE. Professional version
 Group:   Development/Tools
 License: Proprietary
 URL:     http://www.jetbrains.com/pycharm
 
+Provides: bundled(jre) = 1.8.0_152-release
 BuildRequires: axel
 BuildRequires: tar
 Requires: axel
 Requires: tar
-# oracle-jdk, or openjdk-devel, or jre
-Requires: jre
-# For enhanced interactive Python shell inside pycharm
-Recommends: python-ipython
-Recommends: python3-ipython
-# For deployment and remote connections
-Recommends: openssh
-# Packages manager for Python
-Recommends: python-setuptools
-Recommends: python3-setuptools
-# For support code coverage measurement
-Recommends: python-coverage
-Recommends: python3-coverage
-# For performance debugger
-Recommends: Cython
-Recommends: python3-Cython
-# For support virtualized development environments
-Recommends: vagrant
 
 %description
  Powerful Python and Django IDE. Professional version.
@@ -183,6 +166,9 @@ fi
 %exclude %{approot}/license
 
 %changelog
+* Sat May  5 2018 Hui Tang <duriantang@gmail.com> 2018.1.2-1.net
+- Release 2018.1.2
+- Use Bundled JRE
 * Sat Aug 06 2016 nrechn <nrechn@gmail.com> - 2016.2-1
 - Release 2016.2
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 2016.1-1
