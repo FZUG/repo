@@ -1,2 +1,0 @@
-deb [arch=amd64] https://dl.google.com/linux/chrome/deb/ stable main
-deb [arch=amd64] https://repo.fdzh.org/chrome/deb/ stable main

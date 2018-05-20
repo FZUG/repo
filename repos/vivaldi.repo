@@ -1,9 +1,0 @@
-[vivaldi]
-name=Vivaldi Browser
-#baseurl=http://repos.vivaldi.com/archive/rpm/$basearch
-#gpgkey=http://repos.vivaldi.com/archive/linux_signing_key.pub
-baseurl=https://repo.fdzh.org/vivaldi/rpm/$basearch
-gpgkey=https://repo.fdzh.org/vivaldi/linux_signing_key.pub
-gpgcheck=1
-enabled=1
-skip_if_unavailable=1
