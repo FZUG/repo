@@ -3,6 +3,7 @@
 %global debug_package %{nil}
 %global __jar_repack  %{nil}
 %global __os_install_post %{nil}
+%global _build_id_links none
 
 %global _tmppath /var/tmp
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
@@ -10,7 +11,7 @@
 %global appfile %{name}-%{version}.tar.gz
 %global appurl  https://download.jetbrains.com/python/%{appfile}
 # http://download.jetbrains.com/python/Name-Version.tar.gz.sha256
-%global sha256  6557e3d9309d4c84501ddba11345b6103cfbad074c6e160c6bc7e85e73ae8e21
+%global sha256  0095e30de615e2f633d4ff24d61bb69116da8ef36d9ce43bc47b3b3b198919b2
 
 # Usage: DownloadPkg appfile appurl
 %global DownloadPkg() \
@@ -24,8 +25,8 @@ Download\
 %{nil}
 
 Name:    pycharm-professional
-Version: 2018.1.2
-Release: 1.net
+Version: 2018.1.3
+Release: 1.net%{?dist}
 Summary: Powerful Python and Django IDE. Professional version
 Group:   Development/Tools
 License: Proprietary
@@ -166,6 +167,9 @@ fi
 %exclude %{approot}/license
 
 %changelog
+* Sat May 22 2018 Hui Tang <duriantang@gmail.com> 2018.1.3-1.net
+- Release 2018.1.3
+- Workaround .build-id conflicts.
 * Sat May  5 2018 Hui Tang <duriantang@gmail.com> 2018.1.2-1.net
 - Release 2018.1.2
 - Use Bundled JRE
