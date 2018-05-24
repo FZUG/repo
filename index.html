@@ -1,19 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN" prefix="og: http://ogp.me/ns#">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
     <head>
         <meta charset="utf-8"/>
-        <meta name="Author" content="Fedora Zh User Group"/>
-        <meta name="Description" content="Fedora 中文用户组（FZUG）创建并维护此社区源，本源提供中文用户常用软件包。"/>
+        <meta name="Author" content="Fedora Zhongwen User Group (FZUG)"/>
+        <meta name="Description" content="Fedora 中文用户组 (FZUG) 创建并维护此社区源，提供中文用户常用软件包。"/>
         <title>Fedora中文社区软件源</title>
-        <meta property="og:url" content="//repo.fdzh.org"/>
-        <meta property="og:type" content="website"/>
-        <meta property="og:site_name" content="FZUG"/>
-        <link rel="home" href="//repo.fdzh.org"/>
-<!--
-        <link rel="stylesheet" href="http://www.uisdc.com/wss/fonts?family=Myriad+Set+Pro&amp;weights=100&amp;v=1" type="text/css" media="all"/>
-        <link rel="stylesheet" href="http://www.uisdc.com/wss/fonts?family=PingHei&amp;weights=200&amp;v=1"/>
--->
-        <link type="text/css" rel="stylesheet" href="//fonts.fdzh.org/css?family=Clicker+Script|Open+Sans:400,300">
 
         <style type="text/css">
 
@@ -25,291 +16,289 @@ html[lang=zh-CN] h1{font-family: "Myriad Set Pro","Lucida Grande","Helvetica Neu
 
 /*stylesheet here*/
 body{
-	background-color: #FDFFFD;
+    background-color: #FDFFFD;
 }
 #header{
-	width:75%;
-	margin:0 auto;
+    width:75%;
+    margin:0 auto;
 }
 #headlinks{
-	float:right;
-	margin-right: 10px;
-	padding: 10px 0;
+    float:right;
+    margin-right: 10px;
+    padding: 10px 0;
 }
 #headlinks li{
-	float:left;
-	margin-left:25px;
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	font-size:16px;
-	color:#EEECDF;
+    float:left;
+    margin-left:25px;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-size:16px;
+    color:#EEECDF;
 }
 #headlinks li:hover{
-	color:#FFF;
+    color:#FFF;
 }
 #headlinks li a{
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	font-size:16px;
-	color:#EEECDF;
-	text-decoration:none;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-size:16px;
+    color:#EEECDF;
+    text-decoration:none;
 }
 #headlinks li a:hover{
-	color:#FFF;
+    color:#FFF;
 }
 #welcome{
-	/*width: 100%;*/
-	padding: 42px 0px;
-	background: #294172; /* Old browsers */
-	background: -moz-linear-gradient(top, #3c6eb4 0%, #294172 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3c6eb4), color-stop(100%,#294172)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* IE10+ */
-	background: linear-gradient(to bottom, #3c6eb4 0%,#294172 100%); /* W3C */
+    /*width: 100%;*/
+    padding: 42px 0px;
+    background: #294172; /* Old browsers */
+    background: -moz-linear-gradient(top, #3c6eb4 0%, #294172 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#3c6eb4), color-stop(100%,#294172)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #3c6eb4 0%,#294172 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #3c6eb4 0%,#294172 100%); /* W3C */
 }
 #intro{
-	margin:0 auto;
-	width:75%;
-	color:#F1F1F1;
+    margin:0 auto;
+    width:75%;
+    color:#F1F1F1;
 }
 #intro h1{
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	font-weight:400;
-	font-size:48px;
-	margin-top:10px;
-	color:rgba(255, 255, 255, 0.1);
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-weight:400;
+    font-size:48px;
+    margin-top:10px;
+    color:rgba(255, 255, 255, 0.618);
 }
 #intro h2{
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	font-weight:300;
-	font-size:24px;
-	margin-top:10px;
-	margin-bottom:10px;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-weight:300;
+    font-size:24px;
+    margin-top:10px;
+    margin-bottom:10px;
 }
 #intro p{
-	margin-bottom:0px;
-	line-height:1.3em;
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	font-weight:300;
-	font-size:18px;
+    margin-bottom:0px;
+    line-height:1.3em;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-weight:300;
+    font-size:18px;
 }
 #wrapper{
-	width:75%;
-	margin:25px auto;
+    width:75%;
+    margin:25px auto;
 }
 #wrapper a {
-	color:#06c;
-	text-decoration: none;
+    color:#06c;
+    text-decoration: none;
 }
 #wrapper a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 #filelist h3{
-	color:#3c6eb4;
-	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
-	font-weight:100;
-	font-size:24px;
-	margin:0px 0 15px 0;
+    color:#3c6eb4;
+    font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+    font-weight:100;
+    font-size:24px;
+    margin:0px 0 15px 0;
 }
 #filelist table{
-	width:100%;
-	empty-cells:hide;
+    width:100%;
+    empty-cells:hide;
 }
 th{
-	font-weight:normal;
-	text-align:left;
-	font-size:16px;
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	padding:3px 0px;
+    font-weight:normal;
+    text-align:left;
+    font-size:16px;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    padding:3px 0px;
 }
 thead{
-	/*border-bottom:thin dotted #000;*/
+    /*border-bottom:thin dotted #000;*/
 }
 #name{
-	text-align:left;
-	padding:3px 0 3px 3px;
+    text-align:left;
+    padding:3px 0 3px 3px;
 }
 #help{
-	text-align:left;
-	padding:3px 3px 3px 0;
+    text-align:left;
+    padding:3px 3px 3px 0;
 }
 #filelist td{
-	font-size:14px;
-	line-height:20px;
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-size:14px;
+    line-height:20px;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
 }
 #filelist td.help{
-	padding:0px 3px 0px 0px;
-	text-align: left;
+    padding:0px 3px 0px 0px;
+    text-align: left;
 }
 #filelist td.filename
 {
-	padding-left:3px;
+    padding-left:3px;
 }
 #filelist td span.link {
-	color:#06c;
+    color:#06c;
 }
 #filename{
-	text-align:left;
-	width:15%;
+    text-align:left;
+    width:15%;
 }
 .filesize{
-	display:none;
-	text-align:right;
-	width:0%;
+    display:none;
+    text-align:right;
+    width:0%;
 }
-.filetime{
-	text-align:left;
-	width:35%;
+.license, .dependency {
+    text-align:left;
+    width: 20%;
+}
+
+.description {
+    text-align:left;
+    width: 35%;
 }
 
 .help{
-	text-align:left;
-	width:20px;
+    text-align:left;
+    width:20px;
 }
 tbody tr:hover{
-	background-color:#DDEADD;
+    background-color:#DDEADD;
 }
 #sidebar div{
-	margin-bottom: 25px;
+    margin-bottom: 25px;
 }
 #sidebar h3{
-	color:#3c6eb4;
-	font-family: "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
-	font-weight:300;
-	font-size:24px;
-	margin:0px 0 15px 0;
+    color:#3c6eb4;
+    font-family: "Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+    font-weight:300;
+    font-size:24px;
+    margin:0px 0 15px 0;
 }
 #sidebar p,a{
-	line-height: 1.5em;
-	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
-}
-#sidebar a{
-	color:#030303;
-	text-decoration: none;
-}
-#sidebar a:hover{
-	text-decoration: underline;
+    line-height: 1.5em;
+    font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
 }
 .btn{
-	display: inline-block;
-	background-color: #294172;
-	margin:12px auto 12px auto;
-	padding:3px 20px;
-	line-height: 1.5em;
-	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
-	font-size: 20px;
-	color:#f3f3f3;
-	text-align: center;
-	-webkit-transition: background 0.3s linear;
-	-moz-transition: background 0.3s linear;
-	-ms-transition: background 0.3s linear;
-	-o-transition: background 0.3s linear;
-	transition: background 0.3s linear;
-	cursor:pointer;
+    display: inline-block;
+    background-color: #294172;
+    margin:12px auto 12px auto;
+    padding:3px 20px;
+    line-height: 1.5em;
+    font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+    font-size: 20px;
+    color:#f3f3f3;
+    text-align: center;
+    -webkit-transition: background 0.3s linear;
+    -moz-transition: background 0.3s linear;
+    -ms-transition: background 0.3s linear;
+    -o-transition: background 0.3s linear;
+    transition: background 0.3s linear;
+    cursor:pointer;
 
 }
 .btn:hover{
-	background-color:#3c6eb4;
+    background-color:#3c6eb4;
 }
 #footer{
-	background-color: #333;
-	color:#bbb;
-	padding:30px 0;
+    background-color: #dedede; /* Fedora lightgrey */
+    padding:30px 0;
 }
 #footercontent{
-	width:75%;
-	margin:0 auto;
+    width:75%;
+    margin:0 auto;
 }
 #footerleft{
-	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
-	width:80%;
-	float:left;
-	font-size: 14px;
-	line-height: 1.5em;
+    font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+    width:80%;
+    float:left;
+    font-size: 14px;
+    line-height: 1.5em;
 }
 #footerleft a{
-	color:#ccc;
+    color:#06c;
+    text-decoration: none;
 }
 #footerright{
-	width:33%;
-	float:right;
-	text-align: center;
+    width:33%;
+    float:right;
+    text-align: center;
 }
 #footerright p{
-	margin-top:5px;
+    margin-top:5px;
 }
 .modal
 {
-	visibility: hidden;
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	text-align: center;
-	z-index: 5;
+    visibility: hidden;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    z-index: 5;
 }
 .modalclear{
-	width:100%;
-	background-color:rgba(255,255,255,0.85);
-	height:100%;
-	z-index: 6;
+    width:100%;
+    background-color:rgba(255,255,255,0.85);
+    height:100%;
+    z-index: 6;
 }
 
 .modalcontainer
 {
-	position: absolute;
-	width: 40%;
-	top:200px;
-	left:30%;
-	margin:0 auto;
-	background-color: #FCFCFC;
-	border: 3px solid #ccc;
-	padding: 0px;
-	text-align: left;
-	overflow: hidden;
-	-webkit-box-shadow: 0px 0px 6px 3px rgba(128, 128, 128, 128);
-	box-shadow: 0px 0px 6px 3px rgba(128, 128, 128, 128);
-	opacity: 1;
-	z-index:7;
+    position: absolute;
+    width: 40%;
+    top:200px;
+    left:30%;
+    margin:0 auto;
+    background-color: #FCFCFC;
+    border: 3px solid #ccc;
+    padding: 0px;
+    text-align: left;
+    overflow: hidden;
+    -webkit-box-shadow: 0px 0px 6px 3px rgba(128, 128, 128, 128);
+    box-shadow: 0px 0px 6px 3px rgba(128, 128, 128, 128);
+    opacity: 1;
+    z-index:7;
 }
 .modaltitle{
-	font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
-	font-weight:300;
-	font-size:22px;
-	padding:8px 20px;
-	background-color: #07A878;
-	color:#FCFCFC;
+    font-family: "Open Sans","Ubuntu",Helvetica, Arial, Geneva, sans-serif;
+    font-weight:300;
+    font-size:22px;
+    padding:8px 20px;
+    background-color: #07A878;
+    color:#FCFCFC;
 }
 .modalcontent{
-	font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
-	font-size:22px;
-	padding:8px 20px;
-	background-color: #FFFFFF;
-	line-height: 1.8em;
+    font-family: "Open Sans","Ubuntu","Hiragino Sans GB", "Wenquanyi Micro Hei", "WenQuanYi Micro Hei Mono", "WenQuanYi Zen Hei", "WenQuanYi Zen Hei", "Apple LiGothic Medium", "STXihei", "ST Heiti", "WenQuanYi Zen Hei Sharp";
+    font-size:22px;
+    padding:8px 20px;
+    background-color: #FFFFFF;
+    line-height: 1.8em;
 }
 .modalcontent p{
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 .modalcontent select{
-	width:300px;
+    width:300px;
 }
  @media screen and (min-width:750px) {
    #filelist{
-	 float:left;
-	 width:60%;
-	 border-right: 1px solid #eee;
-	 padding-right: 30px;
+     float:left;
+     width:60%;
+     border-right: 1px solid #eee;
+     padding-right: 30px;
    }
    #sidebar{
-	 float:right;
-	 width:33%;
+     float:right;
+     width:33%;
    }
  }
  @media screen and (max-width:749px) {
    #filelist{
-	 float: left;
-	 width: 100%;
+     float: left;
+     width: 100%;
      margin-bottom: 30px;
    }
    #sidebar {
@@ -319,7 +308,7 @@ tbody tr:hover{
    }
  }
  @media screen and (max-width:500px) {
-   .update, .filetime {
+   .license, .dependency, .description {
      display: none;
    }
  }
@@ -346,25 +335,21 @@ tbody tr:hover{
         </style>
 
 
-<script src="http://7o51u6.com1.z0.glb.clouddn.com/elevator.js"></script>
     </head>
 
     <body> <!-- body start -->
 
 <div id="header">
     <ul id="headlinks">
-        <li><a target="_blank" href="//www.fdzh.org">Home</a></li>
-        <li><a target="_blank" href="http://hack.fdzh.org">Hack</a></li>
-        <li><a target="_blank" href="//github.com/FZUG/repo/wiki">Wiki</a></li>
-        <li><a target="_blank" href="//github.com/FZUG/repo/issues">Issues</a></li>
-        <li><a target="_blank" href="//github.com/FZUG">About</a></li>
+        <li><a target="_blank" href="//zh.fedoracommunity.org">首页</a></li>
+        <li><a target="_blank" href="//zh.fedoracommunity.org/repo">软件源</a></li>
+        <li><a target="_blank" href="//zh.fedoracommunity.org/about">关于</a></li>
     </ul>
 </div>
 
 <div id="welcome">
     <div id="intro">
-        <h1>Freedom. Friends. Features. First.</h1>
-        <h2>欢迎访问 Fedora 中文社区软件源</h2>
+        <h1>Fedora 中文社区软件源</h1>
         <p>Fedora 中文社区 (FZUG) 创建并维护此软件源，为 Fedora 中文用户提供更为丰富的软件包。</p>
     </div>
 </div>
@@ -373,264 +358,257 @@ tbody tr:hover{
 <div id="wrapper">
     <div id="filelist">
         <h3 style="clear:left; display: inline-block;">软件包列表</h3>
-        <a style="float:right;" href="//repo.fdzh.org/FZUG">按 Fedora 版本浏览</a>
+        <a style="float:right;" href="//repo.fdzh.org/FZUG">浏览软件仓库</a>
         <hr />
         <table cellspacing="0" cellpadding="0" class="filelist">
             <thead>
                 <tr id="firstline">
-                    <th id="name">Name</th>
-                    <th class="update">License</th>
-                    <th class="update">Require repo</th>
-                    <th class="update">Description</th>
+                    <th id="name">名称</th>
+                    <th class="license">许可证</th>
+                    <th class="dependency">依赖仓库</th>
+                    <th class="description">描述</th>
                 </tr>
             </thead>
 
             <tbody>
                 <!------- Input Methods ------->
                 <tr>
-                    <td class="filename">Input Methods</td>
+                    <td class="filename">输入法</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">sogoupinyin</span></td>
-                    <td class="filetime">Proprietary, GPLv2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">搜狗拼音输入法</td>
+                    <td class="license">Proprietary, GPLv2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">搜狗拼音输入法</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">fcitx-rime</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">中州韵输入法</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">中州韵输入法</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">fcitx-sunpinyin</span></td>
-                    <td class="filetime">GPLv2+</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">sunpinyin 输入法</td>
+                    <td class="license">GPLv2+</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">sunpinyin 输入法</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">fcitx-qt5</span></td>
-                    <td class="filetime">GPLv2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">fcitx qt5 输入模块</td>
+                    <td class="license">GPLv2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">fcitx qt5 输入模块</td>
                 </tr>
 
                 <!------- Multimedia ------->
                 <tr>
-                    <td class="filename">Multimedia</td>
+                    <td class="filename">多媒体</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">kwplayer</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">酷我音乐</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">酷我音乐</td>
                     <!--Require: python-html2text, python3-keybinder(python3-xlib), python-mutagen, python3-cairo, pygobject3(python3-gobject)-->
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">doubanfm-qt</span></td>
-                    <td class="filetime">MIT</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">豆瓣FM</td>
+                    <td class="license">MIT</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">豆瓣FM</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">musicbox</span></td>
-                    <td class="filetime">MIT</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">网易云音乐 CLI</td>
+                    <td class="license">MIT</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">网易云音乐 CLI</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">deepin-music-player</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">深度音乐</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">深度音乐</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">moonplayer</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">Moonplayer播放器</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">Moonplayer播放器</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">simplescreenrecorder</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">屏幕录像</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">屏幕录像</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">obs-studio</span></td>
-                    <td class="filetime">GPLv2</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">屏幕录像/流媒体直播</td>
+                    <td class="license">GPLv2</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">屏幕录像/流媒体直播</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">tragtor</span></td>
-                    <td class="filetime">LGPLv2</td>
-                    <td class="filetime">rpmfusion</td>
-                    <td class="filetime">FFmpeg音视频转码</td>
+                    <td class="license">LGPLv2</td>
+                    <td class="dependency">rpmfusion</td>
+                    <td class="description">FFmpeg音视频转码</td>
                 </tr>
 
                 <!------- Notes / Dict ------->
                 <tr>
-                    <td class="filename">Notes / Dict</td>
+                    <td class="filename">笔记、词典</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">wiznote</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">为知笔记 stable</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">为知笔记稳定版</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">wiznote-beta</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">为知笔记 beta</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">为知笔记 beta</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">youdao-dict</span></td>
-                    <td class="filetime">Proprietary</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">有道词典 for linux</td>
+                    <td class="license">Proprietary</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">有道词典 Linux 版</td>
                 </tr>
 
                 <!------- Browser ------->
                 <tr>
-                    <td class="filename">Browser / Proxy</td>
+                    <td class="filename">浏览器</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">opera-developer</span></td>
-                    <td class="filetime">Proprietary</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">Opera developer</td>
+                    <td class="license">Proprietary</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">Opera 开发者版</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">opera-beta</span></td>
-                    <td class="filetime">Proprietary</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">Opera beta</td>
+                    <td class="license">Proprietary</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">Opera beta</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">opera-stable</span></td>
-                    <td class="filetime">Proprietary</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">Opera stable</td>
+                    <td class="license">Proprietary</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">Opera 稳定版</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">freshplayerplugin</span></td>
-                    <td class="filetime">MIT</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">Firefox PPAPI flash 兼容插件</td>
+                    <td class="license">MIT</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">Firefox PPAPI flash 兼容插件</td>
                 </tr>
 
                 <!------- Downloads ------->
                 <tr>
-                    <td class="filename">Downloads</td>
+                    <td class="filename">下载</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">bcloud</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">百度云客户端</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">百度云客户端</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">xware-desktop</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">迅雷客户端</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">迅雷客户端</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">pointdownload</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">点载, 支持迅雷/BT/ed2k下载</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">点载, 支持迅雷/BT/ed2k下载</td>
                 </tr>
 
                 <!------- System tools ------->
                 <tr>
-                    <td class="filename">System tools</td>
+                    <td class="filename">系统工具</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">ccal</span></td>
-                    <td class="filetime">LGPL</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">命令行下的农历日历</td>
+                    <td class="license">LGPL</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">命令行下的农历日历</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">grub4dos</span></td>
-                    <td class="filetime">GPLv2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">grub 引导管理器</td>
+                    <td class="license">GPLv2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">grub 引导管理器</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">screenfetch</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">系统信息收集</td>
-                </tr>
-                <tr>
-                    <td class="filename"><a href="#">vim 7.4.764</a></td>
-                    <td class="filetime">vim</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">编辑器之神，增加剪贴板/lua/py3支持</td>
-                    <!--"+yy 复制, "+dd 剪切, "+p 粘贴-->
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">系统信息收集</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">dkms-mt7601u</span></td>
-                    <td class="filetime">GPL</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">MT7601U USB Wifi 驱动</td>
+                    <td class="license">GPL</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">MT7601U USB Wifi 驱动</td>
                 </tr>
 
                 <!------- System libraries ------->
                 <tr>
-                    <td class="filename">System libraries</td>
+                    <td class="filename">系统库</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">opencc</span></td>
-                    <td class="filetime">ASL2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">简繁转换库，修正依赖</td>
+                    <td class="license">ASL2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">简繁转换库，修正依赖</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">sunpinyin</span></td>
-                    <td class="filetime">LGPLv2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">基于 SLM 模型的输入法引擎，更新字典</td>
+                    <td class="license">LGPLv2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">基于 SLM 模型的输入法引擎，更新字典</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">python-html2text</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">HTML → ASCII</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">HTML → ASCII</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">python3-xlib</span></td>
-                    <td class="filetime">GPLv2</td>
-                    <td class="filetime">null</td>
-                    <td class="filetime">Python3 X 库</td>
+                    <td class="license">GPLv2</td>
+                    <td class="dependency"></td>
+                    <td class="description">Python3 X 库</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">python3-keybinder</span></td>
-                    <td class="filetime">GPLv3</td>
-                    <td class="filetime">null</td>
-                    <td class="filetime">Python3 键绑定库</td>
+                    <td class="license">GPLv3</td>
+                    <td class="dependency"></td>
+                    <td class="description">Python3 键绑定库</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">python-mutagen</span></td>
-                    <td class="filetime">GPLv2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">处理音频元数据</td>
+                    <td class="license">GPLv2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">处理音频元数据</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">python3-cairo</span></td>
-                    <td class="filetime">LGPLv2</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">Python3 cairo 绑定，修复 bug</td>
+                    <td class="license">LGPLv2</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">Python3 cairo 绑定，修复 bug</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">pygobject3</span></td>
-                    <td class="filetime">LGPLv2+</td>
-                    <td class="filetime">fedora</td>
-                    <td class="filetime">Python GObject 封装，修复 bug</td>
+                    <td class="license">LGPLv2+</td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">Python GObject 封装，修复 bug</td>
                 </tr>
             </tbody>
         </table>
@@ -658,8 +636,12 @@ tbody tr:hover{
 -->
         <div id="mirrorlinks">
             <h3>使用截图</h3>
-            <a target="_blank" href="/img/snapshot1.png"><img src="/img/snapshot1.png" title="Fedora 22 beautiful face" alt="Fedora 22 桌面" width="60%"/></a>
-            <a target="_blank" href="/img/snapshot2.png"><img src="/img/snapshot2.png" title="Youdao Dictionary" alt="有道词典" width="60%"/></a>
+            <a target="_blank" href="img/snapshot1.png"><img src="img/snapshot1.png" title="Fedora 22 beautiful face" alt="Fedora 22 桌面" width="60%"/></a>
+            <a target="_blank" href="img/snapshot2.png"><img src="img/snapshot2.png" title="Youdao Dictionary" alt="有道词典" width="60%"/></a>
+        </div>
+        <div id="issues">
+            <h3>汇报问题</h3>
+            <a target="_blank" href="//github.com/FZUG/repo/issues">GitHub Issues</a>
         </div>
     </div>
     <div mce_style="clear: both;" style="clear: both;"></div>
@@ -670,42 +652,19 @@ tbody tr:hover{
 
         <div id="footerleft">
             <p>Fedora 中文社区 (FZUG) 由世界各地讲中文的 Fedora 爱好者组成。点击了解中文社区<a href="//github.com/FZUG">开源项目</a>与<a href="//fedoraproject.org/wiki/FZUGCommunicate">沟通方式</a>。</p>
-            <p>本软件源由 <a href="//www.ucloud.cn/?ref=fdzh.org" target="_blank" data-original-title="服务器由 UCloud 赞助"><img height="10%" width="15%" src="/img/ucloud.png" alt="UCloud"></a> 提供服务器资源赞助，由 <a href="http://www.qiniu.com/?ref=fdzh.org" target="_blank" data-original-title="QINIU CDN"><img height="10%" width="15%" src="/img/qiniu-125x55.png" alt="QINIU"></a> 提供 CDN 服务支持。<!--www.b1.qiniudn.com/images/logo-3.png--></p>
+            <p>本软件源由 <a href="//www.ucloud.cn/?ref=fdzh.org" target="_blank" data-original-title="服务器由 UCloud 赞助"><img height="10%" width="15%" src="img/ucloud.png" alt="UCloud"></a> 提供服务器资源赞助，由 <a href="http://www.qiniu.com/?ref=fdzh.org" target="_blank" data-original-title="QINIU CDN"><img height="10%" width="15%" src="img/qiniu-125x55.png" alt="QINIU"></a> 提供 CDN 服务支持。<!--www.b1.qiniudn.com/images/logo-3.png--></p>
             <p>本网站主题在 <a href="//moeka.me" target="_blank">Miaomiao Li</a> 设计的 <a href="//mirrors.ustc.edu.cn/">USTC 开源镜像站主页</a>基础上定制而成。</p>
-            <p>Copyright &copy; 2015 FZUG</p>
+            <p>Copyright &copy; 2015, 2018 FZUG</p>
         </div>
 
         <div mce_style="clear: both;" style="clear: both;"></div>
     </div>
 </div>
 
-<div class="elevator-button" id="back-top" style="display: block;">
+<div id="back-top" style="display: block;">
   <a alt="返回顶部" title="返回顶部" href="#">↑</a>
 </div>
-
-<script>
-// Elevator script included on the page, already.
-
-window.onload = function() {
-  var elevator = new Elevator({
-    element: document.querySelector('.elevator-button'),
-    mainAudio: '//dn-copr.qbox.me/elevator.mp3',
-    endAudio: '//dn-copr.qbox.me/ding.mp3'
-  });
-}
-</script>
     </body> <!-- body end -->
-
-    <!-- Google analytics -->
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-47480129-12', 'auto');
-        ga('send', 'pageview');
-    </script>
 <!-- Designed by Miaomiao Li. It's a wonderful life! -->
 <!--
 vim:ai:et:sta:ts=4:sts=4:sw=4
