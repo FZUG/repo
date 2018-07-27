@@ -1,7 +1,7 @@
 %global repo dde-session-ui
 
 Name:           deepin-session-ui
-Version:        4.3.5
+Version:        4.4.7
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -30,6 +30,8 @@ Requires:       deepin-daemon
 Requires:       startdde
 Requires:       lightdm
 Provides:       lightdm-deepin-greeter%{?_isa} = %{version}-%{release}
+Provides:       deepin-notifications%{?_isa} = %{version}-%{release}
+Obsoletes:      deepin-notifications%{?_isa} < %{version}-%{release}
 
 %description
 This project include those sub-project:
@@ -45,8 +47,8 @@ This project include those sub-project:
 
 %prep
 %setup -q -n %{repo}-%{version}
-sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
-
+sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
+sed -i 's|default_background.jpg|default.png|' widgets/*.cpp boxframe/*.cpp
 sed -i 's|lib|libexec|' \
     misc/applications/deepin-toggle-desktop.desktop* \
     dde-osd/dde-osd_autostart.desktop \
@@ -90,6 +92,9 @@ EOF
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 4.4.7-1
+- Update to 4.4.7
+
 * Mon Mar 26 2018 mosquito <sensor.wen@gmail.com> - 4.3.5-1
 - Update to 4.3.5
 
