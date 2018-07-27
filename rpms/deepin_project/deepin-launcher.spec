@@ -1,13 +1,14 @@
 %global repo dde-launcher
 
 Name:           deepin-launcher
-Version:        4.3.2
+Version:        4.4.1
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-launcher
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
+BuildRequires:  cmake
 BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
@@ -17,21 +18,27 @@ BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5X11Extras)
-BuildRequires:  qt5-linguist
 Requires:       deepin-menu
 Requires:       deepin-daemon
 Requires:       startdde
 Requires:       hicolor-icon-theme
 
 %description
-Deepin desktop-environment - Launcher module
+%{summary}.
+
+%package devel
+Summary:        Development package for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description devel
+Header files and libraries for %{name}.
 
 %prep
 %setup -q -n %{repo}-%{version}
-sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
+sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 
 %build
-%qmake_qt5 PREFIX=%{_prefix} WITHOUT_UNINSTALL_APP=1
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DWITHOUT_UNINSTALL_APP=1 .
 %make_build
 
 %install
@@ -44,7 +51,13 @@ sed -i 's|lrelease|lrelease-qt5|g' translate_generation.sh
 %{_datadir}/dbus-1/services/*.service
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
+%files devel
+%{_includedir}/%{repo}/
+
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 4.4.1-1
+- Update to 4.4.1
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 4.3.2-1
 - Update to 4.3.2
 
