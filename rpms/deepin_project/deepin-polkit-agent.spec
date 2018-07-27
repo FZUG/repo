@@ -1,7 +1,7 @@
 %global repo dde-polkit-agent
 
 Name:           deepin-polkit-agent
-Version:        0.2.0
+Version:        0.2.1
 Release:        1%{?dist}
 Summary:        Deepin Polkit Agent
 License:        GPLv3
@@ -29,7 +29,8 @@ Header files and libraries for %{name}.
 %prep
 %setup -q -n %{repo}-%{version}
 sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
-sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.desktop
+sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.desktop \
+    pluginmanager.cpp
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -50,6 +51,9 @@ sed -i 's|lib|libexec|' dde-polkit-agent.pro polkit-dde-authentication-agent-1.d
 %{_includedir}/dpa/agent-extension.h
 
 %changelog
+* Wed Jul 18 2018 mosquito <sensor.wen@gmail.com> - 0.2.1-1
+- Update to 0.2.1
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 0.2.0-1
 - Update to 0.2.0
 
