@@ -1,5 +1,5 @@
 Name:           deepin-voice-recorder
-Version:        1.3.6.1
+Version:        1.3.7
 Release:        1%{?dist}
 Summary:        Deepin Voice Recorder
 License:        GPLv3
@@ -16,11 +16,11 @@ BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  qt5-linguist
 
 %description
-Deepin Voice Recorder
+%{summary}.
 
 %prep
 %setup -q
-sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' deepin-voice-recorder.pro
+sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' %{name}.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -53,6 +53,9 @@ fi
 %{_datadir}/icons/hicolor/*/apps/%{name}.svg
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 1.3.7-1
+- Update to 1.3.7
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.3.6.1-1
 - Update to 1.3.6.1
 
