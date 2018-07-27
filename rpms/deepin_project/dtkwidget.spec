@@ -1,5 +1,5 @@
 Name:           dtkwidget
-Version:        2.0.7.2
+Version:        2.0.9.1
 Release:        1%{?dist}
 Summary:        Deepin tool kit widget modules
 License:        GPLv3
@@ -23,6 +23,7 @@ BuildRequires:  pkgconfig(gsettings-qt)
 BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(libstartup-notification-1.0)
+BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xcb-util)
@@ -43,7 +44,6 @@ Header files and libraries for %{name}.
 
 %prep
 %setup -q
-sed -i 's|lrelease|lrelease-qt5|g' tools/translate_generation.sh
 sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 
 %build
@@ -73,6 +73,9 @@ sed -i 's|/lib|/libexec|' tools/svgc/svgc.pro
 %{_libdir}/lib%{name}.so
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 2.0.9.1-1
+- Update to 2.0.9.1
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 2.0.7.2-1
 - Update to 2.0.7.2
 
