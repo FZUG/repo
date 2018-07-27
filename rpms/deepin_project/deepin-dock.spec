@@ -1,7 +1,7 @@
 %global repo dde-dock
 
 Name:           deepin-dock
-Version:        4.6.2
+Version:        4.6.7
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -9,6 +9,7 @@ URL:            https://github.com/linuxdeepin/dde-dock
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  cmake
+BuildRequires:  pkgconfig(dde-network-utils)
 BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
 BuildRequires:  pkgconfig(gsettings-qt)
@@ -46,9 +47,10 @@ Header files and libraries for %{name}.
 sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 sed -i '/TARGETS/s|lib|%{_lib}|' plugins/*/CMakeLists.txt
 sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginloader.cpp
+sed -i -E '35d;/dpkg-architecture|EXIT/d' CMakeLists.txt
 
 %build
-%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} .
+%cmake -DCMAKE_INSTALL_PREFIX=%{_prefix} -DARCHITECTURE=%{_arch} .
 %make_build
 
 %install
@@ -60,7 +62,7 @@ sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginloader.cpp
 
 %files
 %license LICENSE
-%{_sysconfdir}/%{name}/indicator/keybord_layout.json
+%{_sysconfdir}/%{repo}/indicator/keybord_layout.json
 %{_bindir}/%{repo}
 %{_libdir}/%{repo}/
 %{_datadir}/%{repo}/
@@ -70,6 +72,9 @@ sed -i 's|/lib|/%{_lib}|' frame/controller/dockpluginloader.cpp
 %{_includedir}/%{repo}/
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 4.6.7-1
+- Update to 4.6.7
+
 * Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 4.6.2-1
 - Update to 4.6.2
 
