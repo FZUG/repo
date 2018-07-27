@@ -1,5 +1,5 @@
 Name:           deepin-image-viewer
-Version:        1.2.18
+Version:        1.2.23
 Release:        1%{?dist}
 Summary:        Deepin Image Viewer
 License:        GPLv3
@@ -29,7 +29,7 @@ BuildRequires:  libappstream-glib
 Requires:       hicolor-icon-theme
 
 %description
-Deepin Image Viewer
+%{summary}.
 
 %prep
 %setup -q
@@ -61,6 +61,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.appdata.
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 1.2.23-1
+- Update to 1.2.23
+
 * Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 1.2.18-1
 - Update to 1.2.18
 
