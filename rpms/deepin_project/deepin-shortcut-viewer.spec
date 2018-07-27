@@ -1,5 +1,5 @@
 Name:           deepin-shortcut-viewer
-Version:        1.3.4
+Version:        1.3.5
 Release:        1%{?dist}
 Summary:        Deepin Shortcut Viewer
 License:        GPLv3
@@ -31,6 +31,9 @@ The program displays a shortcut key window when a JSON data is passed.
 %{_bindir}/%{name}
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 1.3.5-1
+- Update to 1.3.5
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 1.3.4-1
 - Update to 1.3.4
 
