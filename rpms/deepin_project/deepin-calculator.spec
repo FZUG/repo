@@ -1,5 +1,5 @@
 Name:           deepin-calculator
-Version:        1.0.2
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        An easy to use calculator for ordinary users
 License:        GPLv3
@@ -16,7 +16,7 @@ BuildRequires:  desktop-file-utils
 Requires:       hicolor-icon-theme
 
 %description
-An easy to use calculator for ordinary users.
+%{summary}.
 
 %prep
 %setup -q
@@ -39,11 +39,13 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 %license LICENSE
 %{_bindir}/%{name}
 %{_datadir}/%{name}/
-%{_datadir}/dman/%{name}/
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Mon Jul 23 2018 mosquito <sensor.wen@gmail.com> - 1.0.4-1
+- Update to 1.0.4
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.0.2-1
 - Update to 1.0.2
 
