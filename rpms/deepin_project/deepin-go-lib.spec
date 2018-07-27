@@ -7,11 +7,11 @@
 # https://github.com/linuxdeepin/go-lib
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     pkg.deepin.io/lib
-%global   commit          cba7324e6dac0707c153f7444c808117de6d288a
+%global   commit          2d45507b63ba2da0c7b35c73b903068aa41a3ab4
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-deepin-go-lib
-Version:        1.2.6
+Version:        1.2.14
 Release:        1%{?dist}
 Summary:        Go bindings for Deepin Desktop Environment development
 License:        GPLv3
@@ -35,11 +35,14 @@ BuildRequires:  deepin-gir-generator
 BuildRequires:  dbus-x11
 BuildRequires:  iso-codes
 BuildRequires:  mobile-broadband-provider-info
+BuildRequires:  golang(github.com/linuxdeepin/go-x11-client)
 BuildRequires:  golang(github.com/BurntSushi/xgb/xproto)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil/xevent)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil/xprop)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil/xwindow)
+BuildRequires:  golang(github.com/cryptix/wav)
+BuildRequires:  golang(golang.org/x/net/context)
 BuildRequires:  golang(golang.org/x/image/bmp)
 BuildRequires:  golang(golang.org/x/image/tiff)
 BuildRequires:  golang(gopkg.in/check.v1)
@@ -54,11 +57,14 @@ BuildRequires:  pkgconfig(gdk-pixbuf-xlib-2.0)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libcanberra)
 
+Requires:       golang(github.com/linuxdeepin/go-x11-client)
 Requires:       golang(github.com/BurntSushi/xgb/xproto)
 Requires:       golang(github.com/BurntSushi/xgbutil)
 Requires:       golang(github.com/BurntSushi/xgbutil/xevent)
 Requires:       golang(github.com/BurntSushi/xgbutil/xprop)
 Requires:       golang(github.com/BurntSushi/xgbutil/xwindow)
+Requires:       golang(github.com/cryptix/wav)
+Requires:       golang(golang.org/x/net/context)
 Requires:       golang(golang.org/x/image/bmp)
 Requires:       golang(golang.org/x/image/tiff)
 
@@ -70,22 +76,31 @@ Provides:       golang(%{import_path}/arch) = %{version}-%{release}
 Provides:       golang(%{import_path}/archive) = %{version}-%{release}
 Provides:       golang(%{import_path}/archive/gzip) = %{version}-%{release}
 Provides:       golang(%{import_path}/archive/utils) = %{version}-%{release}
+Provides:       golang(%{import_path}/asound) = %{version}-%{release}
 Provides:       golang(%{import_path}/backlight/common) = %{version}-%{release}
 Provides:       golang(%{import_path}/backlight/display) = %{version}-%{release}
 Provides:       golang(%{import_path}/backlight/keyboard) = %{version}-%{release}
 Provides:       golang(%{import_path}/calendar) = %{version}-%{release}
 Provides:       golang(%{import_path}/calendar/lunar) = %{version}-%{release}
 Provides:       golang(%{import_path}/calendar/util) = %{version}-%{release}
+Provides:       golang(%{import_path}/cgroup) = %{version}-%{release}
 Provides:       golang(%{import_path}/dbus) = %{version}-%{release}
 Provides:       golang(%{import_path}/dbus/interfaces) = %{version}-%{release}
 Provides:       golang(%{import_path}/dbus/introspect) = %{version}-%{release}
 Provides:       golang(%{import_path}/dbus/property) = %{version}-%{release}
+Provides:       golang(%{import_path}/dbus1) = %{version}-%{release}
+Provides:       golang(%{import_path}/dbus1/introspect) = %{version}-%{release}
+Provides:       golang(%{import_path}/dbus1/prop) = %{version}-%{release}
+Provides:       golang(%{import_path}/dbusutil) = %{version}-%{release}
+Provides:       golang(%{import_path}/dbusutil/gsprop) = %{version}-%{release}
+Provides:       golang(%{import_path}/dbusutil/proxy) = %{version}-%{release}
 Provides:       golang(%{import_path}/encoding/kv) = %{version}-%{release}
 Provides:       golang(%{import_path}/event) = %{version}-%{release}
 Provides:       golang(%{import_path}/fsnotify) = %{version}-%{release}
 Provides:       golang(%{import_path}/gdkpixbuf) = %{version}-%{release}
 Provides:       golang(%{import_path}/gettext) = %{version}-%{release}
 Provides:       golang(%{import_path}/graphic) = %{version}-%{release}
+Provides:       golang(%{import_path}/gsettings) = %{version}-%{release}
 Provides:       golang(%{import_path}/initializer) = %{version}-%{release}
 Provides:       golang(%{import_path}/initializer/v2) = %{version}-%{release}
 Provides:       golang(%{import_path}/iso) = %{version}-%{release}
@@ -96,14 +111,17 @@ Provides:       golang(%{import_path}/mime) = %{version}-%{release}
 Provides:       golang(%{import_path}/mobileprovider) = %{version}-%{release}
 Provides:       golang(%{import_path}/notify) = %{version}-%{release}
 Provides:       golang(%{import_path}/notify/dbusnotify) = %{version}-%{release}
+Provides:       golang(%{import_path}/pam) = %{version}-%{release}
 Provides:       golang(%{import_path}/pinyin) = %{version}-%{release}
-Provides:       golang(%{import_path}/polkit) = %{version}-%{release}
-Provides:       golang(%{import_path}/polkit/policykit1) = %{version}-%{release}
 Provides:       golang(%{import_path}/procfs) = %{version}-%{release}
 Provides:       golang(%{import_path}/profile) = %{version}-%{release}
 Provides:       golang(%{import_path}/proxy) = %{version}-%{release}
 Provides:       golang(%{import_path}/pulse) = %{version}-%{release}
+Provides:       golang(%{import_path}/pulse/simple) = %{version}-%{release}
 Provides:       golang(%{import_path}/sound) = %{version}-%{release}
+Provides:       golang(%{import_path}/sound_effect) = %{version}-%{release}
+Provides:       golang(%{import_path}/sound_effect/theme) = %{version}-%{release}
+Provides:       golang(%{import_path}/stb_vorbis) = %{version}-%{release}
 Provides:       golang(%{import_path}/strv) = %{version}-%{release}
 Provides:       golang(%{import_path}/tasker) = %{version}-%{release}
 Provides:       golang(%{import_path}/timer) = %{version}-%{release}
@@ -208,8 +226,6 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %gotest %{import_path}/notify
 %gotest %{import_path}/notify/dbusnotify
 %gotest %{import_path}/pinyin
-%gotest %{import_path}/polkit
-%gotest %{import_path}/polkit/policykit1
 %gotest %{import_path}/procfs ||:
 %gotest %{import_path}/profile
 %gotest %{import_path}/proxy
@@ -235,6 +251,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %license LICENSE
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 1.2.14-1
+- Update to 1.2.14
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.2.6-1
 - Update to 1.2.6
 
