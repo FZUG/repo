@@ -1,7 +1,7 @@
 %global repo dde-calendar
 
 Name:           deepin-calendar
-Version:        1.2.2
+Version:        1.2.3
 Release:        1%{?dist}
 Summary:        Calendar for Deepin Desktop Environment
 License:        GPLv3+
@@ -11,7 +11,7 @@ Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 BuildRequires:  deepin-gettext-tools
 BuildRequires:  desktop-file-utils
 BuildRequires:  qt5-linguist
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Gui)
@@ -45,6 +45,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{repo}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{repo}.svg
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 1.2.3-1
+- Update to 1.2.3
+
 * Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 1.2.2-1
 - Update to 1.2.2
 
