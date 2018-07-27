@@ -1,5 +1,5 @@
 Name:           deepin-sound-theme
-Version:        15.10.2
+Version:        15.10.3
 Release:        1%{?dist}
 Summary:        Deepin sound theme
 License:        GPLv3
@@ -24,9 +24,12 @@ Sound files for the Deeping Desktop Environment.
 %dir %{_datadir}/sounds/deepin/
 %dir %{_datadir}/sounds/deepin/stereo/
 %{_datadir}/sounds/deepin/index.theme
-%{_datadir}/sounds/deepin/stereo/*.ogg
+%{_datadir}/sounds/deepin/stereo/*.wav
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 15.10.3-1
+- Update to 15.10.3
+
 * Wed Nov 15 2017 mosquito <sensor.wen@gmail.com> - 15.10.2-1
 - Update to 15.10.2
 
