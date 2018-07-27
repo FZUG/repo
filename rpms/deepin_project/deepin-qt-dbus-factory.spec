@@ -2,7 +2,7 @@
 %global repo   dde-qt-dbus-factory
 
 Name:           deepin-qt-dbus-factory
-Version:        1.0.1
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        A repository stores auto-generated Qt5 dbus code
 # The entire source code is GPLv3+ except
@@ -53,6 +53,9 @@ Header files and libraries for %{name}.
 %{_libdir}/lib%{soname}.so
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 1.0.3-1
+- Update to 1.0.3
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 1.0.1-1
 - Update to 1.0.1
 
