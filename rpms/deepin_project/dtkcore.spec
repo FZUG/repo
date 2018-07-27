@@ -1,5 +1,5 @@
 Name:           dtkcore
-Version:        2.0.7.1
+Version:        2.0.9
 Release:        1%{?dist}
 Summary:        Deepin tool kit core modules
 License:        GPLv3
@@ -21,8 +21,8 @@ Header files and libraries for %{name}.
 %prep
 %setup -q
 sed -i 's|qmake|qmake-qt5|' src/dtk_module.prf
-sed -i 's|tests|tools|' dtkcore.pro
 sed -i 's|/lib|/libexec|' tools/settings/settings.pro
+sed -i 's|lrelease|lrelease-qt5|' tools/script/dtk-translate.py src/dtk_translation.prf
 
 %build
 %qmake_qt5 PREFIX=%{_prefix} LIB_INSTALL_DIR=%{_libdir}
@@ -50,11 +50,13 @@ sed -i 's|/lib|/libexec|' tools/settings/settings.pro
 %{_qt5_archdatadir}/mkspecs/modules/*.pri
 %{_libdir}/cmake/Dtk/DtkConfig.cmake
 %{_libdir}/cmake/DtkCore/DtkCoreConfig.cmake
-%{_libdir}/libdtk/modules/version.pri
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/lib*.so
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 2.0.9-1
+- Update to 2.0.9
+
 * Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 2.0.7.1-1
 - Update to 2.0.7.1
 
