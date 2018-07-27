@@ -1,5 +1,5 @@
 Name:           dtkwm
-Version:        2.0.7
+Version:        2.0.9
 Release:        1%{?dist}
 Summary:        Deepin graphical user interface library
 License:        GPLv3
@@ -52,10 +52,16 @@ Header files and libraries for %{name}.
 
 %files devel
 %{_includedir}/libdtk-*/
+%{_qt5_archdatadir}/mkspecs/modules/qt_lib_dtkwm.pri
+%dir %{_libdir}/cmake/DtkWm/
+%{_libdir}/cmake/DtkWm/DtkWmConfig.cmake
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/*.so
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 2.0.9-1
+- Update to 2.0.9
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 2.0.7-1
 - Update to 2.0.7
 
