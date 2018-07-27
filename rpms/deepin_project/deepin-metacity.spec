@@ -1,5 +1,5 @@
 Name:           deepin-metacity
-Version:        3.22.15
+Version:        3.22.19
 Release:        1%{?dist}
 Summary:        2D window manager for Deepin
 License:        GPLv2+
@@ -41,6 +41,7 @@ Header files and libraries for %{name}.
 %prep
 %setup -q
 sed -i '/Window/s|Win|X-Win|' src/metacity-wm.desktop.in
+sed -i 's|default_background.jpg|default.png|' src/ui/*.c
 
 %build
 ./autogen.sh
@@ -60,13 +61,9 @@ find %{buildroot} -name '*.la' -delete
 desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop \
   %{buildroot}%{_datadir}/gnome/wm-properties/%{name}-wm.desktop
 
-%post
-/sbin/ldconfig
-/usr/bin/update-desktop-database -q ||:
+%post -p /sbin/ldconfig
 
-%postun
-/sbin/ldconfig
-/usr/bin/update-desktop-database -q ||:
+%postun -p /sbin/ldconfig
 
 %files -f %{name}.lang
 %doc README
@@ -91,6 +88,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop \
 %{_libdir}/lib%{name}*.so
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.22.19-1
+- Update to 3.22.19
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.22.15-1
 - Update to 3.22.15
 
