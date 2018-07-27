@@ -1,5 +1,5 @@
 Name:           deepin-gtk-theme
-Version:        17.10.6
+Version:        17.10.7
 Release:        1%{?dist}
 Summary:        Deepin GTK Theme
 License:        GPLv3
@@ -8,7 +8,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
 %description
-Deepin GTK Theme
+%{summary}.
 
 %prep
 %setup -q
@@ -25,6 +25,9 @@ Deepin GTK Theme
 %{_datadir}/themes/deepin-dark/
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 17.10.7-1
+- Update to 17.10.7
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 17.10.6-1
 - Update to 17.10.6
 
