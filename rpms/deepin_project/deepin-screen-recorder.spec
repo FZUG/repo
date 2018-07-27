@@ -1,5 +1,5 @@
 Name:           deepin-screen-recorder
-Version:        2.7.3
+Version:        2.7.5
 Release:        1%{?dist}
 Summary:        Deepin Screen Recorder
 License:        GPLv3
@@ -7,7 +7,7 @@ URL:            https://github.com/linuxdeepin/deepin-screen-recorder
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(dtkwm)
 BuildRequires:  pkgconfig(libprocps)
 BuildRequires:  pkgconfig(Qt5Core)
@@ -21,15 +21,17 @@ BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb)
 BuildRequires:  pkgconfig(xcb-util)
+BuildRequires:  desktop-file-utils
+Requires:       hicolor-icon-theme
 Requires:       byzanz
 Requires:       ffmpeg
 
 %description
-Deepin Screen Recorder
+%{summary}.
 
 %prep
 %setup -q
-sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' deepin-screen-recorder.pro
+sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' %{name}.pro
 
 %build
 %qmake_qt5 PREFIX=%{_prefix}
@@ -38,19 +40,8 @@ sed -i 's|=lupdate|=lupdate-qt5|;s|=lrelease|=lrelease-qt5|' deepin-screen-recor
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 
 %files
 %doc README.md
@@ -63,6 +54,9 @@ fi
 %{_datadir}/dbus-1/services/com.deepin.ScreenRecorder.service
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 2.7.5-1
+- Update to 2.7.5
+
 * Fri Feb 16 2018 mosquito <sensor.wen@gmail.com> - 2.7.3-1
 - Update to 2.7.3
 
