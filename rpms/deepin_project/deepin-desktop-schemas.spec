@@ -1,5 +1,5 @@
 Name:           deepin-desktop-schemas
-Version:        3.2.9
+Version:        3.2.15
 Release:        1%{?dist}
 Summary:        GSettings deepin desktop-wide schemas
 License:        GPLv3
@@ -16,7 +16,7 @@ Requires:       deepin-sound-theme
 Requires:       deepin-artwork-themes
 
 %description
-GSettings deepin desktop-wide schemas.
+%{summary}.
 
 %prep
 %setup -q
@@ -40,6 +40,9 @@ make test
 %{_datadir}/glib-2.0/schemas/*
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.2.15-1
+- Update to 3.2.15
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.2.9-1
 - Update to 3.2.9
 
