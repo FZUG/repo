@@ -1,5 +1,5 @@
 Name:           deepin-icon-theme
-Version:        15.12.54
+Version:        15.12.58
 Release:        1%{?dist}
 Summary:        Icons for the Deepin Desktop Environment
 License:        GPLv3
@@ -10,7 +10,7 @@ BuildRequires:  python-devel
 Requires:       hicolor-icon-theme
 
 %description
-Icons for the Deepin Desktop Environment.
+%{summary}.
 
 %prep
 %setup -q
@@ -44,6 +44,9 @@ fi
 %{_datadir}/icons/Sea/
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 15.12.58-1
+- Update to 15.12.58
+
 * Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 15.12.54-1
 - Update to 15.12.54
 
