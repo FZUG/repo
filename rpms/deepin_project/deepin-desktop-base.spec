@@ -1,5 +1,5 @@
 Name:           deepin-desktop-base
-Version:        2017.11.1
+Version:        2018.7.23
 Release:        1%{?dist}
 Summary:        Base component for Deepin
 License:        GPLv3
@@ -22,7 +22,7 @@ This package provides some components for Deepin desktop environment.
 # Remove Deepin distro's lsb-release
 # Don't override systemd timeouts
 # Remove apt-specific templates
-sed -i -E '/lsb-release|systemd|apt/d' Makefile
+sed -i -E '/lsb-release|systemd|apt|back/d' Makefile
 
 # Fix data path
 sed -i 's|/usr/lib|%{_datadir}|' Makefile
@@ -40,17 +40,17 @@ ln -sfv %{_datadir}/deepin/desktop-version %{buildroot}/etc/deepin-version
 %license LICENSE
 %config(noreplace) %{_sysconfdir}/appstore.json
 %{_sysconfdir}/deepin-version
-%dir %{_datadir}/backgrounds/deepin/
-%{_datadir}/backgrounds/deepin/desktop.jpg
 %dir %{_datadir}/deepin/
 %{_datadir}/deepin/desktop-version
 %{_datadir}/distro-info/deepin.csv
 %{_datadir}/i18n/i18n_dependent.json
 %{_datadir}/i18n/language_info.json
 %{_datadir}/plymouth/deepin-logo.png
-%{_var}/cache/image-blur/*.jpg
 
 %changelog
+* Mon Jul 23 2018 mosquito <sensor.wen@gmail.com> - 2018.7.23-1
+- Update to 2018.7.23
+
 * Mon Nov 27 2017 mosquito <sensor.wen@gmail.com> - 2017.11.1-1
 - Update to 2017.11.1
 
