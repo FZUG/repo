@@ -7,12 +7,12 @@
 # https://github.com/linuxdeepin/go-x11-client
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     %{provider_prefix}
-%global   commit          a10a839c0f79ea80d2b4309c6f2d120f98664c5a
+%global   commit          70dbb86c0a0cb10ebc4e6cbbb21dfa5d5aff5570
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.2.git%{shortcommit}%{?dist}
+Release:        0.3.git%{shortcommit}%{?dist}
 Summary:        A X11 client Go bindings for Deepin Desktop Environment
 License:        GPLv3
 URL:            https://%{provider_prefix}
@@ -31,14 +31,19 @@ Summary:        %{summary}
 BuildArch:      noarch
 BuildRequires:  golang(gopkg.in/check.v1)
 BuildRequires:  golang(golang.org/x/text/encoding/charmap)
+BuildRequires:  golang(github.com/stretchr/testify/assert)
 Requires:       golang(golang.org/x/text/encoding/charmap)
 Provides:       golang(%{import_path}) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/composite) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/damage) = %{version}-%{release}
+Provides:       golang(%{import_path}/ext/dpms) = %{version}-%{release}
+Provides:       golang(%{import_path}/ext/ge) = %{version}-%{release}
+Provides:       golang(%{import_path}/ext/input) = %{version}-%{release}
+Provides:       golang(%{import_path}/ext/randr) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/record) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/render) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/screensaver) = %{version}-%{release}
-Provides:       golang(%{import_path}/ext/shape) = %{version}-%{release}
+Provides:       golang(%{import_path}/ext/shm) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/test) = %{version}-%{release}
 Provides:       golang(%{import_path}/ext/xfixes) = %{version}-%{release}
 Provides:       golang(%{import_path}/util/atom) = %{version}-%{release}
@@ -121,6 +126,9 @@ export GOPATH=%{buildroot}%{gopath}:%{gopath}
 %files unit-test-devel -f unit-test-devel.file-list
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 0-0.3.git70dbb86
+- Update to 70dbb86
+
 * Sat Oct 14 2017 mosquito <sensor.wen@gmail.com> - 0-0.2.gita10a839
 - Update to a10a839
 
