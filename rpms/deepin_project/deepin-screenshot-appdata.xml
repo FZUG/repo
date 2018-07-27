@@ -21,6 +21,13 @@
   <url type="bugtracker">https://github.com/linuxdeepin/deepin-screenshot/issues/</url>
   <releases>
     <release version="4.0.9" date="2017-08-18"></release>
+    <release version="4.0.10" date="2017-10-25"></release>
+    <release version="4.0.11" date="2018-03-07"></release>
+    <release version="4.0.12" date="2018-05-30"></release>
+    <release version="4.0.13" date="2018-05-30"></release>
+    <release version="4.0.14" date="2018-05-31"></release>
+    <release version="4.0.15" date="2018-06-07"></release>
+    <release version="4.0.16" date="2018-06-12"></release>
   </releases>
   <project_license>GPL-3.0</project_license>
   <developer_name>Linux Deepin</developer_name>
