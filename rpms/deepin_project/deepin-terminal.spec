@@ -1,7 +1,7 @@
 %global _terminals gnome-terminal mate-terminal xfce4-terminal lxterminal qterminal qterminal-qt5 terminology yakuake fourterm roxterm lilyterm termit xterm mrxvt
 
 Name:           deepin-terminal
-Version:        2.9.2
+Version:        3.0.1
 Release:        1%{?dist}
 Summary:        Default terminal emulation application for Deepin
 License:        GPLv3
@@ -31,7 +31,7 @@ Recommends:     zssh
 Requires:       %{name}-data = %{version}-%{release}
 
 %description
-Default terminal emulation application for Deepin.
+%{summary}.
 
 %package data
 Summary:        Data files of Deepin Terminal
@@ -44,10 +44,9 @@ The %{name}-data package provides shared data for Deepin Terminal.
 %prep
 %setup -q
 %patch0 -p1 -b .unbundle_vte
-sed -i 's|return __FILE__;|return "%{_datadir}/%{name}/project_path.c";|' project_path.c
 sed -i 's|/usr/lib/%{name}/zssh|%{_bindir}/zssh|' ssh_login.sh
 sed -i '/ssh_login/s|lib|libexec|' lib/utils.vala
-sed -i 's|2.7|2.9|' lib/constant.vala
+sed -i 's|2.7|3.0|' lib/constant.vala
 
 # remove es_419 locale
 rm -rf po/es_419/
@@ -100,11 +99,13 @@ fi
 
 %files data -f %{name}.lang
 %{_datadir}/%{name}/
-%{_datadir}/dman/%{name}/
 %{_datadir}/icons/hicolor/*/apps/%{name}*
 %{_datadir}/applications/%{name}.desktop
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.0.1-1
+- Update to 3.0.1
+
 * Thu Dec  7 2017 mosquito <sensor.wen@gmail.com> - 2.9.2-1
 - Update to 2.9.2
 

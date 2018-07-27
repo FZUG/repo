@@ -8,9 +8,9 @@
  pkg_check_modules(GEE REQUIRED gee-0.8)
  pkg_check_modules(GIO REQUIRED gio-unix-2.0)
  pkg_check_modules(RSVG REQUIRED librsvg-2.0)
-@@ -25,22 +26,6 @@
- pkg_check_modules(FONTCONFIG REQUIRED fontconfig)
- pkg_check_modules(GLIB REQUIRED glib-2.0)
+@@ -44,22 +45,6 @@
+ )
+ endif()
  
 -ExternalProject_Add(Vte-0.29
 -  SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rdparty/vte-0.50.1
@@ -31,7 +31,7 @@
  set(CFLAGS
  	${GIO_CFLAGS}
  	${GTK3_CFLAGS} ${GTK3_CFLAGS_OTHER}
-@@ -60,9 +45,8 @@
+@@ -79,9 +64,8 @@
  	${RSVG_INCLUDE_DIRS}
  	${JsonGlib_INCLUDE_DIRS}
  	${LIBSECRET_INCLUDE_DIRS}
@@ -42,7 +42,7 @@
  include_directories(${INCLUDE_PATHS})
  set(LIBS
  	${GIO_LIBRARIES}
-@@ -72,17 +56,12 @@
+@@ -91,17 +75,12 @@
  	${RSVG_LIBRARIES}
  	${JsonGlib_LIBRARIES}
  	${LIBSECRET_LIBRARIES}
@@ -59,9 +59,9 @@
 -	gnutls
 -	pcre2-8
  )
- vala_precompile(VALA_C
- 	./lib/animation.vala
-@@ -165,8 +144,7 @@
+ SET(APP_SOURCES, "")
+ FILE(GLOB valalist LIST_FILES true */*.vala)
+@@ -137,8 +116,7 @@
  	librsvg-2.0
  )
  add_executable(${target} ${VALA_C} ${CMAKE_SOURCE_DIR}/project_path.c ${CMAKE_SOURCE_DIR}/lib/font.c)
@@ -71,12 +71,12 @@
  
  FILE(GLOB children LIST_DIRECTORIES true po/*)
  SET(dirlist "")
-@@ -183,7 +161,7 @@
- endforeach()
+@@ -170,7 +148,7 @@
+ ENDFOREACH(lang)
  
  INSTALL (TARGETS ${target} DESTINATION bin)
 -INSTALL (PROGRAMS ssh_login.sh ${CMAKE_SOURCE_DIR}/3rdparty/zssh-1.5c/zssh DESTINATION lib/${target})
 +INSTALL (PROGRAMS ssh_login.sh DESTINATION libexec/${target})
- INSTALL (FILES hicolor/32x32/deepin-terminal.png DESTINATION share/icons/hicolor/32x32/apps)
- INSTALL (FILES hicolor/48x48/deepin-terminal.png DESTINATION share/icons/hicolor/48x48/apps)
- INSTALL (FILES hicolor/96x96/deepin-terminal.png DESTINATION share/icons/hicolor/96x96/apps)
+ INSTALL (FILES hicolor/32x32/${target}.png DESTINATION share/icons/hicolor/32x32/apps)
+ INSTALL (FILES hicolor/48x48/${target}.png DESTINATION share/icons/hicolor/48x48/apps)
+ INSTALL (FILES hicolor/96x96/${target}.png DESTINATION share/icons/hicolor/96x96/apps)
