@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        3.2.3
+Version:        3.2.8
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -58,20 +58,6 @@ sed -i '/dtk2/s|lib|libexec|' src/CMakeLists.txt
 
 %find_lang %{name} --with-qt
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-
 %files -f %{name}.lang
 %doc README.md
 %license LICENSE
@@ -80,7 +66,6 @@ fi
 %{_datadir}/%{name}/translations/%{name}*.qm
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
-%{_datadir}/dman/%{name}/
 
 %files devel
 %{_includedir}/libdmr/*.h
@@ -88,6 +73,9 @@ fi
 %{_libdir}/libdmr.so
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.2.8-1
+- Update to 3.2.8
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.2.3-1
 - Update to 3.2.3
 
