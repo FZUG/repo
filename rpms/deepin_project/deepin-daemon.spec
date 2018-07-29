@@ -2,7 +2,7 @@
 %global ds_url https://github.com/linuxdeepin/default-settings
 
 Name:           deepin-daemon
-Version:        3.2.12
+Version:        3.2.21
 Release:        1%{?dist}
 Summary:        Daemon handling the DDE session settings
 License:        GPLv3
@@ -48,6 +48,7 @@ BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/lib)
 BuildRequires:  golang(pkg.deepin.io/lib/fsnotify)
 BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
+BuildRequires:  golang(github.com/linuxdeepin/go-dbus-factory)
 BuildRequires:  golang(github.com/linuxdeepin/go-x11-client)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
@@ -98,19 +99,19 @@ sed -i '/systemd/s|lib|usr/lib|' Makefile
 sed -i 's|lib/NetworkManager|libexec|' network/utils_test.go
 sed -i 's|/usr/lib|%{_libexecdir}|' \
     misc/*services/*.service \
+    misc/etc/pam.d/deepin-auth \
     misc/applications/deepin-toggle-desktop.desktop \
+    misc/dde-daemon/gesture.json \
     misc/dde-daemon/keybinding/system_actions.json \
     keybinding/shortcuts/system_shortcut.go \
     session/power/constant.go \
     session/power/lid_switch.go \
     service_trigger/manager.go \
     bin/dde-system-daemon/main.go \
-    bin/search/main.go \
-    accounts/user.go
+    bin/search/main.go
 
 # Fix grub.cfg path
 sed -i 's|boot/grub|boot/grub2|' grub2/{theme,log,entry,grub_params}.go
-sed -i 's|default_background.jpg|default.png|' accounts/user.go
 
 %build
 export GOPATH="$(pwd)/build:%{gopath}"
@@ -166,6 +167,8 @@ fi
 %files -f %{repo}.lang
 %doc README.md
 %license LICENSE
+%{_sysconfdir}/pam.d/deepin-auth
+%{_sysconfdir}/pam.d/deepin-auth-keyboard
 %{_libexecdir}/%{name}/
 %{_sysusersdir}/%{name}.conf
 %{_prefix}/lib/systemd/logind.conf.d/10-%{name}.conf
@@ -181,8 +184,12 @@ fi
 %{_fontconfig_templatedir}/*.conf
 %{_fontconfig_confdir}/*.conf
 %{_var}/cache/appearance/
+%{_var}/lib/polkit-1/localauthority/10-vendor.d/com.deepin.daemon.Accounts.pkla
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 3.2.21-1
+- Update to 3.2.21
+
 * Sat Mar 24 2018 mosquito <sensor.wen@gmail.com> - 3.2.12-1
 - Update to 3.2.12
 
