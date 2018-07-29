@@ -7,7 +7,7 @@
 %endif
 
 Name:           deepin-api
-Version:        3.1.22
+Version:        3.1.27
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
@@ -36,6 +36,7 @@ BuildRequires:  deepin-gettext-tools
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(github.com/linuxdeepin/go-dbus-factory)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
 BuildRequires:  golang(github.com/disintegration/imaging)
@@ -54,11 +55,19 @@ BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgb/randr)
 BuildRequires:  golang(github.com/BurntSushi/xgb/xproto)
 BuildRequires:  golang(github.com/disintegration/imaging)
+BuildRequires:  golang(github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore)
+BuildRequires:  golang(github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager)
+BuildRequires:  golang(github.com/linuxdeepin/go-x11-client)
+BuildRequires:  golang(github.com/linuxdeepin/go-x11-client/ext/randr)
 BuildRequires:  golang(github.com/nfnt/resize)
 Requires:       golang(github.com/BurntSushi/xgb)
 Requires:       golang(github.com/BurntSushi/xgb/randr)
 Requires:       golang(github.com/BurntSushi/xgb/xproto)
 Requires:       golang(github.com/disintegration/imaging)
+Requires:       golang(github.com/linuxdeepin/go-dbus-factory/com.deepin.lastore)
+Requires:       golang(github.com/linuxdeepin/go-dbus-factory/com.deepin.sessionmanager)
+Requires:       golang(github.com/linuxdeepin/go-x11-client)
+Requires:       golang(github.com/linuxdeepin/go-x11-client/ext/randr)
 Requires:       golang(github.com/nfnt/resize)
 Provides:       golang(%{import_path}/blurimage) = %{version}-%{release}
 Provides:       golang(%{import_path}/drandr) = %{version}-%{release}
@@ -66,6 +75,7 @@ Provides:       golang(%{import_path}/dxinput) = %{version}-%{release}
 Provides:       golang(%{import_path}/dxinput/utils) = %{version}-%{release}
 Provides:       golang(%{import_path}/i18n_dependent) = %{version}-%{release}
 Provides:       golang(%{import_path}/lang_info) = %{version}-%{release}
+Provides:       golang(%{import_path}/language_support) = %{version}-%{release}
 Provides:       golang(%{import_path}/powersupply) = %{version}-%{release}
 Provides:       golang(%{import_path}/powersupply/battery) = %{version}-%{release}
 Provides:       golang(%{import_path}/session) = %{version}-%{release}
@@ -127,6 +137,7 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %files
 %doc README.md
 %license LICENSE
+%{_bindir}/dde-open
 %{_libexecdir}/%{name}/
 %{_unitdir}/*.service
 %{_datadir}/dbus-1/services/*.service
@@ -140,6 +151,9 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.1.27-1
+- Update to 3.1.27
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.22-1
 - Update to 3.1.22
 
