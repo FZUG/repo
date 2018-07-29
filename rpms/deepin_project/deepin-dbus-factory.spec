@@ -3,7 +3,7 @@
 %global   import_path     dbus
 
 Name:           golang-deepin-%{repo}
-Version:        3.1.14
+Version:        3.1.17
 Release:        1%{?dist}
 Summary:        Golang DBus factory for Deepin Desktop Environment
 License:        GPLv3+
@@ -51,6 +51,9 @@ building other packages which use import path with
 %{gopath}/src/dbus/
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.17-1
+- Update to 3.1.17
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.14-1
 - Update to 3.1.14
 
