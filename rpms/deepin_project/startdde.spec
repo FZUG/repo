@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.26
+Version:        3.1.34
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -7,11 +7,12 @@ URL:            https://github.com/linuxdeepin/startdde
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 ExclusiveArch:  %{?go_arches:%{go_arches}}%{!?go_arches:%{ix86} x86_64 %{arm}}
-BuildRequires:  golang
+BuildRequires:  golang jq
 BuildRequires:  deepin-gir-generator
 BuildRequires:  golang-deepin-dbus-factory-devel
 BuildRequires:  golang(pkg.deepin.io/dde/api/dxinput)
 BuildRequires:  golang(pkg.deepin.io/lib)
+BuildRequires:  golang(github.com/linuxdeepin/go-dbus-factory)
 BuildRequires:  golang(github.com/cryptix/wav)
 BuildRequires:  golang(github.com/BurntSushi/xgb)
 BuildRequires:  golang(github.com/BurntSushi/xgbutil)
@@ -28,7 +29,6 @@ BuildRequires:  pkgconfig(xi)
 BuildRequires:  pkgconfig(systemd)
 %{?systemd_requires}
 Requires:       deepin-daemon
-Requires:       deepin-wm-switcher
 Requires:       deepin-wm
 Requires:       deepin-metacity
 
@@ -40,10 +40,7 @@ custom applications which compliant with xdg autostart specification.
 %setup -q
 
 sed -i '/polkit-1/s|lib|libexec|' watchdog/dde_polkit_agent.go
-sed -i '/deepin-daemon/s|lib|libexec|g' Makefile session.go
-
-# Fix systemd path
-sed -i 's|/lib/systemd|/usr/lib/systemd|g' Makefile
+sed -i '/deepin-daemon/s|lib|libexec|' session*.go misc/auto_launch/*.json
 
 %build
 export GOPATH="%{gopath}"
@@ -67,11 +64,16 @@ BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
 %license LICENSE
 %{_bindir}/%{name}
 %{_sbindir}/deepin-session
+%{_sbindir}/deepin-fix-xauthority-perm
 %{_datadir}/xsessions/deepin.desktop
 %{_datadir}/lightdm/lightdm.conf.d/60-deepin.conf
 %{_datadir}/%{name}/auto_launch.json
+%{_datadir}/%{name}/memchecker.json
 
 %changelog
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.34-1
+- Update to 3.1.34
+
 * Tue Mar 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.26-1
 - Update to 3.1.26
 
