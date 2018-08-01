@@ -7,6 +7,8 @@ Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
+# Option to disable ffmpeg
+Patch0:         %{url}/commit/b52b8dc.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-gettext-tools
@@ -20,9 +22,6 @@ BuildRequires:  pkgconfig(dframeworkdbus) >= 2.0
 BuildRequires:  pkgconfig(deepin-anything-server-lib)
 BuildRequires:  pkgconfig(gtk+-2.0)
 BuildRequires:  pkgconfig(gsettings-qt)
-# deepin-movie-devel
-BuildRequires:  pkgconfig(libdmr)
-BuildRequires:  pkgconfig(libffmpegthumbnailer)
 BuildRequires:  pkgconfig(libsecret-1)
 BuildRequires:  pkgconfig(poppler-cpp)
 BuildRequires:  pkgconfig(polkit-agent-1)
@@ -72,6 +71,7 @@ Deepin desktop environment - desktop module.
 
 %prep
 %setup -q -n %{repo}-%{version}
+%patch0 -p1 -b .disable_ffmpeg
 
 # fix file permissions
 find -type f -perm 775 -exec chmod 644 {} \;
@@ -85,7 +85,7 @@ sed -i 's|lib/gvfs|libexec|' %{repo}-lib/gvfs/networkmanager.cpp
 sed -i 's|%{_datadir}|%{_libdir}|' dde-sharefiles/appbase.pri
 
 %build
-%qmake_qt5 PREFIX=%{_prefix} QMAKE_CFLAGS_ISYSTEM= IS_PLATFORM_FEDORA=YES
+%qmake_qt5 PREFIX=%{_prefix} QMAKE_CFLAGS_ISYSTEM= CONFIG+=DISABLE_FFMPEG
 %make_build
 
 %install
