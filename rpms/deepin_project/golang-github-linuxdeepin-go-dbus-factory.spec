@@ -7,12 +7,12 @@
 # https://github.com/linuxdeepin/go-dbus-factory
 %global   provider_prefix %{provider}.%{provider_tld}/%{project}/%{repo}
 %global   import_path     %{provider_prefix}
-%global   commit          78f068577354c1abc38755b40b75955bf681f06f
+%global   commit          6184b97809e25755a9931b344ca47c63555117a6
 %global   shortcommit     %(c=%{commit}; echo ${c:0:7})
 
 Name:           golang-%{provider}-%{project}-%{repo}
 Version:        0
-Release:        0.1.git%{shortcommit}%{?dist}
+Release:        0.2.git%{shortcommit}%{?dist}
 Summary:        GO DBus factory for Deepin Desktop Environment
 License:        GPLv3
 URL:            https://%{provider_prefix}
@@ -95,5 +95,8 @@ cp -a com.* org.* net.* object_manager %{buildroot}%{gopath}/src/%{import_path}/
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 0-0.2.git6184b97
+- Update to 6184b97
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 0-0.1.git67aca0b
 - Initial package build
