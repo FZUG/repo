@@ -1,7 +1,7 @@
 %global repo dde-dock
 
 Name:           deepin-dock
-Version:        4.6.7
+Version:        4.6.9
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Dock module
 License:        GPLv3
@@ -72,6 +72,9 @@ sed -i -E '35d;/dpkg-architecture|EXIT/d' CMakeLists.txt
 %{_includedir}/%{repo}/
 
 %changelog
+* Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 4.6.9-1
+- Update to 4.6.9
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 4.6.7-1
 - Update to 4.6.7
 
