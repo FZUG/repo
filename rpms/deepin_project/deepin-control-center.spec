@@ -1,7 +1,7 @@
 %global repo dde-control-center
 
 Name:           deepin-control-center
-Version:        4.6.1
+Version:        4.6.2
 Release:        1%{?dist}
 Summary:        New control center for Linux Deepin
 License:        GPLv3
@@ -77,6 +77,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop ||:
 %{_datadir}/%{repo}/
 
 %changelog
+* Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 4.6.2-1
+- Update to 4.6.2
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 4.6.1-1
 - Update to 4.6.1
 
