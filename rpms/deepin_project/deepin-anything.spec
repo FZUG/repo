@@ -1,3 +1,5 @@
+%global module  deepin-anything
+
 Name:           deepin-anything
 Version:        0.0.2
 Release:        1%{?dist}
@@ -8,10 +10,19 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  qt5-linguist
 BuildRequires:  pkgconfig(Qt5Gui)
-Requires:       dkms
 
 %description
 %{summary}.
+
+%package dkms
+Summary:        %{name} dkms package
+BuildArch:      noarch
+Requires(post): dkms
+Requires(post): kernel-devel
+
+%description dkms
+This package contains %{name} module wrapped for
+the DKMS framework.
 
 %package devel
 Summary:        Development package for %{name}
@@ -35,10 +46,31 @@ sed -i 's|/usr/lib/$(DEB_HOST_MULTIARCH)|$(LIBDIR)|
 
 %install
 %make_install VERSION=%{version} LIBDIR=%{_libdir}
+install -m644 debian/%{name}-dkms.dkms %{buildroot}%{_usrsrc}/%{name}-%{version}/dkms.conf
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
+
+%post dkms
+dkms add -m %{module} -v %{version} --rpm_safe_upgrade
+
+# Try building it for the current kernel
+if [ `uname -r | grep -c "BOOT"` -eq 0 ] && [ -e /lib/modules/`uname -r`/build/include ]; then
+    dkms build -m %{module} -v %{version}
+    dkms install -m %{module} -v %{version}
+elif [ `uname -r | grep -c "BOOT"` -gt 0 ]; then
+    echo -e ""
+    echo -e "Module build for the currently running kernel was skipped since you"
+    echo -e "are running a BOOT variant of the kernel."
+else
+    echo -e ""
+    echo -e "Module build for the currently running kernel was skipped since the"
+    echo -e "kernel headers for this kernel do not seem to be installed."
+fi
+
+%preun dkms
+dkms remove -m %{module} -v %{version} --all --rpm_safe_upgrade
 
 %files
 %doc README.md
@@ -48,6 +80,7 @@ sed -i 's|/usr/lib/$(DEB_HOST_MULTIARCH)|$(LIBDIR)|
 %{_libdir}/lib*.so.*
 %{_unitdir}/%{name}-server.service
 
+%files dkms
 %{_prefix}/lib/modules-load.d/anything.conf
 %{_usrsrc}/%{name}-%{version}/
 
