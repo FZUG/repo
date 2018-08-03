@@ -1,5 +1,5 @@
 Name:           startdde
-Version:        3.1.34
+Version:        3.1.35
 Release:        1%{?dist}
 Summary:        Starter of deepin desktop environment
 License:        GPLv3
@@ -71,6 +71,9 @@ BUILD_ID="0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')"
 %{_datadir}/%{name}/memchecker.json
 
 %changelog
+* Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 3.1.35-1
+- Update to 3.1.35
+
 * Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 3.1.34-1
 - Update to 3.1.34
 
