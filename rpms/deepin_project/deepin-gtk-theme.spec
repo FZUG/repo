@@ -1,5 +1,5 @@
 Name:           deepin-gtk-theme
-Version:        17.10.7
+Version:        17.10.8
 Release:        1%{?dist}
 Summary:        Deepin GTK Theme
 License:        GPLv3
@@ -25,6 +25,9 @@ BuildArch:      noarch
 %{_datadir}/themes/deepin-dark/
 
 %changelog
+* Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 17.10.8-1
+- Update to 17.10.8
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 17.10.7-1
 - Update to 17.10.7
 
