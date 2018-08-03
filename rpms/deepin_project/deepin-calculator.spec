@@ -1,5 +1,5 @@
 Name:           deepin-calculator
-Version:        1.0.4
+Version:        1.0.5
 Release:        1%{?dist}
 Summary:        An easy to use calculator for ordinary users
 License:        GPLv3
@@ -43,6 +43,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop ||:
 %{_datadir}/icons/hicolor/scalable/apps/%{name}.svg
 
 %changelog
+* Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 1.0.5-1
+- Update to 1.0.5
+
 * Mon Jul 23 2018 mosquito <sensor.wen@gmail.com> - 1.0.4-1
 - Update to 1.0.4
 
