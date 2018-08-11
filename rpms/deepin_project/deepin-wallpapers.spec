@@ -1,37 +1,52 @@
-%global commit 704a515cfa304dcda37e42b5aa0330e02c1da54f
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
+%global md5() {$(echo -n %1 | md5sum | awk '{print$1}')}
 
 Name:           deepin-wallpapers
-Version:        1.7
+Version:        1.7.5
 Release:        1%{?dist}
 Summary:        Deepin Wallpapers provides wallpapers of dde
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/deepin-wallpapers
-Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
+BuildRequires:  deepin-api
 
 %description
-Deepin Wallpapers provides wallpapers of dde
+%{summary}.
 
 %prep
-%setup -q -n %{name}-%{commit}
+%setup -q -n %{name}-%{version}
+sed -i 's|lib|libexec|' Makefile
 
 %build
+%make_build
 
 %install
-install -d %{buildroot}/%{_datadir}/wallpapers/
-cp -ar deepin %{buildroot}/%{_datadir}/wallpapers/
+install -d %{buildroot}%{_datadir}/wallpapers/deepin/
+cp deepin/* deepin-private/* deepin-community/* %{buildroot}%{_datadir}/wallpapers/deepin/
 
-install -d %{buildroot}/%{_var}/cache/
-cp -ar image-blur %{buildroot}/%{_var}/cache/
+install -d %{buildroot}%{_var}/cache/
+cp -ar image-blur %{buildroot}%{_var}/cache/
+
+install -d %{buildroot}%{_datadir}/backgrounds/deepin/
+ln -sv ../../wallpapers/deepin/Hummingbird_by_Shu_Le.jpg \
+  %{buildroot}%{_datadir}/backgrounds/deepin/desktop.jpg
+ln -sv %{md5 %{_datadir}/wallpapers/deepin/Hummingbird_by_Shu_Le.jpg}.jpg \
+  %{buildroot}%{_var}/cache/image-blur/%{md5 %{_datadir}/backgrounds/deepin/desktop.jpg}.jpg
 
 %files
 %doc README.md
 %license LICENSE
+%{_datadir}/backgrounds/deepin/
 %{_datadir}/wallpapers/deepin/
 %{_var}/cache/image-blur/
 
 %changelog
+* Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 1.7.5-1
+- Update to 1.7.5
+
+* Fri Jul 20 2018 mosquito <sensor.wen@gmail.com> - 1.7.4-1
+- Update to 1.7.4
+
 * Fri Oct 27 2017 mosquito <sensor.wen@gmail.com> - 1.7-1
 - Update to 1.7
 
