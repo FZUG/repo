@@ -1,7 +1,7 @@
 %global repo dde-session-ui
 
 Name:           deepin-session-ui
-Version:        4.4.8
+Version:        4.4.9.2
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Session UI module
 License:        GPLv3
@@ -21,6 +21,7 @@ BuildRequires:  pkgconfig(Qt5Svg)
 BuildRequires:  pkgconfig(Qt5Xml)
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(Qt5Multimedia)
+BuildRequires:  pkgconfig(xcb-ewmh)
 BuildRequires:  pkgconfig(xcursor)
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pam-devel
@@ -53,6 +54,7 @@ sed -i 's|lib|libexec|' \
     misc/applications/deepin-toggle-desktop.desktop* \
     dde-osd/dde-osd_autostart.desktop \
     dde-osd/com.deepin.dde.osd.service \
+    dde-osd/notification/files/*.service.in \
     dde-osd/dde-osd.pro \
     dde-welcome/com.deepin.dde.welcome.service \
     dde-welcome/dde-welcome.pro \
@@ -92,6 +94,9 @@ EOF
 %{_datadir}/xgreeters/lightdm-deepin-greeter.desktop
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 4.4.9.2-1
+- Update to 4.4.9.2
+
 * Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 4.4.8-1
 - Update to 4.4.8
 
