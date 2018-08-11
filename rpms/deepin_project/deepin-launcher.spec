@@ -1,7 +1,7 @@
 %global repo dde-launcher
 
 Name:           deepin-launcher
-Version:        4.4.3
+Version:        4.4.4
 Release:        1%{?dist}
 Summary:        Deepin desktop-environment - Launcher module
 License:        GPLv3
@@ -9,6 +9,7 @@ URL:            https://github.com/linuxdeepin/dde-launcher
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
 
 BuildRequires:  cmake
+BuildRequires:  cmake(Qt5LinguistTools)
 BuildRequires:  pkgconfig(dtkcore)
 BuildRequires:  pkgconfig(dtkwidget) >= 2.0
 BuildRequires:  pkgconfig(dframeworkdbus)
@@ -55,6 +56,9 @@ sed -i 's|lrelease|lrelease-qt5|' translate_generation.sh
 %{_includedir}/%{repo}/
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 4.4.4-1
+- Update to 4.4.4
+
 * Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 4.4.3-1
 - Update to 4.4.3
 
