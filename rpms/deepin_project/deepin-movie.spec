@@ -1,5 +1,5 @@
 Name:           deepin-movie
-Version:        3.2.8
+Version:        3.2.9
 Release:        1%{?dist}
 Summary:        Deepin movie based on mpv
 Summary(zh_CN): 深度影音
@@ -73,6 +73,9 @@ sed -i '/dtk2/s|lib|libexec|' src/CMakeLists.txt
 %{_libdir}/libdmr.so
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 3.2.9-1
+- Update to 3.2.9
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.2.8-1
 - Update to 3.2.8
 
