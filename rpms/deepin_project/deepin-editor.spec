@@ -13,11 +13,13 @@ BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(dtkwm)
 BuildRequires:  pkgconfig(libexif)
 BuildRequires:  pkgconfig(xcb-aux)
+BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(polkit-qt5-1)
 BuildRequires:  pkgconfig(Qt5)
 BuildRequires:  pkgconfig(Qt5DBus)
 BuildRequires:  pkgconfig(Qt5Gui)
 BuildRequires:  pkgconfig(Qt5Svg)
+BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  qt5-linguist
 Requires:       deepin-notifications
 Requires:       deepin-qt5integration

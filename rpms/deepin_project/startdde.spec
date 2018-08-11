@@ -31,6 +31,7 @@ BuildRequires:  pkgconfig(systemd)
 Requires:       deepin-daemon
 Requires:       deepin-wm
 Requires:       deepin-metacity
+Requires:       libcgroup-tools
 
 %description
 Startdde is used for launching DDE components and invoking user's
@@ -40,7 +41,7 @@ custom applications which compliant with xdg autostart specification.
 %setup -q
 
 sed -i '/polkit-1/s|lib|libexec|' watchdog/dde_polkit_agent.go
-sed -i '/deepin-daemon/s|lib|libexec|' session*.go misc/auto_launch/*.json
+sed -i '/deepin-daemon/s|lib|libexec|' utils.go session.go misc/auto_launch/*.json
 
 %build
 export GOPATH="%{gopath}"

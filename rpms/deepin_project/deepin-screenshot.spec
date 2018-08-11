@@ -8,7 +8,7 @@ Url:            https://github.com/linuxdeepin/deepin-screenshot
 Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        %{name}-appdata.xml
 
-BuildRequires:  pkgconfig(dtkwidget) = 2.0
+BuildRequires:  pkgconfig(dtkwidget) >= 2.0.6
 BuildRequires:  pkgconfig(dtkwm)
 BuildRequires:  pkgconfig(xtst)
 BuildRequires:  pkgconfig(xcb-util)
