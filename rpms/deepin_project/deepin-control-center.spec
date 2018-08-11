@@ -1,7 +1,7 @@
 %global repo dde-control-center
 
 Name:           deepin-control-center
-Version:        4.6.2
+Version:        4.6.3
 Release:        1%{?dist}
 Summary:        New control center for Linux Deepin
 License:        GPLv3
@@ -32,6 +32,7 @@ Requires:       deepin-network-utils
 Requires:       GeoIP-GeoLite-data
 Requires:       GeoIP-GeoLite-data-extra
 Requires:       gtk-murrine-engine
+Requires:       proxychains-ng
 Requires:       redshift
 Requires:       startdde
 
@@ -77,6 +78,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{repo}.desktop ||:
 %{_datadir}/%{repo}/
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 4.6.3-1
+- Update to 4.6.3
+
 * Thu Aug  2 2018 mosquito <sensor.wen@gmail.com> - 4.6.2-1
 - Update to 4.6.2
 
