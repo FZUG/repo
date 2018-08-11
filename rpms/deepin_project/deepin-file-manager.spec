@@ -1,14 +1,12 @@
 %global repo dde-file-manager
 
 Name:           deepin-file-manager
-Version:        4.6.2
+Version:        4.6.4
 Release:        1%{?dist}
 Summary:        Deepin File Manager
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/dde-file-manager
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
-# Option to disable ffmpeg
-Patch0:         %{url}/commit/b52b8dc.patch
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  deepin-gettext-tools
@@ -71,7 +69,6 @@ Deepin desktop environment - desktop module.
 
 %prep
 %setup -q -n %{repo}-%{version}
-%patch0 -p1 -b .disable_ffmpeg
 
 # fix file permissions
 find -type f -perm 775 -exec chmod 644 {} \;
@@ -149,6 +146,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/dde-trash.desktop ||:
 %{_datadir}/dbus-1/services/com.deepin.dde.desktop.service
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 4.6.4-1
+- Update to 4.6.4
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 4.6.2-1
 - Update to 4.6.2
 
