@@ -7,7 +7,7 @@
 %endif
 
 Name:           deepin-api
-Version:        3.1.27
+Version:        3.1.28
 Release:        1%{?dist}
 Summary:        Go-lang bingding for dde-daemon
 License:        GPLv3+
@@ -146,11 +146,16 @@ export GOPATH="$(pwd)/build:%{gopath}"
 %{_datadir}/icons/hicolor/*/actions/*
 %{_datadir}/dde-api/data/pkg_depends
 %{_polkit_qt_policydir}/com.deepin.api.locale-helper.policy
+%{_polkit_qt_policydir}/com.deepin.api.device.unblock-bluetooth-devices.policy
+%{_var}/lib/polkit-1/localauthority/10-vendor.d/com.deepin.api.device.pkla
 
 %files -n golang-%{name}-devel
 %{gopath}/src/%{import_path}/
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 3.1.28-1
+- Update to 3.1.28
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 3.1.27-1
 - Update to 3.1.27
 
