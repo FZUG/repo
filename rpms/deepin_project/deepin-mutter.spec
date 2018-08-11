@@ -1,5 +1,5 @@
 Name:           deepin-mutter
-Version:        3.20.32
+Version:        3.20.34
 Release:        1%{?dist}
 Summary:        Base window manager for deepin, fork of gnome mutter
 License:        GPLv3
