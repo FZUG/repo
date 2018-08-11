@@ -1,7 +1,10 @@
 %global repo qt5integration
+%global plug qt5dxcb-plugin
+%global plug_url https://github.com/linuxdeepin/qt5dxcb-plugin
+%global plug_ver 1.1.11
 
 Name:           deepin-qt5integration
-Version:        0.3.1
+Version:        0.3.3
 Release:        1%{?dist}
 Summary:        Qt platform theme integration plugins for DDE
 # The entire source code is GPLv3+ except styles/ which is BSD,
@@ -9,6 +12,7 @@ Summary:        Qt platform theme integration plugins for DDE
 License:        GPLv3 and BSD and LGPLv2+
 URL:            https://github.com/linuxdeepin/qt5integration
 Source0:        %{url}/archive/%{version}/%{repo}-%{version}.tar.gz
+Source1:        %{plug_url}/archive/%{plug_ver}/%{plug}-%{plug_ver}.tar.gz
 
 BuildRequires:  pkgconfig(atk)
 BuildRequires:  pkgconfig(cairo)
@@ -30,7 +34,7 @@ BuildRequires:  pkgconfig(pango)
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5OpenGL)
 BuildRequires:  pkgconfig(Qt5Svg)
-BuildRequires:  pkgconfig(Qt5Xdg)
+BuildRequires:  pkgconfig(Qt5Xdg) >= 3.0.0
 BuildRequires:  pkgconfig(Qt5X11Extras)
 BuildRequires:  pkgconfig(sm)
 BuildRequires:  pkgconfig(x11)
@@ -53,24 +57,38 @@ BuildRequires:  qt5-qtbase-private-devel
 Multiple Qt plugins to provide better Qt5 integration for DDE is included.
 
 %prep
-%setup -q -n %{repo}-%{version}
+%setup -q -a1 -n %{repo}-%{version}
+pushd %{plug}-%{plug_ver}
+rm -r platformplugin/libqt5xcbqpa-dev
+sed -i 's|error.*|INCLUDEPATH += %{_qt5_includedir}/QtXcb|' platformplugin/linux.pri
 
 %build
+%qmake_qt5 PREFIX=%{_prefix}
+%make_build
+
+pushd %{plug}-%{plug_ver}
 %qmake_qt5 PREFIX=%{_prefix}
 %make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
+pushd %{plug}-%{plug_ver}
+%make_install INSTALL_ROOT=%{buildroot}
+
 %files
 %doc README.md
 %license LICENSE
+%{_qt5_plugindir}/platforms/libdxcb.so
 %{_qt5_plugindir}/platformthemes/libqdeepin.so
 %{_qt5_plugindir}/styles/libdstyleplugin.so
 %{_qt5_plugindir}/iconengines/libdsvgicon.so
 %{_qt5_plugindir}/imageformats/libdsvg.so
 
 %changelog
+* Fri Aug 10 2018 mosquito <sensor.wen@gmail.com> - 0.3.3-1
+- Update to 0.3.3
+
 * Fri Jul 27 2018 mosquito <sensor.wen@gmail.com> - 0.3.1-1
 - Update to 0.3.1
 
