@@ -264,7 +264,7 @@ def build_rpm(srpmFile, release='23', arch='x86_64', output=outDir, opts='',
     elif quiet:
         opts += ' --quiet'
 
-    command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion {} {}'.format(
+    command = '/bin/mock --resultdir={} --root=fedora-{}-{}-rpmfusion_free {} {}'.format(
         output, release, arch, opts, srpmFile)
     return getstatusoutput(command)
 
