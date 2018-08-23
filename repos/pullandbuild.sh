@@ -54,7 +54,7 @@ if [ ! -z ${OUTPUT+x} ]; then
 fi
 
 for rel in 28 ; do
-    cat ${SPECLISTFILE} | grep -v deepin | tr '\n' ' ' | xargs ./repos/cibuild.py -a x86_64 -r $rel --mock-opts '--no-cleanup-after --no-clean --dnf --define "_buildhost build.zh.fedoracommunity.org"' -o ${OUTPUT} ${extraparam} -v
+    cat ${SPECLISTFILE} | grep -v deepin | tr '\n' ' ' | xargs ./repos/cibuild.py -a x86_64 -r $rel --mock-opts '--no-cleanup-after --no-clean --dnf --define "_buildhost build.zh.fedoracommunity.org"' ${extraparam} -v
 done
 if [ ! -z ${GITREPO+x} ]; then
     popd
