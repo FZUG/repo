@@ -1,4 +1,4 @@
-#!/usr/lib/node_modules/atom-package-manager/bin/node
+#!/usr/bin/node
 'use strict';
 
 process.env.ATOM_RESOURCE_PATH = process.env.ATOM_RESOURCE_PATH ||
@@ -12,7 +12,7 @@ try {
     process.env.ATOM_ELECTRON_VERSION = undefined;
 }
 
-//process.env.PYTHON = __dirname + "/python-interceptor.sh";
+process.env.npm_config_python = __dirname + "/python-interceptor.sh";
 
 require('../lib/apm-cli.js').run(process.argv.slice(2), function (error) {
     process.exitCode = +!!error;
