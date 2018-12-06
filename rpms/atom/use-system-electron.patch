@@ -162,7 +162,7 @@
  
  function registerBuiltins (devMode) {
 -  if (devMode || !cache.resourcePath.startsWith(`${process.resourcesPath}${path.sep}`)) {
-+  if (devMode || !cache.resourcePath.startsWith('/usr/lib/atom/')) {
++  if (devMode || !cache.resourcePath.startsWith('/usr/<lib>/atom/')) {
      const fs = require('fs-plus')
      const atomJsPath = path.join(cache.resourcePath, 'exports', 'atom.js')
      if (fs.isFileSync(atomJsPath)) { cache.builtins.atom = atomJsPath }
@@ -173,7 +173,7 @@
  
    isBundledPackagePath (packagePath) {
 -    if (this.devMode && !this.resourcePath.startsWith(`${process.resourcesPath}${path.sep}`)) {
-+    if (this.devMode && !this.resourcePath.startsWith('/usr/lib/atom/')) {
++    if (this.devMode && !this.resourcePath.startsWith('/usr/<lib>/atom/')) {
        return false
      }
  
@@ -184,7 +184,7 @@
  const CompileCache = require('./compile-cache')
  CompileCache.setCacheDirectory(compileCachePath)
 -CompileCache.install(`${process.resourcesPath}`, require)
-+CompileCache.install('/usr/lib/atom', require)
++CompileCache.install('/usr/<lib>/atom', require)
  
  const setupGlobals = function () {
    global.attachEvent = function () {}
@@ -195,7 +195,7 @@
  
        setupAtomHome()
 -      const devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith(process.resourcesPath + path.sep)
-+      const devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith('/usr/lib/atom')
++      const devMode = getWindowLoadSettings().devMode || !getWindowLoadSettings().resourcePath.startsWith('/usr/<lib>/atom')
        useSnapshot = !devMode && typeof snapshotResult !== 'undefined'
  
        if (devMode) {
@@ -204,7 +204,7 @@
      const CompileCache = useSnapshot ? snapshotResult.customRequire('../src/compile-cache.js') : require('../src/compile-cache')
      CompileCache.setAtomHomeDirectory(process.env.ATOM_HOME)
 -    CompileCache.install(process.resourcesPath, require)
-+    CompileCache.install('/usr/lib/atom', require)
++    CompileCache.install('/usr/<lib>/atom', require)
  
      const ModuleCache = useSnapshot ? snapshotResult.customRequire('../src/module-cache.js') : require('../src/module-cache')
      ModuleCache.register(getWindowLoadSettings())
