@@ -63,7 +63,7 @@ npm install --user root -g --prefix=build/usr $(npm pack | tail -1)
 
 %install
 cp -pr build/. %{buildroot}
-rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/{node_modules,script,src}
+rm -rf %{buildroot}%{nodejs_sitelib}/atom-package-manager/{node_modules,script}
 
 pushd build%{nodejs_sitelib}/atom-package-manager
 for ext in js json map node gyp; do

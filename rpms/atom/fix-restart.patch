@@ -1,11 +1,11 @@
---- a/src/main-process/atom-application.coffee
-+++ b/src/main-process/atom-application.coffee
-@@ -829,7 +829,7 @@
-       @restart()
+--- a/src/main-process/atom-application.js
++++ b/src/main-process/atom-application.js
+@@ -1356,7 +1356,7 @@
+   }
  
-   restart: ->
--    args = []
-+    args = ["--app=/usr/<lib>/atom"]
-     args.push("--safe") if @safeMode
-     args.push("--log-file=#{@logFile}") if @logFile?
-     args.push("--socket-path=#{@socketPath}") if @socketPath?
+   restart () {
+-    const args = []
++    const args = ['/usr/<lib>/atom/atom']
+     if (this.safeMode) args.push('--safe')
+     if (this.logFile != null) args.push(`--log-file=${this.logFile}`)
+     if (this.socketPath != null) args.push(`--socket-path=${this.socketPath}`)

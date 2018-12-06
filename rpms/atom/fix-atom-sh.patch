@@ -1,6 +1,6 @@
 --- a/atom.sh
 +++ b/atom.sh
-@@ -1,20 +1,5 @@
+@@ -1,29 +1,5 @@
  #!/bin/bash
  
 -if [ "$(uname)" == 'Darwin' ]; then
@@ -12,18 +12,27 @@
 -  exit 1
 -fi
 -
--if [ "$(basename $0)" == 'atom-beta' ]; then
--  BETA_VERSION=true
--else
--  BETA_VERSION=
--fi
+-case $(basename $0) in
+-  atom-beta)
+-    CHANNEL=beta
+-    ;;
+-  atom-nightly)
+-    CHANNEL=nightly
+-    ;;
+-  atom-dev)
+-    CHANNEL=dev
+-    ;;
+-  *)
+-    CHANNEL=stable
+-    ;;
+-esac
 -
  export ATOM_DISABLE_SHELLING_OUT_FOR_ENVIRONMENT=true
  
  while getopts ":wtfvh-:" opt; do
-@@ -53,79 +38,21 @@
-   exec 2> /dev/null
- fi
+@@ -65,95 +41,19 @@
+ ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
+ mkdir -p "$ATOM_HOME"
  
 -if [ $OS == 'Mac' ]; then
 -  if [ -L "$0" ]; then
@@ -38,11 +47,22 @@
 -    ATOM_PATH="$(dirname "$ATOM_APP")"
 -    ATOM_APP_NAME="$(basename "$ATOM_APP")"
 -  fi
--
--  if [ -n "$BETA_VERSION" ]; then
--    ATOM_EXECUTABLE_NAME="Atom Beta"
++ATOM_PATH="/usr/<lib>/atom/atom"
+ 
+-  if [ ! -z "${ATOM_APP_NAME}" ]; then
+-    # If ATOM_APP_NAME is known, use it as the executable name
+-    ATOM_EXECUTABLE_NAME="${ATOM_APP_NAME%.*}"
 -  else
--    ATOM_EXECUTABLE_NAME="Atom"
+-    # Else choose it from the inferred channel name
+-    if [ "$CHANNEL" == 'beta' ]; then
+-      ATOM_EXECUTABLE_NAME="Atom Beta"
+-    elif [ "$CHANNEL" == 'nightly' ]; then
+-      ATOM_EXECUTABLE_NAME="Atom Nightly"
+-    elif [ "$CHANNEL" == 'dev' ]; then
+-      ATOM_EXECUTABLE_NAME="Atom Dev"
+-    else
+-      ATOM_EXECUTABLE_NAME="Atom"
+-    fi
 -  fi
 -
 -  if [ -z "${ATOM_PATH}" ]; then
@@ -54,10 +74,7 @@
 -    else
 -      # We haven't found an Atom.app, use spotlight to search for Atom
 -      ATOM_PATH="$(mdfind "kMDItemCFBundleIdentifier == 'com.github.atom'" | grep -v ShipIt | head -1 | xargs -0 dirname)"
-+ATOM_PATH="/usr/bin/electron-<version> --app=/usr/<lib>/atom"
-+ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
-+mkdir -p "$ATOM_HOME"
- 
+-
 -      # Exit if Atom can't be found
 -      if [ ! -x "$ATOM_PATH/$ATOM_APP_NAME" ]; then
 -        echo "Cannot locate ${ATOM_APP_NAME}, it is usually located in /Applications. Set the ATOM_PATH environment variable to the directory containing ${ATOM_APP_NAME}."
@@ -76,14 +93,20 @@
 -  SCRIPT=$(readlink -f "$0")
 -  USR_DIRECTORY=$(readlink -f $(dirname $SCRIPT)/..)
 -
--  if [ -n "$BETA_VERSION" ]; then
--    ATOM_PATH="$USR_DIRECTORY/share/atom-beta/atom"
--  else
--    ATOM_PATH="$USR_DIRECTORY/share/atom/atom"
--  fi
--
--  ATOM_HOME="${ATOM_HOME:-$HOME/.atom}"
--  mkdir -p "$ATOM_HOME"
+-  case $CHANNEL in
+-    beta)
+-      ATOM_PATH="$USR_DIRECTORY/share/atom-beta/atom"
+-      ;;
+-    nightly)
+-      ATOM_PATH="$USR_DIRECTORY/share/atom-nightly/atom"
+-      ;;
+-    dev)
+-      ATOM_PATH="$USR_DIRECTORY/share/atom-dev/atom"
+-      ;;
+-    *)
+-      ATOM_PATH="$USR_DIRECTORY/share/atom/atom"
+-      ;;
+-  esac
 -
 -  : ${TMPDIR:=/tmp}
 -
@@ -92,11 +115,11 @@
 -  if [ $EXPECT_OUTPUT ]; then
 -    "$ATOM_PATH" --executed-from="$(pwd)" --pid=$$ "$@"
 +if [ $EXPECT_OUTPUT ]; then
-+  $ATOM_PATH --executed-from="$(pwd)" --pid=$$ "$@"
++  "$ATOM_PATH" --executed-from="$(pwd)" --pid=$$ "$@"
 +  exit $?
 +else
 +  (
-+  nohup $ATOM_PATH --executed-from="$(pwd)" --pid=$$ "$@" > "$ATOM_HOME/nohup.out" 2>&1
++  nohup "$ATOM_PATH" --executed-from="$(pwd)" --pid=$$ "$@" > "$ATOM_HOME/nohup.out" 2>&1
 +  if [ $? -ne 0 ]; then
 +    cat "$ATOM_HOME/nohup.out"
      exit $?

@@ -1,67 +1,32 @@
---- a/script/config.js
-+++ b/script/config.js
-@@ -7,7 +7,7 @@
- const path = require('path')
+--- a/script/lib/run-apm-install.js
++++ b/script/lib/run-apm-install.js
+@@ -8,11 +8,8 @@
+   const installEnv = Object.assign({}, process.env)
+   // Set resource path so that apm can load metadata related to Atom.
+   installEnv.ATOM_RESOURCE_PATH = CONFIG.repositoryRootPath
+-  // Set our target (Electron) version so that node-pre-gyp can download the
+-  // proper binaries.
+-  installEnv.npm_config_target = CONFIG.appMetadata.electronVersion
+   childProcess.execFileSync(
+-    CONFIG.getApmBinPath(),
++    'apm',
+     ['--loglevel=error', ci ? 'ci' : 'install'],
+     {env: installEnv, cwd: packagePath, stdio: stdioOptions || 'inherit'}
+   )
+--- a/src/package-manager.js
++++ b/src/package-manager.js
+@@ -169,13 +169,7 @@
+       return configPath || this.apmPath
+     }
  
- const repositoryRootPath = path.resolve(__dirname, '..')
--const apmRootPath = path.join(repositoryRootPath, 'apm')
-+const apmRootPath = path.join('/usr/lib')
- const scriptRootPath = path.join(repositoryRootPath, 'script')
- const buildOutputPath = path.join(repositoryRootPath, 'out')
- const docsOutputPath = path.join(repositoryRootPath, 'docs', 'output')
-@@ -18,7 +18,7 @@
- const atomHomeDirPath = process.env.ATOM_HOME || path.join(homeDirPath, '.atom')
- 
- const appMetadata = require(path.join(repositoryRootPath, 'package.json'))
--const apmMetadata = require(path.join(apmRootPath, 'package.json'))
-+const apmMetadata = require(path.join(apmRootPath, 'node_modules', 'atom-package-manager', 'package.json'))
- const channel = getChannel()
- 
- module.exports = {
---- a/script/lib/package-application.js
-+++ b/script/lib/package-application.js
-@@ -56,17 +56,6 @@
- 
- function copyNonASARResources (packagedAppPath, bundledResourcesPath) {
-   console.log(`Copying non-ASAR resources to ${bundledResourcesPath}`)
--  fs.copySync(
--    path.join(CONFIG.repositoryRootPath, 'apm', 'node_modules', 'atom-package-manager'),
--    path.join(bundledResourcesPath, 'app', 'apm'),
--    {filter: includePathInPackagedApp}
--  )
--  if (process.platform !== 'win32') {
--    // Existing symlinks on user systems point to an outdated path, so just symlink it to the real location of the apm binary.
--    // TODO: Change command installer to point to appropriate path and remove this fallback after a few releases.
--    fs.symlinkSync(path.join('..', '..', 'bin', 'apm'), path.join(bundledResourcesPath, 'app', 'apm', 'node_modules', '.bin', 'apm'))
--    fs.copySync(path.join(CONFIG.repositoryRootPath, 'atom.sh'), path.join(bundledResourcesPath, 'app', 'atom.sh'))
--  }
-   if (process.platform === 'darwin') {
-     fs.copySync(path.join(CONFIG.repositoryRootPath, 'resources', 'mac', 'file.icns'), path.join(bundledResourcesPath, 'file.icns'))
-   } else if (process.platform === 'linux') {
---- a/script/lib/dependencies-fingerprint.js
-+++ b/script/lib/dependencies-fingerprint.js
-@@ -21,7 +21,7 @@
-   compute: function () {
-     // Include the electron minor version in the fingerprint since that changing requires a re-install
-     const electronVersion = CONFIG.appMetadata.electronVersion.replace(/\.\d+$/, '')
--    const apmVersion = CONFIG.apmMetadata.dependencies['atom-package-manager']
-+    const apmVersion = CONFIG.apmMetadata.version
-     const body = electronVersion + apmVersion + process.platform + process.version + process.arch
-     return crypto.createHash('sha1').update(body).digest('hex')
+-    const commandName = process.platform === 'win32' ? 'apm.cmd' : 'apm'
+-    const apmRoot = path.join(process.resourcesPath, 'app', 'apm')
+-    this.apmPath = path.join(apmRoot, 'bin', commandName)
+-    if (!fs.isFileSync(this.apmPath)) {
+-      this.apmPath = path.join(apmRoot, 'node_modules', 'atom-package-manager', 'bin', commandName)
+-    }
+-    return this.apmPath
++    return '/usr/lib/node_modules/atom-package-manager/bin/apm'
    }
---- a/src/package-manager.coffee
-+++ b/src/package-manager.coffee
-@@ -147,12 +147,7 @@
-     return configPath if configPath
-     return @apmPath if @apmPath?
  
--    commandName = 'apm'
--    commandName += '.cmd' if process.platform is 'win32'
--    apmRoot = path.join(process.resourcesPath, 'app', 'apm')
--    @apmPath = path.join(apmRoot, 'bin', commandName)
--    unless fs.isFileSync(@apmPath)
--      @apmPath = path.join(apmRoot, 'node_modules', 'atom-package-manager', 'bin', commandName)
-+    @apmPath = '/usr/lib/node_modules/atom-package-manager/bin/apm'
-     @apmPath
- 
-   # Public: Get the paths being used to look for packages.
+   // Public: Get the paths being used to look for packages.

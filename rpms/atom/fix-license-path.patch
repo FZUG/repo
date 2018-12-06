@@ -1,17 +1,17 @@
---- a/src/main-process/atom-application.coffee
-+++ b/src/main-process/atom-application.coffee
-@@ -266,7 +266,7 @@
-     @openPathOnEvent('application:open-your-keymap', 'atom://.atom/keymap')
-     @openPathOnEvent('application:open-your-snippets', 'atom://.atom/snippets')
-     @openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
--    @openPathOnEvent('application:open-license', path.join(process.resourcesPath, 'LICENSE.md'))
-+    @openPathOnEvent('application:open-license', '/usr/share/licenses/atom/LICENSE.md')
+--- a/src/main-process/atom-application.js
++++ b/src/main-process/atom-application.js
+@@ -416,7 +416,7 @@
+     this.openPathOnEvent('application:open-your-keymap', 'atom://.atom/keymap')
+     this.openPathOnEvent('application:open-your-snippets', 'atom://.atom/snippets')
+     this.openPathOnEvent('application:open-your-stylesheet', 'atom://.atom/stylesheet')
+-    this.openPathOnEvent('application:open-license', path.join(process.resourcesPath, 'LICENSE.md'))
++    this.openPathOnEvent('application:open-license', '/usr/share/licenses/atom/LICENSE.md')
  
-     @disposable.add ipcHelpers.on app, 'before-quit', (event) =>
-       resolveBeforeQuitPromise = null
+     this.configFile.onDidChange(settings => {
+       for (let window of this.getAllWindows()) {
 --- a/src/workspace.js
 +++ b/src/workspace.js
-@@ -1101,7 +1101,7 @@
+@@ -1132,7 +1132,7 @@
  
    // Open Atom's license in the active pane.
    openLicense () {
