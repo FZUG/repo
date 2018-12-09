@@ -1,57 +1,39 @@
-%global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
 %global debug_package %{nil}
-%global _hardened_build 1
 %global __provides_exclude (npm)
-%global __requires_exclude (npm|0.12|nodejs.abi)
+%global __requires_exclude (npm|nodejs.abi)
 
-%global project vscode
-%global repo %{project}
-%global electron_ver 1.6.9
-%global node_ver 6
+%global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
+%global strip() find %1 -name "*.node" -exec strip {} \\;
+%global yarn npx yarn
 
-# commit
-%global _commit 27492b6bf3acb0775d82d2f87b25a93490673c6d
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
+%global nodesqlurl https://github.com/mapbox/node-sqlite3
+%global nodesqltgz %{nodesqlurl}/archive/%{nodesqlver}/%{nodesqlver}.tar.gz
 
-# compute checksum for file
-# https://github.com/Microsoft/vscode/blob/master/build/gulpfile.vscode.js#L165
-%global hash MD5() { openssl md5 -binary $1 |openssl base64 |cut -d= -f1; }
-%global line_num LN() { wc -l $1 |cut -d" " -f1; }
-%global _files files=(\
-  "vs/workbench/workbench.main.js"\
-  "vs/workbench/workbench.main.css"\
-  "vs/workbench/electron-browser/bootstrap/index.html"\
-  "vs/workbench/electron-browser/bootstrap/index.js"\
-  "vs/workbench/electron-browser/bootstrap/preload.js"\
-)
-%{nil}
+%global nodesqlver 5bb0dc0
+%global electron_ver 3.0.10
 
 Name:    vscode
-Version: 1.16.1
+Version: 1.29.1
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
-
-Group:   Development/Tools
 License: MIT
 URL:     https://github.com/Microsoft/vscode
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
-# https://github.com/Microsoft/vscode/blob/master/src/vs/workbench/electron-main/env.ts
-Source1: about.json
-Patch0:  improve-i18n.patch
+Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source1: product-release.json
 
 BuildRequires: openssl
-BuildRequires: /usr/bin/npm
-BuildRequires: node-gyp, git
-BuildRequires: python
+BuildRequires: python2, git
+BuildRequires: npm, node-gyp
 BuildRequires: pkgconfig(x11)
 BuildRequires: pkgconfig(xkbfile)
 BuildRequires: pkgconfig(libsecret-1)
 BuildRequires: desktop-file-utils
+BuildRequires: libappstream-glib
 # sysctl_apply macro
 BuildRequires: systemd
 # /usr/lib/systemd/systemd-sysctl
-Requires: systemd
-Requires: electron = %{electron_ver}
+Requires:      systemd
+Requires:      electron >= %{electron_ver}
 
 %description
  VS Code is a new type of tool that combines the simplicity of a code editor
@@ -60,213 +42,171 @@ Requires: electron = %{electron_ver}
  lightweight integration with existing tools.
 
 %prep
-%setup -q -n %{repo}-%{_commit}
-%patch0 -p1
+%setup -q
 
-git clone https://github.com/creationix/nvm.git .nvm
-source .nvm/nvm.sh
-nvm install %{node_ver}
-npm config set python=`which python2`
+# Skip preinstall check
+sed -i '/preinstall/d' package.json
 
-# https://github.com/Microsoft/vscode/pull/2559
-sed -i '/electronVer/s|:.*,$|: "%{electron_ver}",|' package.json
+# Use system python2
+# https://github.com/mapbox/node-sqlite3/issues/1044
+sed -i '/sqlite/s|:.*"|: "%{nodesqltgz}"|' package.json
+
+# Skip smoke test
+sed -i '/smoketest/d' build/npm/postinstall.js
 
 # Do not download electron
-sed -i '/pipe.electron/s|^|//|' build/gulpfile.vscode.js
+sed -i '/pipe.electron/d' build/gulpfile.vscode.js
+
+# Set output directory
+sed -i "/destin/s|=.*|='%{name}';|; /destin/s|result|all|
+        /Asar/s|app|%{name}|" build/gulpfile.vscode.js
+
+# Build native modules for system electron
+sed -i '/target/s|".*"|"%{electron_ver}"|' .yarnrc
+
+# Patch appdata and desktop file
+sed -i resources/linux/code.{appdata.xml,desktop} \
+ -e 's|%{_datadir}.*@@|%{name}|
+     s|@@NAME_SHORT@@|VSCode|
+     s|@@NAME_LONG@@|Visual Studio Code|
+     s|@@NAME@@|%{name}|
+     s|@@ICON@@|%{name}|
+     s|@@LICENSE@@|MIT|
+     s|inode/directory;||'
 
 %build
-export CFLAGS="%{optflags} -fPIC -pie"
-export CXXFLAGS="%{optflags} -fPIC -pie"
-source .nvm/nvm.sh
-nvm use %{node_ver}
-scripts/npm.sh install --loglevel info
-node_modules/.bin/gulp vscode-linux-%{arch}
-npm dedupe
+npm config set python="/usr/bin/python2"
+%yarn install
+%strip node_modules
+%yarn gulp %{name}-linux-%{arch}-min
+rm -rf %{name}/*min
+
+# Output release product.json
+echo "$(cat %{S:1})$(tail -9 %{name}/product.json)" >%{name}/product.json
+
+# Set application name
+sed -i '/Code/s|:.*"|: "Code"|' %{name}/package.json
 
 %install
-# Data files
-mkdir --parents %{buildroot}%{_libdir}/%{name}
-cp -a ../VSCode-linux-*/. %{buildroot}%{_libdir}/%{name}
-rm -rf %{buildroot}%{_libdir}/%{name}/{node_modules,bin}
+# Install data files
+install -d %{buildroot}%{_libdir}
+cp -r %{name} %{buildroot}%{_libdir}
 
-# Bin file
-mkdir --parents %{buildroot}%{_bindir}
-cat <<EOT >> %{buildroot}%{_bindir}/%{name}
+# Install binary
+install -d %{buildroot}%{_bindir}
+cat <<EOT > %{buildroot}%{_bindir}/%{name}
 #!/usr/bin/env bash
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License. See License.txt in the project root
 # for license information.
 
-NAME="%{name}"
-VSCODE_PATH="%{_libdir}/\$NAME"
-ELECTRON="%{_bindir}/electron-%{electron_ver}"
+VSCODE_PATH="%{_libdir}/%{name}"
+ELECTRON="%{_bindir}/electron"
 CLI="\$VSCODE_PATH/out/cli.js"
 ELECTRON_RUN_AS_NODE=1 "\$ELECTRON" "\$CLI" --app="\$VSCODE_PATH" "\$@"
 exit \$?
 EOT
 
-# Icon files
-install -Dm 0644 resources/linux/code.png \
-    %{buildroot}%{_datadir}/icons/hicolor/128x128/apps/%{name}.png
-
-# Desktop file
-mkdir --parents %{buildroot}%{_datadir}/applications
-cat <<EOT >> %{buildroot}%{_datadir}/applications/%{name}.desktop
-[Desktop Entry]
-Type=Application
-Name=Visual Studio Code
-GenericName=Text Editor
-Comment=Code Editing. Redefined.
-Exec=%{name} %U
-Icon=%{name}
-Terminal=false
-StartupNotify=true
-StartupWMClass=VSCode
-Categories=Utility;TextEditor;Development;IDE;
-MimeType=text/plain;
-Actions=new-window;
-Keywords=Text;Editor;vscode;
-Keywords[zh_CN]=文本;编辑器;Text;Editor;vscode;
-
-[Desktop Action new-window]
-Name=New Window
-Name[de]=Neues Fenster
-Name[es]=Nueva ventana
-Name[fr]=Nouvelle fenêtre
-Name[it]=Nuova finestra
-Name[ja]=新規ウインドウ
-Name[ko]=새 창
-Name[ru]=Новое окно
-Name[zh_CN]=新建窗口
-Name[zh_TW]=開新視窗
-Exec=%{name} --new-window %U
-Icon=%{name}
-EOT
-
-desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
-
-# Change appName
-install -m 0644 %{S:1} %{buildroot}%{_libdir}/%{name}/product.json
-sed -i -e \
-   '/Short/s|:.*,$|: "VSCode",|
-    /Long/s|:.*,$|: "Visual Studio Code",|' \
-    %{buildroot}%{_libdir}/%{name}/product.json
-
-# About.json
-sed -i '$a\\t"commit": "%{_commit}",\n\t"date": "'`date -u +%FT%T.%3NZ`'",\n\t"checksums": {' \
-    %{buildroot}%{_libdir}/%{name}/product.json
-sed -i '2s|:.*,$|: "VSCode",|' \
-    %{buildroot}%{_libdir}/%{name}/package.json
-
-# Compute checksum
-%{hash}
-%{line_num}
-%{_files}
-pushd ../VSCode-linux-*/out/
-for i in `seq ${#files[@]}`; do
-  _md5=`MD5 ${files[$((i-1))]}`
-  sed -i '$a\\t\t"'${files[$((i-1))]}'": "'${_md5}'"' %{buildroot}%{_libdir}/%{name}/product.json
-  if [ ${#files[@]} -ne $i ]; then
-    _ln=`LN %{buildroot}%{_libdir}/%{name}/product.json`
-    sed -i ''${_ln}'s|$|,|' %{buildroot}%{_libdir}/%{name}/product.json
-  else
-    sed -i '$a\\t}\n}' %{buildroot}%{_libdir}/%{name}/product.json
-  fi
-done
-
-# find all *.js files and generate node.file-list
-pushd ..
-for ext in js json node; do
-    find node_modules -iname "*.${ext}" \
-    ! -path '*doc*' \
-    ! -path '*test*' \
-    ! -path '*tools*' \
-    ! -path '*example*' \
-    ! -path '*obj.target*' \
-    -exec sh -c "strip '{}' &>/dev/null ||:" \; \
-    -exec install -Dm644 '{}' '%{buildroot}%{_libdir}/%{name}/{}' \;
-done
-popd
+# Install appdata and desktop file
+pushd resources/linux
+install -Dm644 code.appdata.xml %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+install -Dm644 code.desktop     %{buildroot}%{_datadir}/applications/%{name}.desktop
+install -Dm644 code.png         %{buildroot}%{_datadir}/pixmaps/%{name}.png
 
 # Set user watch files
 #https://github.com/FZUG/repo/issues/210
 install -d %{buildroot}%{_sysconfdir}/sysctl.d
-cat > %{buildroot}%{_sysconfdir}/sysctl.d/50-%{name}.conf << EOF
+cat > %{buildroot}%{_sysconfdir}/sysctl.d/50-%{name}.conf <<EOF
 fs.inotify.max_user_watches=$((8192*64))
 EOF
 
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database &>/dev/null ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
-fi
-/usr/bin/update-desktop-database &>/dev/null ||:
+%check
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
+appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.appdata.xml
+%yarn monaco-compile-check
+%yarn strict-null-check
 
 %posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
 %sysctl_apply %{_sysconfdir}/sysctl.d/50-%{name}.conf
 
 %files
-%defattr(-,root,root,-)
 %doc README.md ThirdPartyNotices.txt
 %license LICENSE.txt
 %{_sysconfdir}/sysctl.d/50-%{name}.conf
 %attr(755,-,-) %{_bindir}/%{name}
 %{_libdir}/%{name}/
-%{_datadir}/icons/hicolor/*/apps/%{name}.png
+%{_datadir}/pixmaps/%{name}.png
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/metainfo/%{name}.appdata.xml
 
 %changelog
+* Fri Dec  7 2018 mosquito <sensor.wen@gmail.com> - 1.29.1-1
+- Release 1.29.1
+
 * Sun Sep 24 2017 mosquito <sensor.wen@gmail.com> - 1.16.1-1
 - Release 1.16.1
+
 * Wed May 24 2017 mosquito <sensor.wen@gmail.com> - 1.12.2-1
 - Release 1.12.2
+
 * Sat Feb 11 2017 mosquito <sensor.wen@gmail.com> - 1.9.1-1
 - Release 1.9.1
+
 * Sat Jan  7 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-2
 - Fix watch files limit
+
 * Tue Jan  3 2017 mosquito <sensor.wen@gmail.com> - 1.8.1-1
 - Release 1.8.1
+
 * Sat Dec  3 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-2
 - Fix reopen /usr/lib64/vscode/ directory every time
+
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.7.2-1
 - Release 1.7.2
+
 * Sun Oct 16 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-2
 - Compute checksum
+
 * Sat Oct 15 2016 mosquito <sensor.wen@gmail.com> - 1.6.1-1
 - Release 1.6.1
+
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 1.5.3-1
 - Release 1.5.3
+
 * Wed Jul 13 2016 mosquito <sensor.wen@gmail.com> - 1.3.1-1
 - Release 1.3.1
 - Build for electron 1.2.7
+
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.2.1-1
 - Release 1.2.1
 - Build for electron 1.2.3
+
 * Tue May 31 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-2
 - Use ELECTRON_RUN_AS_NODE for Electron 1.2.0
+
 * Mon May 30 2016 mosquito <sensor.wen@gmail.com> - 1.2.0-1
 - Release 1.2.0
 - Build for electron 1.2.0
 - Use ELECTRON_RUN_AS_NODE environment variable
+
 * Fri May  6 2016 mosquito <sensor.wen@gmail.com> - 1.1.0-1
 - Release 1.1.0 (insiders)
 - Build for electron 0.37.8
 - fsevents dont support linux
 - Fix postinstall.js script
+
 * Thu Apr 14 2016 mosquito <sensor.wen@gmail.com> - 1.0.0-1
 - Release 1.0.0
 - Improve i18n
+
 * Wed Apr 13 2016 mosquito <sensor.wen@gmail.com> - 0.10.15-1
 - Release 0.10.15 (insiders)
 - Use gulp-tsb 1.10.3 for node 0.12
+
 * Tue Apr 12 2016 mosquito <sensor.wen@gmail.com> - 0.10.14-2
 - Build test for electron 0.37.5
 - Use node 0.12 to build native module
+
 * Wed Apr  6 2016 mosquito <sensor.wen@gmail.com> - 0.10.14-1
 - Release 0.10.14 (insiders)
 - Build test for electron 0.37.4, but running crash
@@ -274,25 +214,34 @@ fi
 - Update nan 2.2.0, fixes oniguruma native module build error
 - Fix crash by remove value of aiConfig
   https://github.com/electron/electron/issues/4299
+
 * Sat Mar 12 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-3
 - Rebuild for electron 0.36.11
+
 * Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-2
 - Fixed extensionsGallery url
+
 * Tue Mar  8 2016 mosquito <sensor.wen@gmail.com> - 0.10.10-1
 - Release 0.10.10
 - Spilt package
 - Update electron to 0.36.10
+
 * Thu Feb 11 2016 mosquito <sensor.wen@gmail.com> - 0.10.8-1
 - Release 0.10.8
 - Remove welcome.md
+
 * Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 0.10.6-1
 - Release 0.10.6
+
 * Sun Dec 20 2015 mosquito <sensor.wen@gmail.com> - 0.10.5-1
 - Release 0.10.5
+
 * Fri Dec 04 2015 mosquito <sensor.wen@gmail.com> - 0.10.3-1
 - Release 0.10.3
+
 * Thu Nov 26 2015 mosquito <sensor.wen@gmail.com> - 0.10.2-1
 - Release 0.10.2
 - Add about information
+
 * Wed Nov 25 2015 mosquito <sensor.wen@gmail.com> - 0.10.1-1
 - Initial build
