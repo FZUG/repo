@@ -8,7 +8,7 @@
 
 Name:    atom
 Version: 1.33.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A hack-able text editor for the 21st century
 License: MIT
 URL:     https://github.com/atom/atom
@@ -102,7 +102,7 @@ install -d %{buildroot}%{_datadir}/applications/
 sed -e \
    's|<%= appName %>|Atom|
     s|<%= description %>|%{summary}|
-    s|<%= installDir %>/share/<%= appFileName %>/||
+    s|<%= installDir %>/bin/<%= appFileName %>/|%{name}|
     s|<%= iconPath %>|%{name}|' \
     resources/linux/atom.desktop.in > \
     %{buildroot}%{_datadir}/applications/%{name}.desktop
@@ -148,6 +148,9 @@ install -m644 out/app/node_modules/symbols-view/lib/ctags-config \
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Sun Dec  9 2018 mosquito <sensor.wen@gmail.com> - 1.33.0-2
+- Fix broken Exec line in .desktop file (#335)
+
 * Thu Dec  6 2018 mosquito <sensor.wen@gmail.com> - 1.33.0-1
 - Release 1.33.0
 
