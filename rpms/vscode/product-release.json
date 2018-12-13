@@ -64,7 +64,8 @@
 		"vscjava.vscode-maven": "**/pom.xml",
 		"ms-azuretools.vscode-azureterraform": "**/*.tf",
 		"mauve.terraform": "**/*.tf",
-		"vsciot-vscode.vscode-arduino": "**/*.ino"
+		"vsciot-vscode.vscode-arduino": "**/*.ino",
+		"ms-kubernetes-tools.vscode-kubernetes-tools ": "{**/Chart.yaml}"
 	},
 	"extensionImportantTips": {
 		"ms-vscode.csharp": {
@@ -190,7 +191,18 @@
 			"friendlyName": "Docker",
 			"windowsPath": "%ProgramFiles%\\Docker\\Docker\\Resources\\bin\\docker.exe",
 			"recommendations": [
-				"PeterJausovec.vscode-docker"
+				"PeterJausovec.vscode-docker",
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"azuredevspaces.azds"
+			]
+		},
+		"kubectl": {
+			"friendlyName": "Kubernetes",
+			"windowsPath": "%ProgramFiles%\\Docker\\Docker\\Resources\\bin\\kubectl.exe",
+			"recommendations": [
+				"PeterJausovec.vscode-docker",
+				"ms-kubernetes-tools.vscode-kubernetes-tools",
+				"azuredevspaces.azds"
 			]
 		},
 		"ng": {
@@ -605,6 +617,7 @@
 	},
 	"settingsSearchUrl": "https://bingsettingssearch.trafficmanager.net/api/Search",
 	"experimentsUrl": "https://az764295.vo.msecnd.net/experiments/vscode-experiments.json",
+	"commit": "c6e592b2b5770e40a98cb9c2715a8ef89aec3d74",
 	"surveys": [{
 		"surveyId": "cpp.1",
 		"surveyUrl": "https://www.research.net/r/VBVV6C6",

@@ -13,7 +13,7 @@
 %global electron_ver 3.0.10
 
 Name:    vscode
-Version: 1.29.1
+Version: 1.30.0
 Release: 1%{?dist}
 Summary: Visual Studio Code - An open source code editor
 License: MIT
@@ -140,6 +140,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.a
 %{_datadir}/metainfo/%{name}.appdata.xml
 
 %changelog
+* Wed Dec 12 2018 mosquito <sensor.wen@gmail.com> - 1.30.0-1
+- Release 1.30.0
+
 * Fri Dec  7 2018 mosquito <sensor.wen@gmail.com> - 1.29.1-1
 - Release 1.29.1
 
