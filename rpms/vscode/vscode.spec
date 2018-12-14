@@ -8,17 +8,19 @@
 
 %global nodesqlurl https://github.com/mapbox/node-sqlite3
 %global nodesqltgz %{nodesqlurl}/archive/%{nodesqlver}/%{nodesqlver}.tar.gz
+%global nodesqlver 5bb0dc0e7511cf42cfda72f02e1354c4962c192b
 
-%global nodesqlver 5bb0dc0
+%global commit     a684fe7ee136f89d92fa25ee0b8f9bdeacd104b6
+%global scommit    %(c=%{commit}; echo ${c:0:7})
 %global electron_ver 3.0.10
 
 Name:    vscode
 Version: 1.30.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Visual Studio Code - An open source code editor
 License: MIT
 URL:     https://github.com/Microsoft/vscode
-Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0: %{url}/archive/%{scommit}/%{name}-%{scommit}.tar.gz
 Source1: product-release.json
 
 BuildRequires: openssl
@@ -42,7 +44,7 @@ Requires:      electron >= %{electron_ver}
  lightweight integration with existing tools.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{commit}
 
 # Skip preinstall check
 sed -i '/preinstall/d' package.json
@@ -74,15 +76,20 @@ sed -i resources/linux/code.{appdata.xml,desktop} \
      s|@@LICENSE@@|MIT|
      s|inode/directory;||'
 
+# Output release product.json
+cp %{SOURCE1} product.json
+
+# Disable crash reporter and telemetry service by default
+sed -i '/default/s|:.*,|:false,|' src/vs/platform/telemetry/common/telemetryService.ts \
+    src/vs/workbench/services/crashReporter/electron-browser/crashReporterService.ts
+
 %build
+export BUILD_SOURCEVERSION="%{commit}"
 npm config set python="/usr/bin/python2"
 %yarn install
 %strip node_modules
 %yarn gulp %{name}-linux-%{arch}-min
 rm -rf %{name}/*min
-
-# Output release product.json
-echo "$(cat %{S:1})$(tail -9 %{name}/product.json)" >%{name}/product.json
 
 # Set application name
 sed -i '/Code/s|:.*"|: "Code"|' %{name}/package.json
@@ -140,6 +147,10 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.a
 %{_datadir}/metainfo/%{name}.appdata.xml
 
 %changelog
+* Fri Dec 14 2018 mosquito <sensor.wen@gmail.com> - 1.30.0-2
+- Fix save file for electron-3
+- Disable crash reporter and telemetry service by default
+
 * Wed Dec 12 2018 mosquito <sensor.wen@gmail.com> - 1.30.0-1
 - Release 1.30.0
 

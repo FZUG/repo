@@ -617,7 +617,6 @@
 	},
 	"settingsSearchUrl": "https://bingsettingssearch.trafficmanager.net/api/Search",
 	"experimentsUrl": "https://az764295.vo.msecnd.net/experiments/vscode-experiments.json",
-	"commit": "c6e592b2b5770e40a98cb9c2715a8ef89aec3d74",
 	"surveys": [{
 		"surveyId": "cpp.1",
 		"surveyUrl": "https://www.research.net/r/VBVV6C6",
@@ -648,4 +647,5 @@
 		"languageId": "typescript",
 		"editCount": 10,
 		"userProbability": 0.05
-	}
+	}]
+}
