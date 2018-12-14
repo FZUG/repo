@@ -1,5 +1,6 @@
 %global debug_package %{nil}
 %define  _foxitrevision r057d814
+%define binname foxitreader
 
 Name:     FoxitReader
 Version:  2.4.4.0911
@@ -132,7 +133,7 @@ install -m 644 -t "%{buildroot}%{_datadir}/licenses/%{name}" %{SOURCE1}
 # Install launcher script
 cd "%{buildroot}"
 install -m 755 -d "%{buildroot}%{_bindir}"
-ln -s "%{_libdir}/%{name}/%{name}.sh" "%{buildroot}%{_bindir}/%{name}"
+ln -s "%{_libdir}/%{name}/%{name}.sh" "%{buildroot}%{_bindir}/%{binname}"
 popd
 %post
 
@@ -142,7 +143,7 @@ popd
 
 %files
 %license %{_datadir}/licenses/%{name}/eula.html
-%{_bindir}/%{name}
+%{_bindir}/%{binname}
 %{_libdir}/%{name}/*
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/pixmaps/%{name}.png
