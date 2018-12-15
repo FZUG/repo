@@ -2,9 +2,10 @@
 %global __provides_exclude (npm)
 %global __requires_exclude (npm|nodejs.abi)
 
-%global arch %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
-%global strip() find %1 -name "*.node" -exec strip {} \\;
-%global yarn npx yarn
+%global arch       %(test $(rpm -E%?_arch) = x86_64 && echo "x64" || echo "ia32")
+%global strip()    find %1 -name "*.node" -exec strip {} \\;
+%global yarn       node --max-old-space-size=%{mem_limit} %{_bindir}/npx yarn
+%global mem_limit  4095
 
 %global nodesqlurl https://github.com/mapbox/node-sqlite3
 %global nodesqltgz %{nodesqlurl}/archive/%{nodesqlver}/%{nodesqlver}.tar.gz
@@ -12,7 +13,7 @@
 
 %global commit     a684fe7ee136f89d92fa25ee0b8f9bdeacd104b6
 %global scommit    %(c=%{commit}; echo ${c:0:7})
-%global electron_ver 3.0.10
+%global target     3.0.10
 
 Name:    vscode
 Version: 1.30.0
@@ -35,7 +36,7 @@ BuildRequires: libappstream-glib
 BuildRequires: systemd
 # /usr/lib/systemd/systemd-sysctl
 Requires:      systemd
-Requires:      electron >= %{electron_ver}
+Requires:      electron >= %{target}
 
 %description
  VS Code is a new type of tool that combines the simplicity of a code editor
@@ -64,7 +65,7 @@ sed -i "/destin/s|=.*|='%{name}';|; /destin/s|result|all|
         /Asar/s|app|%{name}|" build/gulpfile.vscode.js
 
 # Build native modules for system electron
-sed -i '/target/s|".*"|"%{electron_ver}"|' .yarnrc
+sed -i '/target/s|".*"|"%{target}"|' .yarnrc
 
 # Patch appdata and desktop file
 sed -i resources/linux/code.{appdata.xml,desktop} \
@@ -85,6 +86,7 @@ sed -i '/default/s|:.*,|:false,|' src/vs/platform/telemetry/common/telemetryServ
 
 %build
 export BUILD_SOURCEVERSION="%{commit}"
+export NODE_OPTIONS="--max-old-space-size=%{mem_limit}"
 npm config set python="/usr/bin/python2"
 %yarn install
 %strip node_modules
@@ -150,6 +152,7 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/metainfo/%{name}.a
 * Fri Dec 14 2018 mosquito <sensor.wen@gmail.com> - 1.30.0-2
 - Fix save file for electron-3
 - Disable crash reporter and telemetry service by default
+- Set max memory size via NODE_OPTIONS
 
 * Wed Dec 12 2018 mosquito <sensor.wen@gmail.com> - 1.30.0-1
 - Release 1.30.0
