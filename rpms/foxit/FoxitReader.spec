@@ -24,20 +24,22 @@ Requires: desktop-file-utils
 Provides: foxitreader = %{version}-%{release}
 
 %description
-Foxit Reader is a free PDF document viewer for the Linux platform, with
-a new streamlined interface, user-customized toolbar, incredibly small
-size, breezing-fast launch speed and rich features. This empowers PDF
-document users with Zoom function, Navigation function, Bookmarks,
-Thumbnails, Text Selection Tool, Snapshot, and Full Screen capabilities.
-Foxit Reader for Desktop Linux is provided by Foxit Corporation free for
-non-commercial use.
+Foxit Reader is a free (as in free beer) PDF document viewer for the 
+Linux platform, with a new streamlined interface, user-customized 
+toolbar, incredibly small size, breezing-fast launch speed and rich
+features. This empowers PDF document users with Zoom function,
+Navigation function, Bookmarks, Thumbnails, Text Selection Tool,
+Snapshot, and Full Screen capabilities.
+Foxit Reader for Desktop Linux is provided by Foxit Corporation free
+for non-commercial use.
 
 %prep
 mkdir -p %{name}.%{version}
-tar -xzf FoxitReader.enu.setup.%{version}.x64.run.tar.gz -C %{name}.%{version}/.
-cp %{SOURCE1} %{name}.%{version}/.
-cp %{SOURCE2} %{name}.%{version}/.
-cp %{PATCH1} %{name}.%{version}/.
+#tar -xzf FoxitReader.enu.setup.%{version}.x64.run.tar.gz -C %{name}.%{version}/.
+%setup -q -c
+cp %{SOURCE1} .
+cp %{SOURCE2} .
+cp %{PATCH1} .
 
 %build
 
@@ -109,13 +111,13 @@ fi
 done < "${srcdir}/%{name}-excluded_files"
 }
 
-pushd %{name}.%{version}
+pushd %{_builddir}/%{name}-%{version}
 build
 popd
 
 %install
 rm -rf %{buildroot}
-pushd %{name}.%{version}
+pushd %{_builddir}/%{name}-%{version}
 install -m 755 -d "%{buildroot}%{_libdir}/%{name}"
 cd "%{name}-build"
 cp -r * "%{buildroot}%{_libdir}/%{name}"
