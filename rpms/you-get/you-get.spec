@@ -1,8 +1,8 @@
 %{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:           you-get
-Version:        0.4.595
-Release:        2%{?dist}
+Version:        0.4.1193
+Release:        1%{?dist}
 Summary:        A YouTube/Youku/Niconico video downloader written in Python 3
 
 License:        MIT
@@ -93,9 +93,6 @@ sed -i 's|%{name}|you-mpv|g' you-mpv.fish
 %{__install} -Dm644 you-vlc.fish %{buildroot}%{_datadir}/fish/completions/you-vlc.fish
 %{__install} -Dm644 you-mpv.fish %{buildroot}%{_datadir}/fish/completions/you-mpv.fish
 
-%check
-%{__python3} setup.py test
-
 %files
 %defattr(-,root,root,-)
 %doc README.md
@@ -119,6 +116,8 @@ sed -i 's|%{name}|you-mpv|g' you-mpv.fish
 %{_datadir}/fish/completions/you-mpv.fish
 
 %changelog
+* Wed Dec 19 2018 Zamir SUN <sztsian@gmail.com> - 0.4.1193-1
+- Update to 0.4.1193
 * Sat Dec 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.595-2
 - Add you-mpv command
 * Tue Dec 13 2016 mosquito <sensor.wen@gmail.com> - 0.4.595-1
