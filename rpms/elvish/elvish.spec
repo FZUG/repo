@@ -1,14 +1,14 @@
 %global debug_package %{nil}
 
 Name:    elvish
-Version: 0.5
-Release: 2%{?dist}
+Version: 0.8
+Release: 1%{?dist}
 Summary: Elvish - A friendly and expressive Unix shell
 
 Group:   System Environment/Shells
 License: BSD 2-Clause
 URL:     https://github.com/elves/elvish
-Source0: https://github.com/elves/elvish/archive/%{version}/elvish-%{version}.tar.gz
+Source0: https://github.com/elves/elvish/archive/v%{version}/elvish-v%{version}.tar.gz
 BuildRequires: golang-bin
 BuildRequires: golang-googlecode-tools-stringer
 Obsoletes: golang-github-elves-elvish
@@ -36,7 +36,9 @@ install -Dm 0755 elvish %{buildroot}%{_bindir}/elvish
 %{_bindir}/elvish
 
 %changelog
+* Wed Dec 19 2018 Zamir SUN <zsun@fedoraproject.org> - 0.8-1
+- Update to 0.8
 * Tue Dec 27 2016 Zamir SUN <zsun@fedoraproject.org> - 0.5-2
-- Rename tp elvish
+- Rename to elvish
 * Tue Dec 20 2016 Zamir SUN <zsun@fedoraproject.org> - 0.5-1
 - Initial with elvish-0.5
