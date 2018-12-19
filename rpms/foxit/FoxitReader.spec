@@ -1,20 +1,24 @@
 %global debug_package %{nil}
+%define  _foxitrevision r057d814
+%define binname foxitreader
 
 Name:     FoxitReader
-Version:  1.1.0
+Version:  2.4.4.0911
 Release:  1%{?dist}
 Summary:  Foxit Reader is a free PDF document viewer
 Summary(zh_CN): 福昕 PDF 阅读器
 
 Group:    Applications/Text
-License:  Proprietary
+License:  EULA
 URL:      http://www.foxitsoftware.com
-Source0:  http://cdn02.foxitsoftware.com/pub/foxit/reader/desktop/linux/1.x/1.1/enu/%{name}-%{version}.tar.bz2
-Source1:  fx-icon.png
-Source2:  FoxitReader_ru.po
+Source0:  http://cdn09.foxitsoftware.com/pub/foxit/reader/desktop/linux/2.x/2.4/en_us/FoxitReader.enu.setup.%{version}.x64.run.tar.gz
+Source1:  https://www.foxitsoftware.com/products/pdf-reader/eula.html
+Source2:  FoxitReader-excluded_files
 
-ExclusiveArch: %{ix86}
-BuildRequires: gettext
+Patch1:   FoxitReader.patch
+
+BuildRequires: p7zip, chrpath, p7zip-plugins
+Requires: gstreamer,gstreamer-tools
 Requires: /usr/bin/gtk-update-icon-cache
 Requires: desktop-file-utils
 Provides: foxitreader = %{version}-%{release}
@@ -29,67 +33,123 @@ Foxit Reader for Desktop Linux is provided by Foxit Corporation free for
 non-commercial use.
 
 %prep
-%setup -q -n 1.1-release
+mkdir -p %{name}.%{version}
+tar -xzf FoxitReader.enu.setup.%{version}.x64.run.tar.gz -C %{name}.%{version}/.
+cp %{SOURCE1} %{name}.%{version}/.
+cp %{SOURCE2} %{name}.%{version}/.
+cp %{PATCH1} %{name}.%{version}/.
+
+%build
+
+build(){
+local _file
+local _line
+local _position
+export srcdir=$(pwd)
+# Clean installer dir
+if [ -d "%{name}-installer" ]
+then
+rm -rf "%{name}-installer"
+fi
+mkdir "%{name}-installer"
+# Decompress .run installer
+_file="FoxitReader.enu.setup.%{version}(%{_foxitrevision}).x64.run"
+LANG=C grep --only-matching --byte-offset --binary \
+          --text $'7z\xBC\xAF\x27\x1C' "${_file}" | cut -f1 -d: | 
+     while read _position
+     do
+       dd if="${_file}" \
+          bs=1M iflag=skip_bytes status=none skip=${_position} \
+          of="%{name}-installer/bin-${_position}.7z"
+     done
+# Clean build dir
+if [ -d "%{name}-build" ]
+then
+rm -rf "%{name}-build"
+fi
+# Decompress 7z files (some files are damaged during the extraction)
+cd "%{name}-installer"
+install -m 755 -d "${srcdir}/%{name}-build"
+for _file in *.7z
+do
+echo ${_file}
+7z -bd -bb0 -y x -o"${srcdir}/%{name}-build" ${_file} 1>/dev/null 2>&1 || true
+done
+# Apply final patches
+cd "${srcdir}/%{name}-build"
+patch -p1 --no-backup-if-mismatch -i %{PATCH1}
+# Remove insecure RPATH
+for _file in "lib/libFcitxQt5DBusAddons.so.1.0" \
+           "lib/libQt5PrintSupport.so.5.3.2" \
+           "platforminputcontexts/libfcitxplatforminputcontextplugin.so" \
+           "printsupport/libcupsprintersupport.so"
+do
+echo "  -> Removing insecure RPATH from ${_file}"
+chrpath --delete "${_file}"
+done
+# Remove unneeded files
+rm "Activation" "Activation.desktop" "Activation.sh" \
+ "countinstalltion" "countinstalltion.sh" \
+ "installUpdate" "ldlibrarypath.sh" \
+ "maintenancetool.sh" "Uninstall.desktop" \
+ "Update.desktop" "updater" "updater.sh"
+find -type d -name ".svn" -exec rm -rf {} +
+find -type f -name ".directory" -exec rm -rf {} +
+find -type f -name "*~" -exec rm {} +
+# Remove excluded files
+while IFS='' read -r _line
+do
+if [ "${_line::2}" = "# " ]
+then
+  echo "  -> Removing excluded files from ${_line:2}..."
+elif [ -n "${_line}" -a "${_line::1}" != "#" ]
+then
+  rm "${srcdir}/%{name}-build/${_line}"
+fi
+done < "${srcdir}/%{name}-excluded_files"
+}
+
+pushd %{name}.%{version}
+build
+popd
 
 %install
-install -d %{buildroot}%{_bindir}
-install -m 0755 %{name} %{buildroot}%{_bindir}
-
-install -d %{buildroot}%{_datadir}/foxit
-install -m 0644 fum.fhd fpdfcjk.bin %{buildroot}%{_datadir}/foxit
-
-install -d %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/%{name}.desktop << EOF
-[Desktop Entry]
-Type=Application
-Encoding=UTF-8
-Name=%{name}
-GenericName=%{name}
-Comment=PDF Viewer
-Comment[ru]=Просмотр PDF
-Comment[zh_CN]=PDF 浏览器
-Exec=%{name} %F
-Icon=fx-icon
-Terminal=false
-Categories=GNOME;GTK;Qt;KDE;Application;Office;Viewer;
-X-Desktop-File-Install-Version=1.1
-MimeType=application/pdf;application/x-gzpdf;application/x-bzpdf;
-EOF
-
-install -d %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/
-install -m 0644 %{S:1} %{buildroot}%{_datadir}/icons/hicolor/48x48/apps
-
-for lang in de fr ja zh_CN zh_TW; do
-  install -d %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES
-  install -m 0644 po/$lang/*.mo %{buildroot}%{_datadir}/locale/$lang/LC_MESSAGES
-done
-install -d %{buildroot}%{_datadir}/locale/ru/LC_MESSAGES
-msgfmt -o %{buildroot}%{_datadir}/locale/ru/LC_MESSAGES/%{name}.mo %{S:2}
-
-%find_lang %{name}
-
+rm -rf %{buildroot}
+pushd %{name}.%{version}
+install -m 755 -d "%{buildroot}%{_libdir}/%{name}"
+cd "%{name}-build"
+cp -r * "%{buildroot}%{_libdir}/%{name}"
+# Install icon and desktop files
+install -m 755 -d "%{buildroot}%{_datadir}/pixmaps"
+install -m 644 "images/FoxitReader.png" \
+"%{buildroot}%{_datadir}/pixmaps/%{name}.png"
+install -m 755 -d "%{buildroot}%{_datadir}/applications"
+install -m 755 "FoxitReader.desktop" \
+"%{buildroot}%{_datadir}/applications/%{name}.desktop"
+rm FoxitReader.desktop
+# Install license file
+install -m 755 -d "%{buildroot}%{_datadir}/licenses/%{name}"
+install -m 644 -t "%{buildroot}%{_datadir}/licenses/%{name}" %{SOURCE1}
+# Install launcher script
+cd "%{buildroot}"
+install -m 755 -d "%{buildroot}%{_bindir}"
+ln -s "%{_libdir}/%{name}/%{name}.sh" "%{buildroot}%{_bindir}/%{binname}"
+popd
 %post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
 
 %postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-fi
-/usr/bin/update-desktop-database -q ||:
 
 %posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
 
-%files -f %{name}.lang
-%doc Readme.txt
-%{_bindir}/%{name}
-%{_datadir}/foxit/fum.fhd
-%{_datadir}/foxit/fpdfcjk.bin
-%{_datadir}/icons/hicolor/*/apps/fx-icon.png
+%files
+%license %{_datadir}/licenses/%{name}/eula.html
+%{_bindir}/%{binname}
+%{_libdir}/%{name}/*
 %{_datadir}/applications/%{name}.desktop
+%{_datadir}/pixmaps/%{name}.png
 
 %changelog
+* Fri Dec 14 2018 Bangjie Deng <dengbangjie@foxmail.com> - 2.4.4.0911
+- Bump version to 2.4.4.0911. The spec was converted from archlinuxcn repo.
 * Mon Dec 14 2015 mosquito <sensor.wen@gmail.com> - 1.1.0-1
 - Initial build
