@@ -7,8 +7,8 @@
 %global electron_ver  3.0.10
 
 Name:    atom
-Version: 1.33.0
-Release: 2%{?dist}
+Version: 1.33.1
+Release: 1%{?dist}
 Summary: A hack-able text editor for the 21st century
 License: MIT
 URL:     https://github.com/atom/atom
@@ -148,6 +148,9 @@ install -m644 out/app/node_modules/symbols-view/lib/ctags-config \
 %{_datadir}/icons/hicolor/*/apps/%{name}.png
 
 %changelog
+* Thu Dec 20 2018 mosquito <sensor.wen@gmail.com> - 1.33.1-1
+- Release 1.33.1
+
 * Sun Dec  9 2018 mosquito <sensor.wen@gmail.com> - 1.33.0-2
 - Fix broken Exec line in .desktop file (#335)
 
