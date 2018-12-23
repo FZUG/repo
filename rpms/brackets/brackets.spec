@@ -1,51 +1,83 @@
-# https://github.com/jgillich/brackets-rpm
 %global debug_package %{nil}
-%global _hardened_build 1
 %global __provides_exclude (npm)
-%global __requires_exclude (npm|0.12)
-%global project brackets
-%global repo %{project}
+%global __requires_exclude (npm)
 
-# commit
-%global _commit0 3af64fae4b8430318770375c0125fcc9eeda1e85
-%global _scommit0 %(c=%{_commit0}; echo ${c:0:7})
-%global _commit1 0ad2696e4e34880385c710addab1554d1476315c
-%global _scommit1 %(c=%{_commit1}; echo ${c:0:7})
+%define subm() %(%{__python2} -c "
+from __future__ import print_function
+for argv in '%*'.split():
+  key, typ = argv.split('.')
+  me = %{meta_data}
+  proj, comm, outdir = me[key][0].split('/')[1], me[key][1], me[key][2]
+  tgzurl = 'https://github.com/%s/archive/%s/%s-%s.tar.gz'
+  if typ == 'tgz': print(tgzurl % (me[key][0], comm[0:7], proj, comm[0:7]))
+  if typ == 'src': print(proj +'-'+ comm)
+  if typ == 'out': print(outdir, end='')
+  if typ == 'com': print(comm)
+  if typ == 'md':  print('mv -T ../%s-%s %s' % (proj, comm, outdir))
+")
+
+%define meta_data %(echo "{
+  '%{name}': ['adobe/%{name}', '49d29a8bc3ac373c881152c4088bf3b3212b8393', '%{name} '],
+  '%{name}-shell': ['adobe/%{name}-shell', 'b858d450cf34cf3cbae7bcfd6da1525d958c8426', '%{name}-shell '],
+  'jslint':['peterflynn/JSLint', '5a09b359873fe98ddd4ec88b7beed3a4171fd8e0', 'src/extensions/default/JSLint/thirdparty/jslint '],
+  'i18n':  ['requirejs/i18n',    'ca7d048cbd365acdb1e25f64d86378976d8a029b', 'src/thirdparty/i18n '],
+  'text':  ['requirejs/text',    '35c3ead097a9ede09469172666cc96349d2ce3e4', 'src/thirdparty/text '],
+  'must':  ['janl/mustache.js',  '0be4e2b9446ccac052a8e74e57fe6d7444dcc231', 'src/thirdparty/mustache '],
+  'path':  ['jblas/path-utils',  'cc7f66e8e213e798f7504d64eaa3d1ae6860c636', 'src/thirdparty/path-utils '],
+  'reqjs': ['jrburke/requirejs', 'a5f5750896bd06a21c2a96e4678cf47e03d80a1a', 'src/thirdparty/requirejs ']
+}")
 
 Name:    brackets
-Version: 1.8
-Release: 2%{?dist}
+Version: 1.13
+Release: 1%{?dist}
 Summary: An open source code editor for the web
-
-Group:   Development/Tools
 License: MIT
-URL:     http://brackets.io
-Source0: http://rpm-ostree.cloud.fedoraproject.org/repo/pkgs/mosquito/brackets/brackets/adobe.brackets.extract.0.8.0-1749-release.zip/200eb47ad53f74e57caa13a6ae16ef5a/adobe.brackets.extract.0.8.0-1749-release.zip
-Source1: GettingStarted-zhcn.html
+URL:     https://brackets.io
+Source0: %subm %{name}-shell.tgz
+Source1: %subm %{name}.tgz
+Source2: %subm jslint.tgz
+Source3: %subm i18n.tgz
+Source4: %subm text.tgz
+Source5: %subm must.tgz
+Source6: %subm path.tgz
+Source7: %subm reqjs.tgz
+Patch0:  %{name}-fix-config.patch
 
-BuildRequires: alsa-lib, GConf2
-BuildRequires: gtk2-devel, git
-BuildRequires: /usr/bin/npm, node-gyp
+BuildRequires: git
+BuildRequires: gcc-c++
+BuildRequires: python2
+BuildRequires: npm(npm)
+BuildRequires: npm(node-gyp)
+BuildRequires: npm(grunt-cli)
+BuildRequires: pkgconfig(gtk+-2.0)
 BuildRequires: desktop-file-utils
-Requires: desktop-file-utils
-%if 0%{?fedora}
-# enable Live Preview
-Recommends: google-chrome
-# enable LiveDevelopment Inspector
-Recommends: ruby
-%endif
-Obsoletes: %{name} <= 1.5.0
+# ld link for libcef.so
+BuildRequires: alsa-lib
+BuildRequires: GConf2
+BuildRequires: libXtst
+BuildRequires: libXScrnSaver
+BuildRequires: nspr
+BuildRequires: nss
 
-# libcef.so require libgcrypt.so.11, libudev.so.0
-# https://github.com/adobe/brackets/issues/10255
-# http://red.fedorapeople.org/SRPMS/compat-libgcrypt-1.5.3-4.fc21.src.rpm
-%if 0%{?fedora} >= 21
-BuildRequires: compat-libgcrypt
-Requires: compat-libgcrypt
-%else
-BuildRequires: libgcrypt
-Requires: libgcrypt
-%endif
+Requires:      npm(arrify)
+Requires:      npm(async)
+Requires:      npm(async-each)
+Requires:      npm(chainsaw)
+Requires:      npm(fs-extra)
+Requires:      npm(micromatch)
+Requires:      npm(glob-parent)
+Requires:      npm(lodash)
+Requires:      npm(opn)
+Requires:      npm(readdirp)
+Requires:      npm(request)
+Requires:      npm(semver)
+Requires:      npm(temp)
+Requires:      npm(touch)
+Requires:      npm(ws)
+# enable Live Preview
+Recommends:    google-chrome
+# enable LiveDevelopment Inspector
+Recommends:    ruby
 
 %description
  Brackets is an open-source editor for web design and development
@@ -54,108 +86,78 @@ Requires: libgcrypt
  under an MIT License.
 
 %prep
-git clone https://github.com/adobe/brackets
-git clone https://github.com/adobe/brackets-shell
-pushd %{name} && git checkout %{_commit0} && git submodule update --init && popd
-# Note: use the linux-1547 branch for build brackets-shell
-# https://github.com/adobe/brackets/issues/12551
-pushd %{name}-shell && git checkout linux-1547 && popd
+%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7 -n %{subm %{name}-shell.src}
+mv %{subm %{name}.src} %{name}; pushd %{name}
+install -d %subm jslint.out i18n.out text.out must.out path.out reqjs.out
+%subm jslint.md i18n.md text.md must.md path.md reqjs.md
+%patch0 -p1 -b .fix-config
+
+sed -E '/(eslint:src|jasmine|npm-install).,$/d' -i Gruntfile.js
+sed 's|python|python2|' -i ../gyp/gyp
+sed 's|<commit>|%{subm %{name}.com}|
+     s|<branch>|release-%{version}|' -i tasks/write-config.js
 
 %build
-ln -sfv %{_libdir}/libudev.so.1 %{_builddir}/libudev.so.0
-export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:%{_builddir}"
-export CFLAGS="%{optflags} -fPIC -pie"
-export CXXFLAGS="%{optflags} -fPIC -pie"
+npm install
+grunt cef icu node create-project
+make
 
-pushd %{_builddir}/%{name}
-npm install && npm install grunt-cli
-./node_modules/.bin/grunt clean less targethtml useminPrepare htmlmin requirejs concat copy usemin
-
-# change version
-sed "/timestamp/s|:.*|: \"`date -u '+%a %b %d %Y %T GMT+0000'`\",|;
-  /version/s|-0|-17108|; /branch/s|:.*|: \"alf_localization_release_1.8\",|;
-  /SHA/s|:.*|: \"%{_commit0}\"|" -i src/config.json
-cp -a src/config.json dist/config.json
-
-pushd %{_builddir}/%{name}-shell
-npm install && npm install grunt-cli
-./node_modules/.bin/grunt setup full-build
+pushd %{name}
+npm install
+grunt build
 
 %install
-mkdir --parents %{buildroot}%{_libdir}/%{name} %{buildroot}%{_datadir}
-pushd %{_builddir}/%{name}-shell
-cp -a installer/linux/debian/package-root/opt/%{name}/. %{buildroot}%{_libdir}/%{name}
-cp -a installer/linux/debian/package-root/usr/share/icons %{buildroot}%{_datadir}/
+install -d %{buildroot}%{_bindir}
+install -Dm755 installer/linux/debian/%{name} %{buildroot}%{_libdir}/%{name}/%{name}
+ln -sv ../%{_lib}/%{name}/%{name} %{buildroot}%{_bindir}/%{name}
+ln -sv ../libudev.so.1 %{buildroot}%{_libdir}/%{name}/libudev.so.0
+
+install -Dm644 installer/linux/debian/%{name}.desktop %{buildroot}%{_datadir}/applications/%{name}.desktop
+cp -r installer/linux/debian/package-root/usr/share/icons %{buildroot}%{_datadir}/
+for px in 32 48 128 256; do
+  install -Dm644 out/Release/files/appshell${px}.png \
+    %{buildroot}%{_datadir}/icons/hicolor/${px}x${px}/apps/%{name}.png
+done
+
+pushd out/Release
+cp -r {files,locales,node-core} %{buildroot}%{_libdir}/%{name}/
+find -maxdepth 1 -type f -exec cp {} %{buildroot}%{_libdir}/%{name}/{} \;
+chmod 4755 %{buildroot}%{_libdir}/%{name}/chrome-sandbox
 popd
 
-mkdir --parents %{buildroot}%{_bindir}
-ln -sfv %{_libdir}/%{name}/%{name} %{buildroot}%{_bindir}/
-ln -sfv %{_libdir}/%{name}/Brackets %{buildroot}%{_bindir}/%{name}-bin
+pushd %{name}
+cp -r samples %{buildroot}%{_libdir}/%{name}/samples
+cp -r dist    %{buildroot}%{_libdir}/%{name}/www
 
-mkdir --parents %{buildroot}%{_datadir}/applications
-cat <<EOT >> %{buildroot}%{_datadir}/applications/%{name}.desktop
-[Desktop Entry]
-Name=Brackets
-Type=Application
-Categories=Development
-Exec=brackets %U
-Icon=brackets
-MimeType=text/html;
-Keywords=Text;Editor;Write;Web;Development;
-EOT
-
-desktop-file-install --mode 0644 %{buildroot}%{_datadir}/applications/%{name}.desktop
-rm -rf %{buildroot}%{_libdir}/%{name}/*.desktop
-
-ln -sfv %{_libdir}/libudev.so.1 %{buildroot}%{_libdir}/%{name}/lib/libudev.so.0
-
-# strip symbol information
-strip %{buildroot}%{_libdir}/%{name}/{Brackets{,-node},lib/libcef.so}
-
-# extensions
-mkdir --parents %{buildroot}%{_libdir}/%{name}/auto-install-extensions
-install -m 0644 %{S:0} %{buildroot}%{_libdir}/%{name}/auto-install-extensions/
-
-# Getting Started zh_cn
-cp -a %{buildroot}%{_libdir}/%{name}/samples/zh-{tw,cn}
-install -m 0644 %{S:1} %{buildroot}%{_libdir}/%{name}/samples/zh-cn/Get*/index.html
-
-%post
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/usr/bin/update-desktop-database &>/dev/null ||:
-
-%postun
-if [ $1 -eq 0 ]; then
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
-fi
-/usr/bin/update-desktop-database &>/dev/null ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null ||:
+install -d %{buildroot}%{_libdir}/%{name}/www/node_modules
+cp -r node_modules/{anymatch,buffers,is-binary-path,binary{,-ext*},chokidar,decompress-zip,mkpath} \
+  %{buildroot}%{_libdir}/%{name}/www/node_modules/
+ln -sv ../../lib/node_modules %{buildroot}%{_libdir}/%{name}/node_modules
 
 %files
-%defattr(-,root,root,-)
-%doc %{name}/README.md
-%license %{name}/LICENSE
-%{_bindir}/%{name}*
-%dir %{_libdir}/%{name}/
-%{_libdir}/%{name}/*
-%{_datadir}/icons/*
+%doc README.md
+%license LICENSE
+%{_bindir}/%{name}
+%{_libdir}/%{name}/
+%{_datadir}/icons/hicolor/*/apps/%{name}*
 %{_datadir}/applications/%{name}.desktop
-%attr(755,root,root) %{_libdir}/%{name}/%{name}
-%attr(755,root,root) %{_libdir}/%{name}/Brackets
-%attr(755,root,root) %{_libdir}/%{name}/Brackets-node
 
 %changelog
+* Fri Dec 21 2018 mosquito <sensor.wen@gmail.com> - 1.13-1
+- Release 1.13
+
 * Sun Dec 25 2016 mosquito <sensor.wen@gmail.com> - 1.8-2
 - Back to linux-1547 branch
 - Set config.json for check version
+
 * Thu Dec  1 2016 mosquito <sensor.wen@gmail.com> - 1.8-1
 - Release 1.8
+
 * Fri Jun 17 2016 mosquito <sensor.wen@gmail.com> - 1.7-1
 - Release 1.7
+
 * Mon Jan 25 2016 mosquito <sensor.wen@gmail.com> - 1.6-1
 - Release 1.6
+
 * Sun Nov 22 2015 mosquito <sensor.wen@gmail.com> - 1.5-1
 - Initial build

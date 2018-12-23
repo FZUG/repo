@@ -1,0 +1,36 @@
+--- a/tasks/write-config.js
++++ b/tasks/write-config.js
+@@ -26,8 +26,7 @@
+ "use strict";
+ 
+ module.exports = function (grunt) {
+-    var common  = require("./lib/common")(grunt),
+-        build   = require("./build")(grunt);
++    var common  = require("./lib/common")(grunt);
+ 
+     // task: write-config
+     grunt.registerTask("write-config", "Merge package.json and src/brackets.config.json into src/config.json", function () {
+@@ -62,19 +61,14 @@ module.exports = function (grunt) {
+         var done = this.async(),
+             distConfig = grunt.file.readJSON("src/config.json");
+ 
+-        build.getGitInfo(process.cwd()).then(function (gitInfo) {
+-            distConfig.buildnumber = gitInfo.commits;
+-            distConfig.version = distConfig.version.substr(0, distConfig.version.lastIndexOf("-") + 1) + gitInfo.commits;
+-            distConfig.repository.SHA = gitInfo.sha;
+-            distConfig.repository.branch = gitInfo.branch;
++            distConfig.buildnumber = "<commit>";
++            distConfig.version = distConfig.version.substr(0, distConfig.version.lastIndexOf("-") + 1) + "<commit>";
++            distConfig.repository.SHA = "<commit>";
++            distConfig.repository.branch = "<branch>";
+             distConfig.config.build_timestamp = new Date().toString().split('(')[0].trim();
+ 
+             common.writeJSON(grunt, "dist/config.json", distConfig);
+ 
+             done();
+-        }, function (err) {
+-            grunt.log.writeln(err);
+-            done(false);
+-        });
+     });
+ };
