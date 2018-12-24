@@ -2,29 +2,29 @@
 %global __provides_exclude (npm)
 %global __requires_exclude (npm)
 
-%define subm() %(%{__python2} -c "
-from __future__ import print_function
-for argv in '%*'.split():
-  key, typ = argv.split('.')
-  me = %{meta_data}
-  proj, comm, outdir = me[key][0].split('/')[1], me[key][1], me[key][2]
+%define subm() %{lua:
+printf, sub = function(...) print(string.format(...)) end, string.sub
+for argv in string.gmatch(rpm.expand('%*'), '%w+%.%a+') do
+  key, typ = string.match(argv, '(%w+)%.(%a+)')
+  me = loadstring('return '..rpm.expand('%{meta_data}'))()
+  proj, comm, outdir = string.match(me[key][1], '/(%w.*)'), me[key][2], me[key][3]
   tgzurl = 'https://github.com/%s/archive/%s/%s-%s.tar.gz'
-  if typ == 'tgz': print(tgzurl % (me[key][0], comm[0:7], proj, comm[0:7]))
-  if typ == 'src': print(proj +'-'+ comm)
-  if typ == 'out': print(outdir, end='')
-  if typ == 'com': print(comm)
-  if typ == 'md':  print('mv -T ../%s-%s %s' % (proj, comm, outdir))
-")
+  if typ == 'tgz' then printf(tgzurl, me[key][1], sub(comm,1,7), proj, sub(comm,1,7)) end
+  if typ == 'src' then print(proj ..'-'.. comm) end
+  if typ == 'out' then print(outdir) end
+  if typ == 'com' then print(comm) end
+  if typ == 'md'  then printf('mv -T ../%s-%s %s\\n', proj, comm, outdir) end
+end}
 
 %define meta_data %(echo "{
-  '%{name}': ['adobe/%{name}', '49d29a8bc3ac373c881152c4088bf3b3212b8393', '%{name} '],
-  '%{name}-shell': ['adobe/%{name}-shell', 'b858d450cf34cf3cbae7bcfd6da1525d958c8426', '%{name}-shell '],
-  'jslint':['peterflynn/JSLint', '5a09b359873fe98ddd4ec88b7beed3a4171fd8e0', 'src/extensions/default/JSLint/thirdparty/jslint '],
-  'i18n':  ['requirejs/i18n',    'ca7d048cbd365acdb1e25f64d86378976d8a029b', 'src/thirdparty/i18n '],
-  'text':  ['requirejs/text',    '35c3ead097a9ede09469172666cc96349d2ce3e4', 'src/thirdparty/text '],
-  'must':  ['janl/mustache.js',  '0be4e2b9446ccac052a8e74e57fe6d7444dcc231', 'src/thirdparty/mustache '],
-  'path':  ['jblas/path-utils',  'cc7f66e8e213e798f7504d64eaa3d1ae6860c636', 'src/thirdparty/path-utils '],
-  'reqjs': ['jrburke/requirejs', 'a5f5750896bd06a21c2a96e4678cf47e03d80a1a', 'src/thirdparty/requirejs ']
+  %{name} = {'adobe/%{name}', '49d29a8bc3ac373c881152c4088bf3b3212b8393', '%{name} '},
+  %{name}shell = {'adobe/%{name}-shell', 'b858d450cf34cf3cbae7bcfd6da1525d958c8426', '%{name}-shell '},
+  jslint = {'peterflynn/JSLint', '5a09b359873fe98ddd4ec88b7beed3a4171fd8e0', 'src/extensions/default/JSLint/thirdparty/jslint '},
+  i18n   = {'requirejs/i18n',    'ca7d048cbd365acdb1e25f64d86378976d8a029b', 'src/thirdparty/i18n '},
+  text   = {'requirejs/text',    '35c3ead097a9ede09469172666cc96349d2ce3e4', 'src/thirdparty/text '},
+  must   = {'janl/mustache.js',  '0be4e2b9446ccac052a8e74e57fe6d7444dcc231', 'src/thirdparty/mustache '},
+  path   = {'jblas/path-utils',  'cc7f66e8e213e798f7504d64eaa3d1ae6860c636', 'src/thirdparty/path-utils '},
+  reqjs  = {'jrburke/requirejs', 'a5f5750896bd06a21c2a96e4678cf47e03d80a1a', 'src/thirdparty/requirejs '}
 }")
 
 Name:    brackets
@@ -33,7 +33,7 @@ Release: 1%{?dist}
 Summary: An open source code editor for the web
 License: MIT
 URL:     https://brackets.io
-Source0: %subm %{name}-shell.tgz
+Source0: %subm %{name}shell.tgz
 Source1: %subm %{name}.tgz
 Source2: %subm jslint.tgz
 Source3: %subm i18n.tgz
@@ -86,7 +86,7 @@ Recommends:    ruby
  under an MIT License.
 
 %prep
-%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7 -n %{subm %{name}-shell.src}
+%setup -q -a1 -a2 -a3 -a4 -a5 -a6 -a7 -n %{subm %{name}shell.src}
 mv %{subm %{name}.src} %{name}; pushd %{name}
 install -d %subm jslint.out i18n.out text.out must.out path.out reqjs.out
 %subm jslint.md i18n.md text.md must.md path.md reqjs.md
