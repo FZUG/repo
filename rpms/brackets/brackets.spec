@@ -3,12 +3,12 @@
 %global __requires_exclude (npm)
 
 %define subm() %{lua:
-printf, sub = function(...) print(string.format(...)) end, string.sub
+local printf, sub = function(...) print(string.format(...)) end, string.sub
+local me = loadstring('return '..rpm.expand('%{meta_data}'))()
+local tgzurl = 'https://github.com/%s/archive/%s/%s-%s.tar.gz'
 for argv in string.gmatch(rpm.expand('%*'), '%w+%.%a+') do
-  key, typ = string.match(argv, '(%w+)%.(%a+)')
-  me = loadstring('return '..rpm.expand('%{meta_data}'))()
-  proj, comm, outdir = string.match(me[key][1], '/(%w.*)'), me[key][2], me[key][3]
-  tgzurl = 'https://github.com/%s/archive/%s/%s-%s.tar.gz'
+  local key, typ = string.match(argv, '(%w+)%.(%a+)')
+  local proj, comm, outdir = string.match(me[key][1], '/(%w.*)'), me[key][2], me[key][3]
   if typ == 'tgz' then printf(tgzurl, me[key][1], sub(comm,1,7), proj, sub(comm,1,7)) end
   if typ == 'src' then print(proj ..'-'.. comm) end
   if typ == 'out' then print(outdir) end
