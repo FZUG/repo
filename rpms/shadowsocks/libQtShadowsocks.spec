@@ -1,88 +1,72 @@
-%global debug_package %{nil}
-%global project libQtShadowsocks
-%global repo %{project}
+%global soname QtShadowsocks
 
-# commit
-%global _commit 87958459a45292efd9c7c9d61c2a99b4d4fcae05
-%global _shortcommit %(c=%{_commit}; echo ${c:0:7})
-
-Name:    libQtShadowsocks
-Version: 1.10.0
-Release: 1.git%{_shortcommit}%{?dist}
-Summary: A lightweight and ultra-fast shadowsocks library
-
+Name:    libqtshadowsocks
+Version: 2.1.0
+Release: 1%{?dist}
+Summary: A lightweight and ultra-fast shadowsocks library written in C++/Qt
 License: LGPLv3+
 URL:     https://github.com/librehat/libQtShadowsocks
-Source0: %{url}/archive/%{_commit}/%{repo}-%{_shortcommit}.tar.gz
+Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 
-BuildRequires: qt5-qtbase-devel
+BuildRequires: cmake
+BuildRequires: gcc-c++
 BuildRequires: qt5-qttools
-BuildRequires: botan-devel
+BuildRequires: pkgconfig(Qt5Gui)
+BuildRequires: pkgconfig(Qt5Network)
+BuildRequires: pkgconfig(botan-2)
 
 %description
-A lightweight and ultra-fast shadowsocks library written in C++/Qt.
+%{summary}.
 
 %package devel
 Summary: %{name} header files
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
-Development files (headers) of %{name}.
-
-%package -n shadowsocks-%{name}
-Summary: A CLI Shadowsocks client
-Requires: %{name}%{?_isa} = %{version}-%{release}
-
-%description -n shadowsocks-%{name}
-A shadowsocks CLI client using %{name}.
+Development files of %{name}.
 
 %prep
-%setup -q -n %{repo}-%{_commit}
+%setup -q -n lib%{soname}-%{version}
 
 %build
-%ifarch x86_64
-%{qmake_qt5} DEFINES+="LIB64"
-%else
-%{qmake_qt5}
-%endif
+%cmake -DCMAKE_BUILD_TYPE=Release
 %make_build
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
 
-%post -p /sbin/ldconfig
-%postun -p /sbin/ldconfig
-
 %files
-%defattr(-,root,root,-)
 %doc README.md
 %license LICENSE
-%{_libdir}/%{name}.so.*
+%{_bindir}/shadowsocks-libqss
+%{_libdir}/lib%{soname}.so.2*
 
 %files devel
-%defattr(-,root,root,-)
-%{_libdir}/%{name}.so
-%{_libdir}/pkgconfig/QtShadowsocks.pc
-%{_includedir}/qtshadowsocks/*
-
-%files -n shadowsocks-%{name}
-%defattr(-,root,root,-)
-%doc README.md
-%license LICENSE
-%{_bindir}/shadowsocks-*
+%{_libdir}/lib%{soname}.so
+%{_libdir}/pkgconfig/%{soname}.pc
+%{_includedir}/%{soname}/
 
 %changelog
-* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.10.0-1.git8795845
-- Update to 1.10.0-1.git8795845
-* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-1.gitc60df46
-- Update to 1.9.0-1.gitc60df46
-* Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-2.gitd2c76c5
+* Sun Dec 30 2018 mosquito <sensor.wen@gmail.com> - 2.1.0-1
+- Update to 2.1.0
+
+* Tue Jan 17 2017 mosquito <sensor.wen@gmail.com> - 1.10.0-1
+- Update to 1.10.0 [8795845]
+
+* Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 1.9.0-1
+- Update to 1.9.0 [c60df46]
+
+* Mon Apr 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-2
 - Rebuild for botan and Qt 5.6.0
-* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-1.gitd2c76c5
-- Update to 1.8.4-1.gitd2c76c5
-* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.2-1.git3c3aa83
-- Update to 1.8.2-1.git3c3aa83
-* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git7b71ee0
-- Update to 1.6.1-1.git7b71ee0
-* Tue Jun 02 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1.git96fc948
+
+* Mon Jan 18 2016 mosquito <sensor.wen@gmail.com> - 1.8.4-1
+- Update to 1.8.4 [d2c76c5]
+
+* Thu Dec 24 2015 mosquito <sensor.wen@gmail.com> - 1.8.2-1
+- Update to 1.8.2 [3c3aa83]
+
+* Fri Aug 14 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1
+- Update to 1.6.1 [7b71ee0]
+
+* Tue Jun 02 2015 mosquito <sensor.wen@gmail.com> - 1.6.1-1
 - Initial build
