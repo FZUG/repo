@@ -1,0 +1,26 @@
+diff --git a/src/libs/installer/binaryformat.h b/src/libs/installer/binaryformat.h
+index b3c76c9..aec31b7 100644
+--- a/src/libs/installer/binaryformat.h
++++ b/src/libs/installer/binaryformat.h
+@@ -81,7 +81,7 @@ private:
+     void setOpenMode(OpenMode mode) { QIODevice::setOpenMode(mode); }
+ 
+ private:
+-    QFSFileEngine m_file;
++    QFile m_file;
+     QByteArray m_name;
+     Range<qint64> m_segment;
+ };
+diff --git a/tools/binarycreator/binarycreator.cpp b/tools/binarycreator/binarycreator.cpp
+index 78eb04d..4c90454 100644
+--- a/tools/binarycreator/binarycreator.cpp
++++ b/tools/binarycreator/binarycreator.cpp
+@@ -461,7 +461,7 @@ static int assemble(Input input, const QInstaller::Settings &settings, const QSt
+         return EXIT_FAILURE;
+     }
+ 
+-    if (!out.rename(targetName)) {
++    if (!out.QFile::rename(targetName)) {
+         qCritical("Cannot write installer to %s: %s", targetName.toUtf8().constData(),
+             out.errorString().toUtf8().constData());
+         QFile::remove(tempFile);
