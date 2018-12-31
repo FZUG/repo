@@ -4,48 +4,42 @@
 %global __provides_exclude_from ^/opt/kingsoft/%{name}/office6/.*\\.so$
 %global __requires_exclude_from ^/opt/kingsoft/%{name}/office6/.*\\.so$
 %global __provides_exclude (font|lib)
-%global __requires_exclude (Qt|app|libc++|draw|krt|kso|spell|wpsio|xer|wpp)
+%global __requires_exclude (Qt|app|libc++|libav|bz2|media|sw|draw|krt|kso|spell|wpsio|xer|wpp)
 
 %global debug_package %{nil}
 %global _tmppath /var/tmp
 %global tmproot %{_tmppath}/%{name}-%{version}_tmproot
-%global arch    %(test $(rpm -E%?_arch) = x86_64 && echo "x86_64" || echo "x86")
-%global appfile %{name}_%{version}~a21_%{arch}.tar.xz
-%global appurl1 http://kdl.cc.ksosoft.com/wps-community/download/a21/%{appfile}
-%global appurl2 https://repo.fdzh.org/FZUG/nonfree/23/source/SRPMS/%{appfile}
-%global sha1sum %(test %arch = x86_64 &&
-           echo "7e9b17572ed5cea50af24f01457f726fc558a515" ||
-           echo "3e417203613c178d881be2ad7db21edb72d3f524")
+# %%global is different from %%define!
+%define test()  %(test $(rpm -E%?_arch) = x86_64 && echo "%1" || echo "%2")
+%global arch    %{test x86_64 x86}
+%global appfile %{name}_%{version}_%{arch}.tar.xz
+%global appurl  http://kdl.cc.ksosoft.com/wps-community/download/%{rev}/%{appfile}
 %global msfonts symbol-fonts_1.2_all.deb
 %global msfonts_url http://linux.linuxidc.com/linuxconf/download.php?file=Li9saW51eGZpbGVzLzIwMTTE6tfKwc8vNNTCLzIwyNUvVWJ1bnR1IDE0LjA0ILCy17AgV1BTL3N5bWJvbC1mb250c18xLjJfYWxsLmRlYg==
 
-# Usage: DownloadPkg appfile appurl
-%global DownloadPkg() \
-Download() {\
-    SHA=$(test -f %1 && sha1sum %1 ||:)\
-    CODE=$(curl -sI %2|awk -F"( |\\r)" '{print$2;exit}')\
-    if [[ (! -f %1 || "${SHA/ */}" != "%sha1sum") && "$CODE" == "200" ]]; then\
-        axel -o %1 -a %2 || wget --unlink -O %1 %2 || Download\
-    fi\
-}\
-Download
-%{nil}
+# Usage: wget appfile appurl
+%global wget() %{expand:
+SHA=$(test -f %1 && sha1sum %1 ||:)
+CODE=$(curl -sI %2|awk '{print$2;exit}')
+if [[ (! -f %1 || "${SHA/ */}" != "%sha1sum") && "$CODE" == "200" ]]; then
+    wget --unlink -O %1 %2 || axel -o %1 -a %2
+fi}
+
+%global rev     6757
+%global sha1sum %{test 03a781599dfcf001fc3bcf1d49699bd1a44aaceb
+                       3c6095380c32252afd7838f295259b14a0bf726e}
 
 Name:           wps-office
-Version:        10.1.0.5672
-Release:        2.a21.net
+Version:        10.1.0.6757
+Release:        1.net
 Summary:        WPS Office Suite
 Summary(zh_CN): 金山 WPS Office 办公套件
-Group:          Applications/Editors
 License:        Proprietary
-URL:            http://wps-community.org
-
+URL:            https://wps-community.org
 BuildRequires:  axel wget dpkg
 BuildRequires:  desktop-file-utils
 Requires:       axel wget dpkg
 Requires:       desktop-file-utils
-Requires:       /usr/bin/gtk-update-icon-cache
-Requires:       /usr/bin/update-mime-database
 # http://sourceforge.net/projects/mscorefonts2
 #Requires:       msttcore-fonts-installer
 
@@ -70,11 +64,8 @@ Requires:       /usr/bin/update-mime-database
  - http://community.wps.cn
 
 %prep
-%DownloadPkg %{appfile} %{appurl1}
-%DownloadPkg %{appfile} %{appurl2}
+%wget %{appfile} %{appurl}
 test -f %{msfonts} || wget -O %{msfonts} %{msfonts_url}
-
-# symbol-fonts
 dpkg-deb -X %{msfonts} .
 
 # Extract archive
@@ -82,110 +73,87 @@ AppFile=%{appfile}
 tar -xvf %{appfile}
 mv ${AppFile%.tar.xz} %{name}
 
-%build
-
 %install
 pushd %{name}
 # Main
 install -d %{buildroot}/opt/kingsoft/%{name}
 cp -r office6 %{buildroot}/opt/kingsoft/%{name}
 
-# Fonts
-install -d %{buildroot}%{_datadir}/fonts/%{name}
-cp -r fonts/* %{buildroot}%{_datadir}/fonts/%{name}
-find ../usr -type f | xargs cp -t %{buildroot}%{_datadir}/fonts/%{name}
-
 # Icons, Mime, Desktop
-cp -r resource/icons %{buildroot}%{_datadir}
-cp -r resource/mime %{buildroot}%{_datadir}
-cp -r resource/applications %{buildroot}%{_datadir}
+install -d %{buildroot}%{_datadir}
+cp -r resource/* %{buildroot}%{_datadir}
 
-# Fonts config
-install -d %{buildroot}%{_datadir}/fontconfig/conf.avail
-install -m 0644 fontconfig/*.conf %{buildroot}%{_datadir}/fontconfig/conf.avail/
+# MS Fonts
+install -d %{buildroot}%{_datadir}/fonts/%{name}
+find ../usr -type f | xargs cp -t %{buildroot}%{_datadir}/fonts/%{name}
 
 # Execution files
 for i in wps wpp et; do
-  install -Dm 0755 ${i} %{buildroot}%{_bindir}/${i}
+  install -Dm755 ${i} %{buildroot}%{_bindir}/${i}
 done
 
 %pre
 if [ $1 -ge 1 ]; then
 # Download wps
 cd %{_tmppath}
-%DownloadPkg %{appfile} %{appurl1}
-%DownloadPkg %{appfile} %{appurl2}
-test -f %{msfonts} || wget -O %{msfonts} %{msfonts_url}
-
-# symbol-fonts
-dpkg-deb -x %{msfonts} . ||:
+%wget %{appfile} %{appurl}
 
 # Extract archive
 AppFile=%{appfile}
-mkdir %{tmproot} &>/dev/null ||:
 tar -xf %{appfile}
 mv ${AppFile%.tar.xz} %{name}
-cd %{name}
 
 # Main
 install -d %{tmproot}/opt/kingsoft/%{name}
-cp -r office6 %{tmproot}/opt/kingsoft/%{name}
-
-# Fonts
-install -d %{tmproot}%{_datadir}/fonts/%{name}
-cp -r fonts/* %{tmproot}%{_datadir}/fonts/%{name}
-find ../usr -type f | xargs cp -t %{tmproot}%{_datadir}/fonts/%{name}
+cp -r %{name}/office6 %{tmproot}/opt/kingsoft/%{name}
 fi
 
 %post
 if [ $1 -ge 1 ]; then
-    cp -rf %{tmproot}/* /; rm -rf %{tmproot} %{_tmppath}/%{name} %{_tmppath}/usr
-    ln -sf %{_datadir}/fontconfig/conf.avail/40-%{name}.conf %{_sysconfdir}/fonts/conf.d/
+    cp -rf %{tmproot}/* /; rm -rf %{tmproot} %{_tmppath}/%{name}
 fi
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/bin/touch --no-create %{_datadir}/mime/packages &>/dev/null ||:
-/usr/bin/update-desktop-database -q ||:
 /usr/bin/fc-cache %{_datadir}/fonts/%{name} ||:
 
 %postun
 if [ $1 -eq 0 ]; then
-    rm -rf %{_sysconfdir}/fonts/conf.d/40-%{name}.conf
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-    /usr/bin/update-mime-database %{_datadir}/mime &>/dev/null ||:
     /usr/bin/fc-cache %{_datadir}/fonts/%{name} ||:
 fi
-/usr/bin/update-desktop-database -q ||:
-
-%posttrans
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-/usr/bin/update-mime-database %{_datadir}/mime &>/dev/null ||:
 
 %files
 %doc %{name}/README.txt
 %{_bindir}/*
-%{_datadir}/fontconfig/conf.avail/*.conf
-%ghost %{_datadir}/fonts/%{name}
+%{_datadir}/fonts/%{name}
 %{_datadir}/applications/*.desktop
-%{_datadir}/mime/packages/*.xml
+%{_datadir}/desktop-directories/%{name}*
 %{_datadir}/icons/hicolor/*/apps/*.png
 %{_datadir}/icons/hicolor/*/mimetypes/*.png
+%{_datadir}/mime/packages/*.xml
+%{_datadir}/templates/*.desktop
 %ghost /opt/kingsoft
 
 %changelog
+* Sun Dec 30 2018 mosquito <sensor.wen@gmail.com> - 10.1.0.6757-1
+- Release 10.1.0.6757
+
 * Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5672-2
 - Fix symbol fonts url
+
 * Wed Jun 29 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5672-1
 - Release 10.1.0.5672
 - Check download url
+
 * Thu Jun 23 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-2
 - Fix download url
+
 * Fri Feb  5 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5503-1
 - Release 10.1.0.5503
+
 * Sun Jan 17 2016 mosquito <sensor.wen@gmail.com> - 10.1.0.5460-1
 - Release 10.1.0.5460
 - Change tmp directory
+
 * Mon Dec 28 2015 mosquito <sensor.wen@gmail.com> - 10.1.0.5444-1
 - Release 10.1.0.5444
+
 * Tue Dec 15 2015 mosquito <sensor.wen@gmail.com> - 9.1.0.4975-1
 - Initial build
