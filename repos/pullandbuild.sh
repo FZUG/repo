@@ -1,6 +1,7 @@
 #!/bin/bash
 
 SPECLISTDIR="/tmp/FZUGLISTS/"
+releases="29"
 
 help()
 {
@@ -47,16 +48,25 @@ if [ ! -z ${GITREPO+x} ]; then
     pushd $GITREPO
 fi
 git pull --rebase
-git log --name-only --since="@{2 days ago}" --pretty=format: | grep spec  >${SPECLISTFILE}
+git log --name-only --since="@{2 days ago}" --pretty=format: | grep "spec$"  >${SPECLISTFILE}
 
 if [ ! -z ${OUTPUT+x} ]; then
     extraparam=" -o ${OUTPUT}"
 fi
 
-for rel in 29 ; do
+for rel in $releases ; do
+    echo "Build for $rel"
     cat ${SPECLISTFILE} | tr '\n' ' ' | xargs ./repos/cibuild.py -a x86_64 -r $rel --createrepo --mock-opts '--dnf --define "_buildhost build.zh.fedoracommunity.org"' ${extraparam} -v
 done
 find ${OUTPUT} -iname "*.log" -exec rm {} \;
+find ${OUTPUT} -iname "*debuginfo*" -exec rm {} \;
+find ${OUTPUT} -iname "*debugsource*" -exec rm {} \;
+for rel in $releases ; do
+    pushd ${OUTPUT}/$rel/x86_64
+        createrepo_c --update .
+    popd
+done
+
 if [ ! -z ${GITREPO+x} ]; then
     popd
 fi
