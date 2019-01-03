@@ -47,15 +47,16 @@ if [ ! -z ${GITREPO+x} ]; then
     pushd $GITREPO
 fi
 git pull --rebase
-git diff --name-only HEAD@{0} HEAD@{1} >${SPECLISTFILE}
+git log --name-only --since="@{2 days ago}" --pretty=format: | grep spec  >${SPECLISTFILE}
 
 if [ ! -z ${OUTPUT+x} ]; then
     extraparam=" -o ${OUTPUT}"
 fi
 
-for rel in 28 ; do
-    cat ${SPECLISTFILE} | grep -v deepin | tr '\n' ' ' | xargs ./repos/cibuild.py -a x86_64 -r $rel --mock-opts '--no-cleanup-after --no-clean --dnf --define "_buildhost build.zh.fedoracommunity.org"' ${extraparam} -v
+for rel in 29 ; do
+    cat ${SPECLISTFILE} | tr '\n' ' ' | xargs ./repos/cibuild.py -a x86_64 -r $rel --createrepo --mock-opts '--dnf --define "_buildhost build.zh.fedoracommunity.org"' ${extraparam} -v
 done
+find ${OUTPUT} -iname "*.log" -exec rm {} \;
 if [ ! -z ${GITREPO+x} ]; then
     popd
 fi
