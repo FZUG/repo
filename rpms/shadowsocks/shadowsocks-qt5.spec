@@ -17,6 +17,8 @@ BuildRequires: pkgconfig(QtShadowsocks)
 BuildRequires: pkgconfig(botan-2)
 BuildRequires: pkgconfig(libqrencode)
 BuildRequires: pkgconfig(zbar)
+BuildRequires: desktop-file-utils
+Requires:      hicolor-icon-theme
 
 %description
 %{summary}.
@@ -30,6 +32,7 @@ BuildRequires: pkgconfig(zbar)
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
+desktop-file-validate %{buildroot}%{_datadir}/applications/{name}.desktop
 
 %files
 %doc README.md
