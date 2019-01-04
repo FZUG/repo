@@ -4,11 +4,12 @@ Name:    qt-installer-framework
 Version: 3.0.6
 Release: 1%{?dist}
 Summary: The Qt Installer Framework used for the Qt SDK installer
-License: GPLv3
+License: GPLv3 and FDL 
 URL:     http://wiki.qt.io/Qt-Installer-Framework
 Source0: http://download.qt.io/official_releases/%{name}/%{version}/%{tgzname}.tar.gz
 Patch0:  %{name}-rename-fails.patch
 
+BuildRequires: gcc-c++
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5UiTools)
 BuildRequires: pkgconfig(Qt5Quick)
