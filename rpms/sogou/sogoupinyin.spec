@@ -3,29 +3,15 @@
 %global _xinputdir  %{_sysconfdir}/X11/xinit/xinput.d
 
 # sogoupinyin-selinux conditional
-%if 0%{?fedora} >= 27 || 0%{?rhel} >= 7
-%global  with_selinux  1
+%if 0%{?fedora} || 0%{?rhel} >= 7
+%global  with_selinux    1
 %endif
 
 %if 0%{?with_selinux}
-%global  selinuxtype   targeted
-%global  moduletype    apps
-%global  modulename    %{name}
-
-# Usage: _format var format
-# Expand 'modulename' into various formats as needed
-# Format must contain '$x' somewhere to do anything useful
-%global _format() export %1=""; for x in %{modulename}; do %1+=%2; %1+=" "; done;
-
-# Relabel files
-%global relabel_files() %{_sbindir}/restorecon -R %{_bindir}/sogou* %{_datadir}/sogou* %{_datadir}/fcitx-%{name} /tmp/*sogou* /home/*/.config/{SogouPY*/,sogou-qimpanel/,Trolltech.conf} &>/dev/null ||:
-
-# Version of SELinux we were using
-%if 0%{?fedora} >= 27
-%global  selinux_policyver 3.13.1-105
-%else
-%global  selinux_policyver 3.13.1-39
-%endif
+%global  selinuxbooleans sogou_access_network=1 sogou_enable_homedirs=0
+%global  selinuxtype     targeted
+%global  moduletype      apps
+%global  modulename      %{name}
 %endif # with_selinux
 
 Name:       sogoupinyin
@@ -54,7 +40,7 @@ Obsoletes:  sogou-pinyin < %{version}-%{release}
 
 # RE: rhbz#1195804 - ensure min NVR for selinux-policy
 %if 0%{?with_selinux}
-Requires:   selinux-policy >= %{selinux_policyver}
+Requires:   selinux-policy >= %{_selinux_policy_version}
 Requires(pre): %{name}-selinux >= %{version}-%{release}
 %endif # with_selinux
 
@@ -96,17 +82,7 @@ China, and Sogou promises it will always be free of charge.
 %package selinux
 Summary: SELinux policies for %{name}
 BuildArch: noarch
-BuildRequires:  selinux-policy
-BuildRequires:  selinux-policy-devel
-Requires(post): selinux-policy-base >= %{selinux_policyver}
-Requires(post): selinux-policy-targeted >= %{selinux_policyver}
-Requires(post): policycoreutils
-%if 0%{?fedora} > 22
-Requires(post): policycoreutils-python-utils
-%else
-Requires(post): policycoreutils-python
-%endif
-Requires(post): libselinux-utils
+%{selinux_requires}
 
 %description selinux
 SELinux policy modules for use with %{name}.
@@ -184,19 +160,13 @@ echo "%{version}" > %{buildroot}%{_datadir}/%{name}/sogou-version
 
 %if 0%{?with_selinux}
 # install SELinux interfaces
-%_format INTERFACES $x.if
 install -d %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
-install -p -m 644 selinux/$INTERFACES \
+install -p -m644 selinux/%{modulename}.if \
     %{buildroot}%{_datadir}/selinux/devel/include/%{moduletype}
 
 # install policy modules
-%if 0%{?fedora} > 22
-%_format MODULES $x.cil.bz2
-%else
-%_format MODULES $x.pp.bz2
-%endif
 install -d %{buildroot}%{_datadir}/selinux/packages
-install -m 644 selinux/$MODULES %{buildroot}%{_datadir}/selinux/packages
+install -m644 selinux/%{modulename}.cil.bz2 %{buildroot}%{_datadir}/selinux/packages
 %endif # with_selinux
 
 %post
@@ -221,30 +191,13 @@ if [ $1 -eq 1 ]; then
           %{_sysconfdir}/xdg/autostart/ &>/dev/null ||:
 fi
 
-%if 0%{?with_selinux}
-%post selinux
-# Install all modules in a single transaction
-%_format MODULES %{_datadir}/selinux/packages/$x.*.bz2
-%{_sbindir}/semodule -n -s %{selinuxtype} -i $MODULES
-if %{_sbindir}/selinuxenabled ; then
-    %{_sbindir}/load_policy
-    %relabel_files
-    if [ $1 -eq 1 ]; then
-        %{_sbindir}/setsebool -P -N sogou_access_network=1
-        %{_sbindir}/setsebool -P -N sogou_enable_homedirs=0
-    fi
-fi
-%endif # with_selinux
-
 %preun
-# uninstall
 if [ $1 -eq 0 ];then
     rm -f %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop ||:
     pkill sogou &>/dev/null ||:
 fi
 
 %postun
-# uninstall
 if [ $1 -eq 0 ]; then
     test ! -x /usr/bin/ibus-daemon && chmod a+x /usr/bin/ibus-daemon &>/dev/null ||:
     INPUTRC=$(readlink /etc/alternatives/xinputrc|awk -F'/' '{print $6}')
@@ -254,14 +207,21 @@ if [ $1 -eq 0 ]; then
 fi
 
 %if 0%{?with_selinux}
+%pre selinux
+%selinux_relabel_pre -s %{selinuxtype}
+
+%post selinux
+%selinux_modules_install %{_datadir}/selinux/packages/%{modulename}.cil.bz2
+%selinux_set_booleans %{selinuxbooleans}
+
 %postun selinux
 if [ $1 -eq 0 ]; then
-    %{_sbindir}/semodule -n -r %{modulename} &>/dev/null ||:
-    if %{_sbindir}/selinuxenabled ; then
-        %{_sbindir}/load_policy
-        %relabel_files
-    fi
+    %selinux_modules_uninstall %{modulename}
+    %selinux_unset_booleans %{selinuxbooleans}
 fi
+
+%posttrans
+%selinux_relabel_post -s %{selinuxtype}
 %endif # with_selinux
 
 %files
@@ -282,8 +242,9 @@ fi
 
 %if 0%{?with_selinux}
 %files selinux
-%{_datadir}/selinux/devel/include/apps/%{name}.if
-%{_datadir}/selinux/packages/%{name}.cil.bz2
+%{_datadir}/selinux/devel/include/%{moduletype}/%{modulename}.if
+%{_datadir}/selinux/packages/%{modulename}.cil.bz2
+%ghost %{_sharedstatedir}/selinux/%{selinuxtype}/active/modules/200/%{modulename}
 %endif # with_selinux
 
 %changelog
