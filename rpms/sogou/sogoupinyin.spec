@@ -3,7 +3,7 @@
 %global _xinputdir  %{_sysconfdir}/X11/xinit/xinput.d
 
 # sogoupinyin-selinux conditional
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 27 || 0%{?rhel} >= 7
 %global  with_selinux  1
 %endif
 
@@ -21,7 +21,7 @@
 %global relabel_files() %{_sbindir}/restorecon -R %{_bindir}/sogou* %{_datadir}/sogou* %{_datadir}/fcitx-%{name} /tmp/*sogou* /home/*/.config/{SogouPY*/,sogou-qimpanel/,Trolltech.conf} &>/dev/null ||:
 
 # Version of SELinux we were using
-%if 0%{?fedora} >= 21
+%if 0%{?fedora} >= 27
 %global  selinux_policyver 3.13.1-105
 %else
 %global  selinux_policyver 3.13.1-39
@@ -29,16 +29,13 @@
 %endif # with_selinux
 
 Name:       sogoupinyin
-Version:    2.1.0.0086
-Release:    2%{?dist}
+Version:    2.2.0.0108
+Release:    1%{?dist}
 Summary:    Sogou Pinyin input method
 Summary(zh_CN): 搜狗拼音输入法
-
 License:    Proprietary and GPLv2
 URL:        http://pinyin.sogou.com/linux
-Group:      Applications/System
-Source0:    http://cdn2.ime.sogou.com/dl/index/1491565850/%{name}_%{version}_amd64.deb
-Source1:    http://cdn2.ime.sogou.com/dl/index/1491566555/%{name}_%{version}_i386.deb
+Source0:    http://cdn2.ime.sogou.com/dl/index/1524572264/%{name}_%{version}_amd64.deb
 Source11:   %{name}.te
 Source12:   %{name}.fc
 Source13:   %{name}.if
@@ -48,11 +45,6 @@ Source14:   Makefile
 Patch0:     sogou-diag_dpkg.patch
 
 BuildRequires: dpkg
-Requires(post): /usr/bin/glib-compile-schemas
-Requires(post): /usr/bin/gtk-update-icon-cache
-Requires(post): /usr/bin/update-mime-database
-Requires(post): desktop-file-utils
-Requires(postun): desktop-file-utils
 Requires:   imsettings im-chooser
 Requires:   fcitx-qt4 fcitx-qt5
 Requires:   fcitx-gtk2 fcitx-gtk3
@@ -78,7 +70,7 @@ accuracy. Sogou input method is the most popular input methods in
 China, and Sogou promises it will always be free of charge.
 
 %description -l zh_CN
-搜狗拼音输入法 - 专注输入法 20 年
+搜狗拼音输入法
 支持全拼简拼双拼, 模糊拼音, 细胞词库, 云输入, 皮肤, 中英混输.
 通过结合搜索引擎技术, 提高输入准确率. 更多惊喜等您体验.
 
@@ -136,166 +128,55 @@ Allow sogou access home dirs:
 %endif # with_selinux
 
 %prep
-# Extract DEB package
-%ifarch x86_64
-dpkg-deb -X %{SOURCE0} %{_builddir}/%{name}-%{version}
-%else
-dpkg-deb -X %{SOURCE1} %{_builddir}/%{name}-%{version}
-%endif
-
-# patch sogou-diag
-pushd %{_builddir}/%{name}-%{version}
-%patch0 -p1
+dpkg -X %{SOURCE0} %{name}-%{version}
+%setup -D -T
+%patch0 -p1 -b .sogou-diag
+mv usr/share/doc/%{name}/* .
 
 %if 0%{?with_selinux}
-pushd %{_builddir}/%{name}-%{version}
-rm -rf selinux
 mkdir selinux
 cp %{S:11} %{S:12} %{S:13} %{S:14} selinux/
 %endif # with_selinux
 
 %build
 %if 0%{?with_selinux}
-pushd %{_builddir}/%{name}-%{version}
-pushd selinux
-make
-popd
+make -C selinux
 %endif # with_selinux
 
 %install
-pushd %{_builddir}/%{name}-%{version}
-
-# 55-sogoupinyin.sh script
-install -d %{buildroot}%{_xinitrcdir}
-cat > %{buildroot}%{_xinitrcdir}/55-%{name}.sh <<EOF
-#!/bin/sh
-set -e
-
-[ -x /usr/bin/fcitx ] || exit 0
-
-if [ -x /usr/bin/im-config ] && [ ! -f \$HOME/.xinputrc ]; then
-    /usr/bin/im-config -n fcitx && export XMODIFIERS="@im=fcitx" || :
-elif [ -x /usr/bin/imsettings-switch ] && [ ! -f \$HOME/.config/imsettings/xinputrc ]; then
-    /usr/bin/imsettings-switch -qf fcitx.conf && export XMODIFIERS="@im=fcitx" || :
-elif [ ! -x /usr/bin/im-config ] && [ ! -x /usr/bin/imsettings-switch ]; then
-    if [ "\$XMODIFIERS" == "" ] || [ "\$XMODIFIERS" == "@im=xim" ]; then
-        export XMODIFIERS="@im=fcitx"
-    fi
-fi
-
-if [ "\$XMODIFIERS" == "@im=fcitx" ]; then
-    if [ -f /usr/lib/*/gtk-2.0/*/immodules/im-fcitx.so ] || \\
-       [ -f /usr/lib*/gtk-2.0/*/immodules/im-fcitx.so ]; then
-        if [ -f /usr/lib/*/gtk-3.0/*/immodules/im-fcitx.so ] || \\
-           [ -f /usr/lib*/gtk-3.0/*/immodules/im-fcitx.so ]; then
-            export GTK_IM_MODULE=fcitx
-        fi
-    fi
-    if [ -f /usr/lib/*/qt4/plugins/inputmethods/qtim-fcitx.so ] || \\
-       [ -f /usr/lib*/qt4/plugins/inputmethods/qtim-fcitx.so ]; then
-        export QT4_IM_MODULE=fcitx
-        if [ -f /usr/lib/*/qt5/plugins/*inputcontexts/libfcitx*.so ] || \\
-           [ -f /usr/lib*/qt5/plugins/*inputcontexts/libfcitx*.so ]; then
-            export QT_IM_MODULE=fcitx
-        fi
-    fi
-fi
-EOF
-
-# fcitx environment variable configurage file
-install -d %{buildroot}%{_sysconfdir}/sysconfig
-cat > %{buildroot}%{_sysconfdir}/sysconfig/%{name} <<EOF
-# If your system does not start automatically Sogou Pinyin,
-# create ~/.profile file and add the following command.
-#    source /etc/sysconfig/sogoupinyin
-export XIM=fcitx
-export XIM_PROGRAM=/usr/bin/fcitx
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS="@im=fcitx"
-while (test ! -d /proc/\`pidof sogou-qimpanel||echo None\`); do
-    FCITX=\$(pidof fcitx &>/dev/null && echo y || echo n)
-    SOGOU=\$(pidof sogou-qimpanel &>/dev/null && echo y || echo n)
-    if [[ \$FCITX == "y" && \$SOGOU == "n" ]]; then
-        /usr/bin/sogou-qimpanel &>/dev/null &
-    fi
-    sleep 15
-done &
-EOF
-
 # binary files
 install -d %{buildroot}%{_bindir}
-install -m 0755 usr/bin/* %{buildroot}%{_bindir}/
+install -m755 usr/bin/* %{buildroot}%{_bindir}/
 
 # library files
 install -d %{buildroot}%{_libdir}/fcitx
-install -m 0644 usr/lib/*-linux-gnu/fcitx/*.so %{buildroot}%{_libdir}/fcitx/
+install -m644 usr/lib/*-linux-gnu/fcitx/*.so %{buildroot}%{_libdir}/fcitx/
 
+pushd usr/share
 # desktop file
-install -d %{buildroot}%{_datadir}/applications
-cat > %{buildroot}%{_datadir}/applications/fcitx-ui-sogou-qimpanel.desktop <<EOF
-[Desktop Entry]
-Name=Sogou Pinyin
-Name[zh_CN]=搜狗拼音
-GenericName=Sogou Pinyin Input Method
-GenericName[zh_CN]=搜狗拼音输入法
-Comment=a popular pinyin input method
-Comment[zh_CN]=搜狗拼音输入法
-MimeType=application/x-sogouskin;application/x-scel;
-Keywords=ime;imf;input;
-Exec=sogou-qimpanel %U
-Icon=fcitx-sogoupinyin
-Terminal=false
-Type=Application
-NoDisplay=true
-Categories=System;Utility;
-StartupNotify=false
-X-GNOME-Autostart-Phase=Applications
-X-GNOME-Autostart-Notify=false
-X-GNOME-Autostart-Delay=2
-X-GNOME-AutoRestart=true
-X-KDE-autostart-phase=1
-X-KDE-autostart-after=panel
-X-MATE-Autostart-Phase=Applications
-X-MATE-Autostart-Delay=2
-X-MATE-Autostart-Notify=false
-EOF
-
+install -d %{buildroot}%{_datadir}
+cp -r applications %{buildroot}%{_datadir}
 # fcitx files
-install -d %{buildroot}%{_datadir}/fcitx
-cp -r usr/share/fcitx/* %{buildroot}%{_datadir}/fcitx/
-
+cp -r fcitx %{buildroot}%{_datadir}
 # sogou input method schemes
-install -d %{buildroot}%{_datadir}/fcitx-%{name}
-cp -r usr/share/fcitx-%{name}/* %{buildroot}%{_datadir}/fcitx-%{name}/
-
+cp -r fcitx-%{name} %{buildroot}%{_datadir}
 # glib schemas
-install -Dm 0644 usr/share/glib-2.0/schemas/50_%{name}.gschema.override \
-   %{buildroot}%{_datadir}/glib-2.0/schemas/50_%{name}.gschema.override
+cp -r glib-2.0 %{buildroot}%{_datadir}
+# locale file
+cp -r locale %{buildroot}%{_datadir}
+# mime file
+cp -r mime %{buildroot}%{_datadir}
+# skin, cell files
+cp -r sogou-qimpanel %{buildroot}%{_datadir}
 
 # icon files
-for i in 16x16 48x48 64x64 128x128; do
-install -d %{buildroot}%{_datadir}/icons/hicolor/$i/apps
-install -m 0644 usr/share/icons/hicolor/$i/apps/*.png \
- %{buildroot}%{_datadir}/icons/hicolor/$i/apps/fcitx-%{name}.png
+for i in 16 48 128; do
+install -Dm644 icons/hicolor/${i}x${i}/apps/fcitx-%{name}.png \
+ %{buildroot}%{_datadir}/icons/hicolor/${i}x${i}/apps/fcitx-%{name}.png
 done
 install -d %{buildroot}%{_datadir}/pixmaps
-install -m 0644 usr/share/pixmaps/*.png %{buildroot}%{_datadir}/pixmaps/
-
-# locale file
-install -Dm 644 usr/share/locale/zh_CN/LC_MESSAGES/fcitx-%{name}.mo \
- %{buildroot}%{_datadir}/locale/zh_CN/LC_MESSAGES/fcitx-%{name}.mo
-
-# mime file
-install -Dm 644 usr/share/mime/packages/fcitx-ui-sogou-qimpanel.xml \
- %{buildroot}%{_datadir}/mime/packages/fcitx-ui-sogou-qimpanel.xml
-
-# skin, cell files
-install -d %{buildroot}%{_datadir}/sogou-qimpanel
-cp -r usr/share/sogou-qimpanel/* %{buildroot}%{_datadir}/sogou-qimpanel/
-
-# doc files
-mv usr/share/doc/%{name}/* .
+install -m644 pixmaps/*.png %{buildroot}%{_datadir}/pixmaps/
+popd
 
 # version information
 install -d %{buildroot}%{_datadir}/%{name}
@@ -339,10 +220,6 @@ if [ $1 -eq 1 ]; then
     ln -s %{_datadir}/applications/fcitx-ui-sogou-qimpanel.desktop \
           %{_sysconfdir}/xdg/autostart/ &>/dev/null ||:
 fi
-/bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-/bin/touch --no-create %{_datadir}/mime/packages &>/dev/null ||:
-/usr/bin/update-desktop-database &>/dev/null ||:
-/sbin/ldconfig
 
 %if 0%{?with_selinux}
 %post selinux
@@ -362,7 +239,7 @@ fi
 %preun
 # uninstall
 if [ $1 -eq 0 ];then
-    rm -rf %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop ||:
+    rm -f %{_sysconfdir}/xdg/autostart/fcitx-ui-sogou-qimpanel.desktop ||:
     pkill sogou &>/dev/null ||:
 fi
 
@@ -374,14 +251,7 @@ if [ $1 -eq 0 ]; then
     if [ "$INPUTRC" == "fcitx.conf" ]; then
         alternatives --auto xinputrc
     fi
-
-    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
-    /bin/touch --no-create %{_datadir}/icons/hicolor &>/dev/null ||:
-    /usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-    /usr/bin/update-mime-database %{_datadir}/mime &>/dev/null ||:
-    /sbin/ldconfig
 fi
-/usr/bin/update-desktop-database &>/dev/null ||:
 
 %if 0%{?with_selinux}
 %postun selinux
@@ -394,20 +264,13 @@ if [ $1 -eq 0 ]; then
 fi
 %endif # with_selinux
 
-%posttrans
-/usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &>/dev/null ||:
-/usr/bin/gtk-update-icon-cache -f -t -q %{_datadir}/icons/hicolor ||:
-/usr/bin/update-mime-database %{?fedora:-n} %{_datadir}/mime &>/dev/null ||:
-
 %files
-%doc %{name}-%{version}/changelog.gz
-%license %{name}-%{version}/{copyright,license*}
-%attr(755,root,root) %{_xinitrcdir}/55-%{name}.sh
-%{_sysconfdir}/sysconfig/%{name}
+%doc changelog.gz
+%license copyright license*
 %{_bindir}/sogou-*
 %{_libdir}/fcitx/*.so
 %{_datadir}/fcitx/
-%{_datadir}/fcitx-%{name}/SogouInput/
+%{_datadir}/fcitx-%{name}/
 %{_datadir}/glib-2.0/schemas/*.gschema.override
 %{_datadir}/icons/hicolor/*/apps/fcitx-%{name}.png
 %{_datadir}/pixmaps/*.png
@@ -419,24 +282,35 @@ fi
 
 %if 0%{?with_selinux}
 %files selinux
-%{_datadir}/selinux/*
+%{_datadir}/selinux/devel/include/apps/%{name}.if
+%{_datadir}/selinux/packages/%{name}.cil.bz2
 %endif # with_selinux
 
 %changelog
+* Sat Jan  5 2019 mosquito <sensor.wen@gmail.com> - 2.2.0.0108-1
+- Update to 2.2.0.0108
+
 * Sun Oct 29 2017 Zamir SUN <sztsian@gmail.com> - 2.1.0.0086-2
 - Fix rebuild error for selinux directory existing
+
 * Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 2.1.0.0086-1
 - Update version 2.1.0.0086
+
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-2
 - Dont rename skin files, fixed #177, #179
+
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 2.1.0.0082-1
 - Update version 2.1.0.0082
+
 * Mon Jul 11 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0078-1
 - Update version 2.0.0.0078
+
 * Thu May 26 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0072-1
 - Update version 2.0.0.0072
+
 * Sun Mar 27 2016 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-4
 - Fix https://github.com/FZUG/repo/issues/81
+
 * Fri Dec 25 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-3
 - Update SELinux module (sogoupinyin 1.1.0)
   Fix the sogou-qimpanel-watchdog does not enable sogou-qimpanel
@@ -446,31 +320,43 @@ fi
   see https://github.com/FZUG/repo/issues/49
 - Patch sogou-diag
   see https://github.com/FZUG/repo/issues/50
+
 * Wed Dec 23 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-2
 - Fix sogou-qimpanel do not run
   see https://github.com/FZUG/repo/issues/49
+
 * Sun Dec 13 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0068-1
 - Update version 2.0.0.0068
 - Update post script
+
 * Sun Oct 25 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-2
 - Add SELinux module (sogoupinyin 1.0.0)
+
 * Sat Oct 17 2015 mosquito <sensor.wen@gmail.com> - 2.0.0.0066-1
 - Update version 2.0.0.0066
+
 * Thu Sep 24 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-2
 - Remove depends
+
 * Tue May 26 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0056-1
 - Update version 1.2.0.0056
+
 * Tue May  5 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0048-1
 - Update version 1.2.0.0048
+
 * Thu Feb  5 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0042-2
 - Fix version information
 - Rename skin directory
+
 * Tue Feb  3 2015 mosquito <sensor.wen@gmail.com> - 1.2.0.0042-1
 - Update version 1.2.0.0042
+
 * Sat Oct 11 2014 mosquito <sensor.wen@gmail.com> - 1.1.0.0037-3
 - Fix uninstall script
+
 * Fri Sep 12 2014 mosquito <sensor.wen@gmail.com> - 1.1.0.0037-2
 - Add i386 version
+
 * Fri Aug 22 2014 mosquito <sensor.wen@gmail.com> - 1.1.0.0037-1
 - For fedora 20 repackaged
 - update version 1.1.0.0037
@@ -480,14 +366,18 @@ fi
   * optimize the keypad function
   * improve stability
   * Fixed select the default skin, cycle start 'sogou-qimpanel' problem
+
 * Fri Jul 4 2014 mosquito <sensor.wen@gmail.com> - 1.0.0.0033-2
 - Update post and preun scripts
+
 * Sun Jun 22 2014 mosquito <sensor.wen@gmail.com> - 1.0.0.0033-1
 - For fedora 20 repackaged
+
 * Tue Jun 17 2014 i@marguerite.su (SuSE)
 - update version 1.0.0.0033
   * number input from keypad
   * run faster
   * optimize details of menus/attribute settings
+
 * Fri Apr 18 2014 i@marguerite.su (SuSE)
 - initial version 1.0.0.0011
