@@ -15,6 +15,9 @@
 %global buildid  183.5153.12
 %global pkgver   2018.3.3
 
+%global tranfile resources_zh_CN_PyCharm_2018.3_r1.jar
+%global tranurl  https://github.com/pingfangx/jetbrains-in-chinese/raw/master/PyCharm/%{tranfile}
+
 # Usage: wget appfile appurl
 %global wget() %{expand:
 SHA=$(test -f %1 && sha256sum %1 ||:)
@@ -50,6 +53,7 @@ Requires:      python3-tox
 %wget %{appfile} %{appurl}
 tar -xvf %{appfile}
 %setup -D -T -n pycharm-%{pkgver}
+%wget %{tranfile} %{tranurl}
 
 %build
 # compile PyDev debugger used by PyCharm to speedup debugging
@@ -65,6 +69,9 @@ rm -rf jre64
 # enable anti-aliasing text in pycharm options
 # https://wiki.archlinux.org/index.php/Java_Runtime_Environment_Fonts
 echo $'-Dawt.useSystemAAFontSettings=on\n-Dswing.aatext=true' >> bin/pycharm64.vmoptions
+
+# i18n
+mv %{tranfile} lib/resources_zh_CN.jar
 
 # base
 install -d %{buildroot}{%{approot},%{_bindir}}
@@ -103,11 +110,15 @@ cd %{_tmppath}
 %wget %{appfile} %{appurl}
 tar -xf %{appfile}
 cd pycharm-%{pkgver}
+%wget %{tranfile} %{tranurl}
 
 # delete some conflicts files
 find -name "*.dll" -or -name "*.dylib" -or -type f \
      -name "*win32*" -or -name "*darwin*" | xargs rm -f
 rm -rf jre64 license
+
+# i18n
+mv %{tranfile} lib/resources_zh_CN.jar
 
 # base
 install -d %{tmproot}%{approot}
