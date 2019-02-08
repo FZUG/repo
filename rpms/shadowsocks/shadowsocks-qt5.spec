@@ -32,7 +32,7 @@ Requires:      hicolor-icon-theme
 
 %install
 %make_install INSTALL_ROOT=%{buildroot}
-desktop-file-validate %{buildroot}%{_datadir}/applications/{name}.desktop
+desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 
 %files
 %doc README.md
