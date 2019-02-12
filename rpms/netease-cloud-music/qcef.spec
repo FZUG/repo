@@ -4,7 +4,7 @@
 
 Name:           qcef
 Version:        1.1.4.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Qt5 binding of CEF
 License:        GPLv3
 URL:            https://github.com/linuxdeepin/qcef
@@ -56,5 +56,8 @@ chmod +s %{buildroot}%{_libdir}/%{name}/chrome-sandbox
 %{_includedir}/%{name}/
 
 %changelog
+* Tue Feb 12 2019 Bangjie Deng <dengbangjie@foxmail.com> - 1.1.4.5-2
+- Rebuilt due to qt-5.11.3 
+
 * Mon Dec 31 2018 mosquito <sensor.wen@gmail.com> - 1.1.4.5-1
 - Initial package build
