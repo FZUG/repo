@@ -14,6 +14,8 @@
 %global __requires_exclude_from ^/opt/%{name}/(.*.dll|Engine/ThirdParty/.*)$
 %global __provides_exclude (mono|icu|mcpp|libsteam|openal)
 %global __requires_exclude (mono|icu)
+# Don't strip .lib files. cf. https://github.com/FZUG/repo/issues/300
+%global __brp_strip_static_archive %{nil}
 
 Name:		ue4
 Version:	4.11.2
