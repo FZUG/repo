@@ -1,11 +1,11 @@
 %global project freshplayerplugin
 %global repo %{project}
 
-%global commit 8debda7f3a03bedfface616fe459d70e6f58e37a
+%global commit 58596f4745190654cff4a5ad6a2bd4ac37b74800
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:    freshplayerplugin
-Version: 0.3.7
+Version: 0.3.9
 Release: 1.git%{shortcommit}%{?dist}
 Summary: PPAPI-host NPAPI-plugin adapter
 Summary(zh_CN): PPAPI-host NPAPI-plugin adapter
@@ -16,6 +16,9 @@ URL:     https://github.com/i-rinat/freshplayerplugin
 Source0: %{url}/archive/%{commit}/%{repo}-%{shortcommit}.tar.gz
 
 BuildRequires: cmake >= 2.8.8
+BuildRequires: cmake-rpm-macros
+BuildRequires: gcc
+BuildRequires: gcc-c++
 BuildRequires: pkgconfig chrpath
 BuildRequires: ragel
 BuildRequires: alsa-lib-devel
@@ -80,6 +83,8 @@ sed -i '/enable_xembed/s|1$|0|' %{buildroot}%{_sysconfdir}/freshwrapper.conf
 %{_libdir}/mozilla/plugins/*.so
 
 %changelog
+* Sat Mar 02 2019 Bangjie Deng <dengbangjie@foxmail.com> - 0.3.9-1.git58596f4
+- update to 0.3.9
 * Mon Sep 11 2017 mosquito <sensor.wen@gmail.com> - 0.3.7-1.git8debda7
 - Update to 0.3.7
 * Thu Oct  6 2016 mosquito <sensor.wen@gmail.com> - 0.3.6-1.git333df0b
