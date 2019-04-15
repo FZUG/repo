@@ -358,257 +358,114 @@ tbody tr:hover{
 <div id="wrapper">
     <div id="filelist">
         <h3 style="clear:left; display: inline-block;">软件包列表</h3>
-        <a style="float:right;" href="//mirrors.tuna.tsinghua.edu.cn/fzug/">浏览软件仓库</a>
+        <span style="float:right;">更新可能有延迟，请以<a href="//mirrors.tuna.tsinghua.edu.cn/fzug/">软件仓库</a>为准</span>
         <hr />
         <table cellspacing="0" cellpadding="0" class="filelist">
             <thead>
                 <tr id="firstline">
                     <th id="name">名称</th>
-                    <th class="license">许可证</th>
                     <th class="dependency">依赖仓库</th>
                     <th class="description">描述</th>
                 </tr>
             </thead>
 
             <tbody>
-                <!------- Input Methods ------->
-                <tr>
-                    <td class="filename">输入法</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">sogoupinyin</span></td>
-                    <td class="license">Proprietary, GPLv2</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">搜狗拼音输入法</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">fcitx-rime</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">中州韵输入法</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">fcitx-sunpinyin</span></td>
-                    <td class="license">GPLv2+</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">sunpinyin 输入法</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">fcitx-qt5</span></td>
-                    <td class="license">GPLv2</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">fcitx qt5 输入模块</td>
-                </tr>
-
                 <!------- Multimedia ------->
                 <tr>
                     <td class="filename">多媒体</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">kwplayer</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">rpmfusion</td>
-                    <td class="description">酷我音乐</td>
-                    <!--Require: python-html2text, python3-keybinder(python3-xlib), python-mutagen, python3-cairo, pygobject3(python3-gobject)-->
-                </tr>
-                <tr>
                     <td class="filename"><span class="link">doubanfm-qt</span></td>
-                    <td class="license">MIT</td>
                     <td class="dependency">rpmfusion</td>
                     <td class="description">豆瓣FM</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">musicbox</span></td>
-                    <td class="license">MIT</td>
+                    <td class="filename"><span class="link">netease-cloud-music</span></td>
                     <td class="dependency">rpmfusion</td>
-                    <td class="description">网易云音乐 CLI</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">deepin-music-player</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">rpmfusion</td>
-                    <td class="description">深度音乐</td>
+                    <td class="description">网易云音乐</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">moonplayer</span></td>
-                    <td class="license">GPLv3</td>
                     <td class="dependency">rpmfusion</td>
                     <td class="description">Moonplayer播放器</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">simplescreenrecorder</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">rpmfusion</td>
-                    <td class="description">屏幕录像</td>
+                    <td class="filename"><span class="link">python-mutagen</span></td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">处理音频元数据</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">obs-studio</span></td>
-                    <td class="license">GPLv2</td>
-                    <td class="dependency">rpmfusion</td>
-                    <td class="description">屏幕录像/流媒体直播</td>
+                    <td class="filename"><span class="link">osdlyrics</span></td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">在屏幕上实时显示歌词</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">tragtor</span></td>
-                    <td class="license">LGPLv2</td>
-                    <td class="dependency">rpmfusion</td>
-                    <td class="description">FFmpeg音视频转码</td>
+                    <td class="filename">办公软件</td>
                 </tr>
-
+                <tr>
+                    <td class="filename"><span class="link">wps-office</span></td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">WPS 网络安装包</td>
+                </tr>
+                <tr>
+                    <td class="filename"><span class="link">FoxitReader</span></td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">福昕 PDF 阅读器</td>
+                </tr>
                 <!------- Notes / Dict ------->
                 <tr>
                     <td class="filename">笔记、词典</td>
                 </tr>
                 <tr>
+                    <td class="filename"><span class="link">reciteword</span></td>
+                    <td class="dependency">fedora</td>
+                    <td class="description">背单词</td>
+                </tr>
+                <tr>
                     <td class="filename"><span class="link">wiznote</span></td>
-                    <td class="license">GPLv3</td>
                     <td class="dependency">fedora</td>
                     <td class="description">为知笔记稳定版</td>
                 </tr>
-                <tr>
-                    <td class="filename"><span class="link">wiznote-beta</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">为知笔记 beta</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">youdao-dict</span></td>
-                    <td class="license">Proprietary</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">有道词典 Linux 版</td>
-                </tr>
-
                 <!------- Browser ------->
                 <tr>
                     <td class="filename">浏览器</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">opera-developer</span></td>
-                    <td class="license">Proprietary</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">Opera 开发者版</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">opera-beta</span></td>
-                    <td class="license">Proprietary</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">Opera beta</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">opera-stable</span></td>
-                    <td class="license">Proprietary</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">Opera 稳定版</td>
-                </tr>
-                <tr>
                     <td class="filename"><span class="link">freshplayerplugin</span></td>
-                    <td class="license">MIT</td>
                     <td class="dependency">fedora</td>
                     <td class="description">Firefox PPAPI flash 兼容插件</td>
                 </tr>
-
-                <!------- Downloads ------->
-                <tr>
-                    <td class="filename">下载</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">bcloud</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">百度云客户端</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">xware-desktop</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">迅雷客户端</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">pointdownload</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">点载, 支持迅雷/BT/ed2k下载</td>
-                </tr>
-
                 <!------- System tools ------->
                 <tr>
-                    <td class="filename">系统工具</td>
+                    <td class="filename">实用工具</td>
                 </tr>
                 <tr>
                     <td class="filename"><span class="link">ccal</span></td>
-                    <td class="license">LGPL</td>
                     <td class="dependency">fedora</td>
                     <td class="description">命令行下的农历日历</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">grub4dos</span></td>
-                    <td class="license">GPLv2</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">grub 引导管理器</td>
-                </tr>
-                <tr>
                     <td class="filename"><span class="link">screenfetch</span></td>
-                    <td class="license">GPLv3</td>
                     <td class="dependency">fedora</td>
                     <td class="description">系统信息收集</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">dkms-mt7601u</span></td>
-                    <td class="license">GPL</td>
+                    <td class="filename"><span class="link">winetricks</span></td>
                     <td class="dependency">fedora</td>
-                    <td class="description">MT7601U USB Wifi 驱动</td>
-                </tr>
-
-                <!------- System libraries ------->
-                <tr>
-                    <td class="filename">系统库</td>
+                    <td class="description">快速安装 WINE 游戏/应用</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">opencc</span></td>
-                    <td class="license">ASL2</td>
+                    <td class="filename"><span class="link">elvish</span></td>
                     <td class="dependency">fedora</td>
-                    <td class="description">简繁转换库，修正依赖</td>
+                    <td class="description">用户友好型 Shell</td>
                 </tr>
                 <tr>
-                    <td class="filename"><span class="link">sunpinyin</span></td>
-                    <td class="license">LGPLv2</td>
+                    <td class="filename">开发工具</td>
+                </tr>
+                <tr>
+                    <td class="filename"><span class="link">vscode</span></td>
                     <td class="dependency">fedora</td>
-                    <td class="description">基于 SLM 模型的输入法引擎，更新字典</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">python-html2text</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">HTML → ASCII</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">python3-xlib</span></td>
-                    <td class="license">GPLv2</td>
-                    <td class="dependency"></td>
-                    <td class="description">Python3 X 库</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">python3-keybinder</span></td>
-                    <td class="license">GPLv3</td>
-                    <td class="dependency"></td>
-                    <td class="description">Python3 键绑定库</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">python-mutagen</span></td>
-                    <td class="license">GPLv2</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">处理音频元数据</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">python3-cairo</span></td>
-                    <td class="license">LGPLv2</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">Python3 cairo 绑定，修复 bug</td>
-                </tr>
-                <tr>
-                    <td class="filename"><span class="link">pygobject3</span></td>
-                    <td class="license">LGPLv2+</td>
-                    <td class="dependency">fedora</td>
-                    <td class="description">Python GObject 封装，修复 bug</td>
+                    <td class="description">微软开源的代码编辑器</td>
                 </tr>
             </tbody>
         </table>
