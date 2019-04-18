@@ -52,7 +52,7 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Thu Apr 18 2019 Bangjie Deng <dengbangjie@foxmail.com> - 234-1
+* Thu Apr 18 2019 Bangjie Deng <dengbangjie@foxmail.com> - 1559-1.git78db9de5
 - Package init.
 
 
