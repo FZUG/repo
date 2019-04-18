@@ -8,7 +8,7 @@ Version:        1559
 Release:        1.git%{shortcommit}%{?dist}
 Summary:        A meta-build system that generates build files for Ninja.
 
-License:        MIT
+License:        3-Clause BSD License
 URL:            https://gn.googlesource.com/gn
 Source0:        https://gn.googlesource.com/gn/+archive/%{commit}.tar.gz
 Patch0:         fix-version.patch
