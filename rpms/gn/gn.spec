@@ -1,11 +1,9 @@
-%global debug_package %{nil}
-
 %global commit 78db9de5aed44f03763176ac6067fb1a73798684
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           gn
-Version:        1559
-Release:        1.git%{shortcommit}%{?dist}
+Version:        0
+Release:        1.1559git%{shortcommit}%{?dist}
 Summary:        A meta-build system that generates build files for Ninja.
 
 License:        3-Clause BSD License
