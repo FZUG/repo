@@ -1,7 +1,7 @@
 %global debug_package %{nil}
 
 Name:           netease-cloud-music
-Version:        1.1.3.1
+Version:        1.2.0.2
 Release:        1%{?dist}
 Summary:        Netease Cloud Music, converted from .deb package
 License:        EULA
@@ -38,6 +38,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/%{name}.desktop
 %{_metainfodir}/%{name}.appdata.xml
 
 %changelog
+* Mon Apr 29 2019 Bangjie Deng <dengbangjie@foxmail.com> - 1.2.0.2-1
+- Update to 1.2.0.2
+
 * Mon Dec 31 2018 mosquito <sensor.wen@gmail.com> - 1.1.3.1-1
 - Update to 1.1.3.1
 
