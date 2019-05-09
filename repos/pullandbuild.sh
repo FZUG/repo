@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SPECLISTDIR="/tmp/FZUGLISTS/"
-releases="29"
+releases="30"
 
 help()
 {
