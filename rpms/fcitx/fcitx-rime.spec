@@ -3,12 +3,12 @@
 %global repo %{project}
 
 # commit
-%global _commit 9351313f2f7f13a488b156d8a997165b718c2d11
+%global _commit a54a4505ef493db2a272005528095ad00b233343
 %global _shortcommit %(c=%{_commit}; echo ${c:0:7})
 
 Name:           fcitx-rime
-Version:        0.3.1
-Release:        2.git%{_shortcommit}%{?dist}
+Version:        0.3.2
+Release:        1.git%{_shortcommit}%{?dist}
 Summary:        Rime input engine support for Fcitx
 Summary(zh_CN): 使 Fcitx 输入框架支持 Rime 输入引擎
 
@@ -20,6 +20,7 @@ Source0:        https://github.com/fcitx/fcitx-rime/archive/%{_commit}/%{repo}-%
 BuildRequires:  cmake
 BuildRequires:  fcitx-data
 BuildRequires:  fcitx-devel
+BuildRequires:  fcitx-qt5-devel
 BuildRequires:  brise
 BuildRequires:  librime-devel
 BuildRequires:  fdupes
@@ -61,14 +62,19 @@ fdupes -nqr %{buildroot}
 %doc README.md
 %license COPYING
 %{_libdir}/fcitx/%{name}.so
+%{_libdir}/fcitx/qt/libfcitx-rime-config-gui.so
 %{_datadir}/fcitx/addon/%{name}.conf
 %{_datadir}/fcitx/imicon/rime.png
 %{_datadir}/fcitx/inputmethod/rime.conf
 %{_datadir}/fcitx/skin/default/rime-*.png
 %{_datadir}/icons/hicolor/48x48/apps/*.png
+%{_datadir}/icons/hicolor/128x128/apps/fcitx-rime.png
 %{_datadir}/icons/hicolor/scalable/status/*.svg
 
 %changelog
+* Fri May 10 2019 Zamir SUN <sztsian@gmail.com> -  0.3.2-1.git54a4505
+- Update to git commit a54a4505ef493db2a272005528095ad00b233343
+
 * Tue Mar 29 2016 mosquito <sensor.wen@gmail.com> - 0.3.1-2.git9351313
 - Update to 0.3.1-2.git9351313
 * Wed Sep 23 2015 mosquito <sensor.wen@gmail.com> - 0.3.1-1.gitb716234
