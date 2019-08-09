@@ -54,6 +54,7 @@ if [ ! -z ${OUTPUT+x} ]; then
     extraparam=" -o ${OUTPUT}"
 fi
 
+find . -iname result.log -exec rm -f {} \;
 for rel in $releases ; do
     echo "Build for $rel"
     cat ${SPECLISTFILE} | tr '\n' ' ' | xargs ./repos/cibuild.py -a x86_64 -r $rel --createrepo --mock-opts '--dnf --define "_buildhost build.zh.fedoracommunity.org"' ${extraparam} -v
