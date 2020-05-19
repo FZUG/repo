@@ -45,5 +45,5 @@ install -m 0644 app/scrcpy.1 %{buildroot}/usr/local/share/man/man1
 
 %changelog
 
-* Mon Oct 16 2017 Ping Fang <qqfang97@163.com> - 1.13.1
+* Tue May 19 2020 Ping Fang <qqfang97@163.com> - 1.13.1
 - Initial package scrcpy
