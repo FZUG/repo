@@ -1,7 +1,7 @@
 %{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 
 Name:           you-get
-Version:        0.4.1193
+Version:        0.4.1456
 Release:        1%{?dist}
 Summary:        A YouTube/Youku/Niconico video downloader written in Python 3
 
@@ -116,6 +116,8 @@ sed -i 's|%{name}|you-mpv|g' you-mpv.fish
 %{_datadir}/fish/completions/you-mpv.fish
 
 %changelog
+* Mon Jul 27 14:01:39 GMT 2020 Qiyu Yan <yanqiyu@fedoraproject.org> - 0.4.1456-1
+- update to 0.4.1456 upstream release
 * Wed Dec 19 2018 Zamir SUN <sztsian@gmail.com> - 0.4.1193-1
 - Update to 0.4.1193
 * Sat Dec 17 2016 mosquito <sensor.wen@gmail.com> - 0.4.595-2
