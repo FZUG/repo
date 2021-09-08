@@ -11,6 +11,14 @@ Requires:       hicolor-icon-theme
 %description
 A minimal Markdown reading & writing app.
 
+%package others
+Summary:        Some useless files
+BuildArch:      noarch
+Requires:       typora = %{version}-%{release}
+
+%description others
+Some useless files.
+
 %prep
 ar x %{SOURCE0}
 tar -xf data.tar.xz
@@ -19,7 +27,6 @@ tar -xf data.tar.xz
 
 %install
 cp -R usr %{buildroot}
-rm -rf %{buildroot}%{_datadir}/lintian
 
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
@@ -37,6 +44,10 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %dir %{_datadir}/typora
 %{_datadir}/typora/*
 
+%files others
+%{_datadir}/lintian
+
 %changelog
 * Sun Jul 18 2021 Liu Sen <liusen@disroot.org> - 0.10.11-1
 - First release
+
