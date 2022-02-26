@@ -1,11 +1,12 @@
+%global         debug_package   %{nil}
 %define         pkgname         scrcpy
 %global         forgeurl        https://github.com/Genymobile/%{pkgname}
-Version:        1.22
+Version:        1.23
 
 %forgemeta
 
 Name:           %{pkgname}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Display and control your Android device
 License:        ASL 2.0
 
@@ -38,6 +39,22 @@ Requires:       %{name} = %{version}-%{release}
 %description server
 This package installs %{summary}.
 
+%package bash-completion
+Summary:        bash completion files for %{name}
+Requires:       %{name} = %{version}-%{release}
+Requires:       bash
+
+%description bash-completion
+This package installs %{summary}.
+
+%package zsh-completion
+Summary:        zsh completion files for %{name}
+Requires:       %{name} = %{version}-%{release}
+Requires:       zsh
+
+%description zsh-completion
+This package installs %{summary}.
+
 %prep
 %forgesetup
 
@@ -63,7 +80,18 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/%{pkgname}.desktop
 %files server
 %{_datadir}/scrcpy/scrcpy-server
 
+%files bash-completion
+%{_datadir}/bash-completion/completions/scrcpy
+
+%files zsh-completion
+%{_datadir}/zsh/site-functions/_scrcpy
+
 %changelog
+* Sat Feb 26 2022 zhullyb <zhullyb@outlook.com> - 1.23-1
+- new version
+- split bash-completion and zsh-completion
+- disable debug package
+
 * Sat Feb 26 2022 zhullyb <zhullyb@outlook.com> - 1.22-2
 - Split server file
 
