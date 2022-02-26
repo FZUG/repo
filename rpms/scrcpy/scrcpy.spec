@@ -1,49 +1,77 @@
-Name:       scrcpy
+%define         pkgname         scrcpy
+%global         forgeurl        https://github.com/Genymobile/%{pkgname}
+Version:        1.22
 
-Version:    1.13
+%forgemeta
 
-Release:    1
+Name:           %{pkgname}
+Release:        2%{?dist}
+Summary:        Display and control your Android device
+License:        ASL 2.0
 
-Summary:    scrcpy
+URL:            %{forgeurl}
+Source0:        %{forgesource}
+Source1:        https://github.com/Genymobile/%{pkgname}/releases/download/v%{version}/%{pkgname}-server-v%{version}
+Source2:        %{pkgname}.desktop
 
-License:    Apache License, Version 2.0
+BuildRequires:  meson gcc
+BuildRequires:  java-devel >= 11
+BuildRequires:  desktop-file-utils
 
-Source0:	https://github.com/Genymobile/scrcpy/archive/v1.13.tar.gz
-Source1:	https://github.com/Genymobile/scrcpy/releases/download/v1.13/scrcpy-server-v1.13
-BuildRequires:	meson
-BuildRequires:	SDL2-devel
-BuildRequires:	ffms2-devel
-BuildRequires:	gcc
-BuildRequires:	make
+BuildRequires:  pkgconfig(sdl2)
+BuildRequires:  pkgconfig(ffms2)
+BuildRequires:  pkgconfig(libusb-1.0)
 
-Requires:	android-tools
-%global debug_package %{nil}
+Requires:       adb
+Requires:       %{name}-server = %{version}
+# https://github.com/Genymobile/scrcpy/blob/master/FAQ.md#issue-with-wayland
+Recommends:     libdecor
 
 %description
-This application provides display and control of Android devices connected on USB (or over TCP/IP). It does not require any root access. It works on GNU/Linux, Windows and macOS.
+This application provides display and control of Android devices
+connected on USB (or over TCP/IP).
+
+%package server
+Summary:        server files for %{name}
+Requires:       %{name} = %{version}-%{release}
+
+%description server
+This package installs %{summary}.
 
 %prep
-%setup -q
+%forgesetup
 
 %build
-meson x --buildtype release --strip -Db_lto=true -Dprebuilt_server=%{SOURCE1}
-ninja -Cx
+%meson -Db_lto=true -Dprebuilt_server='%{S:1}'
+%meson_build
 
 %install
-strip x/app/%{name}
-mkdir -p %{buildroot}/%{_bindir}
-mkdir -p %{buildroot}/usr/local/share/%{name}
-mkdir -p %{buildroot}/usr/local/share/man/man1
-install -m 0755 x/app/%{name} %{buildroot}%{_bindir}/%{name}
-install -m 0755 x/server/%{name}-server %{buildroot}/usr/local/share/%{name}/%{name}-server
-install -m 0644 app/scrcpy.1 %{buildroot}/usr/local/share/man/man1
+%meson_install
+desktop-file-install %{S:2}
+
+%check
+desktop-file-validate %{buildroot}/%{_datadir}/applications/%{pkgname}.desktop
 
 %files
-%{_bindir}/%{name}
-/usr/local/share/%{name}/%{name}-server
-/usr/local/share/man/man1/%{name}.1
+%license LICENSE
+%doc README.md DEVELOP.md FAQ.md
+%{_bindir}/%{pkgname}
+%{_mandir}/man1/%{pkgname}.1*
+%{_datadir}/icons/hicolor/*/apps/%{pkgname}.png
+%{_datadir}/applications/%{pkgname}.desktop
+
+%files server
+%{_datadir}/scrcpy/scrcpy-server
 
 %changelog
+* Sat Feb 26 2022 zhullyb <zhullyb@outlook.com> - 1.22-2
+- Split server file
+
+* Thu Jan 13 2022 sixg0000d <sixg0000d@gmail.com> 1.21-4
+- add scrcpy.desktop
+
+* Sun Nov 14 2021 zeno <zeno@bafh.org> 1.20-3
+- fix runtime dependencies
 
 * Tue May 19 2020 Ping Fang <qqfang97@163.com> - 1.13.1
 - Initial package scrcpy
