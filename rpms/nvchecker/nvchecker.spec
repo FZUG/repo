@@ -1,45 +1,67 @@
-%global srcname nvchecker
+%{!?python3_sitelib: %global python3_sitelib %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%global debug_package %{nil}
 
-Name:           python-%{srcname}
-Version:        1.1
+Name:           nvchecker
+Version:        2.7
 Release:        1%{?dist}
-Summary:        New version checker for software releases.
+Summary:        New version checker for software releases
 
 License:        MIT
-URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        %pypi_source
+URL:            https://github.com/lilydjwg/nvchecker
+Source0:        https://github.com/lilydjwg/nvchecker/archive/refs/tags/v2.7.tar.gz
 
-BuildArch:      noarch 
-BuildRequires:  python3-devel python3-pytest-xdist python3-structlog python3-pytest-asyncio python3-pycurl python3-tornado python3-aiohttp
+BuildRequires:  python3-devel
+BuildRequires:  python3-docutils
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-pygments
+Requires:       python3
+Requires:       python3-tomli
+Requires:       python3-structlog
+Requires:       python3-appdirs
+Requires:       python3-tornado
+Requires:       python3-pycurl
+
+Provides:       python3-%{name}
+Obsoletes:      python3-%{name} <= %{version}
 
 %description
-nvchecker (short for new version checker) is for checking if a new version of some software has been released.
+%{summary}
 
-%package -n python3-%{srcname}
-Summary:        %{summary}
-%{?python_provide:%python_provide python3-%{srcname}}
+%package bash-completion
+Summary:        bash completion files for %{name}
+Requires:       %{name} = %{version}-%{release}
+Requires:       bash
 
-%description -n python3-%{srcname}
-New version checker for software releases.
-
+%description bash-completion
+This package installs %{summary}.
 
 %prep
-%autosetup -n %{srcname}-%{version}
+%autosetup
+%define BUILD_DIR %{_builddir}/%{name}-%{version}
 
 %build
-%py3_build
+%{__python3} setup.py build
+make -C docs man
 
 %install
-%py3_install
+%{__python3} setup.py install --root="%{buildroot}" --optimize=1 --skip-build
+%{__install} -Dm644 docs/_build/man/nvchecker.1 -t %{buildroot}%{_datadir}/man/man1/
+%{__install} -Dm644 scripts/nvtake.bash_completion %{buildroot}%{_datadir}/bash-completion/completions/nvtake
 
-
-%files -n python3-%{srcname}
-%doc README.rst
+%files
+%license LICENSE
+%doc docs/usage.rst
+%doc sample_config.toml
+%{_bindir}/nv*
 %{python3_sitelib}/*
-%{_bindir}/nvchecker
-%{_bindir}/nvcmp
-%{_bindir}/nvtake
+%{_datadir}/man/man1/nvchecker.1.gz
+
+%files bash-completion
+%{_datadir}/bash-completion/completions/nvtake
 
 %changelog
+* Sat Feb 26 2022 zhullyb <zhullyb@outlook.com> - 2.7-1
+- new version
+
 * Wed Aug 22 2018 Bangjie Deng <dengbangjie@foxmail.com> 1.1-1
 - Initial RPM release
