@@ -3,13 +3,14 @@
 
 Name:           nvchecker
 Version:        2.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        New version checker for software releases
 
 License:        MIT
 URL:            https://github.com/lilydjwg/nvchecker
 Source0:        https://github.com/lilydjwg/nvchecker/archive/refs/tags/v2.7.tar.gz
 
+BuildRequires:	make
 BuildRequires:  python3-devel
 BuildRequires:  python3-docutils
 BuildRequires:  python3-setuptools
@@ -21,7 +22,7 @@ Requires:       python3-appdirs
 Requires:       python3-tornado
 Requires:       python3-pycurl
 
-Provides:       python3-%{name}
+Provides:       python3-%{name} = %{version}
 Obsoletes:      python3-%{name} <= %{version}
 
 %description
@@ -60,6 +61,10 @@ make -C docs man
 %{_datadir}/bash-completion/completions/nvtake
 
 %changelog
+* Sun Feb 27 2022 zhullyb <zhullyb@outlook.com> - 2.7-2
+- Add make into buildrequires
+- Specify the version of provided python3-nvchecker
+
 * Sat Feb 26 2022 zhullyb <zhullyb@outlook.com> - 2.7-1
 - new version
 
