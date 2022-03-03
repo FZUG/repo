@@ -8,7 +8,7 @@ Summary:        New version checker for software releases
 
 License:        MIT
 URL:            https://github.com/lilydjwg/nvchecker
-Source0:        https://github.com/lilydjwg/nvchecker/archive/refs/tags/v2.7.tar.gz
+Source0:        https://github.com/lilydjwg/nvchecker/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:	make
 BuildRequires:  python3-devel
@@ -38,7 +38,6 @@ This package installs %{summary}.
 
 %prep
 %autosetup
-%define BUILD_DIR %{_builddir}/%{name}-%{version}
 
 %build
 %{__python3} setup.py build
@@ -53,7 +52,7 @@ make -C docs man
 %license LICENSE
 %doc docs/usage.rst
 %doc sample_config.toml
-%{_bindir}/nv*
+%{_bindir}/{nvchecker,nvchecker-ini2toml,nvchecker-notify,nvcmp,nvtake}
 %{python3_sitelib}/*
 %{_datadir}/man/man1/nvchecker.1.gz
 
