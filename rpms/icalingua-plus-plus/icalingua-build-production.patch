@@ -1,0 +1,10 @@
+--- ./icalingua/static/version.json	2022-03-07 17:48:10.000000000 +0800
++++ ./icalingua/static/version.json	2022-03-09 22:44:13.926233911 +0800
+@@ -1,6 +1,6 @@
+ {
+   "commitId": "Manual Build",
+   "ref": "Manual Build",
+-  "isProduction": false,
++  "isProduction": true,
+   "buildTime": "Manual Build"
+ }
