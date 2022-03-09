@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-name=electron9
+name=electron12
 flags_file="${XDG_CONFIG_HOME:-$HOME/.config}/${name}-flags.conf"
 
 declare -a flags
