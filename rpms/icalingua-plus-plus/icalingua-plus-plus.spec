@@ -27,6 +27,9 @@ BuildRequires:  python
 %patch0
 
 %build
+yarn config set registry https://registry.npmmirror.com
+export SASS_BINARY_SITE=https://npmmirror.com/mirrors/node-sass/
+export ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
 cd icalingua
 yarn
 yarn build:ci
