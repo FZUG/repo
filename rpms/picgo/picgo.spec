@@ -34,6 +34,9 @@ Requires:       electron16
 %forgeautosetup -p1
 
 %build
+npm config set registry https://registry.npmmirror.com
+yarn config set registry https://registry.npmmirror.com
+export ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
 yarn
 npm run electron:build
 
