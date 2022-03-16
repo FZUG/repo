@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=PicGo
+Comment=A simple & beautiful tool for pictures uploading built by vue-cli-electron-builder
+Exec=picgo %U
+Terminal=false
+Type=Application
+Icon=picgo
+StartupWMClass=PicGo
+Categories=Utility;
+MimeType=x-scheme-handler/picgo

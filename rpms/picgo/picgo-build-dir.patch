@@ -1,0 +1,13 @@
+diff -up PicGo-2.3.0/vue.config.js.orig PicGo-2.3.0/vue.config.js
+--- PicGo-2.3.0/vue.config.js.orig	2022-03-11 00:09:42.679691439 +0800
++++ PicGo-2.3.0/vue.config.js	2022-03-11 00:11:10.768154605 +0800
+@@ -84,7 +84,8 @@ const config = {
+           allowToChangeInstallationDirectory: true
+         },
+         linux: {
+-          icon: 'build/icons/'
++          icon: 'build/icons/',
++          target: 'dir'
+         },
+         snap: {
+           publish: ['github']
