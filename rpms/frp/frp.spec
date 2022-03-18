@@ -1,4 +1,4 @@
-Note: Golang depends on network. Network should be enabled when building this software.
+# Note: Golang depends on network. Network should be enabled when building this software.
 
 %global debug_package %{nil}
 
@@ -7,7 +7,7 @@ Version: 0.40.0
 %forgemeta
 
 Name:    frp
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet
 License: ASL 2.0
 URL:	 %{forgeurl}
@@ -57,6 +57,16 @@ export GOPROXY=https://mirrors.aliyun.com/goproxy/
 %{_sysconfdir}/frp/{frps_full.ini,frps.ini}
 %{_unitdir}/{frps.service,frps@.service}
 
+%preun -n frpc
+%systemd_preun frpc.service
+
+%preun -n frps
+%systemd_preun frps.service
+
 %changelog
-* Sun Mar 13 2022 zhullyb <zhullyb@outlook.com>
+* Fri Mar 18 2022 zhullyb <zhullyb@outlook.com> - 0.40.0-2
+-  Add preun , see https://github.com/FZUG/repo/pull/392#issuecomment-1069201446
+
+
+* Sun Mar 13 2022 zhullyb <zhullyb@outlook.com> - 0.40.0-1
 -  First Build.
