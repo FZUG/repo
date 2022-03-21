@@ -34,7 +34,8 @@ This package provides server version of frp.
 %forgesetup
 
 %build
-export GOPROXY=https://mirrors.aliyun.com/goproxy/
+export GO111MODULE=on
+export GOPROXY=https://goproxy.cn,direct
 %{make_build}
 
 %install
