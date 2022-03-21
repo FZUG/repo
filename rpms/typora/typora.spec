@@ -1,6 +1,6 @@
 %global debug_package %{nil}
 Name:           typora
-Version:        0.10.11
+Version:        1.1.5
 Release:        1%{?dist}
 Summary:        a minimal Markdown reading & writing app
 License:        EULA
@@ -48,6 +48,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_datadir}/lintian
 
 %changelog
+* Mon Mar 21 2022 zhullyb <zhullyb@outlook.com> - 1.1.5-1
+- new version
+
 * Sun Jul 18 2021 Liu Sen <liusen@disroot.org> - 0.10.11-1
 - First release
 
