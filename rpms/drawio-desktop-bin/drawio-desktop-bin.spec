@@ -1,5 +1,5 @@
 Name:           drawio-desktop-bin
-Version:        17.2.1
+Version:        17.2.4
 Release:        1%{?dist}
 Summary:        Diagram drawing application built on web technology
 
@@ -38,5 +38,8 @@ cp %{S:1} .
 %{_datadir}/mime/packages/drawio.xml
 
 %changelog
+* Mon Mar 28 2022 zhullyb <zhullyb@outlook.com> - 17.2.4-1
+- new version
+
 * Fri Mar 25 2022 zhullyb <zhullyb@outlook.com> - 17.2.1-1
 - First build.
