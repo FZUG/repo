@@ -1,5 +1,5 @@
 Name:           nodejs-electron17-bin
-Version:        17.3.0
+Version:        17.3.1
 Release:        1%{?dist}
 Summary:        Build cross-platform desktop apps with JavaScript, HTML, and CSS
 License:        MIT
@@ -35,6 +35,9 @@ install -Dm755 %{S:1} "%{buildroot}%{_bindir}/electron17"
 %{_prefix}/lib/electron17/
 
 %changelog
+* Thu Mar 31 2022 zhullyb <zhullyb@outlook.com> - 17.3.1-1
+- new version
+
 * Tue Mar 29 2022 zhullyb <zhullyb@outlook.com> - 17.3.0-1
 - new version
 
