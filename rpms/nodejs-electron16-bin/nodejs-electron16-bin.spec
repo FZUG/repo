@@ -1,5 +1,5 @@
 Name:           nodejs-electron16-bin
-Version:        16.1.0
+Version:        16.2.1
 Release:        1%{?dist}
 Summary:        Build cross-platform desktop apps with JavaScript, HTML, and CSS
 License:        MIT
@@ -35,6 +35,9 @@ install -Dm755 %{S:1} "%{buildroot}%{_bindir}/electron16"
 %{_prefix}/lib/electron16/
 
 %changelog
+* Thu Mar 31 2022 zhullyb <zhullyb@outlook.com> - 16.2.1-1
+- new version
+
 * Fri Mar 25 2022 zhullyb <zhullyb@outlook.com> - 16.1.0-1
 - First Build
 
